@@ -1,0 +1,5 @@
+# Carpetas y contenido
+obj/
+lib_obj/
+# Ejecutables
+ai_prototype
