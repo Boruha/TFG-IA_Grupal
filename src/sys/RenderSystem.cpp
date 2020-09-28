@@ -1,4 +1,5 @@
 #include <sys/RenderSystem.hpp>
+#include <utils/Color.hpp>
 
 extern "C" {
   #include "tinyPTC/tinyptc.h"  
@@ -25,7 +26,7 @@ RenderSystem::update() {
 
     auto screen_ptr = framebuffer.get();
 
-    std::fill(screen_ptr, screen_ptr + framebuffer_size, White);
+    std::fill(screen_ptr, screen_ptr + framebuffer_size, static_cast<uint32_t>(Color::White));
 
     ptc_update(screen_ptr);
 

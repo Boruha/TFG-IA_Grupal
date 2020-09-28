@@ -9,7 +9,7 @@ namespace AIP {
 
 struct GameManager : Manager_t {
     explicit GameManager();
-            ~GameManager();
+            ~GameManager() override;
 
     bool update();
 
