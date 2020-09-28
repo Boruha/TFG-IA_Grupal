@@ -1,18 +1,28 @@
 #include <main.hpp>
+#include <memory>
 
-extern "C"
-{
-  #include "tinyPTC/tinyptc.h"  
-} 
+#include <man/GameManager.hpp>
+#include <utils/GameConstants.hpp>
 
-int main()
-{
+int main() {
+  using timer = std::chrono::steady_clock;
 
-    ptc_open("window", 640, 360);
+  auto  gameManager    { std::make_unique<AIP::GameManager>() };
+  bool  gameCondition  { true };
+  timer time           { };
+  auto  lastUpdateTime { time.now() };
+  auto  timeElapse     { std::chrono::milliseconds { 0 } };
 
-    for(;;);
+  while (gameCondition) {
+    timeElapse = std::chrono::duration_cast<std::chrono::milliseconds>(time.now() - lastUpdateTime);
 
-    ptc_close();
+    if(timeElapse >= DELTATIME) {
+      gameCondition  = gameManager->update();
+      lastUpdateTime = time.now();
+    }
+  }
+  
+  gameManager.~unique_ptr();
 
-    return 0;
+  return 0;
 }
