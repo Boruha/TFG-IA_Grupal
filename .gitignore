@@ -1,5 +1,6 @@
 # Carpetas y contenido
 obj/
 lib_obj/
+.vscode/
 # Ejecutables
 ai_prototype
