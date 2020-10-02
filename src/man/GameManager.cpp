@@ -1,6 +1,6 @@
 #include <man/GameManager.hpp>
-#include <utils/GameConstants.hpp>
 
+#include <utils/GameConstants.hpp>
 #include <ent/Entity_t.hpp>
 #include <man/EntityManager.hpp>
 

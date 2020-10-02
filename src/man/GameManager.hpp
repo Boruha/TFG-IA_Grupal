@@ -1,7 +1,5 @@
 #pragma once
 #include <man/Manager_t.hpp>
-#include <vector>
-#include <memory>
 
 #include <sys/RenderSystem.hpp>
 

@@ -18,7 +18,7 @@ EntityManager::~EntityManager() {
 
 void
 EntityManager::createEntity_t(const uint32_t coord_X, const uint32_t coord_Y) {
-    ent_vector.emplace_back( std::make_unique<Entity_t>(coord_X, coord_Y, 15U, 20U, Color::Black) ); //Cambiar a parámetros;
+    ent_vector.emplace_back( std::make_unique<Entity_t>(coord_X, coord_Y, 10U, 10U, Color::Black) ); //Cambiar a parámetros;
 }
 
 } // namespace AIP
