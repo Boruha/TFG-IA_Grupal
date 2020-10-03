@@ -1,27 +1,46 @@
 #pragma once
-#include <cstdint>
-#include <vector>
+#include <unordered_map>
 
-#include <utils/Color.hpp>
+#include <utils/Alias.hpp>
+#include <cmp/Component_t.hpp>
+#include <cmp/MovementComponent.hpp>
 
 
 namespace AIP {
 
 struct Entity_t{
-    explicit Entity_t(const uint32_t c_X, const uint32_t c_Y, const uint32_t s_W, const uint32_t s_H, const Color col);
-            ~Entity_t() = default;
+    explicit Entity_t() : ent_id(++counterID) { };
+            ~Entity_t() { my_cmps.clear(); };
 
-    const int16_t getID() const { return entID; }
+    
+    template<typename T>
+    void addComponent(T* cmp) {
+        my_cmps[Component_t::getCmpTypeID<T>()] = cmp;
+    }
 
-          uint32_t coord_X  { 0 }; //Esquina superior izq del dibu;
-          uint32_t coord_Y  { 0 };
-    const uint32_t sprite_W { 0 }; //Tamaño del Sprite;
-    const uint32_t sprite_H { 0 };
-    const Color    sprite_C { Color::Red };  
+    const entID& getID() const { return ent_id; }
+
+    template<typename T>    //getComponent Const
+    const decltype(auto) getComponent() const noexcept {
+        T* result     = nullptr;
+        const auto it = my_cmps.find(Component_t::getCmpTypeID<T>());
+        
+        if(it != cend(my_cmps))
+            result = static_cast<T*>(it->second);
+
+        return result;
+    }
+
+    template<typename T> //getComponent
+    decltype(auto) getComponent() noexcept {
+        return const_cast<T*>( std::as_const(*this).getComponent<T>() );
+    }
+
 
 private:
-    inline static uint32_t counterID { 0 };
-    const         uint32_t entID     { 0 };
+    inline static entID counterID { 0 };
+    const         entID ent_id     { 0 };
+    std::unordered_map<cmpID, Component_t*> my_cmps;
 };
 
 } // NS

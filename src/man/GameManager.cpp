@@ -1,26 +1,25 @@
 #include <man/GameManager.hpp>
+#include <man/Manager_t.hpp>
+#include <man/EntityManager.hpp>
 
 #include <utils/GameConstants.hpp>
+
 #include <ent/Entity_t.hpp>
-#include <man/EntityManager.hpp>
+
+#include <sys/RenderSystem.hpp>
+#include <sys/MovementSystem.hpp>
 
 namespace AIP {
 
 GameManager::GameManager() {
-    systems.emplace_back( std::make_unique<AIP::RenderSystem>( WINDOW_W, WINDOW_H ) );
+    systems.emplace_back( std::make_unique<RenderSystem>( WINDOW_W, WINDOW_H ) );
+    systems.emplace_back( std::make_unique<MovementSystem>() );
     manager = std::make_unique<EntityManager>();
 }
 
 GameManager::~GameManager() {
     systems.clear();
 }
-
-const std::vector<std::unique_ptr<Entity_t>>&  
-GameManager::getEntities() const {
-    std::vector<std::unique_ptr<Entity_t>> vec { };
-    return vec;
-}
-
 
 bool
 GameManager::update(){

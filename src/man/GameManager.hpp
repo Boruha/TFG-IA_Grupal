@@ -1,17 +1,17 @@
 #pragma once
-#include <man/Manager_t.hpp>
 
-#include <sys/RenderSystem.hpp>
+#include <vector>
+#include <memory>
 
 namespace AIP {
 
 struct Entity_t;
+struct System_t;
+struct Manager_t;
 
-struct GameManager : Manager_t {
+struct GameManager {
     explicit GameManager();
-            ~GameManager() override;
-
-    const std::vector<std::unique_ptr<Entity_t>>&  getEntities() const override;
+            ~GameManager();
 
     bool update();
 
