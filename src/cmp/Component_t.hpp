@@ -16,10 +16,10 @@ struct Component_t {
     }
 
 private:
-    inline static cmpID counterID         { 0 };
+    inline static cmpID     counterID     { 0 };
     inline static cmpTypeID counterTypeID { 0 };
-    const         cmpID cmp_id            { 0 };
-    const         entID ent_id            { 0 };
+    const         cmpID     cmp_id        { 0 };
+    const         entID     ent_id        { 0 };
 };
 
 }

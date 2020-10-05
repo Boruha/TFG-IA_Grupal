@@ -14,11 +14,13 @@ namespace AIP {
 GameManager::GameManager() {
     systems.emplace_back( std::make_unique<RenderSystem>( WINDOW_W, WINDOW_H ) );
     systems.emplace_back( std::make_unique<MovementSystem>() );
+    
     manager = std::make_unique<EntityManager>();
 }
 
 GameManager::~GameManager() {
     systems.clear();
+    manager.~unique_ptr();
 }
 
 bool

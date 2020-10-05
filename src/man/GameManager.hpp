@@ -1,11 +1,9 @@
 #pragma once
-
 #include <vector>
 #include <memory>
 
 namespace AIP {
 
-struct Entity_t;
 struct System_t;
 struct Manager_t;
 

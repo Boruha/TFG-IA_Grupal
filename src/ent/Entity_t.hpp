@@ -3,7 +3,6 @@
 
 #include <utils/Alias.hpp>
 #include <cmp/Component_t.hpp>
-#include <cmp/MovementComponent.hpp>
 
 
 namespace AIP {
@@ -21,7 +20,7 @@ struct Entity_t{
     const entID& getID() const { return ent_id; }
 
     template<typename T>    //getComponent Const
-    const decltype(auto) getComponent() const noexcept {
+    decltype(auto) getComponent() const noexcept {
         T* result     = nullptr;
         const auto it = my_cmps.find(Component_t::getCmpTypeID<T>());
         

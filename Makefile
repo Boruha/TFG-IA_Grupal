@@ -48,6 +48,10 @@ FLAGS       := -pthread -Wall -pedantic -fno-exceptions
 CCFLAGS     := $(FLAGS) -std=c++17
 CFLAGS      := $(FLAGS)
 
+ifeq ($(debug), true)
+	CCFLAGS   += -O3
+endif
+
 # STRUCTURE FOLDERS
 APPDIR      := 		                              #EXECUTABLE DIRECTORY (Folder root)
 MKDIR 		:= mkdir -p
