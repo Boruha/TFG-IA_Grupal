@@ -13,7 +13,7 @@ EntityManager::EntityManager() {
     
     auto& ent1  = createEntity_t();
     auto& mov_1 = cmp_storage->createComponent( MovementComponent(ent1->getID(), 30U, 30U) );
-    auto& ren_1 = cmp_storage->createComponent( RenderComponent(ent1->getID(), 10U, 10U, Color::Blue) );
+    auto& ren_1 = cmp_storage->createComponent( RenderComponent(ent1->getID(), 10U, 10U, Color::White) );
 
     ent1->addComponent(mov_1.get());
     ent1->addComponent(ren_1.get());
@@ -24,6 +24,7 @@ EntityManager::EntityManager() {
 
     ent2->addComponent(mov_2.get());
     ent2->addComponent(ren_2.get());
+
 }
 
 EntityManager::~EntityManager() {

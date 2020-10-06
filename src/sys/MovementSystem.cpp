@@ -1,20 +1,16 @@
 #include <sys/MovementSystem.hpp>
 
 #include <man/Manager_t.hpp>
-
 #include <cmp/MovementComponent.hpp>
-
-#include <utils/GameConstants.hpp>
-
 #include <algorithm>
 
 namespace AIP {
 
 void
-MovementSystem::init() { }
+MovementSystem::init() noexcept { }
 
 bool
-MovementSystem::update(std::unique_ptr<Manager_t>& context) {
+MovementSystem::update(std::unique_ptr<Manager_t>& context) noexcept {
     auto& mov_cmp_vec = context->getMovementCmps();
 
     auto newLocation = [](std::unique_ptr<MovementComponent>& mov_cmp) {

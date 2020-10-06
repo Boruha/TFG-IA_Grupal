@@ -38,13 +38,15 @@ struct ComponentStorage {
     ComponentStorage& operator=(const ComponentStorage&&) = delete;
 
     template<typename T>
-    [[nodiscard]] constexpr std::unique_ptr<T>& createComponent(T&& new_cmp) noexcept {
+    [[nodiscard]] constexpr std::unique_ptr<T>& 
+    createComponent(T&& new_cmp) noexcept {
         auto&  cmp_vec_ref = getCmpCollection<T>();
         return cmp_vec_ref.emplace_back( std::make_unique<T>(new_cmp) );
     }
 
     template<typename T>
-    [[nodiscard]] constexpr std::vector<std::unique_ptr<T>>& getCmpCollection() noexcept {
+    [[nodiscard]] constexpr std::vector<std::unique_ptr<T>>& 
+    getCmpCollection() noexcept {
         const auto it = cmp_map.find(Component_t::getCmpTypeID<T>());
     
         if(it != end(cmp_map))
@@ -53,8 +55,8 @@ struct ComponentStorage {
         else {
             auto& new_vec = cmp_map[Component_t::getCmpTypeID<T>()] = std::make_unique<CmpVector<T>>();
             return static_cast<CmpVector<T>*>( new_vec.get() )->cmps;
+        }
     }
-}
 
 private:
     std::unordered_map<std::size_t , std::unique_ptr<CmpCollection>> cmp_map;

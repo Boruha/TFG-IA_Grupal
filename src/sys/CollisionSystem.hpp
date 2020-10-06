@@ -7,11 +7,11 @@ namespace AIP {
 
 struct Manager_t;
 
-struct MovementSystem : System_t {
-    explicit MovementSystem() = default;
-    
+struct CollisionSystem : System_t {
+    explicit CollisionSystem() = default;
+
     void init() noexcept override;
     bool update(std::unique_ptr<Manager_t>& context) noexcept override;
 };
 
-} //NS
+} // NS

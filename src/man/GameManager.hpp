@@ -11,7 +11,7 @@ struct GameManager {
     explicit GameManager();
             ~GameManager();
 
-    bool update();
+    bool update() noexcept;
 
 private:
     std::vector<std::unique_ptr<System_t>> systems;
