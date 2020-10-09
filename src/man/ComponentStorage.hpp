@@ -23,7 +23,7 @@ struct CmpCollection {
 //Vector que se creará por cada Cmp
 template<typename T>
 struct CmpVector : CmpCollection {
-    explicit CmpVector<T>() { cmps.reserve(5); }
+    explicit CmpVector<T>() { cmps.reserve(2); }
     ~CmpVector<T>() override { cmps.clear(); };
     std::vector<std::unique_ptr<T>> cmps;
 };
@@ -39,7 +39,7 @@ struct ComponentStorage {
 
     template<typename T>
     [[nodiscard]] constexpr std::unique_ptr<T>& 
-    createComponent(T&& new_cmp) noexcept {
+    createComponent(const T&& new_cmp) noexcept {
         auto&  cmp_vec_ref = getCmpCollection<T>();
         return cmp_vec_ref.emplace_back( std::make_unique<T>(new_cmp) );
     }

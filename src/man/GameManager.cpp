@@ -26,7 +26,7 @@ GameManager::~GameManager() {
 bool
 GameManager::update() noexcept {
     for(auto& sys : systems){
-        if(!sys->update(manager))
+        if(!sys->update(manager, DeltaTime))
             return false;
     }
     return true;

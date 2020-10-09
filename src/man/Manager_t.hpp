@@ -10,6 +10,7 @@ namespace AIP {
 struct Entity_t;
 struct RenderComponent;
 struct MovementComponent;
+struct AI_Component;
 
 struct Manager_t {
     virtual ~Manager_t() = default;
@@ -25,6 +26,9 @@ struct Manager_t {
 
     virtual const std::vector<std::unique_ptr<MovementComponent>>&  getMovementCmps() const noexcept = 0;   
     virtual       std::vector<std::unique_ptr<MovementComponent>>&  getMovementCmps()       noexcept = 0;
+
+    virtual const std::vector<std::unique_ptr<AI_Component>>&  getAI_Cmps() const noexcept = 0;   
+    virtual       std::vector<std::unique_ptr<AI_Component>>&  getAI_Cmps()       noexcept = 0;
 
 };
 

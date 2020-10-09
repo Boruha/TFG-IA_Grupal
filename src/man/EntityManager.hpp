@@ -30,6 +30,9 @@ struct EntityManager : Manager_t
     const std::vector<std::unique_ptr<MovementComponent>>&  getMovementCmps() const noexcept override { return cmp_storage->getCmpCollection<MovementComponent>(); }
           std::vector<std::unique_ptr<MovementComponent>>&  getMovementCmps()       noexcept override { return cmp_storage->getCmpCollection<MovementComponent>(); }
 
+    const std::vector<std::unique_ptr<AI_Component>>&  getAI_Cmps() const noexcept { return cmp_storage->getCmpCollection<AI_Component>(); };   
+          std::vector<std::unique_ptr<AI_Component>>&  getAI_Cmps()       noexcept { return cmp_storage->getCmpCollection<AI_Component>(); };
+
 private:
     std::unordered_map<entID, std::unique_ptr<Entity_t>> ent_map { };
 

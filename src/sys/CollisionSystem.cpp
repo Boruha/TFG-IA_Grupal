@@ -7,7 +7,6 @@
 #include <ent/Entity_t.hpp>
 
 #include <algorithm>
-#include <iostream>
 
 namespace AIP {
 
@@ -15,7 +14,7 @@ void
 CollisionSystem::init() noexcept { }
 
 bool
-CollisionSystem::update(std::unique_ptr<Manager_t>& context) noexcept {
+CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept {
     auto& mov_cmp_vec = context->getMovementCmps();
 
     auto checkWinLimits = [&](std::unique_ptr<MovementComponent>& mov_cmp){
@@ -24,8 +23,8 @@ CollisionSystem::update(std::unique_ptr<Manager_t>& context) noexcept {
 
         auto& c_X = mov_cmp->coord_X; 
         auto& c_Y = mov_cmp->coord_Y;
-        auto  s_W = static_cast<int32_t>(ren_cmp->sprite_W);
-        auto  s_H = static_cast<int32_t>(ren_cmp->sprite_H);
+        auto  s_W = static_cast<float>(ren_cmp->sprite_W);
+        auto  s_H = static_cast<float>(ren_cmp->sprite_H);
         
         if(c_X + s_W  > WINDOW_W_S ) { c_X = s_W;              } //Eje X
         if(c_X - s_W  < 0          ) { c_X = WINDOW_W_S - s_W; }
