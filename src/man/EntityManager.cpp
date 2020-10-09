@@ -14,16 +14,20 @@ EntityManager::EntityManager() {
     auto& ent1  = createEntity_t();
     auto& mov_1 = cmp_storage->createComponent( MovementComponent(ent1->getID(), 30U, 30U) );
     auto& ren_1 = cmp_storage->createComponent( RenderComponent(ent1->getID(), 10U, 10U, Color::White) );
+    auto& ai_1  = cmp_storage->createComponent( AI_Component(ent1->getID()) );
 
     ent1->addComponent(mov_1.get());
     ent1->addComponent(ren_1.get());
+    ent1->addComponent(ai_1.get());
 
     auto& ent2  = createEntity_t();
     auto& mov_2 = cmp_storage->createComponent( MovementComponent(ent2->getID(), 100U, 100U) );
     auto& ren_2 = cmp_storage->createComponent( RenderComponent(ent2->getID(), 10U, 10U, Color::Green) );
+    auto& ai_2  = cmp_storage->createComponent( AI_Component(ent2->getID()) );
 
     ent2->addComponent(mov_2.get());
     ent2->addComponent(ren_2.get());
+    ent2->addComponent(ai_2.get());
 
 }
 

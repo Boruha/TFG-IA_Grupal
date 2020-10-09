@@ -11,6 +11,7 @@ namespace AIP {
 GameManager::GameManager() {
     systems.reserve(5);
 
+    systems.emplace_back( std::make_unique<AI_System>() );
     systems.emplace_back( std::make_unique<MovementSystem>() );
     systems.emplace_back( std::make_unique<CollisionSystem>() );
     systems.emplace_back( std::make_unique<RenderSystem>( WINDOW_W, WINDOW_H ) );
