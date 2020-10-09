@@ -47,10 +47,10 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const float Delt
         auto* mov_cmp = ent->getComponent<MovementComponent>();
 
         auto* screen_ptr  = framebuffer.get();
-              screen_ptr += (static_cast<uint32_t>(mov_cmp->coord_Y) * window_w) + static_cast<uint32_t>(mov_cmp->coord_X);
+              screen_ptr += (static_cast<uint32_t>(mov_cmp->coords.y) * window_w) + static_cast<uint32_t>(mov_cmp->coords.x);
 
-        for(uint32_t i=0; i<render_cmp->sprite_H; ++i) {
-            std::fill(screen_ptr, screen_ptr + render_cmp->sprite_W, static_cast<uint32_t>(render_cmp->sprite_C));
+        for(uint32_t i=0; i<render_cmp->sprite.y; ++i) {
+            std::fill(screen_ptr, screen_ptr + render_cmp->sprite.y, static_cast<uint32_t>(render_cmp->sprite_C));
             screen_ptr += window_w;
         }
     };

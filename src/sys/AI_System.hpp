@@ -7,9 +7,6 @@ struct Manager_t;
 struct AI_Component;
 struct MovementComponent;
 
-constexpr const float ARRIVE_MIN_DIST   { 4 };
-constexpr const float ARRIVE_MIN_DIST2  { ARRIVE_MIN_DIST * ARRIVE_MIN_DIST };
-
 struct AI_System : System_t {
     explicit  AI_System() = default;
 
@@ -23,7 +20,6 @@ private:
     //simple behaviour
     void seek(MovementComponent* mov_cmp, const float x, const float y) noexcept;
     bool arrive(float dist2obj) noexcept;
-
 };
 
 

@@ -1,7 +1,8 @@
 #include <sys/MovementSystem.hpp>
-
 #include <man/Manager_t.hpp>
 #include <cmp/MovementComponent.hpp>
+#include <utils/AI_Constants.hpp>
+
 #include <algorithm>
 
 namespace AIP {
@@ -14,8 +15,8 @@ MovementSystem::update(const std::unique_ptr<Manager_t>& context, const float De
     auto& mov_cmp_vec = context->getMovementCmps();
 
     auto newLocation = [&DeltaTime](std::unique_ptr<MovementComponent>& mov_cmp) {
-        mov_cmp->coord_X += mov_cmp->vel * mov_cmp->dir[0] * DeltaTime;
-        mov_cmp->coord_Y += mov_cmp->vel * mov_cmp->dir[1] * DeltaTime;    
+        mov_cmp->coords.x += MAX_VELOCITY * mov_cmp->dir.x * DeltaTime;
+        mov_cmp->coords.y += MAX_VELOCITY * mov_cmp->dir.y * DeltaTime;    
     };
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), newLocation);

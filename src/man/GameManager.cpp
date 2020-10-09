@@ -9,7 +9,8 @@
 namespace AIP {
 
 GameManager::GameManager() {
-    systems.reserve(5);
+    
+    systems.reserve(1);
 
     systems.emplace_back( std::make_unique<AI_System>() );
     systems.emplace_back( std::make_unique<MovementSystem>() );

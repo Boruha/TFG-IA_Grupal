@@ -10,7 +10,7 @@ namespace AIP {
 constexpr const uint32_t MAX_ENTITIES { 10 };
 
 EntityManager::EntityManager() {
-    
+        
     auto& ent1  = createEntity_t();
     auto& mov_1 = cmp_storage->createComponent( MovementComponent(ent1->getID(), 30U, 30U) );
     auto& ren_1 = cmp_storage->createComponent( RenderComponent(ent1->getID(), 10U, 10U, Color::White) );

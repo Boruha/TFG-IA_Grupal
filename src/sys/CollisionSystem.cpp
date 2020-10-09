@@ -21,16 +21,15 @@ CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const float D
         auto& ent       = context->getEntityByID(mov_cmp->getEntityID());
         auto* ren_cmp   = ent->getComponent<RenderComponent>();
 
-        auto& c_X = mov_cmp->coord_X; 
-        auto& c_Y = mov_cmp->coord_Y;
-        auto  s_W = static_cast<float>(ren_cmp->sprite_W);
-        auto  s_H = static_cast<float>(ren_cmp->sprite_H);
+        auto& coord = mov_cmp->coords;
+        auto  s_W = static_cast<float>(ren_cmp->sprite.x);
+        auto  s_H = static_cast<float>(ren_cmp->sprite.y);
         
-        if(c_X + s_W  > WINDOW_W_S ) { c_X = s_W;              } //Eje X
-        if(c_X - s_W  < 0          ) { c_X = WINDOW_W_S - s_W; }
+        if(coord.x + s_W  > WINDOW_W_S ) { coord.x = s_W;              } //Eje X
+        if(coord.x - s_W  < 0          ) { coord.x = WINDOW_W_S - s_W; }
 
-        if(c_Y + s_H  > WINDOW_H_S ) { c_Y = s_H;              } //Eje Y
-        if(c_Y - s_H  < 0          ) { c_Y = WINDOW_H_S - s_H; }
+        if(coord.y + s_H  > WINDOW_H_S ) { coord.y = s_H;              } //Eje Y
+        if(coord.y - s_H  < 0          ) { coord.y = WINDOW_H_S - s_H; }
 
     };
 

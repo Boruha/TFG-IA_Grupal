@@ -1,5 +1,6 @@
 #pragma once
 #include <cmp/Component_t.hpp>
+#include <utils/Vec2.hpp>
 
 namespace AIP {
 
@@ -11,14 +12,16 @@ Replantear el cmp:
 */
 
 struct MovementComponent : Component_t {
-    explicit MovementComponent(const entID entityID, const float c_X, const float c_Y) 
-      : Component_t(entityID), coord_X(c_X), coord_Y(c_Y) { }
+  explicit MovementComponent(const entID entityID, const float c_X, const float c_Y) 
+    : Component_t(entityID), coords(c_X, c_Y) { }
 
-          float coord_X  {  0    };    //Esquina superior izq del dibu;
-          float coord_Y  {  0    };  
-    const float vel      { 200.f };    //Velocidad máxima a la que nos moveremos (Seguramente acabe fuera del cmp)
-          float dir[2]   { 0, 0  };    //Indica sentido y dirección del movimiento de forma vectorial.
-                                        //En un futuro próximo será de tipo vec2<T>();
+  Vec2<float> coords { 0.f, 0.f };
+  Vec2<float> dir    { 0.f, 0.f }; //currently facing
+  //limitar la cantidad de:
+  // - grados que puede rotar la AI  (posibles const)
+  // - variación de la velocidad
+
+  //Posible tener una velocidad normal (andar xd) y un cap de sprint + acceleración.
 };
 
 }
