@@ -23,7 +23,7 @@ struct CmpCollection {
 //Vector que se creará por cada Cmp
 template<typename T>
 struct CmpVector : CmpCollection {
-    explicit CmpVector<T>() { cmps.reserve(2); }
+    explicit CmpVector<T>() { cmps.reserve(5); }
     ~CmpVector<T>() override { cmps.clear(); };
     std::vector<std::unique_ptr<T>> cmps;
 };

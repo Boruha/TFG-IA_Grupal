@@ -17,6 +17,13 @@ struct MovementComponent : Component_t {
 
   Vec2<float> coords { 0.f, 0.f };
   Vec2<float> dir    { 0.f, 0.f }; //currently facing
+  
+  /*flocking mov*/
+  Vec2<float> target      { 0.f, 0.f }; 
+  Vec2<float> cohesion    { 0.f, 0.f }; 
+  Vec2<float> separation  { 0.f, 0.f }; 
+
+
   //limitar la cantidad de:
   // - grados que puede rotar la AI  (posibles const)
   // - variación de la velocidad

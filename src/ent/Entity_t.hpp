@@ -37,7 +37,7 @@ struct Entity_t{
 
 
 private:
-    inline static entID counterID { 0 };
+    inline static entID counterID  { 0 };
     const         entID ent_id     { 0 };
     std::unordered_map<cmpID, Component_t*> my_cmps;
 };

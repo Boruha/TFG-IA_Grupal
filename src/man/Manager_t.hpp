@@ -8,15 +8,20 @@
 namespace AIP {
 
 struct Entity_t;
+struct Flock_t;
 struct RenderComponent;
 struct MovementComponent;
 struct AI_Component;
+
 
 struct Manager_t {
     virtual ~Manager_t() = default;
 
     virtual const std::unordered_map<entID, std::unique_ptr<Entity_t>>&  getEntities() const noexcept = 0;   
     virtual       std::unordered_map<entID, std::unique_ptr<Entity_t>>&  getEntities()       noexcept = 0;
+
+    virtual const std::vector<std::unique_ptr<Flock_t>>&  getFlocks() const noexcept = 0;   
+    virtual       std::vector<std::unique_ptr<Flock_t>>&  getFlocks()       noexcept = 0;
 
     virtual const std::unique_ptr<Entity_t>&  getEntityByID(entID eid) const noexcept = 0;   
     virtual       std::unique_ptr<Entity_t>&  getEntityByID(entID eid)       noexcept = 0;

@@ -18,8 +18,16 @@ struct Vec2 {
 
     void normalize() {
         auto module = length();
-        x /= module;
-        y /= module;
+        if(module != 0) {
+            x /= module;
+            y /= module;
+        }
+        else
+        {
+            x = 0;
+            y = 0;
+        }
+        
     }
 };
 

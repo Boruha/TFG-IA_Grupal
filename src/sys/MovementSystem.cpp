@@ -15,8 +15,8 @@ MovementSystem::update(const std::unique_ptr<Manager_t>& context, const float De
     auto& mov_cmp_vec = context->getMovementCmps();
 
     auto newLocation = [&DeltaTime](std::unique_ptr<MovementComponent>& mov_cmp) {
-        mov_cmp->coords.x += MAX_VELOCITY * mov_cmp->dir.x * DeltaTime;
-        mov_cmp->coords.y += MAX_VELOCITY * mov_cmp->dir.y * DeltaTime;    
+        mov_cmp->coords.x += SEEK_MAX_SPEED * mov_cmp->dir.x * DeltaTime;
+        mov_cmp->coords.y += SEEK_MAX_SPEED * mov_cmp->dir.y * DeltaTime;    
     };
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), newLocation);
