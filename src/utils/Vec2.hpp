@@ -7,13 +7,16 @@ template<typename T>
 struct Vec2 {
     Vec2<T>() = default;
     Vec2<T>(const T  X,  const T  Y ) : x(X), y(Y) { }
-    //Añadir cstor de copia y move
 
     T x { };
     T y { };
 
     T length() {
-        return std::sqrt( (x*x) + (y*y) ); //TODO: guardar el valor y renovar al cambiar alguna de las componentes.
+        return std::sqrt( (x*x) + (y*y) );
+    }
+
+    T length2() {
+        return (x*x) + (y*y);
     }
 
     void normalize() {
