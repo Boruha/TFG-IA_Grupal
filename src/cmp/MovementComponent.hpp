@@ -12,16 +12,16 @@ Replantear el cmp:
 */
 
 struct MovementComponent : Component_t {
-  explicit MovementComponent(const entID entityID, const float c_X, const float c_Y) 
+  explicit MovementComponent(const entID entityID, const ufixed32_t c_X, const ufixed32_t c_Y) 
     : Component_t(entityID), coords(c_X, c_Y) { }
 
-  Vec2<float> coords { 0.f, 0.f };
-  Vec2<float> dir    { 0.f, 0.f }; //currently facing
+  ufixed_vec2 coords { 0u, 0u };
+  fixed_vec2  dir    { 0,  0  }; //currently facing
   
   /*flocking mov*/
-  Vec2<float> target      { 0.f, 0.f }; 
-  Vec2<float> cohesion    { 0.f, 0.f }; 
-  Vec2<float> separation  { 0.f, 0.f }; 
+  fixed_vec2  target      { 0, 0 }; 
+  fixed_vec2  cohesion    { 0, 0 }; 
+  fixed_vec2  separation  { 0, 0 }; 
 
 
   //limitar la cantidad de:

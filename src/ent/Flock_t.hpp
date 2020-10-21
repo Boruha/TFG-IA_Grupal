@@ -1,6 +1,8 @@
 #pragma once
 #include <utils/Vec2.hpp>
 #include <utils/Alias.hpp>
+#include <utils/ufixed32_t.hpp>
+
 
 #include <vector>
 #include <array>
@@ -16,13 +18,13 @@ struct Flock_t {
         target.y = patrol_coord[patrol_index+1];
     };
 
-    Vec2<float> MC     { 0, 0 }; //Centro del conjunto.
+    ufixed_vec2 MC { 0u, 0u }; //Centro del conjunto.
     std::vector<Entity_t*> squadron { };
 
-    std::array<float,8> patrol_coord { 100.f,100.f, 600.f,100.f, 600.f,600.f, 100.f,600.f };
-    std::size_t         patrol_index { 0 };
+    std::array<ufixed32_t,8> patrol_coord { 100u,100u, 600u,100u, 600u,600u, 100u,600u };
+    std::size_t              patrol_index { 0u };
 
-    Vec2<float> target { };
+    ufixed_vec2 target { 0u, 0u };
 
 
 private:

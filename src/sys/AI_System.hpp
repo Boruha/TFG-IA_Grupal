@@ -25,11 +25,11 @@ private:
     void patrol_target_update(std::unique_ptr<Flock_t>& flock_ent) noexcept;
 
     /*Flock behaviours*/
-    void cohesion(MovementComponent* mov_cmp, const Vec2<float>& flock_mc) noexcept;
+    void cohesion(MovementComponent* mov_cmp, const ufixed_vec2& flock_mc) noexcept;
     void separation(std::vector<Entity_t*>& squadron) noexcept;
 
     /*Generic behaviours*/
-    void arrive(MovementComponent* mov_cmp, const Vec2<float>& target) noexcept;                                          
+    void arrive(MovementComponent* mov_cmp, const ufixed_vec2& target) noexcept;                                          
 };
 
 

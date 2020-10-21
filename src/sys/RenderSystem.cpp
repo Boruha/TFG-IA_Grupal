@@ -9,6 +9,8 @@
 #include <cmp/RenderComponent.hpp>
 #include <cmp/MovementComponent.hpp>
 
+#include <utils/AI_Constants.hpp>
+
 extern "C" {
   #include "tinyPTC/tinyptc.h"  
 }
@@ -36,7 +38,6 @@ RenderSystem::init() noexcept {
 
 bool
 RenderSystem::update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept {
-
     const auto& render_cmp_vec = context->getRenderCmps();
           auto* screen_ptr     = framebuffer.get();
 
@@ -47,10 +48,10 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const float Delt
         auto* mov_cmp = ent->getComponent<MovementComponent>();
 
         auto* screen_ptr  = framebuffer.get();
-              screen_ptr += (static_cast<uint32_t>(mov_cmp->coords.y) * window_w) + static_cast<uint32_t>(mov_cmp->coords.x);
+              screen_ptr += (mov_cmp->coords.y.getNoScaled() * window_w) + mov_cmp->coords.x.getNoScaled();
 
-        for(uint32_t i=0; i<render_cmp->sprite.y; ++i) {
-            std::fill(screen_ptr, screen_ptr + render_cmp->sprite.y, static_cast<uint32_t>(render_cmp->sprite_C));
+        for(uint32_t i=0; i<render_cmp->sprite.y.getNoScaled(); ++i) {
+            std::fill(screen_ptr, screen_ptr + render_cmp->sprite.y.getNoScaled(), static_cast<uint32_t>(render_cmp->sprite_C));
             screen_ptr += window_w;
         }
     };

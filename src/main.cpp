@@ -16,7 +16,7 @@ int main() {
   while (gameCondition) {
     timeElapse = std::chrono::duration_cast<std::chrono::milliseconds>(time.now() - lastUpdateTime);
 
-    if(timeElapse >= DELTATIME) {
+    if(timeElapse >= AIP::DELTATIME) {
       gameCondition  = gameManager->update();
       lastUpdateTime = time.now();
     }

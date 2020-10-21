@@ -26,7 +26,7 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const float DeltaTi
         auto& mc_coords     = flock_ent->MC;
         auto& ent_squadron  = flock_ent->squadron;
 
-        mc_coords.x = mc_coords.y = 0.f;
+        mc_coords.x.number = mc_coords.y.number = 0u;
         
         for(auto* ent : ent_squadron) {                                 //Itera por cada integrante
             auto* mov_cmp = ent->getComponent<MovementComponent>();
@@ -37,6 +37,8 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const float DeltaTi
         mc_coords.x /= ent_squadron.size();                             //saca el promedio en cada eje.
         mc_coords.y /= ent_squadron.size();
     };
+
+
     std::for_each(begin(flock_ent_vec), end(flock_ent_vec), update_flock_MC);
     
     for(auto& flock : flock_ent_vec)
@@ -58,7 +60,7 @@ AI_System::patrol(std::unique_ptr<Flock_t>& flock_ent) noexcept {
         arrive(mov_cmp, flock_ent->target);
         cohesion(mov_cmp, mc_coords);
 
-        mov_cmp->separation.x = mov_cmp->separation.y = 0.f; //FEO "-.- (pasar reset al sistema)
+        mov_cmp->separation.x = mov_cmp->separation.y = 0; //FEO "-.- (pasar reset al sistema)
     };
     std::for_each(begin(ents_in_squadron), end(ents_in_squadron), arrive_patrol_cohesion);
 
@@ -79,7 +81,9 @@ AI_System::patrol_target_update(std::unique_ptr<Flock_t>& flock_ent) noexcept {
     const auto& mc_coords = flock_ent->MC;
           auto& target    = flock_ent->target;
 
-    Vec2<float> diff_flock2target { target.x - mc_coords.x, target.y - mc_coords.y };
+    fixed_vec2 diff_flock2target { };
+    diff_flock2target.x.number = target.x.number - mc_coords.x.number;
+    diff_flock2target.y.number = target.y.number - mc_coords.y.number;
 
     if( diff_flock2target.length2() < FLOCK_ARRIVE_MIN_DIST2 ) {
         const auto& route = flock_ent->patrol_coord;
@@ -92,14 +96,14 @@ AI_System::patrol_target_update(std::unique_ptr<Flock_t>& flock_ent) noexcept {
 }
 
 void
-AI_System::cohesion(MovementComponent* mov_cmp, const Vec2<float>& flock_mc) noexcept {
+AI_System::cohesion(MovementComponent* mov_cmp, const ufixed_vec2& flock_mc) noexcept {
     auto& cohesion_vec = mov_cmp->cohesion; 
 
-    cohesion_vec.x = flock_mc.x - mov_cmp->coords.x;
-    cohesion_vec.y = flock_mc.y - mov_cmp->coords.y;
+    cohesion_vec.x.number = flock_mc.x.number - mov_cmp->coords.x.number;
+    cohesion_vec.y.number = flock_mc.y.number - mov_cmp->coords.y.number;
 
     if(cohesion_vec.length2() < COHESION_RAD2)
-        cohesion_vec.x = cohesion_vec.y = 0.f;
+        cohesion_vec.x.number = cohesion_vec.y.number = 0;
 }
 
 void
@@ -110,20 +114,24 @@ AI_System::separation(std::vector<Entity_t*>& squadron) noexcept {
         for(auto it_comp_ent = it_current_ent + 1; it_comp_ent != end(squadron); ++it_comp_ent ) {
             auto* mov_cmp_comp = (*it_comp_ent)->getComponent<MovementComponent>();
             
-            Vec2<float> ent_separation { mov_cmp_current->coords.x - mov_cmp_comp->coords.x,
-                                         mov_cmp_current->coords.y - mov_cmp_comp->coords.y };
+            fixed_vec2 ent_separation { }; 
+            ent_separation.x.number = mov_cmp_current->coords.x.number - mov_cmp_comp->coords.x.number;
+            ent_separation.y.number = mov_cmp_current->coords.y.number - mov_cmp_comp->coords.y.number;
             
-            auto dist = ent_separation.length2();
+            auto dist { ent_separation.length2() };
 
             if(dist < SEPARATION_RAD2) {
-                float strength = std::min(SEPARATION_NUM/dist, ENT_MAX_SPEED);
+                auto strength { std::min(SEPARATION_NUM/dist, ENT_MAX_SPEED) };
                 ent_separation.normalize();
 
-                mov_cmp_current->separation.x += strength * ent_separation.x;
-                mov_cmp_current->separation.y += strength * ent_separation.y;
+                auto str_result_X { strength * ent_separation.x };
+                auto str_result_Y { strength * ent_separation.y };
 
-                mov_cmp_comp->separation.x += strength * (ent_separation.x * -1);
-                mov_cmp_comp->separation.y += strength * (ent_separation.y * -1);
+                mov_cmp_current->separation.x += str_result_X;
+                mov_cmp_current->separation.y += str_result_Y;
+
+                mov_cmp_comp->separation.x += str_result_X * -1;
+                mov_cmp_comp->separation.y += str_result_Y * -1;
             } //end_if
 
         } //end_for2
@@ -132,14 +140,14 @@ AI_System::separation(std::vector<Entity_t*>& squadron) noexcept {
 
 /*Generic behaviours*/
 void
-AI_System::arrive(MovementComponent* mov_cmp, const Vec2<float>& target) noexcept {
+AI_System::arrive(MovementComponent* mov_cmp, const ufixed_vec2& target) noexcept {
     auto& to_target = mov_cmp->target;
 
-    to_target.x = target.x - mov_cmp->coords.x;
-    to_target.y = target.y - mov_cmp->coords.y;
+    to_target.x.number = target.x.number - mov_cmp->coords.x.number;
+    to_target.y.number = target.y.number - mov_cmp->coords.y.number;
 
     if(to_target.length2() < ENT_ARRIVE_MIN_DIST2)
-        to_target.x = to_target.y = 0.f;
+        to_target.x.number = to_target.y.number = 0;
 }
 
 } //NS
