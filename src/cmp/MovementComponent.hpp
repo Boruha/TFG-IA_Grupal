@@ -16,13 +16,14 @@ struct MovementComponent : Component_t {
     : Component_t(entityID), coords(c_X, c_Y) { }
 
   ufixed_vec2 coords { 0u, 0u };
-  fixed_vec2  dir    { 0,  0  }; //currently facing
-  
-  /*flocking mov*/
-  fixed_vec2  target      { 0, 0 }; 
-  fixed_vec2  cohesion    { 0, 0 }; 
-  fixed_vec2  separation  { 0, 0 }; 
 
+  //velocidades
+  ufixed_vec2 current_vel { 0u, 0u };
+
+  fixed_vec2  dir    { 0, 0 };      //resultant vector
+    fixed_vec2  target      { 0, 0 }; //2 desired position
+    fixed_vec2  cohesion    { 0, 0 }; //2 flock centre
+    fixed_vec2  separation  { 0, 0 }; //2 avoid other entities
 
   //limitar la cantidad de:
   // - grados que puede rotar la AI  (posibles const)
