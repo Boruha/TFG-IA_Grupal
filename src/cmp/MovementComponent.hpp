@@ -18,9 +18,10 @@ struct MovementComponent : Component_t {
   ufixed_vec2 coords { 0u, 0u };
 
   //velocidades
-  ufixed_vec2 current_vel { 0u, 0u };
+  fixed32_t current_vel { 0 }; //Rango de valores: [0  - MAX_SPEED]
+  bool in_movement { false };
 
-  fixed_vec2  dir    { 0, 0 };      //resultant vector
+  fixed_vec2  dir    { 0, 0 };        //resultant vector
     fixed_vec2  target      { 0, 0 }; //2 desired position
     fixed_vec2  cohesion    { 0, 0 }; //2 flock centre
     fixed_vec2  separation  { 0, 0 }; //2 avoid other entities

@@ -60,20 +60,11 @@ AI_System::patrol(std::unique_ptr<Flock_t>& flock_ent) noexcept {
         arrive(mov_cmp, flock_ent->target);
         cohesion(mov_cmp, mc_coords);
 
-        mov_cmp->separation.x = mov_cmp->separation.y = 0; //FEO "-.- (pasar reset al sistema)
+        mov_cmp->separation.x = mov_cmp->separation.y = 0;
     };
     std::for_each(begin(ents_in_squadron), end(ents_in_squadron), arrive_patrol_cohesion);
 
     separation(ents_in_squadron);
-
-    /*Result*/                                  //FEOOOOOO T.T (pasar nomalizacion al sistema)
-    for(auto* ent : ents_in_squadron) {
-        auto* mov_cmp = ent->getComponent<MovementComponent>();
-
-        mov_cmp->dir.x = mov_cmp->target.x + mov_cmp->cohesion.x + mov_cmp->separation.x;
-        mov_cmp->dir.y = mov_cmp->target.y + mov_cmp->cohesion.y + mov_cmp->separation.y;
-        mov_cmp->dir.normalize();
-    }
 }
 
 void
@@ -113,8 +104,8 @@ AI_System::separation(std::vector<Entity_t*>& squadron) noexcept {
 
         for(auto it_comp_ent = it_current_ent + 1; it_comp_ent != end(squadron); ++it_comp_ent ) {
             auto* mov_cmp_comp = (*it_comp_ent)->getComponent<MovementComponent>();
-            
             fixed_vec2 ent_separation { }; 
+            
             ent_separation.x.number = mov_cmp_current->coords.x.number - mov_cmp_comp->coords.x.number;
             ent_separation.y.number = mov_cmp_current->coords.y.number - mov_cmp_comp->coords.y.number;
             
@@ -133,7 +124,6 @@ AI_System::separation(std::vector<Entity_t*>& squadron) noexcept {
                 mov_cmp_comp->separation.x += str_result_X * -1;
                 mov_cmp_comp->separation.y += str_result_Y * -1;
             } //end_if
-
         } //end_for2
     } //end_for1
 }
