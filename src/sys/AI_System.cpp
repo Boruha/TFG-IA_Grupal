@@ -57,7 +57,7 @@ AI_System::patrol(std::unique_ptr<Flock_t>& flock_ent) noexcept {
     auto arrive_patrol_cohesion = [&](Entity_t* entity) {
         auto* mov_cmp = entity->getComponent<MovementComponent>();
 
-        arrive(mov_cmp, flock_ent->target);
+        arrive(mov_cmp, flock_ent->target, mc_coords);
         cohesion(mov_cmp, mc_coords);
 
         mov_cmp->separation.x = mov_cmp->separation.y = 0;
@@ -130,14 +130,30 @@ AI_System::separation(std::vector<Entity_t*>& squadron) noexcept {
 
 /*Generic behaviours*/
 void
-AI_System::arrive(MovementComponent* mov_cmp, const ufixed_vec2& target) noexcept {
-    auto& to_target = mov_cmp->target;
+AI_System::arrive(MovementComponent* mov_cmp, const ufixed_vec2& target, const ufixed_vec2& flock_mc) noexcept {
+    auto& to_target    = mov_cmp->target;
+    auto& my_coords    = mov_cmp->coords;
+    mov_cmp->Accel_mod = 1;
+    
+    //Calculo posición relativa en el destino del flock.
+    int32_t relative_pos_x = my_coords.x.number - flock_mc.x.number;
+    int32_t relative_pos_y = my_coords.y.number - flock_mc.y.number;
+    //marcamos la posicion relativa como obj.
+    int32_t own_target_x   = target.x.number    + relative_pos_x;
+    int32_t own_target_y   = target.y.number    + relative_pos_y;
 
-    to_target.x.number = target.x.number - mov_cmp->coords.x.number;
-    to_target.y.number = target.y.number - mov_cmp->coords.y.number;
+    to_target.x.number = own_target_x - my_coords.x.number;
+    to_target.y.number = own_target_y - my_coords.y.number;
 
-    if(to_target.length2() < ENT_ARRIVE_MIN_DIST2)
+    auto dist_to_target = to_target.length2(); 
+
+    if(dist_to_target < ENT_DECELERATE_MIN_DIST2)
+        mov_cmp->Accel_mod = -1;
+
+    if(dist_to_target < ENT_ARRIVE_MIN_DIST2) {
+        std::cout << "LLEGO\n";
         to_target.x.number = to_target.y.number = 0;
+    }
 }
 
 } //NS

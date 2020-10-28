@@ -15,9 +15,6 @@ struct MovementSystem : System_t {
     
     void init() noexcept override;
     bool update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept override;
-
-private:
-    void calculeCurrentVelocity(fixed32_t& current_vel, fixed32_t dir_length, bool in_mov) noexcept;
 };
 
 } //NS

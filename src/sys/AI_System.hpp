@@ -29,7 +29,7 @@ private:
     void separation(std::vector<Entity_t*>& squadron) noexcept;
 
     /*Generic behaviours*/
-    void arrive(MovementComponent* mov_cmp, const ufixed_vec2& target) noexcept;                                          
+    void arrive(MovementComponent* mov_cmp, const ufixed_vec2& target, const ufixed_vec2& flock_mc) noexcept;                                          
 };
 
 

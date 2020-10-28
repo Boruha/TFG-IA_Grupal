@@ -19,18 +19,16 @@ struct MovementComponent : Component_t {
 
   //velocidades
   fixed32_t current_vel { 0 }; //Rango de valores: [0  - MAX_SPEED]
-  bool in_movement { false };
+  int8_t    Accel_mod   { 1 };
 
   fixed_vec2  dir    { 0, 0 };        //resultant vector
     fixed_vec2  target      { 0, 0 }; //2 desired position
     fixed_vec2  cohesion    { 0, 0 }; //2 flock centre
     fixed_vec2  separation  { 0, 0 }; //2 avoid other entities
+  fixed_vec2  rot    { 0, 0 };        //->Where i will face
 
   //limitar la cantidad de:
   // - grados que puede rotar la AI  (posibles const)
-  // - variación de la velocidad
-
-  //Posible tener una velocidad normal (andar xd) y un cap de sprint + acceleración.
 };
 
 }

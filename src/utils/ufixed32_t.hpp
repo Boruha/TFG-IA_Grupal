@@ -9,7 +9,8 @@ constexpr const int32_t  SCALE_S { 256 };
 
 struct ufixed32_t {
     ufixed32_t() = default;
-    constexpr ufixed32_t(uint32_t num)          noexcept : number(num * SCALE)           { } //ctor
+    constexpr explicit ufixed32_t(uint32_t num) noexcept : number(num * SCALE)           { } //ctor
+    constexpr explicit ufixed32_t(float    num) noexcept : number(num * SCALE)           { } //ctor
     constexpr ufixed32_t(const ufixed32_t& num) noexcept : number(num.number)            { } //copy ctor
     constexpr ufixed32_t(ufixed32_t&& num)      noexcept : number(std::move(num.number)) { } //move ctor
 
@@ -93,7 +94,8 @@ struct ufixed32_t {
 
 struct fixed32_t {
     fixed32_t() = default;
-    constexpr fixed32_t(int32_t num)          noexcept : number(num * SCALE)           { } //ctor
+    constexpr explicit fixed32_t(int32_t num) noexcept : number(num * SCALE)           { } //ctor
+    constexpr explicit fixed32_t(float   num) noexcept : number(num * SCALE)           { } //ctor
     constexpr fixed32_t(const fixed32_t& num) noexcept : number(num.number)            { } //copy ctor
     constexpr fixed32_t(fixed32_t&& num)      noexcept : number(std::move(num.number)) { } //move ctor
 
