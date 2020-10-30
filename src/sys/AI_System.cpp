@@ -125,6 +125,9 @@ AI_System::separation(std::vector<Entity_t*>& squadron) noexcept {
                 mov_cmp_comp->separation.y += str_result_Y * -1;
             } //end_if
         } //end_for2
+        
+        mov_cmp_current->dir.x = mov_cmp_current->target.x + mov_cmp_current->cohesion.x + mov_cmp_current->separation.x;
+        mov_cmp_current->dir.y = mov_cmp_current->target.y + mov_cmp_current->cohesion.y + mov_cmp_current->separation.y;
     } //end_for1
 }
 

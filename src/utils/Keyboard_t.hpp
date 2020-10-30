@@ -68,6 +68,10 @@ private:
         , { XK_7        , false }
         , { XK_8        , false }
         , { XK_9        , false }
+        , { XK_Left     , false }
+        , { XK_Up       , false }
+        , { XK_Right    , false }
+        , { XK_Down     , false }
     };
 };
 

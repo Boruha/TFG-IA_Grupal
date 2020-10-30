@@ -3,9 +3,6 @@
 #include <ent/Entity_t.hpp>
 #include <ent/Flock_t.hpp>
 
-#include <cmp/MovementComponent.hpp>
-#include <cmp/RenderComponent.hpp>
-
 #include <utils/AI_Constants.hpp>
 
 namespace AIP {
@@ -64,6 +61,18 @@ EntityManager::EntityManager() {
     ent4->addComponent(ai_4.get());
 
     flock_1->squadron.emplace_back(ent4.get());
+
+    /*ent 5 - player*/
+    auto& ent5  = createEntity_t();
+    auto& mov_5 = cmp_storage->createComponent( MovementComponent(ent5->getID(), ufixed32_t(200u) , ufixed32_t(200u)) );
+    auto& ren_5 = cmp_storage->createComponent( RenderComponent(ent5->getID(), ufixed32_t(10u), ufixed32_t(10u), Color::Blue) );
+    auto& in_5  = cmp_storage->createComponent( InputComponent(ent5->getID()) );
+
+    ent5->addComponent(mov_5.get());
+    ent5->addComponent(ren_5.get());
+    ent5->addComponent(in_5.get());
+
+
 }
 
 EntityManager::~EntityManager() {

@@ -29,6 +29,11 @@ struct ufixed32_t {
         return *this;
     }
 
+    ufixed32_t& operator-=(const ufixed32_t& num) {
+        number -= num.number;
+        return *this;
+    }
+
     constexpr ufixed32_t operator+(const ufixed32_t& num) const {
         ufixed32_t new_uf32_t { };
         new_uf32_t.number = this->number + num.number; 
@@ -111,6 +116,11 @@ struct fixed32_t {
 
     fixed32_t& operator+=(const fixed32_t& num) {
         number += num.number;
+        return *this;
+    }
+
+    fixed32_t& operator-=(const fixed32_t& num) {
+        number -= num.number;
         return *this;
     }
 

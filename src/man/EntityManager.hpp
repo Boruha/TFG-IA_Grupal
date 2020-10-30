@@ -1,7 +1,9 @@
 #pragma once
 #include <man/Manager_t.hpp>
 #include <man/ComponentStorage.hpp>
+
 #include <ent/Flock_t.hpp>
+
 #include <utils/Alias.hpp>
 #include <utils/Color.hpp>
 
@@ -37,6 +39,9 @@ struct EntityManager : Manager_t
 
       const std::vector<std::unique_ptr<AI_Component>>&  getAI_Cmps() const noexcept { return cmp_storage->getCmpCollection<AI_Component>(); };   
             std::vector<std::unique_ptr<AI_Component>>&  getAI_Cmps()       noexcept { return cmp_storage->getCmpCollection<AI_Component>(); };
+
+      const std::vector<std::unique_ptr<InputComponent>>&  getInputCmps() const noexcept override { return cmp_storage->getCmpCollection<InputComponent>(); }
+            std::vector<std::unique_ptr<InputComponent>>&  getInputCmps()       noexcept override { return cmp_storage->getCmpCollection<InputComponent>(); }
 
 private:
       std::unordered_map<entID, std::unique_ptr<Entity_t>> ent_map     { };

@@ -12,6 +12,7 @@ struct Flock_t;
 struct RenderComponent;
 struct MovementComponent;
 struct AI_Component;
+struct InputComponent;
 
 
 struct Manager_t {
@@ -34,6 +35,9 @@ struct Manager_t {
 
     virtual const std::vector<std::unique_ptr<AI_Component>>&  getAI_Cmps() const noexcept = 0;   
     virtual       std::vector<std::unique_ptr<AI_Component>>&  getAI_Cmps()       noexcept = 0;
+
+    virtual const std::vector<std::unique_ptr<InputComponent>>&  getInputCmps() const noexcept = 0;   
+    virtual       std::vector<std::unique_ptr<InputComponent>>&  getInputCmps()       noexcept = 0;
 
 };
 

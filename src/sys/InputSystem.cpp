@@ -2,13 +2,17 @@
 
 #include <man/Manager_t.hpp>
 
-#include <cmp/RenderComponent.hpp>
+#include <cmp/InputComponent.hpp>
+#include <cmp/MovementComponent.hpp>
+
+#include <ent/Entity_t.hpp>
 
 extern "C" {
   #include "tinyPTC/tinyptc.h"  
 }
 
-#include <iostream>
+#include <algorithm>
+
 
 namespace AIP {
 
@@ -32,16 +36,33 @@ InputSystem::init() noexcept { }
 
 bool 
 InputSystem::update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept {
+    auto& input_cmp_vec = context->getInputCmps();
+
     ptc_process_events();
 
-    if(keyboard.isKeyPressed( XK_b )) {
-        auto& render_cmp_vec = context->getRenderCmps();
-
-        for(auto& render_cmp : render_cmp_vec) {
-            render_cmp->sprite_C = Color::Blue;
-        }
-    }
+    auto checkKeys = [&](std::unique_ptr<InputComponent>& input_cmp) {
+        auto& ent = context->getEntityByID(input_cmp->getEntityID());
+        auto* mov = ent->getComponent<MovementComponent>();
+        auto& dir = mov->dir;
         
+        dir.x.number = dir.y.number = 0;
+        //averiguar como hacer para mantener pulsado con tinyPTC
+
+        if( keyboard.isKeyPressed(input_cmp->key_Up) )
+            dir.y.number -= SCALE_S;
+
+        if( keyboard.isKeyPressed(input_cmp->key_Down) )
+            dir.y.number += SCALE_S;
+        
+        if( keyboard.isKeyPressed(input_cmp->key_Left) )
+            dir.x.number -= SCALE_S;
+        
+        if( keyboard.isKeyPressed(input_cmp->key_Right) )
+            dir.x.number += SCALE_S;
+
+    };
+    std::for_each(begin(input_cmp_vec), end(input_cmp_vec), checkKeys);
+
 
     return true;
 }

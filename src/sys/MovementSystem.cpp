@@ -18,13 +18,19 @@ MovementSystem::update(const std::unique_ptr<Manager_t>& context, const float De
         auto& current_v   = mov_cmp->current_vel.number;
         auto& current_dir = mov_cmp->dir;
 
-        current_dir.x = mov_cmp->target.x + mov_cmp->cohesion.x + mov_cmp->separation.x;
-        current_dir.y = mov_cmp->target.y + mov_cmp->cohesion.y + mov_cmp->separation.y;
-
-        current_v = std::clamp((mov_cmp->Accel_mod * ACCEL_MODIFIER) + current_v, 0, ENT_MAX_SPEED_NS);
+        //cambiar como gestiono la aceleración
+        if( current_dir.length2().number != 0 )
+            current_v = std::clamp((mov_cmp->Accel_mod * ACCEL_MODIFIER) + current_v, 0, ENT_MAX_SPEED_NS);
+        else
+            current_v = std::clamp(current_v/2, 0, ENT_MAX_SPEED_NS);
 
         current_dir.normalize();
         
+        //if(mov_cmp->getEntityID() == 5u) {
+        //    std::cout << "Mi velocidad es: " << current_v << "\n";
+        //    std::cout << "Mi dir es: " << current_dir.x.number << ", " << current_dir.y.number << "\n\n";
+        //}
+
         mov_cmp->coords.x.number += current_v * current_dir.x.number * DeltaTime;
         mov_cmp->coords.y.number += current_v * current_dir.y.number * DeltaTime;
     };

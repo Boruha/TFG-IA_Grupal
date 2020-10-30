@@ -1,6 +1,5 @@
 #pragma once
 #include <cmp/Component_t.hpp>
-#include <array>
 
 namespace AIP {
 
