@@ -32,7 +32,7 @@ CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const float D
         const auto& size_H = ren_cmp->sprite.y;
         
         //eje X
-        if(direct.x > 0) {
+        if(direct.x.number > 0) {
             if(coord.x > WINDOW_W_S - size_W)
                 coord.x = size_W;
         } else {
@@ -41,7 +41,7 @@ CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const float D
         }
         
         //eje Y
-        if(direct.y > 0) {
+        if(direct.y.number > 0) {
             if(coord.y > WINDOW_H_S - size_H)
                 coord.y = size_H;
         } else {

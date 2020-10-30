@@ -32,7 +32,7 @@ EntityManager::EntityManager() {
     /*ent 2*/
     auto& ent2  = createEntity_t();
     auto& mov_2 = cmp_storage->createComponent( MovementComponent(ent2->getID(), ufixed32_t(100u), ufixed32_t(100u) ) );
-    auto& ren_2 = cmp_storage->createComponent( RenderComponent(ent2->getID(), ufixed32_t(10u), ufixed32_t(10u), Color::Green) );
+    auto& ren_2 = cmp_storage->createComponent( RenderComponent(ent2->getID(), ufixed32_t(10u), ufixed32_t(10u), Color::White) );
     auto& ai_2  = cmp_storage->createComponent( AI_Component(ent2->getID()) );
 
     ent2->addComponent(mov_2.get());
@@ -44,7 +44,7 @@ EntityManager::EntityManager() {
     /*ent 3*/
     auto& ent3  = createEntity_t();
     auto& mov_3 = cmp_storage->createComponent( MovementComponent(ent3->getID(), ufixed32_t(100u) , ufixed32_t(200u) ) );
-    auto& ren_3 = cmp_storage->createComponent( RenderComponent(ent3->getID(), ufixed32_t(10u), ufixed32_t(10u), Color::Blue) );
+    auto& ren_3 = cmp_storage->createComponent( RenderComponent(ent3->getID(), ufixed32_t(10u), ufixed32_t(10u), Color::White) );
     auto& ai_3  = cmp_storage->createComponent( AI_Component(ent3->getID()) );
 
     ent3->addComponent(mov_3.get());
@@ -56,7 +56,7 @@ EntityManager::EntityManager() {
     /*ent 4*/
     auto& ent4  = createEntity_t();
     auto& mov_4 = cmp_storage->createComponent( MovementComponent(ent4->getID(), ufixed32_t(200u) , ufixed32_t(200u)) );
-    auto& ren_4 = cmp_storage->createComponent( RenderComponent(ent4->getID(), ufixed32_t(10u), ufixed32_t(10u), Color::Blue) );
+    auto& ren_4 = cmp_storage->createComponent( RenderComponent(ent4->getID(), ufixed32_t(10u), ufixed32_t(10u), Color::White) );
     auto& ai_4  = cmp_storage->createComponent( AI_Component(ent4->getID()) );
 
     ent4->addComponent(mov_4.get());

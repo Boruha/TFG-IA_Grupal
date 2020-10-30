@@ -60,7 +60,7 @@ AI_System::patrol(std::unique_ptr<Flock_t>& flock_ent) noexcept {
         arrive(mov_cmp, flock_ent->target, mc_coords);
         cohesion(mov_cmp, mc_coords);
 
-        mov_cmp->separation.x = mov_cmp->separation.y = 0;
+        mov_cmp->separation.x.number = mov_cmp->separation.y.number = 0;
     };
     std::for_each(begin(ents_in_squadron), end(ents_in_squadron), arrive_patrol_cohesion);
 

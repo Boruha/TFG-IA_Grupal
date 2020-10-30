@@ -15,8 +15,9 @@ GameManager::GameManager() {
     systems.emplace_back( std::make_unique<AI_System>() );
     systems.emplace_back( std::make_unique<MovementSystem>() );
     systems.emplace_back( std::make_unique<CollisionSystem>() );
-    systems.emplace_back( std::make_unique<RenderSystem>( WINDOW_W, WINDOW_H ) );
-    
+    systems.emplace_back( std::make_unique<RenderSystem>( WINDOW_W, WINDOW_H ) ); //aqui se crea la ventana de tinyPTC
+    systems.emplace_back( std::make_unique<InputSystem>() );                      //por lo que todos los cambios relacionados tienen
+                                                                                  //ir a posteriori. Ejemplo, los callbacks del input.
     manager = std::make_unique<EntityManager>();
 }
 

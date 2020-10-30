@@ -94,8 +94,8 @@ struct ufixed32_t {
 
 struct fixed32_t {
     fixed32_t() = default;
-    constexpr explicit fixed32_t(int32_t num) noexcept : number(num * SCALE)           { } //ctor
-    constexpr explicit fixed32_t(float   num) noexcept : number(num * SCALE)           { } //ctor
+    constexpr explicit fixed32_t(int32_t num) noexcept : number(num * SCALE_S)           { } //ctor
+    constexpr explicit fixed32_t(float   num) noexcept : number(num * SCALE_S)           { } //ctor
     constexpr fixed32_t(const fixed32_t& num) noexcept : number(num.number)            { } //copy ctor
     constexpr fixed32_t(fixed32_t&& num)      noexcept : number(std::move(num.number)) { } //move ctor
 
@@ -128,7 +128,7 @@ struct fixed32_t {
 
     constexpr fixed32_t operator*(const fixed32_t& num) const {
         fixed32_t new_uf32_t { };
-        new_uf32_t.number = ( (this->number/SCALE) * (num.number/SCALE) ) * SCALE; //desbordamiento (posibilidad de scale max8)
+        new_uf32_t.number = ( (this->number/SCALE_S) * (num.number/SCALE_S) ) * SCALE_S; //desbordamiento (posibilidad de scale_S max8)
         return new_uf32_t;
     }
 
@@ -140,7 +140,7 @@ struct fixed32_t {
 
     constexpr fixed32_t operator/(const fixed32_t& num) const {
         fixed32_t new_uf32_t { };
-        new_uf32_t.number = (this->number / num.number) * SCALE; 
+        new_uf32_t.number = (this->number / num.number) * SCALE_S; 
         return new_uf32_t;
     }
 
@@ -156,7 +156,7 @@ struct fixed32_t {
     }
 
     fixed32_t& operator/=(const fixed32_t& num) {
-        number = (this->number / num.number) * SCALE;
+        number = (this->number / num.number) * SCALE_S;
         return *this;
     }
 

@@ -21,7 +21,8 @@ struct Flock_t {
     ufixed_vec2 MC { 0u, 0u }; //Centro del conjunto.
     std::vector<Entity_t*> squadron { };
 
-    std::array<ufixed32_t,8> patrol_coord { 600u,100u, 600u,100u, 600u,600u, 100u,600u };
+    std::array<ufixed32_t,8> patrol_coord { ufixed32_t(600u),ufixed32_t(100u), ufixed32_t(600u),ufixed32_t(600u)
+                                          , ufixed32_t(100u),ufixed32_t(600u), ufixed32_t(100u),ufixed32_t(100u) };
     std::size_t              patrol_index { 0u };
 
     ufixed_vec2 target { 0u, 0u };

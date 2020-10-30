@@ -59,7 +59,7 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const float Delt
 
     ptc_update(screen_ptr);
 
-    return !ptc_process_events();
+    return true; //!ptc_process_events();
 }
 
 } //NS
