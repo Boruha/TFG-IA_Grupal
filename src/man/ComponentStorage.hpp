@@ -31,6 +31,7 @@ struct CmpVector : CmpCollection {
 
 struct ComponentStorage {
     explicit ComponentStorage() = default;
+            ~ComponentStorage() { cmp_map.clear(); }
              
                ComponentStorage(const ComponentStorage& ) = delete; //1 '&' = LValue, 2 '&' = RValue (Valor temporal)
                ComponentStorage(const ComponentStorage&&) = delete;

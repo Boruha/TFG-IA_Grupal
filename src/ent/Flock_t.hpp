@@ -18,15 +18,17 @@ struct Flock_t {
         target.y = patrol_coord[patrol_index+1];
     };
 
-    ufixed_vec2 MC { 0u, 0u }; //Centro del conjunto.
-    std::vector<Entity_t*> squadron { };
+    ~Flock_t() {
+        squadron.clear();
+    }
+
+    ufixed_vec2 target       { 0u, 0u };
+    ufixed_vec2 MC           { 0u, 0u }; //Centro del conjunto.
+    std::size_t patrol_index { 0u };
 
     std::array<ufixed32_t,8> patrol_coord { ufixed32_t(600u),ufixed32_t(100u), ufixed32_t(600u),ufixed32_t(600u)
                                           , ufixed32_t(100u),ufixed32_t(600u), ufixed32_t(100u),ufixed32_t(100u) };
-    std::size_t              patrol_index { 0u };
-
-    ufixed_vec2 target { 0u, 0u };
-
+    std::vector<Entity_t*>   squadron     { };
 
 private:
     inline static flockID counterID { 0 };

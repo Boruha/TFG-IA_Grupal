@@ -16,6 +16,7 @@ extern "C" {
 }
 
 #include <algorithm>
+#include <iostream>
 
 namespace AIP {
 
@@ -29,6 +30,7 @@ RenderSystem::RenderSystem(const uint32_t w, const uint32_t h)
 
 RenderSystem::~RenderSystem() {
     ptc_close();
+    framebuffer.~unique_ptr();
 }
 
 void

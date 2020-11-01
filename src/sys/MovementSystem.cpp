@@ -25,11 +25,6 @@ MovementSystem::update(const std::unique_ptr<Manager_t>& context, const float De
             current_v = std::clamp(current_v/2, 0, ENT_MAX_SPEED_NS);
 
         current_dir.normalize();
-        
-        //if(mov_cmp->getEntityID() == 5u) {
-        //    std::cout << "Mi velocidad es: " << current_v << "\n";
-        //    std::cout << "Mi dir es: " << current_dir.x.number << ", " << current_dir.y.number << "\n\n";
-        //}
 
         mov_cmp->coords.x.number += current_v * current_dir.x.number * DeltaTime;
         mov_cmp->coords.y.number += current_v * current_dir.y.number * DeltaTime;

@@ -14,7 +14,7 @@ namespace AIP {
 struct EntityManager : Manager_t
 {
       explicit EntityManager();
-            ~EntityManager() override;
+              ~EntityManager() override;
 
       [[nodiscard]] std::unique_ptr<Entity_t>& createEntity_t() noexcept;
       [[nodiscard]] std::unique_ptr<Flock_t>&  createFlock_t() noexcept;

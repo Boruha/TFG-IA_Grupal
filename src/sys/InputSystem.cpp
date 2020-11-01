@@ -38,7 +38,8 @@ bool
 InputSystem::update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept {
     auto& input_cmp_vec = context->getInputCmps();
 
-    ptc_process_events();
+    if( ptc_process_events() )
+        return false;
 
     auto checkKeys = [&](std::unique_ptr<InputComponent>& input_cmp) {
         auto& ent = context->getEntityByID(input_cmp->getEntityID());
@@ -62,7 +63,6 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const float Delta
 
     };
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), checkKeys);
-
 
     return true;
 }

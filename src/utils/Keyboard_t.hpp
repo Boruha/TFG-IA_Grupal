@@ -12,6 +12,7 @@ struct Keyboard_t {
     using OptKeyIt = std::optional<std::unordered_map<KeySym, bool>::iterator>;
 
     explicit Keyboard_t() = default;
+            ~Keyboard_t() {  }
 
     Keyboard_t(const Keyboard_t&)            = delete;
     Keyboard_t(Keyboard_t&&)                 = delete;
