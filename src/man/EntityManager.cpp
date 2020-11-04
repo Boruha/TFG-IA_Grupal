@@ -72,6 +72,8 @@ EntityManager::EntityManager() {
     ent5->addComponent(ren_5.get());
     ent5->addComponent(in_5.get());
 
+    player_id = ent5->getID();
+
 
 }
 

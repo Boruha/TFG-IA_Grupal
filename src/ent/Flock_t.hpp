@@ -11,24 +11,30 @@ namespace AIP {
 
 struct Entity_t;
 
+enum class Flock_behaviour : uint16_t {
+    no_b     = 0u,
+    patrol_b = 1u,
+    arrive_b  = 2u,
+    flee_b   = 3u,
+    pursue_b = 4u,
+    evade_b  = 5u
+};
+
 struct Flock_t {
-    explicit Flock_t() : flock_id(++counterID) {
-        squadron.reserve(5);
-        target.x = patrol_coord[patrol_index];
-        target.y = patrol_coord[patrol_index+1];
-    };
+    explicit Flock_t();
+    ~Flock_t();
+    
+    void setTarget(std::vector<ufixed_vec2>& new_target_list);
+    void setTarget(ufixed_vec2& new_target);
 
-    ~Flock_t() {
-        squadron.clear();
-    }
+    ufixed_vec2 current_target { 0u, 0u };
+    ufixed_vec2 MC             { 0u, 0u }; //Centro del conjunto.
+    std::size_t target_index   { 0u };
 
-    ufixed_vec2 target       { 0u, 0u };
-    ufixed_vec2 MC           { 0u, 0u }; //Centro del conjunto.
-    std::size_t patrol_index { 0u };
-
-    std::array<ufixed32_t,8> patrol_coord { ufixed32_t(600u),ufixed32_t(100u), ufixed32_t(600u),ufixed32_t(600u)
-                                          , ufixed32_t(100u),ufixed32_t(600u), ufixed32_t(100u),ufixed32_t(100u) };
+    std::vector<ufixed_vec2> target_list { };
     std::vector<Entity_t*>   squadron     { };
+
+    Flock_behaviour current_behaviour { Flock_behaviour::patrol_b };
 
 private:
     inline static flockID counterID { 0 };

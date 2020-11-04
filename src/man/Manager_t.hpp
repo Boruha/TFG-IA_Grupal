@@ -39,6 +39,9 @@ struct Manager_t {
     virtual const std::vector<std::unique_ptr<InputComponent>>&  getInputCmps() const noexcept = 0;   
     virtual       std::vector<std::unique_ptr<InputComponent>>&  getInputCmps()       noexcept = 0;
 
+    virtual const entID  getPlayerID() const noexcept = 0;   
+    virtual       entID  getPlayerID()       noexcept = 0;
+
 };
 
 }
