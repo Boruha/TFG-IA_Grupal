@@ -6,7 +6,6 @@
 #include <cmp/MovementComponent.hpp>
 
 #include <ent/Entity_t.hpp>
-#include <ent/Flock_t.hpp>
 
 extern "C" {
   #include "tinyPTC/tinyptc.h"  
@@ -42,6 +41,7 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const float Delta
     if( ptc_process_events() )
         return false;
 
+/*
     if(keyboard.isKeyPressed(XK_5)) {
         auto& flocks = context->getFlocks();
 
@@ -91,6 +91,8 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const float Delta
         for(auto& flock : flocks) 
             flock->current_behaviour = Flock_behaviour::no_b;
     }
+*/
+
 
     auto checkKeys = [&](std::unique_ptr<InputComponent>& input_cmp) {
         auto& ent = context->getEntityByID(input_cmp->getEntityID());
@@ -98,7 +100,6 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const float Delta
         auto& dir = mov->dir;
         
         dir.x.number = dir.y.number = 0;
-        //averiguar como hacer para mantener pulsado con tinyPTC
 
         if( keyboard.isKeyPressed(input_cmp->key_Up) )
             dir.y.number -= SCALE_S;
@@ -113,6 +114,7 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const float Delta
             dir.x.number += SCALE_S;
 
     };
+    
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), checkKeys);
 
     return true;

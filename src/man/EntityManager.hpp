@@ -2,8 +2,6 @@
 #include <man/Manager_t.hpp>
 #include <man/ComponentStorage.hpp>
 
-#include <ent/Flock_t.hpp>
-
 #include <utils/Alias.hpp>
 #include <utils/Color.hpp>
 
@@ -17,16 +15,10 @@ struct EntityManager : Manager_t
               ~EntityManager() override;
 
       [[nodiscard]] std::unique_ptr<Entity_t>& createEntity_t() noexcept;
-      [[nodiscard]] std::unique_ptr<Flock_t>&  createFlock_t() noexcept;
 
       /*   GETTERS CONTEXT   */
-
       const std::unordered_map<entID, std::unique_ptr<Entity_t>>&  getEntities() const noexcept override { return ent_map; }
             std::unordered_map<entID, std::unique_ptr<Entity_t>>&  getEntities()       noexcept override { return ent_map; }
-      
-      const std::vector<std::unique_ptr<Flock_t>>&  getFlocks() const noexcept { return flock_vec; }   
-            std::vector<std::unique_ptr<Flock_t>>&  getFlocks()       noexcept { return flock_vec; }
-
 
       const std::unique_ptr<Entity_t>&  getEntityByID(entID eid) const noexcept override { return ent_map.at(eid); }  
             std::unique_ptr<Entity_t>&  getEntityByID(entID eid)       noexcept override { return ent_map.at(eid); }
@@ -48,7 +40,6 @@ struct EntityManager : Manager_t
 
 private:
       std::unordered_map<entID, std::unique_ptr<Entity_t>> ent_map     { };
-      std::vector<std::unique_ptr<Flock_t>>                flock_vec   { };
       std::unique_ptr<ComponentStorage>                    cmp_storage { std::make_unique<ComponentStorage>() };
       entID player_id { 0u };
 };

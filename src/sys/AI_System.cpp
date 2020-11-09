@@ -2,7 +2,6 @@
 #include <man/Manager_t.hpp>
 
 #include <ent/Entity_t.hpp>
-#include <ent/Flock_t.hpp>
 
 #include <cmp/AI_Component.hpp>
 #include <cmp/MovementComponent.hpp>
@@ -19,100 +18,67 @@ AI_System::init() noexcept { }
 
 bool
 AI_System::update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept {
-    auto& flock_ent_vec = context->getFlocks();
+    auto& ai_cmp_vec = context->getAI_Cmps();
     
     /*MC UPDATE*/
-    auto update_flock_MC = [&](std::unique_ptr<Flock_t>& flock_ent) {
-        auto& mc_coords     = flock_ent->MC;
-        auto& ent_squadron  = flock_ent->squadron;
+    auto update_ai_movement = [&](std::unique_ptr<AI_Component>& ai_cmp) {
+        auto& ent     = context->getEntityByID( ai_cmp->getEntityID() );
+        auto* mov_cmp = ent->getComponent<MovementComponent>();
 
-        mc_coords.x.number = mc_coords.y.number = 0u;
-        
-        for(auto* ent : ent_squadron) {                                 //Itera por cada integrante
-            auto* mov_cmp = ent->getComponent<MovementComponent>();
-
-            mc_coords.x += mov_cmp->coords.x;                           //suma sus coordenadas
-            mc_coords.y += mov_cmp->coords.y;
-        }
-        mc_coords.x /= ent_squadron.size();                             //saca el promedio en cada eje.
-        mc_coords.y /= ent_squadron.size();
+        updateTarget(ai_cmp, mov_cmp);
+        arrive(mov_cmp, ai_cmp->target_vec.at(ai_cmp->target_index) );
     };
 
-
-    std::for_each(begin(flock_ent_vec), end(flock_ent_vec), update_flock_MC);
-    
-    for(auto& flock : flock_ent_vec)
-        patrol(flock, context);
+    std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), update_ai_movement);
 
     return true;
 }
 
+/* BASIC BEHAVIOURS FUCTIONS */
 void
-AI_System::patrol(std::unique_ptr<Flock_t>& flock_ent, const std::unique_ptr<Manager_t>& context) noexcept {
-    auto& ents_in_squadron = flock_ent->squadron;  //vec entity_t*
-    auto& mc_coords        = flock_ent->MC;        //centro de masas flock
+AI_System::arrive(MovementComponent* mov_cmp, const ufixed_vec2& target) noexcept {
+    auto& to_target    = mov_cmp->dir;
+    auto& my_coords    = mov_cmp->coords;
 
-    patrol_target_update(flock_ent);
+    to_target.x.number = target.x.number - my_coords.x.number;
+    to_target.y.number = target.y.number - my_coords.y.number;
 
-    auto arrive_patrol_cohesion = [&](Entity_t* entity) {
-        auto* mov_cmp = entity->getComponent<MovementComponent>();
-        mov_cmp->separation.x.number = mov_cmp->separation.y.number = 0;
+    auto dist_to_target = to_target.length2(); 
 
-        cohesion(mov_cmp, mc_coords);
+    if(dist_to_target < ENT_ARRIVE_MIN_DIST2)
+        to_target.x.number = to_target.y.number = 0;
 
-        switch (flock_ent->current_behaviour)
-        {
-            case Flock_behaviour::patrol_b: arrive(mov_cmp, flock_ent->current_target, mc_coords); //en el futuro habra diff
-                break;
-
-            case Flock_behaviour::arrive_b: arrive(mov_cmp, flock_ent->current_target, mc_coords); 
-                break;
-
-            case Flock_behaviour::pursue_b: pursue(mov_cmp, context, mc_coords); 
-                break;
-
-            case Flock_behaviour::evade_b: evade(mov_cmp, context, mc_coords); 
-                break;
-        
-            default: mov_cmp->target.x.number = mov_cmp->target.y.number = 0; 
-                break;
-        }
-
-    };
-    std::for_each(begin(ents_in_squadron), end(ents_in_squadron), arrive_patrol_cohesion);
-
-    separation(ents_in_squadron);
+    to_target.normalize();
 }
 
-void
-AI_System::patrol_target_update(std::unique_ptr<Flock_t>& flock_ent) noexcept {
-    const auto& mc_coords = flock_ent->MC;
-          auto& target    = flock_ent->current_target;
+/* AUX FUCTIONS */
+void 
+AI_System::updateTarget(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp) noexcept {
+    auto& coords = mov_cmp->coords;
+    auto& route  = ai_cmp->target_vec;
+    auto& index  = ai_cmp->target_index;
+    auto& target = route.at(index);
 
-    fixed_vec2 diff_flock2target { };
-    diff_flock2target.x.number = target.x.number - mc_coords.x.number;
-    diff_flock2target.y.number = target.y.number - mc_coords.y.number;
+    fixed_vec2 diff_2target { };
+    diff_2target.x.number = target.x.number - coords.x.number;
+    diff_2target.y.number = target.y.number - coords.y.number;
 
-    if( diff_flock2target.length2() < FLOCK_ARRIVE_MIN_DIST2 ) {
-        const auto& route = flock_ent->target_list;
-              auto& index = flock_ent->target_index;
-                
+    if( diff_2target.length2() < ENT_ARRIVE_MIN_DIST2 ) {        
         index  = (index + 1) % route.size();
         target = route.at(index);
     }
 }
 
-void
-AI_System::cohesion(MovementComponent* mov_cmp, const ufixed_vec2& flock_mc) noexcept {
-    auto& cohesion_vec = mov_cmp->cohesion; 
 
-    cohesion_vec.x.number = flock_mc.x.number - mov_cmp->coords.x.number;
-    cohesion_vec.y.number = flock_mc.y.number - mov_cmp->coords.y.number;
 
-    if(cohesion_vec.length2() < COHESION_RAD2)
-        cohesion_vec.x.number = cohesion_vec.y.number = 0;
-}
+} //NS
 
+
+//std::cout << "Vec target:     " << mov_cmp->target.x << " - " << mov_cmp->target.y << "\n";
+//std::cout << "Vec cohesion:   " << mov_cmp->cohesion.x << " - " << mov_cmp->cohesion.y << "\n";
+//std::cout << "Vec separation: " << mov_cmp->separation.x << " - " << mov_cmp->separation.y << "\n";
+
+/*
 void
 AI_System::separation(std::vector<Entity_t*>& squadron) noexcept {
     for(auto it_current_ent = begin(squadron); it_current_ent < end(squadron); ++it_current_ent ) {
@@ -146,102 +112,4 @@ AI_System::separation(std::vector<Entity_t*>& squadron) noexcept {
         mov_cmp_current->dir.y = mov_cmp_current->target.y + mov_cmp_current->cohesion.y + mov_cmp_current->separation.y;
     } //end_for1
 }
-
-/*Generic behaviours*/
-void
-AI_System::arrive(MovementComponent* mov_cmp, const ufixed_vec2& target, const ufixed_vec2& flock_mc) noexcept {
-    auto& to_target    = mov_cmp->target;
-    auto& my_coords    = mov_cmp->coords;
-    mov_cmp->Accel_mod = 1;
-    
-    //Calculo posición relativa en el destino del flock.
-    int32_t relative_pos_x = my_coords.x.number - flock_mc.x.number;
-    int32_t relative_pos_y = my_coords.y.number - flock_mc.y.number;
-    //marcamos la posicion relativa como obj.
-    int32_t own_target_x   = target.x.number    + relative_pos_x;
-    int32_t own_target_y   = target.y.number    + relative_pos_y;
-
-    to_target.x.number = own_target_x - my_coords.x.number;
-    to_target.y.number = own_target_y - my_coords.y.number;
-
-    auto dist_to_target = to_target.length2(); 
-
-    if(dist_to_target < ENT_DECELERATE_MIN_DIST2)
-        mov_cmp->Accel_mod = -1;
-
-    if(dist_to_target < ENT_ARRIVE_MIN_DIST2)
-        to_target.x.number = to_target.y.number = 0;
-
-}
-
-void 
-AI_System::pursue(MovementComponent* mov_cmp, const std::unique_ptr<Manager_t>& context, const ufixed_vec2& flock_mc) noexcept {
-    auto& ent = context->getEntityByID( context->getPlayerID() );
-    auto* player_mov = ent->getComponent<MovementComponent>();
-
-    auto& to_target    = mov_cmp->target;
-    auto& my_coords    = mov_cmp->coords;
-    mov_cmp->Accel_mod = 1;
-
-    //next pos player    
-    int32_t  player_future_x = (10 * player_mov->dir.x.number) + player_mov->coords.x.number;
-    int32_t  player_future_y = (10 * player_mov->dir.y.number) + player_mov->coords.y.number;
-
-    
-    //Calculo posición relativa en el destino del flock.
-    int32_t relative_pos_x = my_coords.x.number - flock_mc.x.number;
-    int32_t relative_pos_y = my_coords.y.number - flock_mc.y.number;
-    //marcamos la posicion relativa como obj.
-    int32_t own_target_x   = player_future_x    + relative_pos_x;
-    int32_t own_target_y   = player_future_y    + relative_pos_y;
-
-    to_target.x.number = own_target_x - my_coords.x.number;
-    to_target.y.number = own_target_y - my_coords.y.number;
-
-    auto dist_to_target = to_target.length2(); 
-
-    if(dist_to_target < ENT_DECELERATE_MIN_DIST2)
-        mov_cmp->Accel_mod = -1;
-
-    if(dist_to_target < ENT_ARRIVE_MIN_DIST2)
-        to_target.x.number = to_target.y.number = 0;
-
-}                                      
-
-void 
-AI_System::evade(MovementComponent* mov_cmp, const std::unique_ptr<Manager_t>& context, const ufixed_vec2& flock_mc) noexcept {
-    auto& ent = context->getEntityByID( context->getPlayerID() );
-    auto* player_mov = ent->getComponent<MovementComponent>();
-
-    auto& to_target    = mov_cmp->target;
-    auto& my_coords    = mov_cmp->coords;
-    mov_cmp->Accel_mod = 1;
-
-    //next pos player    
-    int32_t  player_future_x = (10 * player_mov->dir.x.number) + player_mov->coords.x.number;
-    int32_t  player_future_y = (10 * player_mov->dir.y.number) + player_mov->coords.y.number;
-
-    
-    //Calculo posición relativa en el destino del flock.
-    int32_t relative_pos_x = my_coords.x.number - flock_mc.x.number;
-    int32_t relative_pos_y = my_coords.y.number - flock_mc.y.number;
-    //marcamos la posicion relativa como obj.
-    int32_t own_target_x   = player_future_x    + relative_pos_x;
-    int32_t own_target_y   = player_future_y    + relative_pos_y;
-
-    to_target.x.number = my_coords.x.number - own_target_x;
-    to_target.y.number = my_coords.y.number - own_target_y;
-
-    auto dist_to_target = to_target.length2(); 
-
-    if(dist_to_target > ENT_ESCAPE_MAX_DIST2)
-        to_target.x.number = to_target.y.number = 0;
-
-}
-
-} //NS
-
-
-//std::cout << "Vec target:     " << mov_cmp->target.x << " - " << mov_cmp->target.y << "\n";
-//std::cout << "Vec cohesion:   " << mov_cmp->cohesion.x << " - " << mov_cmp->cohesion.y << "\n";
-//std::cout << "Vec separation: " << mov_cmp->separation.x << " - " << mov_cmp->separation.y << "\n";
+*/

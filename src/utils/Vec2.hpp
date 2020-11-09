@@ -1,42 +1,11 @@
 #pragma once
+
 #include <cmath>
 #include <iostream>
 
-#include <utils/AI_Constants.hpp>
 #include <utils/ufixed32_t.hpp>
 
 namespace AIP {
-
-//template<typename T>
-//struct Vec2 {
-//    Vec2<T>() = default;
-//    Vec2<T>(const T  X,  const T  Y ) : x(X), y(Y) { }
-//
-//    T x { };
-//    T y { };
-//
-//    T length() {
-//        return std::sqrt( ((x/SCALE) * (x/SCALE)) + ((y/SCALE) * (y/SCALE)) );
-//    }
-//
-//    T length2() {
-//        return (((x/SCALE) * (x/SCALE)) * SCALE) + (((y/SCALE) * (y/SCALE)) * SCALE);
-//    }
-//
-//    void normalize() {
-//        auto module = length();
-//        if(module != 0) {
-//            x /= module;
-//            y /= module;
-//        }
-//        else
-//        {
-//            x = 0;
-//            y = 0;
-//        }
-//        
-//    }
-//};
 
 struct fixed_vec2 {
     fixed_vec2() = default;
