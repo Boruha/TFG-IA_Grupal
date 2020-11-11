@@ -7,6 +7,37 @@
 
 namespace AIP {
 
+template<typename T>
+struct vec2 {
+    vec2<T>() = default;
+    vec2<T>(const T  X,  const T  Y ) : x(X), y(Y) { }
+
+    T x { 0 };
+    T y { 0 };
+
+    T length() {
+        return std::sqrt( (x * x) + (y * y) );
+    }
+
+    T length2() {
+        return (x*x) + (y*y);
+    }
+
+    void normalize() {
+        auto module = length();
+        if(module != 0) {
+            x /= module;
+            y /= module;
+        }
+        else
+        {
+            x = 0;
+            y = 0;
+        }
+        
+    }
+};
+
 struct fixed_vec2 {
     fixed_vec2() = default;
     fixed_vec2(const fixed32_t  X,  const fixed32_t  Y ) : x(X), y(Y) { }

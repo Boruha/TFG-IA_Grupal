@@ -36,12 +36,12 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const float DeltaTi
 
 /* BASIC BEHAVIOURS FUCTIONS */
 void
-AI_System::arrive(MovementComponent* mov_cmp, const ufixed_vec2& target) noexcept {
+AI_System::arrive(MovementComponent* mov_cmp, const fixed_vec2& target) noexcept {
     auto& to_target    = mov_cmp->dir;
     auto& my_coords    = mov_cmp->coords;
 
-    to_target.x.number = target.x.number - my_coords.x.number;
-    to_target.y.number = target.y.number - my_coords.y.number;
+    to_target.x = target.x - my_coords.x;
+    to_target.y = target.y - my_coords.y;
 
     auto dist_to_target = to_target.length2(); 
 
@@ -60,8 +60,8 @@ AI_System::updateTarget(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent
     auto& target = route.at(index);
 
     fixed_vec2 diff_2target { };
-    diff_2target.x.number = target.x.number - coords.x.number;
-    diff_2target.y.number = target.y.number - coords.y.number;
+    diff_2target.x = target.x - coords.x;
+    diff_2target.y = target.y - coords.y;
 
     if( diff_2target.length2() < ENT_ARRIVE_MIN_DIST2 ) {        
         index  = (index + 1) % route.size();

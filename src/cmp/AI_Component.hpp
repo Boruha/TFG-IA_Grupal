@@ -18,7 +18,7 @@ namespace AIP {
 struct AI_Component : Component_t {
     explicit AI_Component(entID eid) : Component_t(eid) { }
 
-    std::vector<ufixed_vec2> target_vec { { 100u, 100u }, { 600u, 100u }, { 600u, 600u }, { 100u, 600u } };
+    std::vector<fixed_vec2> target_vec { { -300, -300 }, { 200, -300 }, { 200, 200 }, { -300, 200 } };
     uint32_t target_index { 0u };
 
 };

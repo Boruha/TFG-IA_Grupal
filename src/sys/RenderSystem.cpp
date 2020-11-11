@@ -1,7 +1,5 @@
 #include <sys/RenderSystem.hpp>
 
-#include <utils/Color.hpp>
-
 #include <man/Manager_t.hpp>
 
 #include <ent/Entity_t.hpp>
@@ -46,12 +44,14 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const float Delt
     std::fill(screen_ptr, screen_ptr + framebuffer_size, static_cast<uint32_t>(Color::Black));
 
     auto drawSprite = [&](const std::unique_ptr<RenderComponent>& render_cmp) {
-        auto& ent     = context->getEntityByID(render_cmp->getEntityID());
-        auto* mov_cmp = ent->getComponent<MovementComponent>();
-        
+              auto& ent     = context->getEntityByID(render_cmp->getEntityID());
+        const auto* mov_cmp = ent->getComponent<MovementComponent>();
+                
+        const auto screen_coords  = continuous_to_screen(mov_cmp->coords);
+
         auto* screen_ptr  = framebuffer.get();
-              screen_ptr += (mov_cmp->coords.y.getNoScaled() * window_w) + mov_cmp->coords.x.getNoScaled();
-        //draw body
+              screen_ptr += (screen_coords.y * window_w) + screen_coords.x;
+
         for(uint32_t i=0; i<render_cmp->sprite.y.getNoScaled(); ++i) {
             std::fill(screen_ptr, screen_ptr + render_cmp->sprite.y.getNoScaled(), static_cast<uint32_t>(render_cmp->sprite_C));
             screen_ptr += window_w;
@@ -61,7 +61,16 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const float Delt
 
     ptc_update(screen_ptr);
 
-    return true; //!ptc_process_events();
+    return true;
 }
+
+vec2<uint32_t>
+RenderSystem::continuous_to_screen(const fixed_vec2& cont) noexcept {
+    auto new_x = static_cast<uint32_t>( cont.x.getNoScaled() + (window_w/2) );
+    auto new_y = static_cast<uint32_t>( cont.y.getNoScaled() + (window_h/2) );
+
+    return { new_x, new_y };
+}
+
 
 } //NS

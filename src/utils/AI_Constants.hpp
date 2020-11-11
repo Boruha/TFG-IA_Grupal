@@ -21,10 +21,5 @@ constexpr fixed32_t SEPARATION_NUM  { 100000 };
 //MOVEMENT_SYS
 constexpr int32_t    ENT_MAX_SPEED_NS { 200 };
 constexpr fixed32_t  ENT_MAX_SPEED    { ENT_MAX_SPEED_NS };
-constexpr int32_t    ACCEL_MODIFIER   { 8 };
-constexpr fixed32_t  ROTATION_CAP     { 0.2f };
-
-
-
 
 } //NS
