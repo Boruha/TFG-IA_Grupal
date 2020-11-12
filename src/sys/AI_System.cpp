@@ -17,7 +17,7 @@ void
 AI_System::init() noexcept { }
 
 bool
-AI_System::update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept {
+AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed32_t DeltaTime) noexcept {
     auto& ai_cmp_vec = context->getAI_Cmps();
     
     /*MC UPDATE*/
@@ -40,8 +40,7 @@ AI_System::arrive(MovementComponent* mov_cmp, const fixed_vec2& target) noexcept
     auto& to_target    = mov_cmp->dir;
     auto& my_coords    = mov_cmp->coords;
 
-    to_target.x = target.x - my_coords.x;
-    to_target.y = target.y - my_coords.y;
+    to_target = target - my_coords;
 
     auto dist_to_target = to_target.length2(); 
 
@@ -57,16 +56,12 @@ AI_System::updateTarget(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent
     auto& coords = mov_cmp->coords;
     auto& route  = ai_cmp->target_vec;
     auto& index  = ai_cmp->target_index;
-    auto& target = route.at(index);
+    auto  target = route.at(index);
 
-    fixed_vec2 diff_2target { };
-    diff_2target.x = target.x - coords.x;
-    diff_2target.y = target.y - coords.y;
+    auto diff_2target { target - coords };
 
-    if( diff_2target.length2() < ENT_ARRIVE_MIN_DIST2 ) {        
+    if( diff_2target.length2() < ENT_ARRIVE_MIN_DIST2 )
         index  = (index + 1) % route.size();
-        target = route.at(index);
-    }
 }
 
 

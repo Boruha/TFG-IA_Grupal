@@ -19,41 +19,30 @@ void
 CollisionSystem::init() noexcept { }
 
 bool
-CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept {
+CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const fixed32_t DeltaTime) noexcept {
     auto& mov_cmp_vec = context->getMovementCmps();
 
-    auto checkWinLimits = [&](std::unique_ptr<MovementComponent>& mov_cmp){
+    auto checkWinLimits = [&](std::unique_ptr<MovementComponent>& mov_cmp) {
         auto& ent       = context->getEntityByID(mov_cmp->getEntityID());
         auto* ren_cmp   = ent->getComponent<RenderComponent>();
 
               auto& coord  = mov_cmp->coords;
-        const auto& direct = mov_cmp->dir;
-        const auto size_W  = static_cast<int32_t>(ren_cmp->sprite.x.number);
-        const auto size_H  = static_cast<int32_t>(ren_cmp->sprite.y.number);
+        const auto size_W  = static_cast<fixed32_t>(ren_cmp->sprite.x);
+        const auto size_H  = static_cast<fixed32_t>(ren_cmp->sprite.y);
         
         //eje X
-        if(coord.x.number + size_W > WINDOW_W_S.number/2)
-                coord.x.number = (-WINDOW_W_S.number/2) + size_W;
+        if( coord.x + size_W > HALF_WINDOW_W )
+                coord.x = (HALF_WINDOW_W * -1) + size_W;
         
-        if(coord.x.number - size_W < -WINDOW_W_S.number/2)
-                coord.x.number = (WINDOW_W_S.number/2) - size_W;
+        if( coord.x - size_W < (HALF_WINDOW_W * -1) )
+                coord.x = HALF_WINDOW_W - size_W;
 
         //eje Y
-        if(coord.y.number + size_H > WINDOW_H_S.number/2)
-                coord.y.number = (-WINDOW_H_S.number/2) + size_H;
+        if( coord.y + size_H > HALF_WINDOW_H )
+                coord.y = (HALF_WINDOW_H * -1) + size_H;
         
-        if(coord.y.number - size_H < -WINDOW_H_S.number/2)
-                coord.y.number = (WINDOW_H_S.number/2) - size_H;
-
-        
-        //eje Y
-        //if(direct.y.number > 0) {
-        //    if(coord.y.number > WINDOW_H_S.number - size_H)
-        //        coord.y.number = size_H;
-        //} else {
-        //    if(coord.y.number < size_H)
-        //        coord.y.number = WINDOW_H_S.number - size_H;
-        //}
+        if( coord.y - size_H < (HALF_WINDOW_H * -1) )
+                coord.y = HALF_WINDOW_H - size_H;
     };
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), checkWinLimits);

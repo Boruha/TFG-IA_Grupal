@@ -12,12 +12,12 @@ struct RenderSystem : System_t {
             ~RenderSystem() override;
 
     void init() noexcept override;
-    bool update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept override;
+    bool update(const std::unique_ptr<Manager_t>& context, const fixed32_t DeltaTime) noexcept override;
     
 private:
     vec2<uint32_t> continuous_to_screen(const fixed_vec2& cont) noexcept;
 
-    const uint32_t window_w { 0 }, window_h { 0 }, framebuffer_size { 0 };
+    const uint32_t window_w { 0 }, window_h { 0 }, half_window_w { 0 }, half_window_h { 0 }, framebuffer_size { 0 } ;
     std::unique_ptr<uint32_t[]> framebuffer { nullptr };
 };
 

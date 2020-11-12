@@ -11,7 +11,7 @@ struct InputSystem : System_t {
     explicit InputSystem();
 
     void init() noexcept override;
-    bool update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept override;
+    bool update(const std::unique_ptr<Manager_t>& context, const fixed32_t DeltaTime) noexcept override;
 
 private:
     static void onkeypress(KeySym key);

@@ -11,7 +11,7 @@ struct CollisionSystem : System_t {
     explicit CollisionSystem() = default;
 
     void init() noexcept override;
-    bool update(const std::unique_ptr<Manager_t>& context, const float DeltaTime) noexcept override;
+    bool update(const std::unique_ptr<Manager_t>& context, const fixed32_t DeltaTime) noexcept override;
 };
 
 } // NS

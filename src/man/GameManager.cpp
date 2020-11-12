@@ -1,9 +1,11 @@
 #include <man/GameManager.hpp>
-
 #include <man/Manager_t.hpp>
 #include <man/EntityManager.hpp>
+
 #include <utils/GameConstants.hpp>
+
 #include <ent/Entity_t.hpp>
+
 #include <sys/SysIncludeList.hpp>
 
 namespace AIP {
@@ -29,7 +31,7 @@ GameManager::~GameManager() {
 bool
 GameManager::update() noexcept {
     for(auto& sys : systems){
-        if(!sys->update(manager, DeltaTime))
+        if(!sys->update(manager, DELTATIME_MILLI))
             return false;
     }
     return true;
