@@ -19,7 +19,7 @@ void
 CollisionSystem::init() noexcept { }
 
 bool
-CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const fixed32_t DeltaTime) noexcept {
+CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
     auto& mov_cmp_vec = context->getMovementCmps();
 
     auto checkWinLimits = [&](std::unique_ptr<MovementComponent>& mov_cmp) {
@@ -27,8 +27,8 @@ CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const fixed32
         auto* ren_cmp   = ent->getComponent<RenderComponent>();
 
               auto& coord  = mov_cmp->coords;
-        const auto size_W  = static_cast<fixed32_t>(ren_cmp->sprite.x);
-        const auto size_H  = static_cast<fixed32_t>(ren_cmp->sprite.y);
+        const auto size_W  = static_cast<fixed64_t>(ren_cmp->sprite.x);
+        const auto size_H  = static_cast<fixed64_t>(ren_cmp->sprite.y);
         
         //eje X
         if( coord.x + size_W > HALF_WINDOW_W )

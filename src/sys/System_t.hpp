@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utils/ufixed32_t.hpp>
+#include <utils/ufixed64_t.hpp>
 
 #include <memory>
 
@@ -12,7 +12,7 @@ struct System_t {
     virtual ~System_t() = default;
     
     virtual void init() noexcept = 0;
-    virtual bool update(const std::unique_ptr<Manager_t>& context, const fixed32_t DeltaTime) noexcept = 0;
+    virtual bool update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept = 0;
 };
 
 }

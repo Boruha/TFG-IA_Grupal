@@ -35,7 +35,7 @@ void
 InputSystem::init() noexcept { }
 
 bool 
-InputSystem::update(const std::unique_ptr<Manager_t>& context, const fixed32_t DeltaTime) noexcept {
+InputSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
     auto& input_cmp_vec = context->getInputCmps();
 
     if( ptc_process_events() )

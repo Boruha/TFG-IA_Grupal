@@ -17,7 +17,7 @@ void
 AI_System::init() noexcept { }
 
 bool
-AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed32_t DeltaTime) noexcept {
+AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
     auto& ai_cmp_vec = context->getAI_Cmps();
     
     /*MC UPDATE*/

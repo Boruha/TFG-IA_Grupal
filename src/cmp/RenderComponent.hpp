@@ -7,7 +7,7 @@
 namespace AIP {
 
 struct RenderComponent : Component_t {
-    explicit RenderComponent(const entID entityID, const ufixed32_t s_W, const ufixed32_t s_H, const Color col) 
+    explicit RenderComponent(const entID entityID, const ufixed64_t s_W, const ufixed64_t s_H, const Color col) 
         : Component_t(entityID), sprite(s_W, s_H), sprite_C(col) { }
 
     const ufixed_vec2 sprite { 0u, 0u };

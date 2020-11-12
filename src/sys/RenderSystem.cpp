@@ -15,7 +15,7 @@ extern "C" {
 
 namespace AIP {
 
-RenderSystem::RenderSystem(const uint32_t w, const uint32_t h) 
+RenderSystem::RenderSystem(const uint32_t w, const uint32_t h)
     : window_w(w), window_h(h), half_window_w(w/2), half_window_h(h/2), framebuffer_size(w*h), framebuffer(std::make_unique<uint32_t[]>(w*h)) {
     ptc_open("AI Prototype", window_w, window_h);
     
@@ -34,7 +34,7 @@ RenderSystem::init() noexcept {
 }
 
 bool
-RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed32_t DeltaTime) noexcept {
+RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
     const auto& render_cmp_vec = context->getRenderCmps();
           auto* screen_ptr     = framebuffer.get();
 
@@ -58,7 +58,7 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed32_t 
         }
     };
 
-    std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), drawSprite);  
+    std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), drawSprite);
 
     ptc_update(screen_ptr);
 

@@ -20,7 +20,7 @@ struct AI_Component : Component_t {
 
     std::vector<fixed_vec2> target_vec { fixed_vec2 { -300, -300 }, fixed_vec2 {  200, -300 }
                                        , fixed_vec2 {  200,  200 }, fixed_vec2 { -300,  200 } };
-    uint32_t target_index { 0u };
+    uint64_t target_index { 0u };
 
 };
 

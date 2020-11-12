@@ -4,7 +4,7 @@
 #include <iostream>
 #include <utility>
 
-#include <utils/ufixed32_t.hpp>
+#include <utils/ufixed64_t.hpp>
 
 namespace AIP {
 
@@ -93,13 +93,13 @@ struct vec2 {
 
 struct fixed_vec2 {
     fixed_vec2() = default;
-    constexpr explicit fixed_vec2(const fixed32_t  X,  const fixed32_t  Y ) : x(X), y(Y) { }
-    constexpr explicit fixed_vec2(const int32_t    X,  const int32_t    Y ) : x(X), y(Y) { }
+    constexpr explicit fixed_vec2(const fixed64_t  X,  const fixed64_t  Y ) : x(X), y(Y) { }
+    constexpr explicit fixed_vec2(const int64_t    X,  const int64_t    Y ) : x(X), y(Y) { }
     constexpr fixed_vec2(const fixed_vec2& cpy_vec) : x(cpy_vec.x), y(cpy_vec.y) { } //cpy ctor
     constexpr fixed_vec2(fixed_vec2&& mov_vec)      : x(std::move(mov_vec.x)), y(std::move(mov_vec.y)) { } //move ctor
 
-    fixed32_t x { 0 };
-    fixed32_t y { 0 };
+    fixed64_t x { 0l };
+    fixed64_t y { 0l };
 
     /* OPERATORS */
     fixed_vec2& operator=(const fixed_vec2& copy_from) { //copy assigment 
@@ -147,14 +147,14 @@ struct fixed_vec2 {
         return new_vec;
     }
 
-    fixed_vec2 operator*(const int32_t& num) const {
+    fixed_vec2 operator*(const int64_t& num) const {
         fixed_vec2 new_vec { };
         new_vec.x = this->x * num; 
         new_vec.y = this->y * num; 
         return new_vec;
     }
 
-    fixed_vec2 operator*(const fixed32_t& num) const {
+    fixed_vec2 operator*(const fixed64_t& num) const {
         fixed_vec2 new_vec { };
         new_vec.x = this->x * num; 
         new_vec.y = this->y * num; 
@@ -163,12 +163,12 @@ struct fixed_vec2 {
 
 
     /* FUNCTIONS */
-    constexpr int32_t
+    constexpr int64_t
     length() {
         return std::sqrt( (x.getNoScaled() * x.getNoScaled()) + (y.getNoScaled() * y.getNoScaled() ) );
     }
 
-    constexpr fixed32_t
+    constexpr fixed64_t
     length2() {
         return (x*x) + (y*y);
     }
@@ -191,13 +191,13 @@ struct fixed_vec2 {
 
 struct ufixed_vec2 {
     ufixed_vec2() = default;
-    constexpr explicit ufixed_vec2(const ufixed32_t  X,  const ufixed32_t  Y ) : x(X), y(Y) { }
-    constexpr explicit ufixed_vec2(const uint32_t    X,  const uint32_t    Y ) : x(X), y(Y) { }
+    constexpr explicit ufixed_vec2(const ufixed64_t  X,  const ufixed64_t  Y ) : x(X), y(Y) { }
+    constexpr explicit ufixed_vec2(const uint64_t    X,  const uint64_t    Y ) : x(X), y(Y) { }
     constexpr ufixed_vec2(const ufixed_vec2& cpy_vec) : x(cpy_vec.x), y(cpy_vec.y) { } //cpy ctor
     constexpr ufixed_vec2(ufixed_vec2&& mov_vec)      : x(std::move(mov_vec.x)), y(std::move(mov_vec.y)) { } //move ctor
     
-    ufixed32_t x { 0u };
-    ufixed32_t y { 0u };
+    ufixed64_t x { 0ul };
+    ufixed64_t y { 0ul };
 
     /* OPERATORS */
     ufixed_vec2& operator=(const ufixed_vec2& copy_from) { //copy assigment 
@@ -245,14 +245,14 @@ struct ufixed_vec2 {
         return new_vec;
     }
 
-    ufixed_vec2 operator*(const uint32_t& num) const {
+    ufixed_vec2 operator*(const uint64_t& num) const {
         ufixed_vec2 new_vec { };
         new_vec.x = this->x * num; 
         new_vec.y = this->y * num; 
         return new_vec;
     }
 
-    ufixed_vec2 operator*(const ufixed32_t& num) const {
+    ufixed_vec2 operator*(const ufixed64_t& num) const {
         ufixed_vec2 new_vec { };
         new_vec.x = this->x * num; 
         new_vec.y = this->y * num; 
@@ -260,12 +260,12 @@ struct ufixed_vec2 {
     }
 
     /* FUNCTIONS */
-    constexpr uint32_t
+    constexpr uint64_t
     length() {
         return std::sqrt( (x.getNoScaled() * x.getNoScaled()) + (y.getNoScaled() * y.getNoScaled() ) );
     }
 
-    constexpr ufixed32_t
+    constexpr ufixed64_t
     length2() {
         return (x*x) + (y*y);
     }
