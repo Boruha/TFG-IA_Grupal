@@ -23,11 +23,4 @@
   year         = {2019},
 }
 
-@Misc{Boids1986,
-  author       = {Craig Reynolds},
-  howpublished = {\url{http://www.red3d.com/cwr/boids/}},
-  title        = {Boids: Background and update},
-  year         = {1986},
-}
-
 @Comment{jabref-meta: databaseType:bibtex;}

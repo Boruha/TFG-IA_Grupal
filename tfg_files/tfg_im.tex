@@ -1,6 +1,6 @@
 \documentclass[a4paper,11pt,titlepage]{scrbook}
-\usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc} %codificacion
+\usepackage[spanish]{babel} %idioma
 
 %\usepackage{titlesec}
 %\usepackage{palatino} %usar fot palatino en vez de times roman
@@ -16,17 +16,18 @@
 %\usepackage[chapter]{algorithm}
 %\RequirePackage{verbatim}
 %\RequirePackage[Glenn]{fncychap}
-\usepackage{fancyhdr}
-\usepackage{graphicx}
-\usepackage{afterpage}
-\usepackage{longtable}
-\usepackage{xcolor}
+\usepackage{fancyhdr} %estilo del documento
+\usepackage{graphicx} %colores
+\usepackage{afterpage} %\clearpage y un par mas de funcs
+\usepackage{longtable} %tabular and table extra opcs
+\usepackage{xcolor}   %opcs colores
 \definecolor{portada}{RGB}{239,206,53}
 \definecolor{base}{RGB}{35,31,32}
-\usepackage{pdfpages}
-\usepackage[acronym]{glossaries}
+\usepackage{pdfpages} %inclusion de archivos al doc
+\usepackage[acronym]{glossaries} %acronimos y abreviaturas
 \usepackage{acronym}
-\usepackage{breakcites}
+\usepackage{breakcites} %modifica \cite
+\usepackage{natbib}
 
 \renewcommand{\glossaryname}{Glosario}
 \renewcommand{\acronymname}{Acrónimos}
@@ -37,7 +38,7 @@
 \definecolor{gray45}{gray}{.45}
 \definecolor{gray30}{gray}{.94}
 
-\usepackage{listings}
+\usepackage{listings} %para escribir codigo
 \lstset{ frame=Ltb,
 framerule=0pt,
 aboveskip=0.5cm,
@@ -214,7 +215,8 @@ pdfproducer = {pdflatex}
 %input{capitulos/conclusiones}
 
 %\nocite{*} %incluye TODOS los documentos de la base de datos bibliográfica sean o no citados en el texto
-\bibliography{bibliografia/bibliografia}\addcontentsline{toc}{chapter}{Bibliografía} %sustituir bibliografía con el nombre del fichero bibtex con la bibliografía
+\nocite{*}
+\bibliography{bibliografia/bibliografia.bib}\addcontentsline{toc}{chapter}{Bibliografía} %sustituir bibliografía con el nombre del fichero bibtex con la bibliografía
 \bibliographystyle{apalike}
 %
 %\appendix
