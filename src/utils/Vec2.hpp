@@ -11,7 +11,7 @@ namespace AIP {
 template<typename T>
 struct vec2 {
     vec2<T>() = default;
-    constexpr explicit vec2<T>(const T  X,  const T  Y ) : x(X), y(Y) { }
+    constexpr explicit vec2<T>(const T X,  const T Y ) : x(X), y(Y) { }
     constexpr vec2<T>(const vec2<T>& cpy_vec) : x(cpy_vec.x), y(cpy_vec.y) { } //cpy ctor
     constexpr vec2<T>(vec2<T>&& mov_vec)      : x(std::move(mov_vec.x)), y(std::move(mov_vec.y)) { } //move ctor
 
@@ -133,10 +133,38 @@ struct fixed_vec2 {
         return new_vec;
     }
 
+    fixed_vec2 operator+(const int64_t& num) const {
+        fixed_vec2 new_vec { };
+        new_vec.x = this->x + num; 
+        new_vec.y = this->y + num; 
+        return new_vec;
+    }
+
+    fixed_vec2 operator+(const fixed64_t& num) const {
+        fixed_vec2 new_vec { };
+        new_vec.x = this->x + num; 
+        new_vec.y = this->y + num; 
+        return new_vec;
+    }
+
     fixed_vec2 operator-(const fixed_vec2& num) const {
         fixed_vec2 new_vec { };
         new_vec.x = this->x - num.x; 
         new_vec.y = this->y - num.y; 
+        return new_vec;
+    }
+
+    fixed_vec2 operator-(const int64_t& num) const {
+        fixed_vec2 new_vec { };
+        new_vec.x = this->x - num; 
+        new_vec.y = this->y - num; 
+        return new_vec;
+    }
+
+    fixed_vec2 operator-(const fixed64_t& num) const {
+        fixed_vec2 new_vec { };
+        new_vec.x = this->x - num; 
+        new_vec.y = this->y - num;
         return new_vec;
     }
 
@@ -231,10 +259,38 @@ struct ufixed_vec2 {
         return new_vec;
     }
 
+    ufixed_vec2 operator+(const uint64_t& num) const {
+        ufixed_vec2 new_vec { };
+        new_vec.x = this->x + num; 
+        new_vec.y = this->y + num;
+        return new_vec;
+    }
+
+    ufixed_vec2 operator+(const ufixed64_t& num) const {
+        ufixed_vec2 new_vec { };
+        new_vec.x = this->x + num; 
+        new_vec.y = this->y + num;
+        return new_vec;
+    }
+
     ufixed_vec2 operator-(const ufixed_vec2& num) const {
         ufixed_vec2 new_vec { };
         new_vec.x = this->x - num.x; 
         new_vec.y = this->y - num.y; 
+        return new_vec;
+    }
+
+    ufixed_vec2 operator-(const uint64_t& num) const {
+        ufixed_vec2 new_vec { };
+        new_vec.x = this->x - num; 
+        new_vec.y = this->y - num;
+        return new_vec;
+    }
+
+    ufixed_vec2 operator-(const ufixed64_t& num) const {
+        ufixed_vec2 new_vec { };
+        new_vec.x = this->x - num; 
+        new_vec.y = this->y - num;
         return new_vec;
     }
 

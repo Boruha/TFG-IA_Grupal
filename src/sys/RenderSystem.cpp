@@ -4,7 +4,6 @@
 
 #include <ent/Entity_t.hpp>
 
-#include <cmp/RenderComponent.hpp>
 #include <cmp/MovementComponent.hpp>
 
 extern "C" {
@@ -12,6 +11,7 @@ extern "C" {
 }
 
 #include <algorithm>
+#include <iostream>
 
 namespace AIP {
 
@@ -60,6 +60,8 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t 
 
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), drawSprite);
 
+    bresenham_line();
+
     ptc_update(screen_ptr);
 
     return true;
@@ -73,5 +75,122 @@ RenderSystem::continuous_to_screen(const fixed_vec2& cont) noexcept {
     return vec2<uint32_t> { new_x, new_y };
 }
 
+void
+RenderSystem::bresenham_line() noexcept {
+    auto punto_inicio = fixed_vec2(100l, 100l); //esto sera el input de la func en siguientes versiones
+    auto longitud     = fixed_vec2(0l, 100l);
+
+    const auto screen_p_ini = continuous_to_screen(punto_inicio);
+    const auto screen_p_fin = continuous_to_screen(punto_inicio + longitud);
+
+    int32_t dX = screen_p_fin.x - screen_p_ini.x;
+    int32_t dY = screen_p_fin.y - screen_p_ini.y;
+
+    if( (dX * dX) > (dY * dY) ) {
+        if(dY == 0) {
+            if(screen_p_ini.x > screen_p_fin.x)
+                draw_line_H(screen_p_fin, screen_p_ini, Color::Blue);
+            else
+                draw_line_H(screen_p_ini, screen_p_fin, Color::Green);
+        }
+        else {
+            if(screen_p_ini.x > screen_p_fin.x)
+                draw_line_X(screen_p_fin, screen_p_ini, dY, -dX, Color::White);
+            else
+                draw_line_X(screen_p_ini, screen_p_fin, dY,  dX, Color::Red);
+        }
+    }
+    else {
+        if(dX == 0) {
+            if(screen_p_ini.y > screen_p_fin.y)
+                draw_line_V(screen_p_fin, screen_p_ini, Color::White);
+            else
+                draw_line_V(screen_p_ini, screen_p_fin, Color::Red);
+        }
+        else {
+            if(screen_p_ini.y > screen_p_fin.y)
+                draw_line_Y(screen_p_fin, screen_p_ini, dX, -dY, Color::Blue);
+            else
+                draw_line_Y(screen_p_ini, screen_p_fin, dX,  dY, Color::Green);
+        }
+    }
+
+}
+
+void
+RenderSystem::draw_line_X(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end, int32_t dY, const int32_t dX, const Color color) noexcept { 
+    int32_t iy = window_w;
+
+    if(dY < 0 ) {
+        iy *= -1;
+        dY *= -1;
+    }
+
+    int32_t D  = 2 * dY - dX;
+
+    auto* screen_ptr  = framebuffer.get();
+          screen_ptr += (p_ini.y * window_w) + p_ini.x;
+    
+    for(uint32_t x = p_ini.x; x < p_end.x; ++x) {
+        *screen_ptr = static_cast<uint32_t>(color);
+        
+        if(D > 0) {
+            screen_ptr += iy;
+            D += 2 * (dY - dX);
+        }
+
+        D += 2 * dY;
+        ++screen_ptr;
+    }
+}
+
+void
+RenderSystem::draw_line_Y(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end, int32_t dX, const int32_t dY, const Color color) noexcept { 
+    int32_t ix = 1;
+
+    if(dX < 0 ) {
+        ix *= -1;
+        dX *= -1;
+    }
+
+    int32_t D  = 2 * dX - dY;
+
+    auto* screen_ptr  = framebuffer.get();
+          screen_ptr += (p_ini.y * window_w) + p_ini.x;
+    
+    for(uint32_t y = p_ini.y; y < p_end.y; ++y) {
+        *screen_ptr = static_cast<uint32_t>(color);
+        
+        if(D > 0) {
+            screen_ptr += ix;
+            D += 2 * (dX - dY);
+        }
+
+        D += 2 * dX;
+        screen_ptr += window_w;
+    }
+}
+
+void
+RenderSystem::draw_line_H(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end, const Color color) noexcept { 
+    auto* screen_ptr  = framebuffer.get();
+          screen_ptr += (p_ini.y * window_w) + p_ini.x;
+    
+    for(uint32_t x=p_ini.x; x<p_end.x; ++x) {
+        *screen_ptr = static_cast<uint32_t>(color);
+        ++screen_ptr;
+    }
+}
+
+void
+RenderSystem::draw_line_V(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end, const Color color) noexcept { 
+    auto* screen_ptr  = framebuffer.get();
+          screen_ptr += (p_ini.y * window_w) + p_ini.x;
+
+    for(uint32_t y=p_ini.y; y<p_end.y; ++y) {
+        *screen_ptr = static_cast<uint32_t>(color);
+        screen_ptr += window_w;
+    }
+}
 
 } //NS
