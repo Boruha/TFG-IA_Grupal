@@ -41,8 +41,8 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t 
     std::fill(screen_ptr, screen_ptr + framebuffer_size, static_cast<uint32_t>(Color::Black));
 
     auto drawSprite = [&](const std::unique_ptr<RenderComponent>& render_cmp) {
-              auto& ent     = context->getEntityByID(render_cmp->getEntityID());
-        const auto* mov_cmp = ent->getComponent<MovementComponent>();
+        auto& ent     = context->getEntityByID(render_cmp->getEntityID());
+        auto* mov_cmp = ent->getComponent<MovementComponent>();
         
         //paso de continuo a pixel
         const auto screen_coords  = continuous_to_screen(mov_cmp->coords);
@@ -56,11 +56,11 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t 
             std::fill(screen_ptr, screen_ptr + render_cmp->sprite.y.getNoScaled(), static_cast<uint32_t>(render_cmp->sprite_C));
             screen_ptr += window_w;
         }
+
+        bresenham_line(mov_cmp->coords, mov_cmp->dir, mov_cmp->vel, render_cmp->sprite_C);
     };
 
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), drawSprite);
-
-    bresenham_line();
 
     ptc_update(screen_ptr);
 
@@ -76,12 +76,9 @@ RenderSystem::continuous_to_screen(const fixed_vec2& cont) noexcept {
 }
 
 void
-RenderSystem::bresenham_line() noexcept {
-    auto punto_inicio = fixed_vec2(100l, 100l); //esto sera el input de la func en siguientes versiones
-    auto longitud     = fixed_vec2(0l, 100l);
-
-    const auto screen_p_ini = continuous_to_screen(punto_inicio);
-    const auto screen_p_fin = continuous_to_screen(punto_inicio + longitud);
+RenderSystem::bresenham_line(fixed_vec2& p_ini, fixed_vec2& dir, fixed64_t& length, Color color) noexcept {
+    const auto screen_p_ini = continuous_to_screen(p_ini);
+    const auto screen_p_fin = continuous_to_screen(p_ini + (dir*length) );
 
     int32_t dX = screen_p_fin.x - screen_p_ini.x;
     int32_t dY = screen_p_fin.y - screen_p_ini.y;
@@ -89,29 +86,29 @@ RenderSystem::bresenham_line() noexcept {
     if( (dX * dX) > (dY * dY) ) {
         if(dY == 0) {
             if(screen_p_ini.x > screen_p_fin.x)
-                draw_line_H(screen_p_fin, screen_p_ini, Color::Blue);
+                draw_line_H(screen_p_fin, screen_p_ini, color);
             else
-                draw_line_H(screen_p_ini, screen_p_fin, Color::Green);
+                draw_line_H(screen_p_ini, screen_p_fin, color);
         }
         else {
             if(screen_p_ini.x > screen_p_fin.x)
-                draw_line_X(screen_p_fin, screen_p_ini, dY, -dX, Color::White);
+                draw_line_X(screen_p_fin, screen_p_ini, dY, -dX, color);
             else
-                draw_line_X(screen_p_ini, screen_p_fin, dY,  dX, Color::Red);
+                draw_line_X(screen_p_ini, screen_p_fin, dY,  dX, color);
         }
     }
     else {
         if(dX == 0) {
             if(screen_p_ini.y > screen_p_fin.y)
-                draw_line_V(screen_p_fin, screen_p_ini, Color::White);
+                draw_line_V(screen_p_fin, screen_p_ini, color);
             else
-                draw_line_V(screen_p_ini, screen_p_fin, Color::Red);
+                draw_line_V(screen_p_ini, screen_p_fin, color);
         }
         else {
             if(screen_p_ini.y > screen_p_fin.y)
-                draw_line_Y(screen_p_fin, screen_p_ini, dX, -dY, Color::Blue);
+                draw_line_Y(screen_p_fin, screen_p_ini, dX, -dY, color);
             else
-                draw_line_Y(screen_p_ini, screen_p_fin, dX,  dY, Color::Green);
+                draw_line_Y(screen_p_ini, screen_p_fin, dX,  dY, color);
         }
     }
 
@@ -120,6 +117,7 @@ RenderSystem::bresenham_line() noexcept {
 void
 RenderSystem::draw_line_X(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end, int32_t dY, const int32_t dX, const Color color) noexcept { 
     int32_t iy = window_w;
+    uint32_t y_limit = p_ini.y;
 
     if(dY < 0 ) {
         iy *= -1;
@@ -132,10 +130,15 @@ RenderSystem::draw_line_X(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end
           screen_ptr += (p_ini.y * window_w) + p_ini.x;
     
     for(uint32_t x = p_ini.x; x < p_end.x; ++x) {
+
+        if(x >= window_w || y_limit >= window_h)
+            break;
+
         *screen_ptr = static_cast<uint32_t>(color);
-        
+    
         if(D > 0) {
             screen_ptr += iy;
+            ++y_limit;
             D += 2 * (dY - dX);
         }
 
@@ -147,6 +150,7 @@ RenderSystem::draw_line_X(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end
 void
 RenderSystem::draw_line_Y(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end, int32_t dX, const int32_t dY, const Color color) noexcept { 
     int32_t ix = 1;
+    uint32_t x_limit = p_ini.x;
 
     if(dX < 0 ) {
         ix *= -1;
@@ -159,10 +163,15 @@ RenderSystem::draw_line_Y(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end
           screen_ptr += (p_ini.y * window_w) + p_ini.x;
     
     for(uint32_t y = p_ini.y; y < p_end.y; ++y) {
+        
+        if(y >= window_h || x_limit >= window_w) 
+            break;
+
         *screen_ptr = static_cast<uint32_t>(color);
         
         if(D > 0) {
             screen_ptr += ix;
+            ++x_limit;
             D += 2 * (dX - dY);
         }
 
@@ -177,6 +186,9 @@ RenderSystem::draw_line_H(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end
           screen_ptr += (p_ini.y * window_w) + p_ini.x;
     
     for(uint32_t x=p_ini.x; x<p_end.x; ++x) {
+        if(x >= window_w)
+            break;
+
         *screen_ptr = static_cast<uint32_t>(color);
         ++screen_ptr;
     }
@@ -188,6 +200,9 @@ RenderSystem::draw_line_V(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end
           screen_ptr += (p_ini.y * window_w) + p_ini.x;
 
     for(uint32_t y=p_ini.y; y<p_end.y; ++y) {
+        if(y >= window_h)
+            break;
+
         *screen_ptr = static_cast<uint32_t>(color);
         screen_ptr += window_w;
     }

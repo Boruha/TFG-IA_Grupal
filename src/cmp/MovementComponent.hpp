@@ -10,6 +10,7 @@ struct MovementComponent : Component_t {
 
   fixed_vec2 coords { 0, 0 };
   fixed_vec2  dir   { 0, 0 };
+  fixed64_t  vel    { 0l };
 };
 
 }

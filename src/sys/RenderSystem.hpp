@@ -1,9 +1,9 @@
 #pragma once
 #include <sys/System_t.hpp>
 
-#include <cmp/RenderComponent.hpp>
-
 #include <utils/Vec2.hpp>
+
+#include <cmp/RenderComponent.hpp>
 
 namespace AIP {
 
@@ -18,7 +18,7 @@ struct RenderSystem : System_t {
     
 private:
     vec2<uint32_t> continuous_to_screen(const fixed_vec2& cont) noexcept;
-    void bresenham_line() noexcept;
+    void bresenham_line(fixed_vec2& p_ini, fixed_vec2& dir, fixed64_t& length, Color color) noexcept;
     
     void draw_line_X(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end, int32_t dY, const int32_t dX, const Color color) noexcept;
     void draw_line_Y(const vec2<uint32_t> p_ini, const vec2<uint32_t> p_end, int32_t dX, const int32_t dY, const Color color) noexcept;
