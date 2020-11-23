@@ -64,6 +64,20 @@ struct vec2 {
         return new_vec;
     }
 
+    vec2<T> operator/(const vec2<T>& num) const {
+        vec2<T> new_vec { };
+        new_vec.x = this->x / num.x; 
+        new_vec.y = this->y / num.y; 
+        return new_vec;
+    }
+
+    vec2<T> operator/(const T& num) const {
+        vec2<T> new_vec { };
+        new_vec.x = this->x / num; 
+        new_vec.y = this->y / num; 
+        return new_vec;
+    }
+
     /* FUNCTIONS */
     constexpr T 
     length() {
@@ -186,6 +200,13 @@ struct fixed_vec2 {
         fixed_vec2 new_vec { };
         new_vec.x = this->x * num; 
         new_vec.y = this->y * num; 
+        return new_vec;
+    }
+
+    fixed_vec2 operator/(const int64_t& num) const {
+        fixed_vec2 new_vec { };
+        new_vec.x = this->x / num; 
+        new_vec.y = this->y / num; 
         return new_vec;
     }
 
@@ -312,6 +333,13 @@ struct ufixed_vec2 {
         ufixed_vec2 new_vec { };
         new_vec.x = this->x * num; 
         new_vec.y = this->y * num; 
+        return new_vec;
+    }
+
+    ufixed_vec2 operator/(const uint64_t& num) const {
+        ufixed_vec2 new_vec { };
+        new_vec.x = this->x / num; 
+        new_vec.y = this->y / num; 
         return new_vec;
     }
 
