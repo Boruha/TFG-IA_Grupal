@@ -70,6 +70,11 @@ struct fixed64_t {
         return new_uf64_t; 
     }
 
+    constexpr fixed64_t operator*=(const fixed64_t& num) {
+        this->number = (this->number * num.number) / SCALE_S;
+        return *this;
+    }
+
     constexpr fixed64_t operator/(const fixed64_t& num) const {
         fixed64_t new_uf64_t { };
         new_uf64_t.number = (this->number / num.number) * SCALE_S; 
@@ -172,6 +177,11 @@ struct ufixed64_t {
         ufixed64_t new_uf64_t { };
         new_uf64_t.number = this->number * num;
         return new_uf64_t; 
+    }
+
+    constexpr ufixed64_t operator*=(const ufixed64_t& num) {
+        this->number = (this->number * num.number) / SCALE;
+        return *this;
     }
 
     constexpr ufixed64_t operator/(const ufixed64_t& num) const {

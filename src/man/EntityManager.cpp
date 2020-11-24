@@ -20,7 +20,7 @@ EntityManager::EntityManager() {
     ent1->addComponent(ai_1.get());
 
     /*ent 5 - player*/
-    auto& ent5  = createEntity_t();
+    /*auto& ent5  = createEntity_t();
     auto& mov_5 = cmp_storage->createComponent( MovementComponent(ent5->getID(), fixed64_t(200l) , fixed64_t(200l)) );
     auto& ren_5 = cmp_storage->createComponent( RenderComponent(ent5->getID(), ufixed64_t(10ul), ufixed64_t(10ul), Color::Blue) );
     auto& in_5  = cmp_storage->createComponent( InputComponent(ent5->getID()) );
@@ -29,7 +29,7 @@ EntityManager::EntityManager() {
     ent5->addComponent(ren_5.get());
     ent5->addComponent(in_5.get());
 
-    player_id = ent5->getID();
+    player_id = ent5->getID();*/
 }
 
 EntityManager::~EntityManager() {

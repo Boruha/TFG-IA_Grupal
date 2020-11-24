@@ -25,8 +25,7 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
         auto& ent     = context->getEntityByID( ai_cmp->getEntityID() );
         auto* mov_cmp = ent->getComponent<MovementComponent>();
 
-        updateTarget(ai_cmp, mov_cmp);
-        arrive(mov_cmp, ai_cmp->target_vec.at(ai_cmp->target_index) );
+        arrive(mov_cmp, ai_cmp);
     };
 
     std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), update_ai_movement);
@@ -36,32 +35,60 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
 
 /* BASIC BEHAVIOURS FUCTIONS */
 void
-AI_System::arrive(MovementComponent* mov_cmp, const fixed_vec2& target) noexcept {
-    auto& to_target    = mov_cmp->dir;
-    auto& my_coords    = mov_cmp->coords;
+AI_System::arrive(MovementComponent* mov_cmp, std::unique_ptr<AI_Component>& ai_cmp) noexcept {
+    auto& my_coords = mov_cmp->coords;
+    auto& my_accel  = mov_cmp->accel;
+    auto& my_direct = mov_cmp->dir;
 
-    to_target = target - my_coords;
+    auto  target_dir = ai_cmp->target_vec.at(ai_cmp->target_index) - my_coords;
+    auto  distance2  = target_dir.length2();
+    fixed64_t target_speed { };
 
-    auto dist_to_target = to_target.length2(); 
+    //si hemos llegado miramos si hay un "target siguiente", sino nos quedamos quietos y salimos.
+    if(distance2 < ENT_ARRIVE_DIST2) {
+        if(auto new_target = updateTarget(ai_cmp)) {
+            target_dir = (*new_target).get() - my_coords;
+            distance2  = target_dir.length2();
+        }
+        else {
+            my_accel.x.number  = my_accel.y.number  = 0;
+            my_direct.x.number = my_direct.y.number = 0;
+            return;
+        }
+    }
+    //si esta lejos intenta alcanzar max speed, sino interpola [max_speed, 0]
+    if(distance2 > ENT_SLOW_DIST2)
+        target_speed = ENT_MAX_SPEED;
+    else
+        target_speed = ENT_MAX_SPEED * ( fixed64_t(target_dir.length()) / ENT_SLOW_DIST );
+    
+    //calculamos la aceleracion objetivo como la diferencia de  (deseada - actual) 
+    target_dir.normalize();
+    target_dir *= target_speed;
 
-    if(dist_to_target < ENT_ARRIVE_MIN_DIST2)
-        to_target.x.number = to_target.y.number = 0;
+    my_accel  = target_dir - my_direct;
+    my_accel /= ENT_TIME_TO_TARGET;
 
-    to_target.normalize();
+    //ajustamos la aceleracion para que no sea muy alta.
+    if(my_accel.length2() > ENT_MAX_ACCEL2) {
+        my_accel.normalize();
+        my_accel *= ENT_MAX_ACCEL;
+    }
 }
 
 /* AUX FUCTIONS */
-void 
-AI_System::updateTarget(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp) noexcept {
-    auto& coords = mov_cmp->coords;
+AI_System::optVec2_refw 
+AI_System::updateTarget(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
     auto& route  = ai_cmp->target_vec;
     auto& index  = ai_cmp->target_index;
-    auto  target = route.at(index);
 
-    auto diff_2target { target - coords };
+    auto index_fwd = (index+1) % route.size();
 
-    if( diff_2target.length2() < ENT_ARRIVE_MIN_DIST2 )
-        index  = (index + 1) % route.size();
+    if(index_fwd != index) {
+        index = index_fwd;
+        return std::ref(route.at(index));
+    }
+    return { };
 }
 
 

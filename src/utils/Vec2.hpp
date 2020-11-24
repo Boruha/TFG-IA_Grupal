@@ -203,6 +203,18 @@ struct fixed_vec2 {
         return new_vec;
     }
 
+    fixed_vec2 operator*=(const fixed_vec2& num) {
+        this->x *= num.x;
+        this->y *= num.y;
+        return *this;
+    }
+
+    fixed_vec2 operator*=(const fixed64_t& num) {
+        this->x *= num;
+        this->y *= num;
+        return *this;
+    }
+
     fixed_vec2 operator/(const int64_t& num) const {
         fixed_vec2 new_vec { };
         new_vec.x = this->x / num; 
@@ -210,11 +222,23 @@ struct fixed_vec2 {
         return new_vec;
     }
 
+    fixed_vec2 operator/=(const fixed_vec2& num) {
+        this->x /= num.x;
+        this->y /= num.y;
+        return *this;
+    }
+
+    fixed_vec2 operator/=(const fixed64_t& num) {
+        this->x /= num;
+        this->y /= num;
+        return *this;
+    }
+
 
     /* FUNCTIONS */
     constexpr int64_t
     length() {
-        return std::sqrt( (x.getNoScaled() * x.getNoScaled()) + (y.getNoScaled() * y.getNoScaled() ) );
+        return std::sqrt(( x.getNoScaled() * x.getNoScaled() ) + ( y.getNoScaled() * y.getNoScaled() ));
     }
 
     constexpr fixed64_t
@@ -224,7 +248,7 @@ struct fixed_vec2 {
 
     constexpr void
     normalize() {
-        auto module = length();
+        auto module = length() ;
         if(module != 0) {
             x /= module;
             y /= module;
@@ -334,6 +358,18 @@ struct ufixed_vec2 {
         new_vec.x = this->x * num; 
         new_vec.y = this->y * num; 
         return new_vec;
+    }
+
+    ufixed_vec2 operator*=(const ufixed_vec2& num) {
+        this->x *= num.x;
+        this->y *= num.y;
+        return *this;
+    }
+
+    ufixed_vec2 operator*=(const ufixed64_t& num) {
+        this->x *= num;
+        this->y *= num;
+        return *this;
     }
 
     ufixed_vec2 operator/(const uint64_t& num) const {

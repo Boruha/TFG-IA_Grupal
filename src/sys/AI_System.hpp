@@ -4,6 +4,8 @@
 #include <utils/Vec2.hpp>
 
 #include <vector>
+#include <optional>
+#include <functional>
 
 namespace AIP {
 
@@ -13,14 +15,16 @@ struct AI_Component;
 struct MovementComponent;
 
 struct AI_System : System_t {
+    using optVec2_refw = std::optional<std::reference_wrapper<fixed_vec2>>;
+
     explicit  AI_System() = default;
 
     void init() noexcept override;
     bool update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept override;
 
 private:
-    void arrive(MovementComponent* mov_cmp, const fixed_vec2& target) noexcept;
-    void updateTarget(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp) noexcept;
+    void arrive(MovementComponent* mov_cmp, std::unique_ptr<AI_Component>& ai_cmp) noexcept;
+    [[nodiscard]] optVec2_refw updateTarget(std::unique_ptr<AI_Component>& ai_cmp) noexcept;
 };
 
 
