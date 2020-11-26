@@ -9,12 +9,14 @@ struct MovementComponent : Component_t {
     : Component_t(entityID), coords(c_X, c_Y) { }
 
   fixed_vec2 coords { 0, 0 };
-  fixed_vec2  dir   { 0, 0 }; //desplazamiento final de la entidad
-  fixed64_t  vel    { 0l };   //velocidad actual con la que se mueve la entidad
+  fixed_vec2 dir    { 0, 0 }; //desplazamiento final de la entidad
+  fixed_vec2 accel_to_target  { 0, 0 }; //acceleracion calculada en cada iteracion.
 
   //componentes aux
-  fixed_vec2 accel  { 0, 0 }; //accelarión calculada en cada iteracion.
-
+  fixed_vec2 cohesion_force   { 0, 0 }; //si hay elementos cercanos, fuerza que los agrupa. 
+  fixed_vec2 copy_to_draw     { 0, 0 };
+  fixed_vec2 separation_force { 0, 0 }; //si hay elementos cercanos, fuerza que los separa.
+  
 };
 
 }

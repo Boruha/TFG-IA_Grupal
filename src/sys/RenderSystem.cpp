@@ -83,28 +83,7 @@ RenderSystem::continuous_to_screen(const fixed_vec2& cont) noexcept {
 void
 RenderSystem::bresenham_line(const vec2<uint32_t>& screen_p_ini, const vec2<uint32_t>& screen_p_fin
                             , int32_t dY, int32_t dX, const Color& color) noexcept {
-    //auto& dir   = mov_cmp->dir; 
-    //auto& color = render_cmp->sprite_C;
-    //
-    //if(dir.length2().number == 0)
-    //    return;
-//
-    //auto p_ini = mov_cmp->coords;
-    //p_ini.x += (static_cast<fixed64_t>(render_cmp->sprite.x)/2);
-    //p_ini.y += (static_cast<fixed64_t>(render_cmp->sprite.y)/2);
-    //auto p_fin = p_ini + (dir / 2);
-//
-    //p_ini.x = std::clamp(p_ini.x, (half_window_w64*-1), half_window_w64);
-    //p_ini.y = std::clamp(p_ini.y, (half_window_h64*-1), half_window_h64);
-    //p_fin.x = std::clamp(p_fin.x, (half_window_w64*-1), half_window_w64);
-    //p_fin.y = std::clamp(p_fin.y, (half_window_h64*-1), half_window_h64);
-//
-    //const auto screen_p_ini = continuous_to_screen(p_ini);
-    //const auto screen_p_fin = continuous_to_screen(p_fin);
-//
-    //int32_t dX = screen_p_fin.x - screen_p_ini.x;
-    //int32_t dY = screen_p_fin.y - screen_p_ini.y;
-//
+
     if( (dX * dX) >= (dY * dY) ) {
         if(dY == 0) {
             if(screen_p_ini.x > screen_p_fin.x)
@@ -138,7 +117,8 @@ RenderSystem::bresenham_line(const vec2<uint32_t>& screen_p_ini, const vec2<uint
 void
 RenderSystem::draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<RenderComponent>& render_cmp) noexcept {
     auto& dir   = mov_cmp->dir;
-    auto& accel = mov_cmp->accel;
+    auto& accel = mov_cmp->accel_to_target;
+    auto& cohes = mov_cmp->copy_to_draw;
     
     //ajustamos el inicio de los vectores de steer.
     auto p_ini = mov_cmp->coords;
@@ -160,6 +140,7 @@ RenderSystem::draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<Rende
         int32_t dY = screen_p_fin.y - screen_p_ini.y;
         bresenham_line(screen_p_ini, screen_p_fin, dY, dX, Color::Red);
     }
+
     if(accel.length2().number != 0) {
         auto p_fin = p_ini + (accel * 2);
         p_fin.x = std::clamp(p_fin.x, (half_window_w64*-1), half_window_w64);
@@ -171,6 +152,19 @@ RenderSystem::draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<Rende
         int32_t dY = screen_p_fin.y - screen_p_ini.y;
         bresenham_line(screen_p_ini, screen_p_fin, dY, dX, Color::Green);
     }
+
+    if(cohes.length2().number != 0) {
+        auto p_fin = p_ini + (cohes * 4);
+        p_fin.x = std::clamp(p_fin.x, (half_window_w64*-1), half_window_w64);
+        p_fin.y = std::clamp(p_fin.y, (half_window_h64*-1), half_window_h64);
+
+        const auto screen_p_fin = continuous_to_screen(p_fin);
+
+        int32_t dX = screen_p_fin.x - screen_p_ini.x;
+        int32_t dY = screen_p_fin.y - screen_p_ini.y;
+        bresenham_line(screen_p_ini, screen_p_fin, dY, dX, Color::Blue);
+    }
+
 }
 
 void

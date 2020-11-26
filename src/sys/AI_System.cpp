@@ -20,24 +20,23 @@ bool
 AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
     auto& ai_cmp_vec = context->getAI_Cmps();
     
-    /*MC UPDATE*/
-    auto update_ai_movement = [&](std::unique_ptr<AI_Component>& ai_cmp) {
+    std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), [&](std::unique_ptr<AI_Component>& ai_cmp) {
         auto& ent     = context->getEntityByID( ai_cmp->getEntityID() );
         auto* mov_cmp = ent->getComponent<MovementComponent>();
 
         arrive(mov_cmp, ai_cmp);
-    };
+    });
 
-    std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), update_ai_movement);
+    separation(context, ai_cmp_vec);
 
     return true;
 }
 
-/* BASIC BEHAVIOURS FUCTIONS */
+/* BASIC BEHAVIOURS FUNCTIONS */
 void
 AI_System::arrive(MovementComponent* mov_cmp, std::unique_ptr<AI_Component>& ai_cmp) noexcept {
     auto& my_coords = mov_cmp->coords;
-    auto& my_accel  = mov_cmp->accel;
+    auto& my_accel  = mov_cmp->accel_to_target;
     auto& my_direct = mov_cmp->dir;
 
     auto  target_dir = ai_cmp->target_vec.at(ai_cmp->target_index) - my_coords;
@@ -60,13 +59,13 @@ AI_System::arrive(MovementComponent* mov_cmp, std::unique_ptr<AI_Component>& ai_
     if(distance2 > ENT_SLOW_DIST2)
         target_speed = ENT_MAX_SPEED;
     else
-        target_speed = ENT_MAX_SPEED * ( fixed64_t(target_dir.length()) / ENT_SLOW_DIST );
+        target_speed = ENT_MAX_SPEED * ( target_dir.length_fix() / ENT_SLOW_DIST );
     
     //calculamos la aceleracion objetivo como la diferencia de  (deseada - actual) 
     target_dir.normalize();
     target_dir *= target_speed;
 
-    my_accel  = target_dir - my_direct;
+    my_accel  = (target_dir - my_direct);
     my_accel /= ENT_TIME_TO_TARGET;
 
     //ajustamos la aceleracion para que no sea muy alta.
@@ -76,7 +75,45 @@ AI_System::arrive(MovementComponent* mov_cmp, std::unique_ptr<AI_Component>& ai_
     }
 }
 
-/* AUX FUCTIONS */
+
+/* FLOCKING B. FUNCTIONS */
+void 
+AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept {
+    auto end_it = end(AI_cmps);
+    
+    for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
+        auto& ai_ent     = context->getEntityByID( (*ai_it)->getEntityID() );
+        auto* ai_mov_cmp = ai_ent->getComponent<MovementComponent>();
+
+        for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
+            auto& comparision_ent     = context->getEntityByID( (*comparision_it)->getEntityID() );
+            auto* comparision_mov_cmp = comparision_ent->getComponent<MovementComponent>();
+
+            auto diff_vec  = ai_mov_cmp->coords - comparision_mov_cmp->coords;
+            auto distance2 = diff_vec.length2();
+
+            if(distance2 < ENT_SEPARATION_DIST2) {
+                auto strength = std::min(DECAY_COEFICIENT / distance2, ENT_MAX_ACCEL);
+                diff_vec.normalize();
+                auto result   = diff_vec * strength;
+
+                //std::cout << "La fuerza es (" << DECAY_COEFICIENT.number << " / " << distance2.number << ")\t = ";
+                //std::cout << strength.number << "\n";
+
+                ai_mov_cmp->separation_force          += result;
+                comparision_mov_cmp->separation_force += result * -1;
+            }            
+        }// END FOR COMPARISION
+        if(ai_mov_cmp->separation_force.length2() > ENT_MAX_ACCEL2) {
+            ai_mov_cmp->separation_force.normalize();
+            ai_mov_cmp->separation_force *= ENT_MAX_ACCEL;
+        }
+
+    }// END FOR AI
+}
+
+
+/* AUX FUNCTIONS */
 AI_System::optVec2_refw 
 AI_System::updateTarget(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
     auto& route  = ai_cmp->target_vec;
@@ -91,14 +128,7 @@ AI_System::updateTarget(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
     return { };
 }
 
-
-
 } //NS
-
-
-//std::cout << "Vec target:     " << mov_cmp->target.x << " - " << mov_cmp->target.y << "\n";
-//std::cout << "Vec cohesion:   " << mov_cmp->cohesion.x << " - " << mov_cmp->cohesion.y << "\n";
-//std::cout << "Vec separation: " << mov_cmp->separation.x << " - " << mov_cmp->separation.y << "\n";
 
 /*
 void

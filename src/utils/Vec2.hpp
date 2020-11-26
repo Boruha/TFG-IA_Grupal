@@ -242,13 +242,19 @@ struct fixed_vec2 {
     }
 
     constexpr fixed64_t
+    length_fix() {
+        int64_t sqrt = std::sqrt(( x.getNoScaled() * x.getNoScaled() ) + ( y.getNoScaled() * y.getNoScaled() ));
+        return fixed64_t( sqrt );
+    }
+
+    constexpr fixed64_t
     length2() {
         return (x*x) + (y*y);
     }
 
     constexpr void
     normalize() {
-        auto module = length() ;
+        auto module = length();
         if(module != 0) {
             x /= module;
             y /= module;
