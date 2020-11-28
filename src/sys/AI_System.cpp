@@ -24,7 +24,36 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
         auto& ent     = context->getEntityByID( ai_cmp->getEntityID() );
         auto* mov_cmp = ent->getComponent<MovementComponent>();
 
-        arrive(mov_cmp, ai_cmp);
+        switch (ai_cmp->current_behavior) {
+        case AI_behaviour::patrol_b : patrol(ai_cmp, mov_cmp);
+            break;
+        
+        case AI_behaviour::chase_b : {
+                auto& pj = context->getEntityByID( context->getPlayerID() );
+                auto& pj_pos = pj->getComponent<MovementComponent>()->coords;   
+                chase(ai_cmp, mov_cmp, pj_pos);
+            }
+            break;
+
+        case AI_behaviour::runaway_b : {
+                auto& pj = context->getEntityByID( context->getPlayerID() );
+                auto& pj_pos = pj->getComponent<MovementComponent>()->coords;   
+                run_away(ai_cmp, mov_cmp, pj_pos);
+            }
+            break;
+
+        case AI_behaviour::pursue_b : {
+                auto& pj = context->getEntityByID( context->getPlayerID() );
+                auto* pj_mov = pj->getComponent<MovementComponent>();   
+                pursue(ai_cmp, mov_cmp, pj_mov);
+            }
+            break;
+
+        default: 
+                mov_cmp->dir.x.number = mov_cmp->dir.y.number = 0;
+                mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
+            break;
+        }
     });
 
     separation(context, ai_cmp_vec);
@@ -32,29 +61,51 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
     return true;
 }
 
-/* BASIC BEHAVIOURS FUNCTIONS */
+
+/* CONPLEX B. */
+void 
+AI_System::patrol(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp) noexcept {
+    auto& target = ai_cmp->target_vec.at(ai_cmp->target_index);
+    
+    if( !arrive(mov_cmp, target) ) {
+        if(auto new_target = updatePatrol(ai_cmp))
+            arrive(mov_cmp, (*new_target).get());
+    }
+}
+
+void 
+AI_System::chase(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+    arrive(mov_cmp, target_pos);
+}
+
+void 
+AI_System::run_away(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+    flee(mov_cmp, target_pos);
+}
+
 void
-AI_System::arrive(MovementComponent* mov_cmp, std::unique_ptr<AI_Component>& ai_cmp) noexcept {
+AI_System::pursue(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
+    auto& target_pos    = target_mov_cmp->coords;
+    auto  predicted_pos = target_pos + target_mov_cmp->dir;
+
+    arrive(mov_cmp, predicted_pos);
+}          
+
+
+/* BASIC BEHAVIOURS FUNCTIONS */
+bool
+AI_System::arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
     auto& my_coords = mov_cmp->coords;
     auto& my_accel  = mov_cmp->accel_to_target;
     auto& my_direct = mov_cmp->dir;
 
-    auto  target_dir = ai_cmp->target_vec.at(ai_cmp->target_index) - my_coords;
+    auto  target_dir = target_pos - my_coords;
     auto  distance2  = target_dir.length2();
     fixed64_t target_speed { };
 
-    //si hemos llegado miramos si hay un "target siguiente", sino nos quedamos quietos y salimos.
-    if(distance2 < ENT_ARRIVE_DIST2) {
-        if(auto new_target = updateTarget(ai_cmp)) {
-            target_dir = (*new_target).get() - my_coords;
-            distance2  = target_dir.length2();
-        }
-        else {
-            my_accel.x.number  = my_accel.y.number  = 0;
-            my_direct.x.number = my_direct.y.number = 0;
-            return;
-        }
-    }
+    if(distance2 < ENT_ARRIVE_DIST2)
+        return false;
+
     //si esta lejos intenta alcanzar max speed, sino interpola [max_speed, 0]
     if(distance2 > ENT_SLOW_DIST2)
         target_speed = ENT_MAX_SPEED;
@@ -73,6 +124,43 @@ AI_System::arrive(MovementComponent* mov_cmp, std::unique_ptr<AI_Component>& ai_
         my_accel.normalize();
         my_accel *= ENT_MAX_ACCEL;
     }
+
+    return true;
+}
+
+bool
+AI_System::flee(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+    auto& my_coords = mov_cmp->coords;
+    auto& my_accel  = mov_cmp->accel_to_target;
+    auto& my_direct = mov_cmp->dir;
+
+    auto  target_dir = my_coords - target_pos;
+    auto  distance2  = target_dir.length2();
+    fixed64_t target_speed { };
+
+    if(distance2 > ENT_FLEE_DIST2)
+        return false;
+
+    //si esta lejos intenta alcanzar max speed, sino interpola [max_speed, 0]
+    if(distance2 < ENT_FAR_SLOW_DIST2)
+        target_speed = ENT_MAX_SPEED;
+    else
+        target_speed = ENT_MAX_SPEED * ( (ENT_FAR_SLOW_DIST - target_dir.length_fix()) / ENT_FAR_SLOW_DIST );
+    
+    //calculamos la aceleracion objetivo como la diferencia de  (deseada - actual) 
+    target_dir.normalize();
+    target_dir *= target_speed;
+
+    my_accel  = (target_dir - my_direct);
+    my_accel /= ENT_TIME_TO_TARGET;
+
+    //ajustamos la aceleracion para que no sea muy alta.
+    if(my_accel.length2() > ENT_MAX_ACCEL2) {
+        my_accel.normalize();
+        my_accel *= ENT_MAX_ACCEL;
+    }
+
+    return true;
 }
 
 
@@ -97,13 +185,11 @@ AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<std
                 diff_vec.normalize();
                 auto result   = diff_vec * strength;
 
-                //std::cout << "La fuerza es (" << DECAY_COEFICIENT.number << " / " << distance2.number << ")\t = ";
-                //std::cout << strength.number << "\n";
-
                 ai_mov_cmp->separation_force          += result;
                 comparision_mov_cmp->separation_force += result * -1;
             }            
         }// END FOR COMPARISION
+
         if(ai_mov_cmp->separation_force.length2() > ENT_MAX_ACCEL2) {
             ai_mov_cmp->separation_force.normalize();
             ai_mov_cmp->separation_force *= ENT_MAX_ACCEL;
@@ -115,7 +201,7 @@ AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<std
 
 /* AUX FUNCTIONS */
 AI_System::optVec2_refw 
-AI_System::updateTarget(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
+AI_System::updatePatrol(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
     auto& route  = ai_cmp->target_vec;
     auto& index  = ai_cmp->target_index;
 
@@ -125,43 +211,24 @@ AI_System::updateTarget(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
         index = index_fwd;
         return std::ref(route.at(index));
     }
+    
     return { };
 }
 
-} //NS
+AI_System::optVec2_refw 
+AI_System::updateRoute(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
+    auto& route  = ai_cmp->target_vec;
+    auto& index  = ai_cmp->target_index;
 
-/*
-void
-AI_System::separation(std::vector<Entity_t*>& squadron) noexcept {
-    for(auto it_current_ent = begin(squadron); it_current_ent < end(squadron); ++it_current_ent ) {
-        auto* mov_cmp_current = (*it_current_ent)->getComponent<MovementComponent>();
+    auto index_fwd = index + 1;
 
-        for(auto it_comp_ent = it_current_ent + 1; it_comp_ent != end(squadron); ++it_comp_ent ) {
-            auto* mov_cmp_comp = (*it_comp_ent)->getComponent<MovementComponent>();
-            fixed_vec2 ent_separation { }; 
-            
-            ent_separation.x.number = mov_cmp_current->coords.x.number - mov_cmp_comp->coords.x.number;
-            ent_separation.y.number = mov_cmp_current->coords.y.number - mov_cmp_comp->coords.y.number;
-            
-            auto dist { ent_separation.length2() };
+    if(index_fwd < route.size()) {
+        index = index_fwd;
+        return std::ref(route.at(index));
+    }
 
-            if(dist < SEPARATION_RAD2) {
-                auto strength { std::min(SEPARATION_NUM/dist, ENT_MAX_SPEED) };
-                ent_separation.normalize();
-
-                auto str_result_X { strength * ent_separation.x };
-                auto str_result_Y { strength * ent_separation.y };
-
-                mov_cmp_current->separation.x += str_result_X;
-                mov_cmp_current->separation.y += str_result_Y;
-
-                mov_cmp_comp->separation.x += str_result_X * -1;
-                mov_cmp_comp->separation.y += str_result_Y * -1;
-            } //end_if
-        } //end_for2
-        
-        mov_cmp_current->dir.x = mov_cmp_current->target.x + mov_cmp_current->cohesion.x + mov_cmp_current->separation.x;
-        mov_cmp_current->dir.y = mov_cmp_current->target.y + mov_cmp_current->cohesion.y + mov_cmp_current->separation.y;
-    } //end_for1
+    return { };
 }
-*/
+
+
+} //NS

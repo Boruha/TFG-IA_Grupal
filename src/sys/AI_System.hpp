@@ -23,14 +23,31 @@ struct AI_System : System_t {
     bool update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept override;
 
 private:
-    /* Steering B. */
-    void arrive(MovementComponent* mov_cmp, std::unique_ptr<AI_Component>& ai_cmp) noexcept;
-    
-    /* FLOCKING B. FUNCTIONS */
-    void separation(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept;
+/* CONPLEX B. */
+    void patrol(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp) noexcept;
+    void chase(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
+    void run_away(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
+    //pathfinding / pathfollowing -> vx        
+    //obstacle avoidance          -> vx   note: imagino que la intención es que sea un paso de todos
+                                              //para evitar elementos en pursue, etc...
+    void pursue(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;          
+    //pursue                      -> v1   note: arrive del Pj con predict del mov.
+    //evade                       -> v1   note: flee del Pj con predict del mov.
 
-    /* AUX */
-    [[nodiscard]] optVec2_refw updateTarget(std::unique_ptr<AI_Component>& ai_cmp) noexcept;
+/* STEERING B. BASIC */
+    bool arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
+    bool flee(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
+    //wander  -> vx
+
+/* FLOCKING B. COMPO */ //patrol usará todo esto
+    void separation(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept;
+    //cohesion           -> v1
+    //direction aligment -> v1
+
+/* AUX */
+    [[nodiscard]] optVec2_refw updatePatrol(std::unique_ptr<AI_Component>& ai_cmp) noexcept;
+    [[nodiscard]] optVec2_refw updateRoute(std::unique_ptr<AI_Component>& ai_cmp) noexcept;
+    //predict movement -> v1
 };
 
 

@@ -6,14 +6,14 @@
 
 namespace AIP {
 
-//enum class AI_behaviour : uint16_t {
-//    no_b     = 0u,
-//    patrol_b = 1u,
-//    arrive_b  = 2u,
-//    flee_b   = 3u,
-//    pursue_b = 4u,
-//    evade_b  = 5u
-//};
+enum class AI_behaviour : uint16_t {
+    no_b     = 0u,
+    patrol_b = 1u,
+    chase_b  = 2u,
+    runaway_b= 3u,
+    pursue_b = 4u,
+    evade_b  = 5u
+};
 
 struct AI_Component : Component_t {
     explicit AI_Component(entID eid) : Component_t(eid) { }
@@ -21,6 +21,7 @@ struct AI_Component : Component_t {
     std::vector<fixed_vec2> target_vec { fixed_vec2 { -300, -300 }, fixed_vec2 {  200, -300 }
                                        , fixed_vec2 {  200,  200 }, fixed_vec2 { -300,  200 } };
     std::size_t target_index { 0u };
+    AI_behaviour current_behavior { AI_behaviour::patrol_b };
 };
 
 } //NS

@@ -13,6 +13,13 @@ constexpr fixed64_t ENT_SLOW_DIST2 { ENT_SLOW_DIST * ENT_SLOW_DIST };
 
 constexpr fixed64_t ENT_TIME_TO_TARGET { 0.1f };
 
+//Flee B.
+constexpr fixed64_t ENT_FLEE_DIST  { 400l };
+constexpr fixed64_t ENT_FLEE_DIST2 { ENT_FLEE_DIST * ENT_FLEE_DIST };
+
+constexpr fixed64_t ENT_FAR_SLOW_DIST  { 390l };
+constexpr fixed64_t ENT_FAR_SLOW_DIST2 { ENT_FAR_SLOW_DIST * ENT_FAR_SLOW_DIST };
+
 //SEPARATION B.
 constexpr fixed64_t ENT_SEPARATION_DIST  { 70l };
 constexpr fixed64_t ENT_SEPARATION_DIST2 { ENT_SEPARATION_DIST * ENT_SEPARATION_DIST };

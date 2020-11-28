@@ -40,32 +40,34 @@ bool
 RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
     const auto& render_cmp_vec = context->getRenderCmps();
           auto* screen_ptr     = framebuffer.get();
-
+    
+    //clean de pantalla
     std::fill(screen_ptr, screen_ptr + framebuffer_size, static_cast<uint32_t>(Color::Black));
 
-    auto drawSprite = [&](const std::unique_ptr<RenderComponent>& render_cmp) {
-        auto& ent     = context->getEntityByID(render_cmp->getEntityID());
-        auto* mov_cmp = ent->getComponent<MovementComponent>();
+    //pintar todos los render_cmp
+    std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
+        [&](const std::unique_ptr<RenderComponent>& render_cmp) {
+            auto& ent     = context->getEntityByID(render_cmp->getEntityID());
+            auto* mov_cmp = ent->getComponent<MovementComponent>();
 
-        //paso de continuo a pixel
-        const auto screen_coords  = continuous_to_screen(mov_cmp->coords);
+            //paso de continuo a pixel
+            const auto screen_coords  = continuous_to_screen(mov_cmp->coords);
 
-        //puntero a inicio pantalla y colocación para pintar el sprite.
-        auto* screen_ptr  = framebuffer.get();
-              screen_ptr += (screen_coords.y * window_w) + screen_coords.x;
+            //puntero a posicion al sprite.
+            auto* screen_ptr  = framebuffer.get();
+                  screen_ptr += (screen_coords.y * window_w) + screen_coords.x;
 
-        //pintar sprite
-        for(uint32_t i=0; i<render_cmp->sprite.y.getNoScaled(); ++i) {
-            std::fill(screen_ptr, screen_ptr + render_cmp->sprite.y.getNoScaled(), static_cast<uint32_t>(render_cmp->sprite_C));
-            screen_ptr += window_w;
-        }
-        //pintar vector deplazamiento
-        if(debug_mode) {
-            draw_debug(mov_cmp, render_cmp);
-        }
-    };
+            //pintar sprite
+            for(uint32_t i=0; i<render_cmp->sprite.y.getNoScaled(); ++i) {
+                std::fill(screen_ptr, screen_ptr + render_cmp->sprite.y.getNoScaled(), static_cast<uint32_t>(render_cmp->sprite_C));
+                screen_ptr += window_w;
+            }
 
-    std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), drawSprite);
+            //pintar vectores steer
+            if(debug_mode) {
+                draw_debug(mov_cmp, render_cmp);
+            }
+    });
 
     ptc_update(screen_ptr);
 
@@ -118,7 +120,7 @@ void
 RenderSystem::draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<RenderComponent>& render_cmp) noexcept {
     auto& dir   = mov_cmp->dir;
     auto& accel = mov_cmp->accel_to_target;
-    auto& cohes = mov_cmp->copy_to_draw;
+    auto& separ = mov_cmp->copy_to_draw;
     
     //ajustamos el inicio de los vectores de steer.
     auto p_ini = mov_cmp->coords;
@@ -153,8 +155,8 @@ RenderSystem::draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<Rende
         bresenham_line(screen_p_ini, screen_p_fin, dY, dX, Color::Green);
     }
 
-    if(cohes.length2().number != 0) {
-        auto p_fin = p_ini + (cohes * 4);
+    if(separ.length2().number != 0) {
+        auto p_fin = p_ini + (separ * 4);
         p_fin.x = std::clamp(p_fin.x, (half_window_w64*-1), half_window_w64);
         p_fin.y = std::clamp(p_fin.y, (half_window_h64*-1), half_window_h64);
 

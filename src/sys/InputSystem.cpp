@@ -4,8 +4,11 @@
 
 #include <cmp/InputComponent.hpp>
 #include <cmp/MovementComponent.hpp>
+#include <cmp/AI_Component.hpp>
 
 #include <ent/Entity_t.hpp>
+
+#include <utils/AI_Constants.hpp>
 
 extern "C" {
   #include "tinyPTC/tinyptc.h"  
@@ -40,31 +43,73 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t D
 
     if( ptc_process_events() )
         return false;
-
-    auto checkKeys = [&](std::unique_ptr<InputComponent>& input_cmp) {
-        auto& ent = context->getEntityByID(input_cmp->getEntityID());
-        auto* mov = ent->getComponent<MovementComponent>();
-        auto& dir = mov->dir;
-        
-        dir.x.number = dir.y.number = 0;
-
-        if( keyboard.isKeyPressed(input_cmp->key_Up) )
-            dir.y.number -= SCALE_S;
-
-        if( keyboard.isKeyPressed(input_cmp->key_Down) )
-            dir.y.number += SCALE_S;
-        
-        if( keyboard.isKeyPressed(input_cmp->key_Left) )
-            dir.x.number -= SCALE_S;
-        
-        if( keyboard.isKeyPressed(input_cmp->key_Right) )
-            dir.x.number += SCALE_S;
-
-        dir.normalize();
-
-    };
     
-    std::for_each(begin(input_cmp_vec), end(input_cmp_vec), checkKeys);
+    if( keyboard.isKeyPressed(XK_0) ) {
+        auto& ai_cmp_vec = context->getAI_Cmps();
+
+        std::for_each(ai_cmp_vec.begin(), ai_cmp_vec.end(), 
+            [](std::unique_ptr<AI_Component>& ai_cmp) {
+            ai_cmp->current_behavior = AI_behaviour::no_b;
+        });
+    }
+
+    if( keyboard.isKeyPressed(XK_1) ) {
+        auto& ai_cmp_vec = context->getAI_Cmps();
+
+        std::for_each(ai_cmp_vec.begin(), ai_cmp_vec.end(), 
+            [](std::unique_ptr<AI_Component>& ai_cmp) {
+            ai_cmp->current_behavior = AI_behaviour::patrol_b;
+        });
+    }
+
+    if( keyboard.isKeyPressed(XK_2) ) {
+        auto& ai_cmp_vec = context->getAI_Cmps();
+
+        std::for_each(ai_cmp_vec.begin(), ai_cmp_vec.end(), 
+            [](std::unique_ptr<AI_Component>& ai_cmp) {
+            ai_cmp->current_behavior = AI_behaviour::chase_b;
+        });
+    }
+
+    if( keyboard.isKeyPressed(XK_3) ) {
+        auto& ai_cmp_vec = context->getAI_Cmps();
+
+        std::for_each(ai_cmp_vec.begin(), ai_cmp_vec.end(), 
+            [](std::unique_ptr<AI_Component>& ai_cmp) {
+            ai_cmp->current_behavior = AI_behaviour::runaway_b;
+        });
+    }
+
+    if( keyboard.isKeyPressed(XK_4) ) {
+        auto& ai_cmp_vec = context->getAI_Cmps();
+
+        std::for_each(ai_cmp_vec.begin(), ai_cmp_vec.end(), 
+            [](std::unique_ptr<AI_Component>& ai_cmp) {
+            ai_cmp->current_behavior = AI_behaviour::pursue_b;
+        });
+    }
+
+
+    std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
+        [&](std::unique_ptr<InputComponent>& input_cmp) {
+            auto& ent = context->getEntityByID(input_cmp->getEntityID());
+            auto* mov = ent->getComponent<MovementComponent>();
+            auto& dir = mov->dir;
+            
+            dir.x.number = dir.y.number = 0;
+    
+            if( keyboard.isKeyPressed(input_cmp->key_Up) )
+                dir.y -= ENT_MAX_SPEED;
+    
+            if( keyboard.isKeyPressed(input_cmp->key_Down) )
+                dir.y += ENT_MAX_SPEED;
+            
+            if( keyboard.isKeyPressed(input_cmp->key_Left) )
+                dir.x -= ENT_MAX_SPEED;
+            
+            if( keyboard.isKeyPressed(input_cmp->key_Right) )
+                dir.x += ENT_MAX_SPEED;
+    });
 
     return true;
 }
