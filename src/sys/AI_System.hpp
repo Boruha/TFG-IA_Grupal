@@ -27,16 +27,16 @@ private:
     void patrol(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp) noexcept;
     void chase(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
     void run_away(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
+    void pursue(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
+    void evade(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
+    
     //pathfinding / pathfollowing -> vx        
     //obstacle avoidance          -> vx   note: imagino que la intención es que sea un paso de todos
                                               //para evitar elementos en pursue, etc...
-    void pursue(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;          
-    //pursue                      -> v1   note: arrive del Pj con predict del mov.
-    //evade                       -> v1   note: flee del Pj con predict del mov.
-
+                                              
 /* STEERING B. BASIC */
     bool arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
-    bool flee(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
+    bool leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
     //wander  -> vx
 
 /* FLOCKING B. COMPO */ //patrol usará todo esto

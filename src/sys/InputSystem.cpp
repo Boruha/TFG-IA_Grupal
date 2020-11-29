@@ -89,6 +89,15 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t D
         });
     }
 
+    if( keyboard.isKeyPressed(XK_5) ) {
+        auto& ai_cmp_vec = context->getAI_Cmps();
+
+        std::for_each(ai_cmp_vec.begin(), ai_cmp_vec.end(), 
+            [](std::unique_ptr<AI_Component>& ai_cmp) {
+            ai_cmp->current_behavior = AI_behaviour::evade_b;
+        });
+    }
+
 
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
         [&](std::unique_ptr<InputComponent>& input_cmp) {

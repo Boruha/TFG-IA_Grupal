@@ -20,34 +20,44 @@ EntityManager::EntityManager() {
     ent1->addComponent(ai_1.get());
 
     /*ent 2*/
-    /*auto& ent2  = createEntity_t();
+    auto& ent2  = createEntity_t();
     auto& mov_2 = cmp_storage->createComponent( MovementComponent(ent2->getID(), fixed64_t(60l) , fixed64_t(-10l) ) );
     auto& ren_2 = cmp_storage->createComponent( RenderComponent(ent2->getID(), ufixed64_t(10ul), ufixed64_t(10ul), Color::White) );
     auto& ai_2  = cmp_storage->createComponent( AI_Component(ent2->getID()) );
 
     ent2->addComponent(mov_2.get());
     ent2->addComponent(ren_2.get());
-    ent2->addComponent(ai_2.get());*/
+    ent2->addComponent(ai_2.get());
 
     /*ent 3*/
-    /*auto& ent3  = createEntity_t();
+    auto& ent3  = createEntity_t();
     auto& mov_3 = cmp_storage->createComponent( MovementComponent(ent3->getID(), fixed64_t(-10l) , fixed64_t(20l) ) );
     auto& ren_3 = cmp_storage->createComponent( RenderComponent(ent3->getID(), ufixed64_t(10ul), ufixed64_t(10ul), Color::White) );
     auto& ai_3  = cmp_storage->createComponent( AI_Component(ent3->getID()) );
 
     ent3->addComponent(mov_3.get());
     ent3->addComponent(ren_3.get());
-    ent3->addComponent(ai_3.get());*/
+    ent3->addComponent(ai_3.get());
 
     /*ent 4*/
-    /*auto& ent4  = createEntity_t();
+    auto& ent4  = createEntity_t();
     auto& mov_4 = cmp_storage->createComponent( MovementComponent(ent4->getID(), fixed64_t(-60l) , fixed64_t(10l) ) );
     auto& ren_4 = cmp_storage->createComponent( RenderComponent(ent4->getID(), ufixed64_t(10ul), ufixed64_t(10ul), Color::White) );
     auto& ai_4  = cmp_storage->createComponent( AI_Component(ent4->getID()) );
 
     ent4->addComponent(mov_4.get());
     ent4->addComponent(ren_4.get());
-    ent4->addComponent(ai_4.get());*/
+    ent4->addComponent(ai_4.get());
+
+    /*ent 6*/
+    auto& ent6  = createEntity_t();
+    auto& mov_6 = cmp_storage->createComponent( MovementComponent(ent6->getID(), fixed64_t(-20l) , fixed64_t(-40l) ) );
+    auto& ren_6 = cmp_storage->createComponent( RenderComponent(ent6->getID(), ufixed64_t(10ul), ufixed64_t(10ul), Color::White) );
+    auto& ai_6  = cmp_storage->createComponent( AI_Component(ent6->getID()) );
+
+    ent6->addComponent(mov_6.get());
+    ent6->addComponent(ren_6.get());
+    ent6->addComponent(ai_6.get());
 
     /*ent 5 - player*/
     auto& ent5  = createEntity_t();

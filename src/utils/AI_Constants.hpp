@@ -8,7 +8,7 @@ namespace AIP {
 constexpr fixed64_t ENT_ARRIVE_DIST  { 20l };
 constexpr fixed64_t ENT_ARRIVE_DIST2 { ENT_ARRIVE_DIST * ENT_ARRIVE_DIST };
 
-constexpr fixed64_t ENT_SLOW_DIST  { 25l };
+constexpr fixed64_t ENT_SLOW_DIST  { 23l };
 constexpr fixed64_t ENT_SLOW_DIST2 { ENT_SLOW_DIST * ENT_SLOW_DIST };
 
 constexpr fixed64_t ENT_TIME_TO_TARGET { 0.1f };
@@ -17,7 +17,7 @@ constexpr fixed64_t ENT_TIME_TO_TARGET { 0.1f };
 constexpr fixed64_t ENT_FLEE_DIST  { 400l };
 constexpr fixed64_t ENT_FLEE_DIST2 { ENT_FLEE_DIST * ENT_FLEE_DIST };
 
-constexpr fixed64_t ENT_FAR_SLOW_DIST  { 390l };
+constexpr fixed64_t ENT_FAR_SLOW_DIST  { 395l };
 constexpr fixed64_t ENT_FAR_SLOW_DIST2 { ENT_FAR_SLOW_DIST * ENT_FAR_SLOW_DIST };
 
 //SEPARATION B.

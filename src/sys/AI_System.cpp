@@ -49,6 +49,13 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
             }
             break;
 
+        case AI_behaviour::evade_b : {
+                auto& pj = context->getEntityByID( context->getPlayerID() );
+                auto* pj_mov = pj->getComponent<MovementComponent>();   
+                evade(ai_cmp, mov_cmp, pj_mov);
+            }
+            break;
+
         default: 
                 mov_cmp->dir.x.number = mov_cmp->dir.y.number = 0;
                 mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
@@ -80,7 +87,7 @@ AI_System::chase(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_c
 
 void 
 AI_System::run_away(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
-    if( !flee(mov_cmp, target_pos) ) {
+    if( !leave(mov_cmp, target_pos) ) {
         mov_cmp->dir.x.number = mov_cmp->dir.y.number = 0;
         mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
     }
@@ -92,7 +99,18 @@ AI_System::pursue(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_
     auto  predicted_pos = target_pos + target_mov_cmp->dir;
 
     arrive(mov_cmp, predicted_pos);
-}          
+}
+
+void
+AI_System::evade(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
+    auto& target_pos    = target_mov_cmp->coords;
+    auto  predicted_pos = target_pos + target_mov_cmp->dir;
+
+    if( !leave(mov_cmp, predicted_pos) ) {
+        mov_cmp->dir.x.number = mov_cmp->dir.y.number = 0;
+        mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
+    }
+}  
 
 
 /* BASIC BEHAVIOURS FUNCTIONS */
@@ -132,7 +150,7 @@ AI_System::arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
 }
 
 bool
-AI_System::flee(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System::leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
     auto& my_coords = mov_cmp->coords;
     auto& my_accel  = mov_cmp->accel_to_target;
     auto& my_direct = mov_cmp->dir;
