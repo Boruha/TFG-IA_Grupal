@@ -15,8 +15,7 @@ struct AI_Component;
 struct MovementComponent;
 
 struct AI_System : System_t {
-    using optVec2_refw = std::optional<std::reference_wrapper<fixed_vec2>>;
-
+    using optVec2_refw   = std::optional<std::reference_wrapper<fixed_vec2>>;
     explicit AI_System() = default;
 
     void init() noexcept override;
@@ -29,26 +28,25 @@ private:
     void run_away(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
     void pursue(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
     void evade(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
-    
-    //pathfinding / pathfollowing -> vx        
-    //obstacle avoidance          -> vx   note: imagino que la intención es que sea un paso de todos
-                                              //para evitar elementos en pursue, etc...
                                               
 /* STEERING B. BASIC */
     bool arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
     bool leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
-    //wander  -> vx
 
-/* FLOCKING B. COMPO */ //patrol usará todo esto
+/* FLOCKING B. COMPO */
     void separation(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept;
+    void cohesion(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept;
     //cohesion           -> v1
     //direction aligment -> v1
 
 /* AUX */
     [[nodiscard]] optVec2_refw updatePatrol(std::unique_ptr<AI_Component>& ai_cmp) noexcept;
     [[nodiscard]] optVec2_refw updateRoute(std::unique_ptr<AI_Component>& ai_cmp) noexcept;
-    //predict movement -> v1
 };
 
+/* Adiciones futuras */
+    //pathfinding / pathfollowing
+    //obstacle avoidance
+    //wander
 
 } //NS

@@ -19,6 +19,7 @@ MovementSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_
             //aplicar los distintos modificadores
             mov_cmp->dir += mov_cmp->accel_to_target;
             mov_cmp->dir += mov_cmp->separation_force;
+            mov_cmp->dir += mov_cmp->cohesion_force;
     
             //nos aseguramos de no pasarnos de la vel max.
             if(mov_cmp->dir.length2() > ENT_MAX_SPEED2) {
@@ -30,8 +31,12 @@ MovementSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_
             mov_cmp->coords += mov_cmp->dir * DeltaTime;
             
             /* resets */
-            mov_cmp->copy_to_draw = mov_cmp->separation_force;
+            mov_cmp->sep_copy_to_draw = mov_cmp->separation_force;
+            mov_cmp->coh_copy_to_draw = mov_cmp->cohesion_force;
+
             mov_cmp->separation_force.x.number = mov_cmp->separation_force.y.number = 0;
+            mov_cmp->cohesion_force.x.number   = mov_cmp->cohesion_force.y.number   = 0;
+            mov_cmp->cohesion_count.number     = 0;
     });
         
     return true;

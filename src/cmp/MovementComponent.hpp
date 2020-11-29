@@ -11,12 +11,13 @@ struct MovementComponent : Component_t {
   fixed_vec2 coords { 0, 0 };
   fixed_vec2 dir    { 0, 0 }; //desplazamiento final de la entidad
   fixed_vec2 accel_to_target  { 0, 0 }; //acceleracion calculada en cada iteracion.
+  fixed_vec2 cohesion_force   { 0, 0 }; //si hay elementos cercanos, fuerza que los agrupa.
+  fixed_vec2 separation_force { 0, 0 }; //si hay elementos cercanos, fuerza que los separa.
 
   //componentes aux
-  fixed_vec2 cohesion_force   { 0, 0 }; //si hay elementos cercanos, fuerza que los agrupa. 
-  fixed_vec2 copy_to_draw     { 0, 0 };
-  fixed_vec2 separation_force { 0, 0 }; //si hay elementos cercanos, fuerza que los separa.
-  
+  fixed_vec2 sep_copy_to_draw { 0, 0 };
+  fixed_vec2 coh_copy_to_draw { 0, 0 };
+  fixed64_t  cohesion_count   { 0l };
 };
 
 }

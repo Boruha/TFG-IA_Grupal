@@ -64,6 +64,7 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
     });
 
     separation(context, ai_cmp_vec);
+    cohesion(context, ai_cmp_vec);
 
     return true;
 }
@@ -208,7 +209,7 @@ AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<std
 
                 ai_mov_cmp->separation_force          += result;
                 comparision_mov_cmp->separation_force += result * -1;
-            }            
+            }
         }// END FOR COMPARISION
 
         if(ai_mov_cmp->separation_force.length2() > ENT_MAX_ACCEL2) {
@@ -219,6 +220,51 @@ AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<std
     }// END FOR AI
 }
 
+void
+AI_System::cohesion(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept {
+    auto end_it = end(AI_cmps);
+    
+    for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
+        auto& ai_ent     = context->getEntityByID( (*ai_it)->getEntityID() );
+        auto* ai_mov_cmp = ai_ent->getComponent<MovementComponent>();
+        auto& ai_centre  = ai_mov_cmp->cohesion_force;
+        auto& ai_count   = ai_mov_cmp->cohesion_count;
+
+        for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
+            auto& comparision_ent     = context->getEntityByID( (*comparision_it)->getEntityID() );
+            auto* comparision_mov_cmp = comparision_ent->getComponent<MovementComponent>();
+            auto& comparision_centre  = comparision_mov_cmp->cohesion_force;
+            auto& comparision_count   = comparision_mov_cmp->cohesion_count;
+
+            auto diff_vec = ai_mov_cmp->coords - comparision_mov_cmp->coords;
+
+            if(diff_vec.length2() < ENT_COHESION_DIST2) {
+                ai_centre += comparision_mov_cmp->coords;
+                ai_count  += 1;
+                comparision_centre += ai_mov_cmp->coords;
+                comparision_count  += 1;
+            }
+        }// END FOR COMPARISION
+
+        if(ai_count.number > 0) {
+            ai_centre        /= ai_count;
+            auto target_dir   = ai_centre - ai_mov_cmp->coords;
+            auto target_speed = ENT_MAX_SPEED * ( target_dir.length_fix() / (ENT_SEPARATION_DIST/2) );
+        
+            target_dir.normalize();
+            target_dir *= target_speed;
+            target_dir /= ENT_TIME_TO_TARGET;
+
+            //ajustamos la aceleracion para que no sea muy alta.
+            if(target_dir.length2() > ENT_MAX_ACCEL2) {
+                target_dir.normalize();
+                target_dir *= ENT_MAX_ACCEL;
+            }
+            
+            ai_centre = target_dir;
+        }
+    }// END FOR AI
+}
 
 /* AUX FUNCTIONS */
 AI_System::optVec2_refw 

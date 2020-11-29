@@ -120,7 +120,8 @@ void
 RenderSystem::draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<RenderComponent>& render_cmp) noexcept {
     auto& dir   = mov_cmp->dir;
     auto& accel = mov_cmp->accel_to_target;
-    auto& separ = mov_cmp->copy_to_draw;
+    auto& separ = mov_cmp->sep_copy_to_draw;
+    auto& cohes = mov_cmp->coh_copy_to_draw;
     
     //ajustamos el inicio de los vectores de steer.
     auto p_ini = mov_cmp->coords;
@@ -140,7 +141,7 @@ RenderSystem::draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<Rende
 
         int32_t dX = screen_p_fin.x - screen_p_ini.x;
         int32_t dY = screen_p_fin.y - screen_p_ini.y;
-        bresenham_line(screen_p_ini, screen_p_fin, dY, dX, Color::Red);
+        bresenham_line(screen_p_ini, screen_p_fin, dY, dX, Color::White);
     }
 
     if(accel.length2().number != 0) {
@@ -165,6 +166,18 @@ RenderSystem::draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<Rende
         int32_t dX = screen_p_fin.x - screen_p_ini.x;
         int32_t dY = screen_p_fin.y - screen_p_ini.y;
         bresenham_line(screen_p_ini, screen_p_fin, dY, dX, Color::Blue);
+    }
+
+    if(cohes.length2().number != 0) {
+        auto p_fin = p_ini + (cohes * 4);
+        p_fin.x = std::clamp(p_fin.x, (half_window_w64*-1), half_window_w64);
+        p_fin.y = std::clamp(p_fin.y, (half_window_h64*-1), half_window_h64);
+
+        const auto screen_p_fin = continuous_to_screen(p_fin);
+
+        int32_t dX = screen_p_fin.x - screen_p_ini.x;
+        int32_t dY = screen_p_fin.y - screen_p_ini.y;
+        bresenham_line(screen_p_ini, screen_p_fin, dY, dX, Color::Red);
     }
 
 }

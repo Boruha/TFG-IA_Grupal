@@ -46,6 +46,11 @@ struct fixed64_t {
         return new_uf64_t;
     }
 
+    constexpr fixed64_t operator+=(const int64_t& num) {
+        number += (num * SCALE_S); 
+        return *this;
+    }
+
     constexpr fixed64_t operator-(const fixed64_t& num) const {
         fixed64_t new_uf64_t { };
         new_uf64_t.number = this->number - num.number; 
