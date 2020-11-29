@@ -80,7 +80,10 @@ AI_System::chase(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_c
 
 void 
 AI_System::run_away(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
-    flee(mov_cmp, target_pos);
+    if( !flee(mov_cmp, target_pos) ) {
+        mov_cmp->dir.x.number = mov_cmp->dir.y.number = 0;
+        mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
+    }
 }
 
 void
@@ -146,7 +149,7 @@ AI_System::flee(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
         target_speed = ENT_MAX_SPEED;
     else
         target_speed = ENT_MAX_SPEED * ( (ENT_FAR_SLOW_DIST - target_dir.length_fix()) / ENT_FAR_SLOW_DIST );
-    
+
     //calculamos la aceleracion objetivo como la diferencia de  (deseada - actual) 
     target_dir.normalize();
     target_dir *= target_speed;
