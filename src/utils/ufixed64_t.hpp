@@ -6,6 +6,7 @@ namespace AIP {
 
 constexpr const uint64_t SCALE   { 65536u };
 constexpr const int64_t  SCALE_S { 65536 };
+//The C++ Programming Language, 4th edition
 
 struct fixed64_t {
     fixed64_t() = default;

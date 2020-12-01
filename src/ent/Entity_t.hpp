@@ -19,7 +19,7 @@ struct Entity_t{
 
     const entID& getID() const { return ent_id; }
 
-    template<typename T> decltype(auto) 
+    template<typename T> decltype(auto)
     constexpr getComponent() const noexcept {
         T* result     = nullptr;
         const auto it = my_cmps.find(Component_t::getCmpTypeID<T>());
@@ -33,7 +33,7 @@ struct Entity_t{
     template<typename T> decltype(auto) 
     getComponent() noexcept {
         return const_cast<T*>( std::as_const(*this).getComponent<T>() );
-    }
+    } //estudiar mejor la diff C++ templates, the complete guide, 2nd edition
 
 
 private:

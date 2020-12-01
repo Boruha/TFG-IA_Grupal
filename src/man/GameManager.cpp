@@ -24,7 +24,7 @@ GameManager::GameManager() {
 }
 
 GameManager::~GameManager() {
-    systems.clear();
+    systems.clear(); //delete auto
     manager.~unique_ptr();
 }
 

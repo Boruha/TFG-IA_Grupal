@@ -19,8 +19,8 @@ int main() {
     timeElapse = std::chrono::duration_cast<std::chrono::microseconds>(time.now() - lastUpdateTime);
 
     if(timeElapse.count() >= AIP::DELTATIME_MICRO.number) {
-      gameCondition  = gameManager->update();
       lastUpdateTime = time.now();
+      gameCondition  = gameManager->update();
     }
   }
   
