@@ -9,9 +9,7 @@ namespace AIP {
 
 struct Entity_t{
     explicit Entity_t() : ent_id(++counterID) { };
-            ~Entity_t() { my_cmps.clear(); };
 
-    
     template<typename T> void 
     constexpr addComponent(T* cmp) {
         my_cmps[Component_t::getCmpTypeID<T>()] = cmp;
@@ -33,7 +31,7 @@ struct Entity_t{
     template<typename T> decltype(auto) 
     getComponent() noexcept {
         return const_cast<T*>( std::as_const(*this).getComponent<T>() );
-    } //estudiar mejor la diff C++ templates, the complete guide, 2nd edition
+    }
 
 
 private:

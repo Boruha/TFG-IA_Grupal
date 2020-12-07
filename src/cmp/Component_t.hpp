@@ -1,4 +1,5 @@
 #pragma once
+
 #include <utils/Alias.hpp>
 
 namespace AIP {

@@ -1,15 +1,19 @@
 #pragma once
+
+#include <man/Manager_t.hpp>
+#include <sys/System_t.hpp>
 #include <vector>
 #include <memory>
 
 namespace AIP {
 
-struct System_t;
-struct Manager_t;
-
 struct GameManager {
     explicit GameManager();
-            ~GameManager();
+
+    GameManager(const GameManager& )            = delete;
+    GameManager(const GameManager&&)            = delete;
+    GameManager& operator=(const GameManager& ) = delete;
+    GameManager& operator=(const GameManager&&) = delete;
 
     bool update() noexcept;
 

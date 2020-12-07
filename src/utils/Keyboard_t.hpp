@@ -2,7 +2,6 @@
 
 #include <X11/X.h>
 #include <X11/keysym.h>
-
 #include <unordered_map>
 #include <optional>
 
@@ -19,9 +18,9 @@ struct Keyboard_t {
     Keyboard_t& operator=(const Keyboard_t&) = delete;
     Keyboard_t& operator=(Keyboard_t&&)      = delete;
 
-    bool isKeyPressed(KeySym key) noexcept;
-    void setValue(KeySym key, bool value) noexcept;
-    OptKeyIt getKeyIterator(KeySym key) noexcept;
+    bool     isKeyPressed(KeySym key)         noexcept;
+    void     setValue(KeySym key, bool value) noexcept;
+    OptKeyIt getKeyIterator(KeySym key)       noexcept;
 
 
 private:

@@ -1,6 +1,6 @@
 #pragma once
-#include <cmp/Component_t.hpp>
 
+#include <cmp/Component_t.hpp>
 #include <X11/X.h>
 #include <X11/keysym.h>
 

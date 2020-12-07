@@ -1,9 +1,6 @@
 #include <main.hpp>
-
 #include <man/GameManager.hpp>
-
 #include <utils/GameConstants.hpp>
-
 #include <memory>
 
 int main() {
@@ -23,8 +20,8 @@ int main() {
       gameCondition  = gameManager->update();
     }
   }
-  
-  gameManager.~unique_ptr();
+
+  //cuando me ponga con el delta time mirar de dejar esto más bonito con funciones que te den el reloj, delta time y demases.
 
   return 0;
 }

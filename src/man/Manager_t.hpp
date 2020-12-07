@@ -1,9 +1,9 @@
 #pragma once
+
+#include <utils/Alias.hpp>
 #include <vector>
 #include <unordered_map>
 #include <memory>
-
-#include <utils/Alias.hpp>
 
 namespace AIP {
 
@@ -12,7 +12,6 @@ struct RenderComponent;
 struct MovementComponent;
 struct AI_Component;
 struct InputComponent;
-
 
 struct Manager_t {
     virtual ~Manager_t() = default;

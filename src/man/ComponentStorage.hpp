@@ -1,19 +1,13 @@
 #pragma once
+
+#include <cmp/CmpIncludeList.hpp>
+#include <utils/Alias.hpp>
+#include <utils/Color.hpp>
 #include <vector>
 #include <memory>
 #include <unordered_map>
-#include <cstdint>
-
-#include <utils/Alias.hpp>
-#include <utils/Color.hpp>
-
-#include <cmp/CmpIncludeList.hpp>
-
 
 namespace AIP {
-
-struct RenderComponent;
-struct MovementComponent;
 
 //Struct generico para nuestras temp de Cmps
 struct CmpCollection {
@@ -24,16 +18,14 @@ struct CmpCollection {
 template<typename T>
 struct CmpVector : CmpCollection {
     explicit CmpVector<T>() { cmps.reserve(5u); }
-    ~CmpVector<T>() override { cmps.clear(); };
     std::vector<std::unique_ptr<T>> cmps;
 };
 
 
 struct ComponentStorage {
     explicit ComponentStorage() = default;
-            ~ComponentStorage() { cmp_map.clear(); }
              
-               ComponentStorage(const ComponentStorage& ) = delete; //1 '&' = LValue, 2 '&' = RValue (Valor temporal)
+               ComponentStorage(const ComponentStorage& ) = delete;
                ComponentStorage(const ComponentStorage&&) = delete;
     ComponentStorage& operator=(const ComponentStorage& ) = delete;
     ComponentStorage& operator=(const ComponentStorage&&) = delete;

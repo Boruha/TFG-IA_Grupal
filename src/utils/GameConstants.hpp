@@ -1,8 +1,8 @@
 #pragma once
 
+#include <utils/ufixed64_t.hpp>
 #include <chrono>
 #include <ratio>
-#include <utils/ufixed64_t.hpp>
 
 namespace AIP {
 

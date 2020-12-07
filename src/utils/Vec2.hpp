@@ -1,10 +1,10 @@
 #pragma once
 
+#include <utils/ufixed64_t.hpp>
 #include <cmath>
 #include <iostream>
 #include <utility>
 
-#include <utils/ufixed64_t.hpp>
 
 namespace AIP {
 

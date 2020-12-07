@@ -1,5 +1,5 @@
 #pragma once
-#include <cstdint>
+
 #include <utils/ufixed64_t.hpp>
 
 namespace AIP {
@@ -28,7 +28,6 @@ constexpr fixed64_t DECAY_COEFICIENT     { 2400l };
 //COHESION B.
 constexpr fixed64_t ENT_COHESION_DIST       { 300l };
 constexpr fixed64_t ENT_COHESION_DIST2      { ENT_COHESION_DIST * ENT_COHESION_DIST };
-//constexpr fixed64_t ENT_COHESION_LIMIT_DIST { 120l };
 
 //MOVEMENT_SYS
 constexpr fixed64_t ENT_MAX_SPEED  { 300l };

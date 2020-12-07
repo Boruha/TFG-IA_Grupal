@@ -9,12 +9,20 @@
 
 namespace AIP {
 
-struct EntityManager : Manager_t
-{
+//crear usings para hacer más legible el documento
+struct EntityManager : Manager_t {
       explicit EntityManager();
-              ~EntityManager() override;
+
+      void init() noexcept;
+
+      EntityManager(const EntityManager& )            = delete;
+      EntityManager(const EntityManager&&)            = delete;
+      EntityManager& operator=(const EntityManager& ) = delete;
+      EntityManager& operator=(const EntityManager&&) = delete;
 
       [[nodiscard]] std::unique_ptr<Entity_t>& createEntity_t() noexcept;
+      void createSoldier(const ufixed64_t& size, const fixed64_t& pos_x, const fixed64_t& pos_y, const Color col) noexcept;
+      
 
       /*   GETTERS CONTEXT   */
       const std::unordered_map<entID, std::unique_ptr<Entity_t>>&  getEntities() const noexcept override { return ent_map; }
