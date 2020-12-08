@@ -10,7 +10,6 @@
 namespace AIP {
 
 struct Manager_t;
-struct Entity_t;
 struct AI_Component;
 struct MovementComponent;
 
@@ -36,8 +35,6 @@ private:
 /* FLOCKING B. COMPO */
     void separation(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept;
     void cohesion(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept;
-    //cohesion           -> v1
-    //direction aligment -> v1
 
 /* AUX */
     [[nodiscard]] optVec2_refw updatePatrol(std::unique_ptr<AI_Component>& ai_cmp) noexcept;
@@ -48,5 +45,6 @@ private:
     //pathfinding / pathfollowing
     //obstacle avoidance
     //wander
+    //direction aligment
 
 } //NS

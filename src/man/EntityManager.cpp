@@ -2,8 +2,6 @@
 
 #include <ent/Entity_t.hpp>
 
-#include <utils/AI_Constants.hpp>
-
 namespace AIP {
 
 constexpr const std::size_t MAX_ENTITIES { 10u };

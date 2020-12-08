@@ -1,19 +1,7 @@
 #pragma once
-
 #include <utils/ufixed64_t.hpp>
-#include <chrono>
-#include <ratio>
 
 namespace AIP {
-
-//GameLoop
-constexpr double FPS { 60.0 };
-
-//ManagerUpdateFunction
-constexpr float DeltaTime { 1.f / static_cast<float>(FPS) };
-
-constexpr fixed64_t DELTATIME_MILLI { DeltaTime };
-constexpr fixed64_t DELTATIME_MICRO { (DeltaTime * 1000000.f)/SCALE_S };
 
 //Screen Settings
 constexpr uint32_t WINDOW_W { 1920u };

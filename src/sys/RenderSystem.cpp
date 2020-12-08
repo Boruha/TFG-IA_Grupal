@@ -11,10 +11,9 @@ extern "C" {
 }
 
 #include <algorithm>
-#include <iostream>
 
 namespace AIP {
-
+//Cambiar al uso de las constantes y/o generar métodos para redimensionar y demas.
 RenderSystem::RenderSystem(const uint32_t w, const uint32_t h)
     : window_w(w), window_h(h), half_window_w(w/2), half_window_h(h/2), framebuffer_size(w*h)
     , half_window_w64( static_cast<int64_t>(w/2) ), half_window_h64( static_cast<int64_t>(h/2) )

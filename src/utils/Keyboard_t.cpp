@@ -1,7 +1,5 @@
 #include <utils/Keyboard_t.hpp>
 
-#include <iostream>
-
 namespace AIP {
 
 Keyboard_t::OptKeyIt

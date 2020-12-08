@@ -1,9 +1,12 @@
 #include <sys/MovementSystem.hpp>
+
 #include <man/Manager_t.hpp>
+
 #include <cmp/MovementComponent.hpp>
 
+#include <utils/AI_Constants.hpp>
+
 #include <algorithm>
-#include <iostream>
 
 namespace AIP {
 

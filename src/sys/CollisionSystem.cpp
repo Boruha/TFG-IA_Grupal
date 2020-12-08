@@ -5,13 +5,11 @@
 #include <cmp/MovementComponent.hpp>
 #include <cmp/RenderComponent.hpp>
 
-#include <utils/GameConstants.hpp>
-#include <utils/AI_Constants.hpp>
+#include <utils/ScreenData.hpp>
 
 #include <ent/Entity_t.hpp>
 
 #include <algorithm>
-#include <iostream>
 
 namespace AIP {
 

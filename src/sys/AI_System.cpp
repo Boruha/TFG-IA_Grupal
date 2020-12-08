@@ -1,4 +1,5 @@
 #include <sys/AI_System.hpp>
+
 #include <man/Manager_t.hpp>
 
 #include <ent/Entity_t.hpp>
@@ -9,7 +10,6 @@
 #include <utils/AI_Constants.hpp>
 
 #include <algorithm>
-#include <iostream>
 
 namespace AIP {
 

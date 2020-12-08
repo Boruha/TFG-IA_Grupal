@@ -1,7 +1,11 @@
 #include <main.hpp>
+
 #include <man/GameManager.hpp>
-#include <utils/GameConstants.hpp>
+
+#include <utils/TimeData.hpp>
+
 #include <memory>
+#include <chrono>
 
 int main() {
   using timer = std::chrono::steady_clock;
@@ -15,7 +19,7 @@ int main() {
   while (gameCondition) {
     timeElapse = std::chrono::duration_cast<std::chrono::microseconds>(time.now() - lastUpdateTime);
 
-    if(timeElapse.count() >= AIP::DELTATIME_MICRO.number) {
+    if(timeElapse.count() >= AIP::LOOP_TIME.number) {
       lastUpdateTime = time.now();
       gameCondition  = gameManager->update();
     }

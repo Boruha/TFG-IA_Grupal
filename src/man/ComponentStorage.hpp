@@ -1,8 +1,10 @@
 #pragma once
 
 #include <cmp/CmpIncludeList.hpp>
+
 #include <utils/Alias.hpp>
 #include <utils/Color.hpp>
+
 #include <vector>
 #include <memory>
 #include <unordered_map>
@@ -17,7 +19,7 @@ struct CmpCollection {
 //Vector que se creará por cada Cmp
 template<typename T>
 struct CmpVector : CmpCollection {
-    explicit CmpVector<T>() { cmps.reserve(5u); }
+    explicit CmpVector<T>() { cmps.reserve(10u); }
     std::vector<std::unique_ptr<T>> cmps;
 };
 

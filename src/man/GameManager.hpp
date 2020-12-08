@@ -1,7 +1,8 @@
 #pragma once
-
 #include <man/Manager_t.hpp>
+
 #include <sys/System_t.hpp>
+
 #include <vector>
 #include <memory>
 

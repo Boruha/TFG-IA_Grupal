@@ -1,5 +1,4 @@
 #pragma once
-
 #include <utils/ufixed64_t.hpp>
 
 namespace AIP {
