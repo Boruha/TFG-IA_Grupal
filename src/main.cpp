@@ -2,8 +2,6 @@
 
 #include <man/GameManager.hpp>
 
-#include <utils/TimeData.hpp>
-
 #include <memory>
 #include <chrono>
 
@@ -12,6 +10,8 @@ int main() {
 
   auto  gameManager    { std::make_unique<AIP::GameManager>() };
   bool  gameCondition  { true };
+
+  //glock
   timer time           { };
   auto  lastUpdateTime { time.now() };
   auto  timeElapse     { std::chrono::microseconds { 0 } };
@@ -19,7 +19,7 @@ int main() {
   while (gameCondition) {
     timeElapse = std::chrono::duration_cast<std::chrono::microseconds>(time.now() - lastUpdateTime);
 
-    if(timeElapse.count() >= AIP::LOOP_TIME.number) {
+    if(timeElapse.count() >= gameManager->getLoopTime().number) {
       lastUpdateTime = time.now();
       gameCondition  = gameManager->update();
     }
