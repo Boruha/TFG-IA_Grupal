@@ -22,10 +22,6 @@ struct GameManager {
     
     fixed64_t getLoopTime()  noexcept;
     fixed64_t getDeltaTime() noexcept;
-    void doubleLoopTime()    noexcept;
-    void halfLoopTime()      noexcept;
-    void doubleDeltaTime()   noexcept;
-    void halfDeltaTime()     noexcept;
 
 private:
     std::vector<std::unique_ptr<System_t>> systems;
@@ -33,6 +29,9 @@ private:
 
     fixed64_t setLoopTime()  noexcept;
     fixed64_t setDeltaTime() noexcept;
+    void checkFpsMsg()       noexcept;   
+    void changeLoopTime(bool operation)  noexcept;
+    void changeDeltaTime(bool operation) noexcept;
     
     //TimeInfo
     float FPS_LT { 60.f };

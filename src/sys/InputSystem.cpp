@@ -22,11 +22,13 @@ namespace AIP {
 void 
 InputSystem::onkeypress(KeySym key) {
     keyboard.setValue(key, true);
+    std::cout << "\tON keypress\n";
 }
 
 void 
 InputSystem::onkeyrelease(KeySym key) {
     keyboard.setValue(key, false);
+    std::cout << "\tOFF keypress\n";
 }
 
 InputSystem::InputSystem() {
@@ -98,6 +100,29 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t D
         });
     }
 
+    //if( keyboard.isKeyPressed(XK_7) ) {
+    //    if(keyboard.isKeyPressed(XK_Control_R))
+    //        fps_msg.emplace_back(FPS_Opc::LoopTime, true);
+    //    else
+    //        fps_msg.emplace_back(FPS_Opc::LoopTime, false);
+    //}
+//
+    //if( keyboard.isKeyPressed(XK_8) ) {
+    //    if(keyboard.isKeyPressed(XK_Control_R))
+    //        fps_msg.emplace_back(FPS_Opc::DeltaTime, true);
+    //    else
+    //        fps_msg.emplace_back(FPS_Opc::DeltaTime, false);
+    //}
+//
+    //if( keyboard.isKeyPressed(XK_9) ) {
+    //    if(keyboard.isKeyPressed(XK_Control_R))
+    //        fps_msg.emplace_back(FPS_Opc::Both, true);
+    //    else
+    //        fps_msg.emplace_back(FPS_Opc::Both, false);
+    //}
+
+    if(keyboard.isKeyPressed(XK_Control_R))
+        std::cout << "ME PULSAS\n";
 
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
         [&](std::unique_ptr<InputComponent>& input_cmp) {

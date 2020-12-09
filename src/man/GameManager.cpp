@@ -7,6 +7,9 @@
 
 #include <utils/ScreenData.hpp>
 
+#include <iostream>
+#include <algorithm>
+
 namespace AIP {
 
 GameManager::GameManager() {
@@ -23,11 +26,39 @@ GameManager::GameManager() {
 
 bool
 GameManager::update() noexcept {
-    for(auto& sys : systems){
+    for(auto& sys : systems) {
         if(!sys->update(manager, DeltaTime))
             return false;
     }
+    checkFpsMsg();
+
     return true;
+}
+
+void
+GameManager::checkFpsMsg() noexcept {
+    auto& msgs = systems.front()->fps_msg;
+    
+    while (!msgs.empty()) {
+        auto& last_msg = msgs.back();
+        
+        switch (last_msg.Target) {
+        case FPS_Opc::LoopTime : changeLoopTime(last_msg.Action);
+            break;
+        
+        case FPS_Opc::DeltaTime : changeDeltaTime(last_msg.Action);
+            break;
+        
+        case FPS_Opc::Both : changeLoopTime(last_msg.Action);
+                             changeDeltaTime(last_msg.Action);
+            break;
+                
+        default:
+            break;
+        }
+        msgs.pop_back();
+    }
+    
 }
 
 fixed64_t
@@ -51,27 +82,21 @@ GameManager::setDeltaTime() noexcept {
 }
 
 void
-GameManager::doubleLoopTime() noexcept {
-    FPS_LT *= 2.f;
+GameManager::changeLoopTime(bool operation) noexcept {
+    FPS_LT = (operation) ? FPS_LT * 2.f : FPS_LT / 2.f;
+    std::clamp(FPS_LT, 15.f, 120.f);
     LoopTime = setLoopTime();
+    std::cout << "El LoopRate es:       " << FPS_LT << "\n";
+    std::cout << "Con un Tick size de : " << LoopTime.number << "\n\n";
 }
 
 void
-GameManager::halfLoopTime() noexcept {
-    FPS_LT /= 2.f;
-    LoopTime = setLoopTime();
-}
-
-void
-GameManager::doubleDeltaTime() noexcept {
-    FPS_DT *= 2.f;
+GameManager::changeDeltaTime(bool operation) noexcept {
+    FPS_DT = (operation) ? FPS_DT * 2.f : FPS_DT / 2.f;
+    std::clamp(FPS_DT, 15.f, 120.f);
     DeltaTime = setDeltaTime();
-}
-
-void
-GameManager::halfDeltaTime() noexcept {
-    FPS_DT /= 2.f;
-    DeltaTime = setDeltaTime();
+    std::cout << "El DeltaRate es:      " << FPS_DT << "\n";
+    std::cout << "Con un Tick size de : " << DeltaTime.number << "\n\n";
 }
 
 

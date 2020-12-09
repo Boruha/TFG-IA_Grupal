@@ -146,6 +146,6 @@ clean :
 	$(RM) $(APP) -r $(OBJ)
 
 # DELETE LIBS TOO
-clean_all :
+cleanall :
 	$(RM) $(APP) -r $(OBJ) $(OBJLIB)
 
