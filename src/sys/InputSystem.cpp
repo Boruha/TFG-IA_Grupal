@@ -22,13 +22,11 @@ namespace AIP {
 void 
 InputSystem::onkeypress(KeySym key) {
     keyboard.setValue(key, true);
-    std::cout << "\tON keypress\n";
 }
 
 void 
 InputSystem::onkeyrelease(KeySym key) {
     keyboard.setValue(key, false);
-    std::cout << "\tOFF keypress\n";
 }
 
 InputSystem::InputSystem() {
