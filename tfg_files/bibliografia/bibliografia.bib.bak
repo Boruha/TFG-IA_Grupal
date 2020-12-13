@@ -23,4 +23,43 @@
   year         = {2019},
 }
 
+@Misc{Boids1986,
+  author       = {Craig Reynolds},
+  howpublished = {\url{http://www.red3d.com/cwr/boids/}},
+  title        = {Boids: Background and update},
+  year         = {1986},
+}
+
+@Misc{Steam_User2019,
+  author       = {Amordron},
+  howpublished = {\url{https://steamcommunity.com/app/644930/discussions/0/1649917420753004999/}},
+  month        = may,
+  title        = {{AI discussion}},
+  year         = {2019},
+}
+
+@Misc{Pikachunet2018,
+  author       = {Pikachunet},
+  howpublished = {\url{https://www.reddit.com/r/TheyAreBillions/comments/9zvffg/example_of_number_of_zombies_per_wave_800/}},
+  month        = nov,
+  title        = {Informal level editor},
+  year         = {2018},
+}
+
+@Misc{Pritchard2000,
+  author       = {Matthew Pritchard},
+  howpublished = {\url{https://www.gamasutra.com/view/feature/131844/postmortem_ensemble_studios_age_.php?page=1}},
+  month        = mar,
+  title        = {{Postmortem: Ensemble Studio's Age of Empires II: Age of Kings}},
+  year         = {2000},
+}
+
+@Misc{Francis2020,
+  author       = {Bryant Francis},
+  howpublished = {\url{https://www.gamasutra.com/view/news/358215/Rebuilding_a_classic_in_Age_of_Empires_II_Definitive_Edition.php}},
+  month        = feb,
+  title        = {{Rebuilding a classic in Age of Empires II: Definitive Edition}},
+  year         = {2020},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

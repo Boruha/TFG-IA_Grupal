@@ -1,37 +1,64 @@
 \chapter{Marco teórico}
 \label{Marco_teorico}
 
-\section{Estudio de mercado}
-A lo largo de los años los \ac{RTS} siempre han contado con una gran aceptación entre
-los usuarios de \ac{PC}, un claro ejemplo de esto puede ser el juego \textit{`Age of
-Empire II: The Age of Kings'}\footnote{Desarrollado por `Ensemble Studios' y lanzado a
-finales de 1999.} el cual se posicionó como uno de los juegos más vendidos del momento
-superando el millón de copias. Actualmente el juego cuenta con una remasterización
-\footnote{Co-desarrollado por Forgotten Empires, Tantalus Media y Wicked
-Witch. Lanzado en noviembre de 2019.} la cual ha conseguido vender más de 50.000
-copias en \textit{`Steam'}. Datos extraídos de su articulo en \citeauthor*{Wiki_AoE2}.
+%\section{Estudio de mercado}
+%A lo largo de los años los \ac{RTS} siempre han contado con una gran aceptación entre
+%los usuarios de \ac{PC}, un claro ejemplo de esto puede ser el juego \textit{`Age of
+%Empire II: The Age of Kings'}\footnote{Desarrollado por `Ensemble Studios' y lanzado a
+%finales de 1999.} el cual se posicionó como uno de los juegos más vendidos del momento
+%superando el millón de copias. Actualmente el juego cuenta con una remasterización
+%\footnote{Co-desarrollado por Forgotten Empires, Tantalus Media y Wicked
+%Witch. Lanzado en noviembre de 2019.} la cual ha conseguido vender más de 50.000
+%copias en \textit{`Steam'}. Datos extraídos de su articulo en \citeauthor*{Wiki_AoE2}.
 
-Si miramos en el panoráma nacional actual, podemos encontar el juego \textit{`They Are
-Billions'} \footnote{Desarollado por Numantian Games y lanzado en junio de 2019.}
-disponible inicialmente para \ac{PC} y posteriormente lanzado en \textit{`PlayStation 4'}
-y \textit{`Xbox One'} debido a su éxito. A día de hoy el juego a conseguido vender
-solamente en \textit{`Steam'} más de 25.000 unidades consiguiendo una valoración muy
-positiva por parte de los usuarios de la plaforma como podemos ver en la página 
-del juego de \citeauthor*{TaB2019} en dicha tienda.
+%Si miramos en el panoráma nacional actual, podemos encontar el juego \textit{`They Are
+%Billions'} \footnote{Desarollado por Numantian Games y lanzado en junio de 2019.}
+%disponible inicialmente para \ac{PC} y posteriormente lanzado en \textit{`PlayStation 4'}
+%y \textit{`Xbox One'} debido a su éxito. A día de hoy el juego a conseguido vender
+%solamente en \textit{`Steam'} más de 25.000 unidades consiguiendo una valoración muy
+%positiva por parte de los usuarios de la plaforma como podemos ver en la página 
+%del juego de \citeauthor*{TaB2019} en dicha tienda.
 
-El género puede aparentar ser cosa del pasado pero vistas las cifras podemos concluir
-que sigue siendo un reclamo para los jugadores.
+%El género puede aparentar ser cosa del pasado pero vistas las cifras podemos concluir
+%que sigue siendo un reclamo para los jugadores.
 
 \section{Referentes}
-A la hora de establecer las mecánicas, el estilo artístico y/o otros aparatados del
-juego es habitual basarse o tener en cuenta lo que han hecho otras entregas anteriores
-en su momento. Para el desarrollo de este proyecto han sido de gran utilidad una
-serie de entregas entre las que cabe destacar dos.
+Cuando uno busca desarrollar un producto es una buena práctica el investigar que se ha realizado
+previamente en entregas similares, ver que ténicas se han utilizado y que problemas se han
+encontrado y como los solventaron. También es interesante ver que mecánicas se han ido consevando
+y que innovaciones se han ido introduciendo con el paso del tiempo.
+
+A continuación vamos a detallar aspectos de interés encontrados en diversas entregas
+las cuales nos servirán de referentes.
 
 \subsection{Age of Empires II: The Age of Kings}
 En primer lugar encontramos el juego \textit{'Age of Empires II: The Age of Kings'}, en
-este juego tendremos que gestionar una civilizacion a elegir entre un amplio abanico de
-facciones con sus propias unidades y edificaciones.
+este juego encontraremos una serie de campañas a través de las cuales encarnaremos a personajes
+históricos como `Juana de Arco' o `William Wallace' y los acompañaremos en sus conquistas y
+batallas más icónicas. Además de grandes batallas encontraremos el deber de gestionar nuestra
+facción, este trabajo nos requerirá recoger rescursos a lo largo del mapa mientras desarrollamos 
+nuestras ciudades y unidades.
+
+El desarrollo tecnológico se divide en cuatro etapas históricas: Alta Edad Media,
+de los castillos, Feudal e Imperial. Cada una de estas etapas trae consigo una serie de
+unidades, edificaciones e investigaciones nuevas las cuales nos proporcionaran escenarios
+más complejos a nivel estratégico, para pasar de una etapa a otra no es necesario completar
+al 100\% las opciones desbloqueadas, solo unos requisitos mínimos.
+
+El juego cuenta con un total de 35 civilizaciones o facciones, todas tienen acceso al mismo árbol
+tecnológico pero cuentan con ligeras diferencias, cada una cuenta con una o dos tecnologías únicas
+y características especiales en una unidad militar\footnote{Normalmente alguna cualidad mejorada en relación a las
+demás como puede ser la velocidad o daño.}.
+
+Todas la unidades militares\footnote{Lista de unidades: \url{https://ageofempires.fandom.com/wiki/Units_(Age_of_Empires_II)}.}
+de las que podemos disponer cuentan con una serie características que
+las hacen más o menos fuertes en función del objetivo al que se enfrenten, podemos encontrar
+el ejemplo de las máquinas de asedio las cuales son más fuertes contra estructuras pero
+más débiles contra infanteria, o las unidades a caballo que son fuertes contra arqueros
+e infanteria pero débiles frente a lanceros. \\
+Este tipo de mécanicas dotan al juego de una importante componente táctica en el manejo
+de las unidades que debemos dominar si queremos completar los diferentes niveles de
+forma satisfactoria~\ref{img:aoe_2}.
 
 \begin{figure}[ht]
 \centering
@@ -40,14 +67,17 @@ facciones con sus propias unidades y edificaciones.
 \label{img:aoe_1}
 \end{figure}
 
-El jugador deberá ser capaz de guiar a las unidades, gestionar las ciudades y conseguir
-recursos a lo largo del escenario con el fin de derrotar a las demás facciones. Además,
-se nos presenta una serie de campañas en las cuales manejaremos a grandes personajes de
-la historia como `William Wallace' o `Juana de Arco' entre otros.
+En lo referente a edificaciones\footnote{Lista de edificios: \url{https://ageofempires.fandom.com/wiki/Buildings_(Age_of_Empires_II)}.}
+podemos encontrar distintos tipos según su aporte al jugador,
+el edifício printipal es el `Ayuntamiento' el cual nos permitirá crear colonos para que trabajen
+recogiendo recursos y/o ayudando en la construcción de nuevas estructuras, en segundo lugar podemos
+encontrar edifícios como el `Cuartel' o el `Campo de tiro' los cuales nos permiten crear unidades
+militares, por otro lado tenemos edificios como la `Herreria' la cual nos permitirá realizar investigaciones
+y crear unidades de asedio.
 
-El juego hace de referente en varios aspectos entre los que podemos encontrar el
-apartado visual donde se utiliza una perspectiva isométrica con cámara fija y el uso
-de una estética clásica propia de las épocas a las que pertenecen las civilizaciones.
+Por último podemos encontrar estructuras de temática religiosa como el `Monasterio', otras destinadas
+a aumentar la productividad en las explotación de recursos naturales como el `Molino'
+y defensivas como las `Murallas'. 
 
 \begin{figure}[ht]
 \centering
@@ -56,17 +86,71 @@ de una estética clásica propia de las épocas a las que pertenecen las civiliz
 \label{img:aoe_2}
 \end{figure}
 
-Todas la unidades de las que podemos disponer cuentan con una serie características que
-las hacen más o menos fuertes en función del objetivo al que ataquen, podemos encontrar
-el ejemplo de las máquinas de asedio las cuales son más fuertes contra estructuras pero
-más débiles contra infanteria, o las unidades a caballo que son fuertes contra arqueros
-e infanteria pero débiles frente a lanceros.
-Este tipo de mécanicas dotan al juego de una importante componente táctica en el manejo
-de las unidades que debemos dominar si queremos completar los diferentes niveles de
-forma satisfactoria~\ref{img:aoe_2}.
+En el género \ac{RTS} hay una tendencia al uso de una perspectiva isométrica con cámara fija
+la cual solo podemos modificar haciendo zoom o desplazandola por el entorno, esto seguramente
+se deba a que es la configuración que mejor nos permite observar el mapa y todas las unidades que
+hay en el. Además, el hecho de que sea fija nos libra de la problemática de ir ajustando la
+cámara según la parte del mapeado que estemos observando, ya que, seguramente el mapeado y los elementos
+visuales del juego también hayan sido diseñados teniendo esto en cuenta.
+
+Como podemos ver en el artículo de \citeauthor*{Pritchard2000} sobre el desarrollo de \ac{AoE} 2,
+la \ac{IA} del juego esta desarrollada completamente con un lenguaje de \textit{scripting} desarrollado
+por ellos~\ref{img:aoe_scripting_1}, de esta forma el código consiste en una serie de constantes y variables definidas desde un
+inicio y mediante condicionales realizar las acciones  y cambios pertinentes. Gracias a un usuario
+de \textit{`GitHub'} podemos ver en las imagenes~\ref{img:aoe_scripting_2} el código usado en el juego, la extensión es 
+de  más de 10.000 líneas de código.
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}[c]{0.45\linewidth}
+	\hspace{9mm}
+	\includegraphics[height=0.15\textheight]{imagenes/marco_teo/referentes/aoe_scripting_1.png}
+	\caption{Descripción Estructura.}
+	\label{img:aoe_script_1}
+\end{minipage}
+\begin{minipage}[c]{0.45\linewidth}
+	\hspace{9mm}
+	\includegraphics[height=0.15\textheight]{imagenes/marco_teo/referentes/aoe_scripting_2.png}
+	\caption{Ejemplo condición.}
+	\label{img:aoe_script_2}
+\end{minipage}
+\textbf{Fuente:} guía de scripting para \ac{IA} de \ac{AoE} 2 de \citeauthor*{redmechanic2017}.
+\label{img:aoe_scripting_1}	
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}[c]{0.45\linewidth}
+	\hspace{9mm}
+	\includegraphics[height=0.11\textheight]{imagenes/marco_teo/referentes/aoe_scripting_3.png}
+	\caption{Ejemplo condición.}
+	\label{img:aoe_script_3}
+\end{minipage}
+\begin{minipage}[c]{0.45\linewidth}
+	\hspace{9mm}
+	\includegraphics[height=0.11\textheight]{imagenes/marco_teo/referentes/aoe_scripting_4.png}
+	\caption{Ejemplo constantes.}
+	\label{img:aoe_script_4}
+\end{minipage}
+\textbf{Fuente:} repositorio de \textit{'GitHub'} del usuario \citeauthor*{Andygmb2014}. 
+\label{img:aoe_scripting_2}	
+\end{figure}
+
+Además de estos \textit{scripts} el juego utiliza un sistema de \textit{pathfinding} en dos niveles,
+el primero de los algoritmos calcula la ruta a seguir por las unidades sin tener el cuenta los
+elementos triviales como las demás unidades, mientras que la segunda pasada calcula el camino 
+en tramos específicos con el fin de esquivar otras unidades, edificaciones, etc...
+
+En lo referente al movimiento de las unidades, tanto por la forma en la que está programada
+la \ac{IA} como por la sensación que dan al jugar, es posible que se trate de un  \textit{``Goto''}
+clásico y sencillo para evitar realizar muchos cálculos. \\
+Además, con el tiempo el juego se ha convertido en un objetivo para \textit{``Speedrunners''}
+y con una escena competitiva que se basa en ser el más rápido jugando\footnote{En los enfrentamientos de alto rango se llegan a medir las acciónes por minuto (APM).}
+por lo que una reacción instantánea de las unidades es un factor importante para  estos
+jugadores.
 
 \subsection{The Are Billions}
-En segundo lugar podemos encontrar el juego \textit{'\acf{TaB}'} el cual reutiliza
+En segundo lugar podemos encontrar el +juego \textit{'\acf{TaB}'} el cual reutiliza
 una serie de características propias del género y como pueden ser la perspectiva
 isométrica pero sin dejar de innovar introduciendo nuevas mecánicas y/o formas de
 plantear la jugabilidad.
