@@ -40,7 +40,7 @@ facción, este trabajo nos requerirá recoger rescursos a lo largo del mapa mien
 nuestras ciudades y unidades.
 
 El desarrollo tecnológico se divide en cuatro etapas históricas: Alta Edad Media,
-de los castillos, Feudal e Imperial. Cada una de estas etapas trae consigo una serie de
+de los Castillos, Feudal e Imperial, cada una de estas etapas trae consigo una serie de
 unidades, edificaciones e investigaciones nuevas las cuales nos proporcionaran escenarios
 más complejos a nivel estratégico, para pasar de una etapa a otra no es necesario completar
 al 100\% las opciones desbloqueadas, solo unos requisitos mínimos.
@@ -58,7 +58,7 @@ más débiles contra infanteria, o las unidades a caballo que son fuertes contra
 e infanteria pero débiles frente a lanceros. \\
 Este tipo de mécanicas dotan al juego de una importante componente táctica en el manejo
 de las unidades que debemos dominar si queremos completar los diferentes niveles de
-forma satisfactoria~\ref{img:aoe_2}.
+forma satisfactoria.
 
 \begin{figure}[ht]
 \centering
@@ -71,13 +71,13 @@ En lo referente a edificaciones\footnote{Lista de edificios: \url{https://ageofe
 podemos encontrar distintos tipos según su aporte al jugador,
 el edifício printipal es el `Ayuntamiento' el cual nos permitirá crear colonos para que trabajen
 recogiendo recursos y/o ayudando en la construcción de nuevas estructuras, en segundo lugar podemos
-encontrar edifícios como el `Cuartel' o el `Campo de tiro' los cuales nos permiten crear unidades
+encontrar edifícios como el `Cuartel' o el `Campo de Tiro' los cuales nos permiten crear unidades
 militares, por otro lado tenemos edificios como la `Herreria' la cual nos permitirá realizar investigaciones
 y crear unidades de asedio.
 
-Por último podemos encontrar estructuras de temática religiosa como el `Monasterio', otras destinadas
-a aumentar la productividad en las explotación de recursos naturales como el `Molino'
-y defensivas como las `Murallas'. 
+Por último podemos encontrar estructuras de temática religiosa como el `Monasterio', otras 
+destinadas a aumentar la productividad en la explotación de recursos naturales como el 
+`Molino' y defensivas como la `Muralla'. 
 
 \begin{figure}[ht]
 \centering
@@ -86,24 +86,24 @@ y defensivas como las `Murallas'.
 \label{img:aoe_2}
 \end{figure}
 
-En el género \ac{RTS} hay una tendencia al uso de una perspectiva isométrica con cámara fija
-la cual solo podemos modificar haciendo zoom o desplazandola por el entorno, esto seguramente
+En el género \textit{\ac{RTS}} hay una tendencia al uso de una perspectiva isométrica con cámara fija
+la cual solo podemos modificar haciendo \textit{zoom} o desplazandola por el entorno, esto seguramente
 se deba a que es la configuración que mejor nos permite observar el mapa y todas las unidades que
 hay en el. Además, el hecho de que sea fija nos libra de la problemática de ir ajustando la
-cámara según la parte del mapeado que estemos observando, ya que, seguramente el mapeado y los elementos
+cámara según la parte del mapeado que estemos, ya que, seguramente el mapeado y los elementos
 visuales del juego también hayan sido diseñados teniendo esto en cuenta.
 
-Como podemos ver en el artículo de \citeauthor*{Pritchard2000} sobre el desarrollo de \ac{AoE} 2,
+Como podemos ver en el artículo de \citeauthor*{Pritchard2000} sobre el desarrollo de \textit{\ac{AoE} 2},
 la \ac{IA} del juego esta desarrollada completamente con un lenguaje de \textit{scripting} desarrollado
 por ellos~\ref{img:aoe_scripting_1}, de esta forma el código consiste en una serie de constantes y variables definidas desde un
 inicio y mediante condicionales realizar las acciones  y cambios pertinentes. Gracias a un usuario
-de \textit{`GitHub'} podemos ver en las imagenes~\ref{img:aoe_scripting_2} el código usado en el juego, la extensión es 
-de  más de 10.000 líneas de código.
+de \textit{`GitHub'} podemos ver en las imagenes~\ref{img:aoe_scripting_2} el código usado en el juego
+y confirmar como está elaborado.
 
 \begin{figure}[ht]
 \centering
 \begin{minipage}[c]{0.45\linewidth}
-	\hspace{9mm}
+	\hspace{20mm}
 	\includegraphics[height=0.15\textheight]{imagenes/marco_teo/referentes/aoe_scripting_1.png}
 	\caption{Descripción Estructura.}
 	\label{img:aoe_script_1}
@@ -113,7 +113,7 @@ de  más de 10.000 líneas de código.
 	\includegraphics[height=0.15\textheight]{imagenes/marco_teo/referentes/aoe_scripting_2.png}
 	\caption{Ejemplo condición.}
 	\label{img:aoe_script_2}
-\end{minipage}
+\end{minipage}\\[3mm]
 \textbf{Fuente:} guía de scripting para \ac{IA} de \ac{AoE} 2 de \citeauthor*{redmechanic2017}.
 \label{img:aoe_scripting_1}	
 \end{figure}
@@ -127,11 +127,11 @@ de  más de 10.000 líneas de código.
 	\label{img:aoe_script_3}
 \end{minipage}
 \begin{minipage}[c]{0.45\linewidth}
-	\hspace{9mm}
+	\hspace{2mm}
 	\includegraphics[height=0.11\textheight]{imagenes/marco_teo/referentes/aoe_scripting_4.png}
 	\caption{Ejemplo constantes.}
 	\label{img:aoe_script_4}
-\end{minipage}
+\end{minipage}\\[3mm]
 \textbf{Fuente:} repositorio de \textit{'GitHub'} del usuario \citeauthor*{Andygmb2014}. 
 \label{img:aoe_scripting_2}	
 \end{figure}
@@ -150,10 +150,16 @@ por lo que una reacción instantánea de las unidades es un factor importante pa
 jugadores.
 
 \subsection{The Are Billions}
-En segundo lugar podemos encontrar el +juego \textit{'\acf{TaB}'} el cual reutiliza
-una serie de características propias del género y como pueden ser la perspectiva
-isométrica pero sin dejar de innovar introduciendo nuevas mecánicas y/o formas de
-plantear la jugabilidad.
+En segundo lugar podemos encontrar el juego \textit{'\acf{TaB}'} el cual se localiza en un
+mundo postapocalíptico infestado de zombis donde quedan muy pocos superviventes, el juego
+cuenta con dos modos:
+
+En primer lugar encontramos el modo \textbf{horda} en el cual deberemos sobrevivir a
+sucesivas oleadas de zombis, la cuales serán cada vez más grandes y con unidades más poderosas.
+Además, deberemos mejorar nuestra colonia y sus defensas para poder lograr pasar las rondas.\\
+En segundo lugar tenemos el modo \textbf{campaña}, el cual consistirá en una serie de misiones con el
+fin de ampliar el tamaño de nuestro imperio a la vez que conocemos su historia y personajes
+clave. 
 
 \begin{figure}[ht]
 \centering
@@ -161,50 +167,96 @@ plantear la jugabilidad.
 \caption{Imágen promocional del juego.}
 \label{img:tab_1}
 \end{figure}
- 
-En \textit{'\ac{TaB}'} podemos encontrar funciones interesantes como la pausa
-táctica la cual nos permitirá visualizar detenidamente el estado del mapa sin tener que
-preocuparnos por no estar atendiendo algunos posibles eventos como ataques a nuestras
-tropas por parte del enemigo. En juegos anteriores como los \textit{'\ac{AoE}'} es
+
+En \textit{'\ac{TaB}'} podemos ver como se reutilizan una serie de características propias
+del género como pueden ser: el uso de una perspectiva isométrica con cámara fija o el uso de
+un ``árbol tecnológico'' por el cual deberemos escalar si queremos desbloquear nuevas unidades
+y/o mejorar las ya disponibles.
+
+Si nos fijamos en las construcciones\footnote{Lista de edificios: \url{https://they-are-billions.fandom.com/wiki/Category:Buildings\#Buildings}.}
+disponibles en el juego, encontramos como se sigue la línea de un ``Ayuntamiento'' como núcleo
+de nuestra base, el cual nos permitirá conseguir trabajadores y nos dará acceso a las primeras
+mejoras. Por otro lado, encontramos las edificaciones destinadas a conseguir recursos, reclutar
+nuevas tropas y/o defender nuestra colonia. \\
+En este juego se introduce como novedad el recurso de la `energía', el cual será utilizado
+para mantener nuestras maquinárias en funcionamiento y nos limitará cuanto y donde podremos construir.  
+Para ganar energía y ampliar el terreno disponible el jugador deberá construir `torres de Tesla' (o sus respectivas mejoras).
+
+
+A diferencia de en \textit{'\ac{AoE}'}, en \textit{'\ac{TaB}'} encontramos la aparición de solamente dos facciones:
+`El Nuevo Imperio', la facción del jugador, la cual representa una 
+serie de colonias que tendremos que desarrollar a lo largo de los niveles, y en el otro lado, 
+encontramos las infinitas hordas de zombis que tratarán de exterminar a la raza humana.
+
+Cada una de las facciones tiene sus propias unidades~\ref{img:tab_2}, el jugador contará con 7 unidades distintas
+entre las que podemos encontrar desde unas rápidas y sigilosas exploradoras hasta unidades equipadas
+con lanzallamas o montados en robots de combate. \footnote{Lista unidades imperiales: \url{https://they-are-billions.fandom.com/wiki/Category:Units}.}
+\\Las hordas enemigas estarán compuestas en su mayoria por unidades débiles que de forma eventual
+serán acompañadas por gigantes~\ref{img:tab_3} y/o otras unidades especiales.
+\footnote{Lista unidades zombi: \url{https://they-are-billions.fandom.com/wiki/Category:Infected}.}
+
+A lo largo del juego podemos encontrar funciones interesantes e inovadoras como la pausa
+táctica, la cual nos permitirá visualizar detenidamente el estado del mapa sin tener que
+preocuparnos por no estar atendiendo algunos posibles eventos, como ataques a nuestras
+tropas por parte del enemigo.\\ 
+En juegos anteriores como los \textit{'\ac{AoE}'} es
 fácil encontrarnos en la situación de tener trabajadores en la ciudad sin hacer tareas
-un rato y no poder mirar cuales son e ir pensando su ocupación siguiente por estar
-atrapado en refriegas con otros jugadores, con este tipo de mecánicas estas situaciones
+un rato y, no poder mirar cuales son e ir pensando su ocupación siguiente por estar
+atrapados en refriegas con otros jugadores, con este tipo de mecánicas estas situaciones
 se solventan en mayor o menor medida y permiten al jugador tomarse el tiempo que
 necesite para pensar las acciones que quiere realizar.
-
-Otro aspecto llamativo en el podemos fijarnos es en la aparición de solamente dos
-facciones. Por un lado encontramos `El Nuevo Imperio', la facción del jugador, la
-cual representa una serie de colonias que tendremos que desarrollar a lo largo de
-los niveles. En el otro lado encontramos las infinitas hordas de zombis que tratarán
-de exterminar a la raza humana.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.6\textwidth]{imagenes/marco_teo/referentes/tab_2.png}
-\caption{Ejemplo de unidad mecánica del imperio y estética del juego}
+\caption{Ejemplo de elementos tecnológicos del juego.}
 \label{img:tab_2}
 \end{figure}
 
-A diferencia de en \textit{'\ac{AoE}'} que todas la facciones poseen las mismas unidades
-\footnote{Algunos valores pueden variar según bonos de facción}, en
-\textit{'\ac{TaB}'} cada facción dispondrá de unidades únicas con acciones propias.
-Como podemos ver en la imágen~\ref{img:tab_2} las tropas del imperio se basan en el uso
-de maquinaria y armas de fuego para repeler las hordas enemigas, por otro lado los
-zombis contarán con diversas caraterísticas físicas mejoradas conforme sean de mayor
-``nivel'' puediendo encontrar algunos más rápidos, o más fuertes o más grandes y
-resistentes al daño.~\ref{img:tab_3}
-
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.5\textwidth]{imagenes/marco_teo/referentes/tab_3.png}
+\includegraphics[width=0.4\textwidth]{imagenes/marco_teo/referentes/tab_3.png}
 \caption{Infectado gigante}
 \label{img:tab_3}
 \end{figure}
 
-Como último punto a destacar de la entrega tenemos la introducción del un modo de
-juego de supervivencia donde a lo largo del tiempo irán apareciendo oleadas de zombis
-donde cada vez aparecen más enemigos y más poderosos de forma infinita, haciendo así
-que la partida termine cuando el jugador deje de aguantar la ofensiva enemiga.
+Otra adición interesante es la posibilidad de hacer una captura de todo el mapeado explorado~\ref{img:tab_4}
+en el nivel pudiendo así mostrar el avance de nuesta ciudad y alrededores, además de la 
+inmensidad de las oleadas de zombis que nos irán atacando.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{imagenes/marco_teo/referentes/tab_4.png}
+\caption{Ejemplo de captura global del nivel.}
+\label{img:tab_4}
+\end{figure}
+
+En lo refente a la \ac{IA}, podemos observar como intentan replicar la forma de actuar del
+zombi común. Como podemos leer en la entrevista a `Jesús Arribas' y `Miguel Corral'
+\footnote{Responsables principales de Numantian Games y desarrolladores del juego.} por parte
+de \citeauthor*{Sucasas2018} para el portal `Xakata', cada zombi cuenta con mecanismos para 
+detectar a los humanos, ya sea por divisarlos visualmente o escucharlos moverse, además si un 
+compañero cercano ha encontrado un objetivo, este le seguirá siguiendo 
+una mentalidad de manada a la que se irán sumando los zombis en su recorrido.
+
+Mientras los infectados estén sin un objetivo específico, pueden darse dos escenarios:
+el primero nos muestra enemigos dispersos por el mapa esperando a que el jugador se aventure
+a explorar esa zona y sorprenderle con un ataque. El otro nos trae las oleadas que aparecen
+en los límites del mapa las cuales tienen como objetivo el centro de nuestra base, si los
+enemigos estáticos por el mapa divisan la horda se unirán a ella aumentando así su poder, esto
+sin duda alienta al jugador a ``limpiar'' el mapa con el fin de aliviar estas acometidas.\\
+Como la intención de la \ac{IA} es la de replicar la forma de ``no pensar'' de los zombis, en
+el momento en que unidades humanas se presenten delante de las hordas de enemigos estos se
+dispondrán a perseguir a estas personas, perdiendo así el foco en nuestra base. Esto abre las
+puertas a poder jugar con el \textit{``aggro''} de los zombis de forma estratégica.
+
+En paralelo a las declaraciones de los \textit{devs}, parte de la comunidad discutía sobre si
+la \ac{IA} del juego hacía trampas con tal de incrementar la dificultad, a lo que el usuario
+\citeauthor*{Steam_User2019} comenta las declaraciones de los desarrolladores y niega que la
+máquina haga trampas, para apoyar sus palabras nos redirije a un \textit{post} de \textit{`Reddit'}
+donde \citeauthor*{Pikachunet2018} nos muestra capturas de un posible editor de niveles del
+juego en el que se nos muestran multitud de opciones, entre las que encontramos la cantidad de
+enemigos, como se disponen en el mapa, o si tendrán esa iniciativa de ir al centro de la base.
 
 
 \section{Técnicas de inteligencia articificial}
