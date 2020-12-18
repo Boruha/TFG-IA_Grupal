@@ -10,10 +10,8 @@
 \end{itemize}
 
 \section{Descripción general}
-El juego que se pretende desarrollar consiste en un \ac{RTS} haciendo hincapie en el
-apartado de navegación por el mapa y el combate, dejando así la gestión de recursos
-y el desarrollo de una civilización o facción a un lado debido a las limitaciones
-de tiempo y personal. A lo largo de los distintos niveles, el jugador deberá hacer
+El juego que se pretende desarrollar se basa en el apartado de navegación por el mapa y combate
+típicos en los \ac{RTS}. A lo largo de los distintos niveles, el jugador deberá hacer
 frente a distintos desafios como pueden ser: trasladar todas sus unidades de un punto
 del mapa a otro mientras se evita la muerte de algún personaje importante y/o eliminar
 a todas las entidades enemigas del escenario.
@@ -34,6 +32,8 @@ imágen~\ref{fig:unit-selec}
 
 El jugador perderá cuando todas sus unidades mueran.
 
+\placeholdertext{Ser más preciso y extenso.}
+
 \begin{figure}[ht]
 \centering
 \begin{minipage}[c]{0.45\linewidth}
@@ -48,11 +48,11 @@ El jugador perderá cuando todas sus unidades mueran.
 \end{figure}
 
 \section{Unidades}
-Entre las unidades podemos encontrar diferentes arquetipos con carácteristicas propias
-que nos permitiran crear variedad en las posibles soluciones a la hora de superar el
+Entre las unidades podemos encontrar dos arquetipos con carácteristicas propias
+que nos permitiran crear variedad en las soluciones a la hora de superar el
 nivel.
 
-Los distintos tipos son los siguientes:
+Los tipos son los siguientes:
 \begin{itemize}
 	\item \textbf{Soldado:} es la unidad más básica que podemos encontrar en el campo de
 							guerra, esta armado con una espada y posee estadisticas
@@ -62,6 +62,20 @@ Los distintos tipos son los siguientes:
 							lo que tendremos que protegerlos para asegurar su
 							supervivencia.
 \end{itemize}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}%*{4}{c}}
+\hline
+        & Daño & Vida & Rango \\ 
+\hline
+\hline
+Soldado & 1    & 5    & Melee \\ 
+\hline
+Arquero & 2    & 3    & Largo \\ 
+\hline
+\end{tabular}\\
+\placeholdertext{Valores totalmente provisionales}
+\end{center}
 
 \section{Controles}
 A la hora de jugar tendremos una serie de teclas asignadas a las acciones que el
@@ -75,6 +89,7 @@ Las teclas para navegar por los menús son las siguientes:
 	\item \textbf{Enter:} mediante esta tecla podremos avanzar por los menús una vez estemos sobre la opción deseada.
 	\item \textbf{Retroceso:} mediante esta otra podremos ir hacía atrás por los menús.
 	\item \textbf{Escape:} esta nos permitirá salir de la ejecución del programa.
+	\placeholdertext{igual esto es un poco ilegal.}
 \end{itemize}
 
 Las asignadas para jugar son las siguientes:
@@ -116,7 +131,7 @@ una barra que indica el progreso de cargado~\ref{mockup_carga}.
 \label{mockup_carga}
 \end{figure}
 
-A continuación de la carga pasaremos directamente al escenario donde se desarrollará el
+A continuación de la carga pasaremos directamente al escenario, donde se desarrollará el
 \textit{gameplay} y nos mantendremos en esta pantalla hasta que termine el juego, ya sea
 por victoria o derrota del jugador~\ref{mockup_juego}.
 
@@ -149,7 +164,7 @@ inicio~\ref{mockup_ini}.
 \end{figure}
 
 Como última pantalla con la que el jugador podrá interactuar es la del menú de
-pausa~\ref{mockup_pausa} en el cual se le dará la opción de salir o de volver a la
+pausa~\ref{mockup_pausa}, en el cual se le dará la opción de salir o de volver a la
 partida, mientras esta pantalla este activa la acción en el juego se paralizará hasta
 que el jugador decida. 
 
@@ -161,9 +176,8 @@ que el jugador decida.
 \end{figure}
 
 \section{Estados del juego}
-
-Una vez mostradas todas las posibles pantallas con las que podrá interactuar el jugador
-es interesante dibujar un diagrama de flujo que plame sus conexiones y posibilidades
+Una vez mostradas todas las posibles pantallas con las que podrá interactuar el jugador,
+es interesante dibujar un diagrama de flujo que plasme sus conexiones y posibilidades
 con el fin de crear una representación gráfica que sirva como esquema global.
 
 Dicho esquema podemos encontrarlo en la figura~\ref{esq:flow_juego}.
@@ -171,15 +185,14 @@ Dicho esquema podemos encontrarlo en la figura~\ref{esq:flow_juego}.
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.45\textwidth]{imagenes/gdd/pantallas/flow_ejecucion.png}
-\caption{MockUp escenario juego.}
+\caption{MockUp flujo de ejecución.}
 \label{esq:flow_juego}
 \end{figure}
 
 \section{Escenarios}
 A lo largo de los niveles la intención es que nos encontremos con distintos biomas como
 pueden ser praderas, bosque o desiertos como los que podemos encontrar en \ac{AoE} II
-como hemos visto anteriormente en la imágen~\ref{img:aoe_2} o en las
-~\ref{img:mapa_aoe1} y ~\ref{img:mapa_aoe2}.
+~\ref{img:aoe_2}~\ref{img:mapa_aoe1}~\ref{img:mapa_aoe2}.
 
 \begin{figure}[ht]
 \centering
@@ -203,5 +216,32 @@ vez le libramos de tener que estar preocuparse de situar la cámara para cada mo
 Al mantener una posición fija podemos situar todos los elementos en la escena de forma
 que no obstaculicen la visión o molesten al jugador.
 
+\section{Mínimo producto viable}
+Una vez planteadas todas las características deseadas para el videojuego, es acosenjable
+decidir que partes del producto son vitales para mostrar la experiencia
+de juego deseable, el hecho de marcar estos objetivos nos ayudará a poder desarrollar una
+versión reducida del proyecto que nos permita dar la sensación de tener un producto acabado.\\
+Es importante realizar este proceso ya que por motivos internos o externos al equipo de desarrollo,
+siempre existen contratiempos que nos impidan conseguir todos los objetivos propuestos en el
+documento.
 
+En cuanto a las etapas en la ejecución del juego, encontramos esencial el poder finalizar el nivel,
+ya sea por victoria o derrota. Acto seguido volver al comienzo del nivel, dejando a un lado un
+posible menú inicial y de pausa.
 
+Una vez en partida el juego constará de un nivel único compuesto por: un escenario estático
+mínimo, un conjunto de unidades propiedad del jugador y otro perteneciente a la máquina.\\
+Al inicio del juego el jugador se encontrará quieto en uno de los extremos del nivel y el enemigo 
+estará patrullando por una zona designada, dejando así a elección del jugador la distribución y el
+momento exacto en el que comenzará la disputa.
+
+En lo referente a las mecánicas y jugabilidad, es importante que el jugador sea capaz de poder
+mover a sus unidades por el escenario y ordenarles atacar, por otro lado sería deseable poder
+ajustar algunos parámetros del comportamiento de su ejercito para poder pasar el nivel de más
+de una forma.\\
+Otro lado la \ac{IA} debe ser capaz de detectar el acercamiento del jugador y responder a la
+ofensiva, dejando la capacidad de tomar la iniciativa y variar su estrategia para versiones
+más completas. Ambos ejercitos se compondrán de soldados y arqueros.
+
+En lo referente al apartado visual, sería deseable tener sprites para unidades y escenario pero
+de ser necesario podemos mantener el sistema de \textit{render} inicial.
