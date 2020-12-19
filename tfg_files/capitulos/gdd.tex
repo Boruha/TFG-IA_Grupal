@@ -12,27 +12,17 @@
 \section{Descripción general}
 El juego que se pretende desarrollar se basa en el apartado de navegación por el mapa y combate
 típicos en los \ac{RTS}. A lo largo de los distintos niveles, el jugador deberá hacer
-frente a distintos desafios como pueden ser: trasladar todas sus unidades de un punto
-del mapa a otro mientras se evita la muerte de algún personaje importante y/o eliminar
-a todas las entidades enemigas del escenario.
+frente a distintos desafios como pueden ser: escoltar con sus unidades de un punto
+del mapa a otro a un personaje importante y/o eliminar a todas las entidades enemigas del escenario.
 
 \section{Mecánicas}
-La finalidad del juego es la de completar los distintos niveles de forma satisfactoria,
-esto sucederá ya sea cuando eliminemos a todas las unidades enemigas desplegadas a lo
-largo del nivel o alcancemos el punto indicado. Como herramienta para alcanzar este
-objetivo dispondremos de un ejercito a nuestro mando el cual deberemos gestionar de
-forma efectiva para sortear los obstáculos y desafios propuestos.
+Durante el juego podremos ejecutar una serie de ordenes sobre nuestras unidades para cambiar
+su distribución, ordenarles que se desplazen y/o que ataquen a enemigos.
 
-El jugador será capaz de seleccionar con el ratón las unidades exactas sobre las que
+El jugador será capaz de seleccionar con el ratón las unidades sobre las que
 quiere lanzar la acción y seleccionar o deseleccionar todas la unidades a su
-disposición mediante atajos de teclado en cualquier momento. Las acciones disponibles
-para su uso serán las de desplazar las unidades, hacer que se queden a la espera y
-realizar un ataque sobre las unidades rivales que se indiquen. Como puede verse en la
-imágen~\ref{fig:unit-selec}
+disposición mediante atajos de teclado en cualquier momento~\ref{fig:unit-selec} .
 
-El jugador perderá cuando todas sus unidades mueran.
-
-\placeholdertext{Ser más preciso y extenso.}
 
 \begin{figure}[ht]
 \centering
@@ -46,6 +36,59 @@ El jugador perderá cuando todas sus unidades mueran.
 \caption{MockUp selección.}
 \label{fig:unit-selec}
 \end{figure}
+
+En cuanto a las posibles formaciones para nuestras unidades, encontramos las siguientes:
+
+\begin{itemize}
+\item \textbf{Por filas:}~\ref{mockup_en_fila} las unidades se dispondrán en función de su rango,
+siendo encabezado el pelotón por las unidades de ataque a \textit{melee}.
+
+\item \textbf{Sin formación:}~\ref{mockup_desordenada} las unidades no tendrán nigún paramétro de ordenación.
+
+\item \textbf{En anillo:}~\ref{mockup_anillo} formación circular alrededor de una unidad especial. En caso de
+no haber unidad escoltada el centro estará vacío. 
+\end{itemize} 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.45\textwidth]{imagenes/gdd/Formacion-en-fila.png}
+\caption{MockUp formacion en fila.}
+\label{mockup_en_fila}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.45\textwidth]{imagenes/gdd/Formacion-desordenada.png}
+\caption{MockUp formacion desordenada.}
+\label{mockup_desordenada}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.3\textwidth]{imagenes/gdd/Formacion-anillo.png}
+\caption{MockUp formacion en anillo.}
+\label{mockup_anillo}
+\end{figure}
+
+Las acciones posibles serán realizadas en función del objeto y/o lugar donde el jugador haga
+click, si el jugador selecciona una unidad enemiga las unidades marcadas iniciarán un ataque hacía
+esa unidad. Si el objetivo es un punto vacío del mapa, las unidades se desplazarán a el.
+
+Por último podemos ordenar a las unidades que mantengan una estrategia definida:
+
+\begin{itemize}
+\item \textbf{Mantener la zona:} en este modo las unidades intentarán evitar dejar su posición
+actual, pudiendo desplazarse ligeramente para atacar unidades enemigas. En caso de salir de combate
+regresará a su posición.
+
+\item \textbf{Agresivo:} en el momento en el que la tropa divisa un enemigo saldrá diracto a atacarle,
+aunque se aleje esta le seguirá mientras siga en su rango de detección.
+\end{itemize} 
+
+Aunque el jugador marque una estrategia y forma de plantear el combate, las unidades podrán
+decidir si seguir al jugador o revelarse. Si los soldados cercanos están siendo masacrados
+existe la posibilidad de que tengan miedo y huyan, si las unidades enemigas nos superan en número
+la unidad puede decidir si permanecer en defensa en lugar de atacar de forma activa.
 
 \section{Unidades}
 Entre las unidades podemos encontrar dos arquetipos con carácteristicas propias
@@ -64,7 +107,7 @@ Los tipos son los siguientes:
 \end{itemize}
 
 \begin{center}
-\begin{tabular}{|c|c|c|c|}%*{4}{c}}
+\begin{tabular}{|c|c|c|c|}
 \hline
         & Daño & Vida & Rango \\ 
 \hline
