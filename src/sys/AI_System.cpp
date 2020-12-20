@@ -6,6 +6,7 @@
 
 #include <cmp/AI_Component.hpp>
 #include <cmp/MovementComponent.hpp>
+#include <cmp/CombatComponent.hpp>
 
 #include <utils/AI_Constants.hpp>
 
@@ -19,44 +20,46 @@ AI_System::init() noexcept { }
 
 bool
 AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
-    std::cout << "PETO EN IA\n";
-    
     auto& ai_cmp_vec = context->getAI_Cmps();
     
     std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), [&](std::unique_ptr<AI_Component>& ai_cmp) {
         auto& ent     = context->getEntityByID( ai_cmp->getEntityID() );
         auto* mov_cmp = ent->getComponent<MovementComponent>();
 
+        auto& pj     = context->getEntityByID( context->getPlayerID() );
+        auto* pj_mov = pj->getComponent<MovementComponent>();
+        auto& pj_pos = pj_mov->coords;
+
+        auto  target_dir = pj_pos - mov_cmp->coords;
+        auto  distance2  = target_dir.length2();
+
+        if( distance2.getNoScaled() > (200l * 200l) ) {
+            ai_cmp->current_behavior = AI_behaviour::patrol_b;
+        }
+        if( distance2.getNoScaled() > (130l * 130l) && distance2.getNoScaled() < (200l * 200l) ) {
+            ai_cmp->current_behavior = AI_behaviour::chase_b;
+        } 
+        if( distance2.getNoScaled() < (130l * 130l) ) {
+            ai_cmp->current_behavior = AI_behaviour::attack_b;
+        }
+
         switch (ai_cmp->current_behavior) {
-        case AI_behaviour::patrol_b : patrol(ai_cmp, mov_cmp);
+            case AI_behaviour::patrol_b : patrol(ai_cmp, mov_cmp);
             break;
         
-        case AI_behaviour::chase_b : {
-                auto& pj = context->getEntityByID( context->getPlayerID() );
-                auto& pj_pos = pj->getComponent<MovementComponent>()->coords;   
-                chase(ai_cmp, mov_cmp, pj_pos);
-            }
+            case AI_behaviour::chase_b : chase(ai_cmp, mov_cmp, pj_pos);
             break;
 
-        case AI_behaviour::runaway_b : {
-                auto& pj = context->getEntityByID( context->getPlayerID() );
-                auto& pj_pos = pj->getComponent<MovementComponent>()->coords;   
-                run_away(ai_cmp, mov_cmp, pj_pos);
-            }
+            case AI_behaviour::runaway_b : run_away(ai_cmp, mov_cmp, pj_pos);
             break;
 
-        case AI_behaviour::pursue_b : {
-                auto& pj = context->getEntityByID( context->getPlayerID() );
-                auto* pj_mov = pj->getComponent<MovementComponent>();   
-                pursue(ai_cmp, mov_cmp, pj_mov);
-            }
+            case AI_behaviour::pursue_b : pursue(ai_cmp, mov_cmp, pj_mov);
             break;
 
-        case AI_behaviour::evade_b : {
-                auto& pj = context->getEntityByID( context->getPlayerID() );
-                auto* pj_mov = pj->getComponent<MovementComponent>();   
-                evade(ai_cmp, mov_cmp, pj_mov);
-            }
+            case AI_behaviour::evade_b : evade(ai_cmp, mov_cmp, pj_mov);
+            break;
+
+            case AI_behaviour::attack_b : attack(ai_cmp, mov_cmp, pj_pos, context);
             break;
 
         default: 
@@ -66,6 +69,7 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
         }
     });
 
+    //cuando haya mas de un bando habra que cambiarlo
     separation(context, ai_cmp_vec);
     cohesion(context, ai_cmp_vec);
 
@@ -82,6 +86,7 @@ AI_System::patrol(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_
         if(auto new_target = updatePatrol(ai_cmp))
             arrive(mov_cmp, (*new_target).get());
     }
+
 }
 
 void 
@@ -115,6 +120,20 @@ AI_System::evade(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_c
         mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
     }
 }  
+
+void
+AI_System::attack(std::unique_ptr<AI_Component>& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, const std::unique_ptr<Manager_t>& context) noexcept {
+    auto& ent = context->getEntityByID(ai_cmp->getEntityID());
+    auto* combat_cmp = ent->getComponent<CombatComponent>();
+    
+    if(combat_cmp->current_attack_cd.number <= 0l) {
+        combat_cmp->current_attack_cd = combat_cmp->attack_cd;
+        attack_msg.emplace_back(ai_cmp->getEntityID(), context->getPlayerID(), combat_cmp->damage);
+        std::cout << "MUEREEEE\n\n";
+    }
+    
+    arrive(mov_cmp, target_pos);
+}
 
 
 /* BASIC BEHAVIOURS FUNCTIONS */
@@ -299,6 +318,5 @@ AI_System::updateRoute(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
 
     return { };
 }
-
 
 } //NS

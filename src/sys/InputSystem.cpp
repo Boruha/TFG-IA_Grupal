@@ -15,8 +15,6 @@ extern "C" {
 }
 
 #include <algorithm>
-#include <iostream>
-
 
 namespace AIP {
 
@@ -40,7 +38,6 @@ InputSystem::init() noexcept { }
 
 bool 
 InputSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
-    std::cout << "PETO EN INPUT\n";
     auto& input_cmp_vec = context->getInputCmps();
 
     if( ptc_process_events() ) //ESC = 1;

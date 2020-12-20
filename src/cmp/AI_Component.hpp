@@ -12,7 +12,8 @@ enum class AI_behaviour : uint16_t {
     chase_b  = 2u,
     runaway_b= 3u,
     pursue_b = 4u,
-    evade_b  = 5u
+    evade_b  = 5u,
+    attack_b = 6u
 };
 
 //hay que pasar el objetivo a un parametro y crear setters.

@@ -22,11 +22,12 @@ struct AI_System : System_t {
 
 private:
 /* CONPLEX B. */
-    void patrol(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp) noexcept;
-    void chase(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
+    void patrol(std::unique_ptr<AI_Component>& ai_cmp  , MovementComponent* mov_cmp) noexcept;
+    void chase(std::unique_ptr<AI_Component>& ai_cmp   , MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
     void run_away(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
-    void pursue(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
-    void evade(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
+    void pursue(std::unique_ptr<AI_Component>& ai_cmp  , MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
+    void evade(std::unique_ptr<AI_Component>& ai_cmp   , MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
+    void attack(std::unique_ptr<AI_Component>& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, const std::unique_ptr<Manager_t>& context) noexcept;
                                               
 /* STEERING B. BASIC */
     bool arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;

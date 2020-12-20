@@ -10,7 +10,6 @@
 #include <ent/Entity_t.hpp>
 
 #include <algorithm>
-#include <iostream>
 
 namespace AIP {
 
@@ -19,8 +18,6 @@ CollisionSystem::init() noexcept { }
 
 bool
 CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
-    std::cout << "PETO EN COll\n";
-    
     auto& mov_cmp_vec = context->getMovementCmps();
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), 

@@ -21,6 +21,7 @@ GameManager::GameManager() {
     systems.emplace_back( std::make_unique<AI_System>() );                        //ir a posteriori. Ejemplo, los callbacks del input.
     systems.emplace_back( std::make_unique<MovementSystem>() );
     systems.emplace_back( std::make_unique<CollisionSystem>() );
+    systems.emplace_back( std::make_unique<AttackSystem>() );
     manager = std::make_unique<EntityManager>();
 }
 

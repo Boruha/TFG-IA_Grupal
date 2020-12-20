@@ -39,6 +39,10 @@ struct EntityManager : Manager_t {
       const std::vector<std::unique_ptr<InputComponent>>&  getInputCmps() const noexcept override { return cmp_storage->getCmpCollection<InputComponent>(); }
             std::vector<std::unique_ptr<InputComponent>>&  getInputCmps()       noexcept override { return cmp_storage->getCmpCollection<InputComponent>(); }
 
+      const std::vector<std::unique_ptr<CombatComponent>>&  getCombatCmps() const noexcept override { return cmp_storage->getCmpCollection<CombatComponent>(); }
+            std::vector<std::unique_ptr<CombatComponent>>&  getCombatCmps()       noexcept override { return cmp_storage->getCmpCollection<CombatComponent>(); }
+
+
       const entID  getPlayerID() const noexcept override { return player_id; };   
             entID  getPlayerID()       noexcept override { return player_id; };
 

@@ -11,7 +11,6 @@ extern "C" {
 }
 
 #include <algorithm>
-#include <iostream>
 
 namespace AIP {
 //Cambiar al uso de las constantes y/o generar métodos para redimensionar y demas.
@@ -37,9 +36,7 @@ RenderSystem::init() noexcept {
 }
 
 bool
-RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
-    std::cout << "PETO EN render\n";
-    
+RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {    
     const auto& render_cmp_vec = context->getRenderCmps();
           auto* screen_ptr     = framebuffer.get();
     
