@@ -7,6 +7,7 @@
 #include <utils/AI_Constants.hpp>
 
 #include <algorithm>
+#include <iostream>
 
 namespace AIP {
 
@@ -15,6 +16,8 @@ MovementSystem::init() noexcept { }
 
 bool
 MovementSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
+    std::cout << "PETO EN MOV\n";
+    
     auto& mov_cmp_vec = context->getMovementCmps();
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), 

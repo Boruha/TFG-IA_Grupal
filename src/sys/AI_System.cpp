@@ -10,6 +10,7 @@
 #include <utils/AI_Constants.hpp>
 
 #include <algorithm>
+#include <iostream>
 
 namespace AIP {
 
@@ -18,6 +19,8 @@ AI_System::init() noexcept { }
 
 bool
 AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
+    std::cout << "PETO EN IA\n";
+    
     auto& ai_cmp_vec = context->getAI_Cmps();
     
     std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), [&](std::unique_ptr<AI_Component>& ai_cmp) {

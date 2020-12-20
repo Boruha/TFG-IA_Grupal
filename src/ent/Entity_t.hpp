@@ -33,11 +33,13 @@ struct Entity_t{
         return const_cast<T*>( std::as_const(*this).getComponent<T>() );
     }
 
+    auto begin() { return my_cmps.begin(); }
+    auto end()   { return my_cmps.end();   }
 
 private:
     inline static entID counterID  { 0u };
     const         entID ent_id     { 0u };
-    std::unordered_map<cmpID, Component_t*> my_cmps;
+    std::unordered_map<cmpTypeID, Component_t*> my_cmps;
 };
 
 } // NS

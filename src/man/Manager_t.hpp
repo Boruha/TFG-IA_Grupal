@@ -37,6 +37,7 @@ struct Manager_t {
     virtual const entID  getPlayerID() const noexcept = 0;   
     virtual       entID  getPlayerID()       noexcept = 0;
 
+    virtual void deleteEntity(entID eid) noexcept = 0;
 };
 
 }

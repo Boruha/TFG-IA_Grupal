@@ -8,18 +8,30 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+#include <algorithm>
 
 namespace AIP {
 
 //Struct generico para nuestras temp de Cmps
 struct CmpCollection {
     virtual ~CmpCollection() = default;
+    virtual void deleteCmpByEntityID(entID eid) = 0;
 };
 
 //Vector que se creará por cada Cmp
 template<typename T>
 struct CmpVector : CmpCollection {
     explicit CmpVector<T>() { cmps.reserve(10u); }
+    
+    void deleteCmpByEntityID(entID eid) override { 
+        auto it_cmp = std::find_if(cmps.begin(), cmps.end(), 
+            [&eid](std::unique_ptr<T>& cmp) { return cmp->getEntityID() == eid; }
+        );
+
+        if( it_cmp == cmps.end() ) return; //MAMAMAMAMAAAL
+        cmps.erase(it_cmp);
+    }
+
     std::vector<std::unique_ptr<T>> cmps;
 };
 
@@ -51,6 +63,15 @@ struct ComponentStorage {
             auto& new_vec = cmp_map[Component_t::getCmpTypeID<T>()] = std::make_unique<CmpVector<T>>();
             return static_cast<CmpVector<T>*>( new_vec.get() )->cmps;
         }
+    }
+
+    void 
+    deleteCmpByTypeIDAndEntityID(cmpTypeID cid, entID eid) {
+        auto it = cmp_map.find(cid);
+        
+        if(it == cmp_map.end()) return; //BAD D D D D
+        
+        it->second->deleteCmpByEntityID(eid);
     }
 
 private:

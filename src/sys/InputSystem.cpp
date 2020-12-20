@@ -15,6 +15,7 @@ extern "C" {
 }
 
 #include <algorithm>
+#include <iostream>
 
 
 namespace AIP {
@@ -39,11 +40,13 @@ InputSystem::init() noexcept { }
 
 bool 
 InputSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
+    std::cout << "PETO EN INPUT\n";
     auto& input_cmp_vec = context->getInputCmps();
 
-    if( ptc_process_events() )
+    if( ptc_process_events() ) //ESC = 1;
         return false;
-    
+
+/* BLOQUE IA    
     if( keyboard.isKeyPressed(XK_0) ) {
         auto& ai_cmp_vec = context->getAI_Cmps();
 
@@ -97,30 +100,36 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t D
             ai_cmp->current_behavior = AI_behaviour::evade_b;
         });
     }
+*/
 
-    //if( keyboard.isKeyPressed(XK_7) ) {
-    //    if(keyboard.isKeyPressed(XK_Control_R))
-    //        fps_msg.emplace_back(FPS_Opc::LoopTime, true);
-    //    else
-    //        fps_msg.emplace_back(FPS_Opc::LoopTime, false);
-    //}
-//
-    //if( keyboard.isKeyPressed(XK_8) ) {
-    //    if(keyboard.isKeyPressed(XK_Control_R))
-    //        fps_msg.emplace_back(FPS_Opc::DeltaTime, true);
-    //    else
-    //        fps_msg.emplace_back(FPS_Opc::DeltaTime, false);
-    //}
-//
-    //if( keyboard.isKeyPressed(XK_9) ) {
-    //    if(keyboard.isKeyPressed(XK_Control_R))
-    //        fps_msg.emplace_back(FPS_Opc::Both, true);
-    //    else
-    //        fps_msg.emplace_back(FPS_Opc::Both, false);
-    //}
+/* BLOQUE Deltatime
+    if( keyboard.isKeyPressed(XK_7) ) {
+        if(keyboard.isKeyPressed(XK_Control_R))
+            fps_msg.emplace_back(FPS_Opc::LoopTime, true);
+        else
+            fps_msg.emplace_back(FPS_Opc::LoopTime, false);
+    }
 
-    if(keyboard.isKeyPressed(XK_Control_R))
-        std::cout << "ME PULSAS\n";
+    if( keyboard.isKeyPressed(XK_8) ) {
+        if(keyboard.isKeyPressed(XK_Control_R))
+            fps_msg.emplace_back(FPS_Opc::DeltaTime, true);
+        else
+            fps_msg.emplace_back(FPS_Opc::DeltaTime, false);
+    }
+
+    if( keyboard.isKeyPressed(XK_9) ) {
+        if(keyboard.isKeyPressed(XK_Control_R))
+            fps_msg.emplace_back(FPS_Opc::Both, true);
+        else
+            fps_msg.emplace_back(FPS_Opc::Both, false);
+    }
+*/
+
+     if( keyboard.isKeyPressed(XK_Control_L) ) {
+                auto& ai_vec = context->getAI_Cmps();
+                if( !ai_vec.empty() )
+                    context->deleteEntity( ai_vec.front()->getEntityID() );
+     }
 
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
         [&](std::unique_ptr<InputComponent>& input_cmp) {

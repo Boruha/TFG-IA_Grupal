@@ -16,8 +16,9 @@ struct EntityManager : Manager_t {
       void init() noexcept;
 
       [[nodiscard]] std::unique_ptr<Entity_t>& createEntity_t() noexcept;
+      void deleteEntity(entID eid) noexcept override;
+
       void createSoldier(const ufixed64_t& size, const fixed64_t& pos_x, const fixed64_t& pos_y, const Color col) noexcept;
-      
 
       /*   GETTERS CONTEXT   */
       const std::unordered_map<entID, std::unique_ptr<Entity_t>>&  getEntities() const noexcept override { return ent_map; }

@@ -1,6 +1,7 @@
 #include <man/EntityManager.hpp>
 
 #include <ent/Entity_t.hpp>
+#include <algorithm>
 
 namespace AIP {
 
@@ -55,6 +56,31 @@ EntityManager::createSoldier(const ufixed64_t& size, const fixed64_t& pos_x, con
     new_ent->addComponent(mov_cmp.get());
     new_ent->addComponent(ren_cmp.get());
     new_ent->addComponent(ai_cmp.get());
+}
+
+void 
+EntityManager::deleteEntity(entID eid) noexcept {
+    //Seleccionar entidad.
+    if(ent_map.empty()) return;
+
+    auto& ent = getEntityByID(eid);
+    auto* ent_ptr = ent.get();
+
+    //Eliminar sus cmps mediante CmpStorage.
+    for(auto& cmp : *ent_ptr) {
+        cmp_storage->deleteCmpByTypeIDAndEntityID(cmp.first , eid);
+    }
+
+    //Eliminar entidad.
+    auto it_ent = std::find_if( ent_map.begin(), ent_map.end(), 
+            [&](const auto& e) { return e.second->getID() == eid; } );
+    
+    ent_map.erase(it_ent);
+
+    std::cout << "Eliminada entidad: " << eid << "\n";
+
+    //Ajustar los Cmps de las demas entidades 
+        //No se queja por el uso de unique_ptr??
 }
 
 } // namespace AIP
