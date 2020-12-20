@@ -29,6 +29,8 @@ AttackSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t 
         if(combat_cmp->health <= 0) {
             std::cout << "aaaaaah me mataste\n\n";
             context->deleteEntity(last_msg.eid_damaged);
+            attack_msg.pop_back(); //ESTO NO DEBERIA ESTAR AQUI
+            return false;
         }
 
         attack_msg.pop_back();

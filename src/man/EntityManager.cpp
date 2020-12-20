@@ -18,9 +18,9 @@ EntityManager::init() noexcept {
     /*ent 1*/
     createSoldier(ufixed64_t(20ul), fixed64_t(30l), fixed64_t(30l), Color::White);
     /*ent 2*/
-    //createSoldier(ufixed64_t(20ul), fixed64_t(60l), fixed64_t(-10l), Color::White);
+    createSoldier(ufixed64_t(20ul), fixed64_t(60l), fixed64_t(-10l), Color::White);
     /*ent 3*/
-    //createSoldier(ufixed64_t(20ul), fixed64_t(-10l), fixed64_t(20l), Color::White);
+    createSoldier(ufixed64_t(20ul), fixed64_t(-10l), fixed64_t(20l), Color::White);
     /*ent 4*/
     //createSoldier(ufixed64_t(20ul), fixed64_t(-60l), fixed64_t(10l), Color::White);
     /*ent 5*/
