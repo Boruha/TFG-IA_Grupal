@@ -23,7 +23,7 @@ CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), 
         [&](std::unique_ptr<MovementComponent>& mov_cmp) {
                 auto& ent       = context->getEntityByID(mov_cmp->getEntityID());
-                auto* ren_cmp   = ent->getComponent<RenderComponent>();
+                auto* ren_cmp   = ent.getComponent<RenderComponent>();
 
                       auto& coord  = mov_cmp->coords;
                 const auto size_W  = static_cast<fixed64_t>(ren_cmp->sprite.x);

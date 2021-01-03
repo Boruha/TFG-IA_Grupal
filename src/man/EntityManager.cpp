@@ -1,6 +1,5 @@
 #include <man/EntityManager.hpp>
 
-#include <ent/Entity_t.hpp>
 #include <algorithm>
 
 namespace AIP {
@@ -28,38 +27,40 @@ EntityManager::init() noexcept {
 
     /*player*/
     auto& ent5  = createEntity_t();
-    auto& mov_5 = cmp_storage->createComponent( MovementComponent(ent5->getID(), fixed64_t(200l) , fixed64_t(200l)) );
-    auto& ren_5 = cmp_storage->createComponent( RenderComponent(ent5->getID(), ufixed64_t(20ul), ufixed64_t(20ul), Color::Blue) );
-    auto& in_5  = cmp_storage->createComponent( InputComponent(ent5->getID()) );
-    auto& combat_5  = cmp_storage->createComponent( CombatComponent(ent5->getID()) );
+    auto& mov_5 = cmp_storage.createComponent( MovementComponent(ent5.getID(), fixed64_t(200l) , fixed64_t(200l)) );
+    auto& ren_5 = cmp_storage.createComponent( RenderComponent(ent5.getID(), ufixed64_t(20ul), ufixed64_t(20ul), Color::Blue) );
+    auto& in_5  = cmp_storage.createComponent( InputComponent(ent5.getID()) );
+    auto& combat_5  = cmp_storage.createComponent( CombatComponent(ent5.getID()) );
 
-    ent5->addComponent(mov_5.get());
-    ent5->addComponent(ren_5.get());
-    ent5->addComponent(in_5.get());
-    ent5->addComponent(combat_5.get());
+    ent5.addComponent(mov_5.get());
+    ent5.addComponent(ren_5.get());
+    ent5.addComponent(in_5.get());
+    ent5.addComponent(combat_5.get());
 
-    player_id = ent5->getID();
+    player_id = ent5.getID();
 
 }
 
-std::unique_ptr<Entity_t>&
+Entity_t&
 EntityManager::createEntity_t() noexcept {
-    auto new_ent { std::make_unique<Entity_t>() };
-    return ent_map[new_ent->getID()] = std::move(new_ent);
+    Entity_t new_ent { };
+    auto new_insert_it = ent_map.insert(std::make_pair( new_ent.getID(), new_ent ) );
+    //return ent_map[new_ent.getID()] = std::move(new_ent);
+    return new_insert_it.first->second;
 }
 
 void
 EntityManager::createSoldier(const ufixed64_t& size, const fixed64_t& pos_x, const fixed64_t& pos_y, const Color col) noexcept {
     auto& new_ent = createEntity_t();
-    auto& mov_cmp = cmp_storage->createComponent( MovementComponent(new_ent->getID(), pos_x, pos_y) );
-    auto& ren_cmp = cmp_storage->createComponent( RenderComponent(new_ent->getID(), size, size, col) );
-    auto& ai_cmp  = cmp_storage->createComponent( AI_Component(new_ent->getID()) );
-    auto& combat_cmp  = cmp_storage->createComponent( CombatComponent(new_ent->getID()) );
+    auto& mov_cmp = cmp_storage.createComponent( MovementComponent(new_ent.getID(), pos_x, pos_y) );
+    auto& ren_cmp = cmp_storage.createComponent( RenderComponent(new_ent.getID(), size, size, col) );
+    auto& ai_cmp  = cmp_storage.createComponent( AI_Component(new_ent.getID()) );
+    auto& combat_cmp  = cmp_storage.createComponent( CombatComponent(new_ent.getID()) );
 
-    new_ent->addComponent(mov_cmp.get());
-    new_ent->addComponent(ren_cmp.get());
-    new_ent->addComponent(ai_cmp.get());
-    new_ent->addComponent(combat_cmp.get());
+    new_ent.addComponent(mov_cmp.get());
+    new_ent.addComponent(ren_cmp.get());
+    new_ent.addComponent(ai_cmp.get());
+    new_ent.addComponent(combat_cmp.get());
 }
 
 void 
@@ -68,16 +69,15 @@ EntityManager::deleteEntity(entID eid) noexcept {
     if(ent_map.empty()) return;
 
     auto& ent = getEntityByID(eid);
-    auto* ent_ptr = ent.get();
 
     //Eliminar sus cmps mediante CmpStorage.
-    for(auto& cmp : *ent_ptr) {
-        cmp_storage->deleteCmpByTypeIDAndEntityID(cmp.first , eid);
+    for(auto& cmp : ent) {
+        cmp_storage.deleteCmpByTypeIDAndEntityID(cmp.first , eid);
     }
 
     //Eliminar entidad.
     auto it_ent = std::find_if( ent_map.begin(), ent_map.end(), 
-            [&](const auto& e) { return e.second->getID() == eid; } );
+            [&](const auto& e) { return e.second.getID() == eid; } );
     
     ent_map.erase(it_ent);
 

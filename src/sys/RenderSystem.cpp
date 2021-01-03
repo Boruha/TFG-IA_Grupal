@@ -47,7 +47,7 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t 
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
         [&](const std::unique_ptr<RenderComponent>& render_cmp) {
             auto& ent     = context->getEntityByID(render_cmp->getEntityID());
-            auto* mov_cmp = ent->getComponent<MovementComponent>();
+            auto* mov_cmp = ent.getComponent<MovementComponent>();
 
             //paso de continuo a pixel
             const auto screen_coords  = continuous_to_screen(mov_cmp->coords);

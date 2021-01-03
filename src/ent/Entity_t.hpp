@@ -17,8 +17,8 @@ struct Entity_t{
 
     const entID& getID() const { return ent_id; }
 
-    template<typename T> decltype(auto)
-    constexpr getComponent() const noexcept {
+    template<typename T> constexpr const T* 
+    getComponent() const noexcept {
         T* result     = nullptr;
         const auto it = my_cmps.find(Component_t::getCmpTypeID<T>());
         
@@ -28,9 +28,9 @@ struct Entity_t{
         return result;
     }
 
-    template<typename T> decltype(auto) 
+    template<typename T> T* 
     getComponent() noexcept {
-        return const_cast<T*>( std::as_const(*this).getComponent<T>() );
+        return const_cast<T*>( const_cast<const Entity_t*>(this)->getComponent<T>() );
     }
 
     auto begin() { return my_cmps.begin(); }

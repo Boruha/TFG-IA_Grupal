@@ -1,6 +1,9 @@
 #pragma once
 
 #include <utils/Alias.hpp>
+
+#include <ent/Entity_t.hpp>
+
 #include <vector>
 #include <unordered_map>
 #include <memory>
@@ -17,11 +20,11 @@ struct CombatComponent;
 struct Manager_t {
     virtual ~Manager_t() = default;
 
-    virtual const std::unordered_map<entID, std::unique_ptr<Entity_t>>&  getEntities() const noexcept = 0;   
-    virtual       std::unordered_map<entID, std::unique_ptr<Entity_t>>&  getEntities()       noexcept = 0;
+    virtual const std::unordered_map<entID, Entity_t>&  getEntities() const noexcept = 0;   
+    virtual       std::unordered_map<entID, Entity_t>&  getEntities()       noexcept = 0;
 
-    virtual const std::unique_ptr<Entity_t>&  getEntityByID(entID eid) const noexcept = 0;   
-    virtual       std::unique_ptr<Entity_t>&  getEntityByID(entID eid)       noexcept = 0;
+    virtual const Entity_t&  getEntityByID(entID eid) const noexcept = 0;   
+    virtual       Entity_t&  getEntityByID(entID eid)       noexcept = 0;
 
     virtual const std::vector<std::unique_ptr<RenderComponent>>&  getRenderCmps() const noexcept = 0;   
     virtual       std::vector<std::unique_ptr<RenderComponent>>&  getRenderCmps()       noexcept = 0;

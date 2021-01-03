@@ -21,7 +21,7 @@ AttackSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t 
         auto& last_msg = attack_msg.back();
 
         auto& ent        = context->getEntityByID(last_msg.eid_damaged);
-        auto* combat_cmp = ent->getComponent<CombatComponent>();
+        auto* combat_cmp = ent.getComponent<CombatComponent>();
         
         combat_cmp->health -= last_msg.amount;
         std::cout << "aaaaaah me dañaste\n\n";

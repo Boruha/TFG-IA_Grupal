@@ -24,10 +24,10 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
     
     std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), [&](std::unique_ptr<AI_Component>& ai_cmp) {
         auto& ent     = context->getEntityByID( ai_cmp->getEntityID() );
-        auto* mov_cmp = ent->getComponent<MovementComponent>();
+        auto* mov_cmp = ent.getComponent<MovementComponent>();
 
         auto& pj     = context->getEntityByID( context->getPlayerID() );
-        auto* pj_mov = pj->getComponent<MovementComponent>();
+        auto* pj_mov = pj.getComponent<MovementComponent>();
         auto& pj_pos = pj_mov->coords;
 
         auto  target_dir = pj_pos - mov_cmp->coords;
@@ -124,7 +124,7 @@ AI_System::evade(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_c
 void
 AI_System::attack(std::unique_ptr<AI_Component>& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, const std::unique_ptr<Manager_t>& context) noexcept {
     auto& ent = context->getEntityByID(ai_cmp->getEntityID());
-    auto* combat_cmp = ent->getComponent<CombatComponent>();
+    auto* combat_cmp = ent.getComponent<CombatComponent>();
     
     if(combat_cmp->current_attack_cd.number <= 0l) {
         combat_cmp->current_attack_cd = combat_cmp->attack_cd;
@@ -215,11 +215,11 @@ AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<std
     
     for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
         auto& ai_ent     = context->getEntityByID( (*ai_it)->getEntityID() );
-        auto* ai_mov_cmp = ai_ent->getComponent<MovementComponent>();
+        auto* ai_mov_cmp = ai_ent.getComponent<MovementComponent>();
 
         for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
             auto& comparision_ent     = context->getEntityByID( (*comparision_it)->getEntityID() );
-            auto* comparision_mov_cmp = comparision_ent->getComponent<MovementComponent>();
+            auto* comparision_mov_cmp = comparision_ent.getComponent<MovementComponent>();
 
             auto diff_vec  = ai_mov_cmp->coords - comparision_mov_cmp->coords;
             auto distance2 = diff_vec.length2();
@@ -248,13 +248,13 @@ AI_System::cohesion(const std::unique_ptr<Manager_t>& context, std::vector<std::
     
     for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
         auto& ai_ent     = context->getEntityByID( (*ai_it)->getEntityID() );
-        auto* ai_mov_cmp = ai_ent->getComponent<MovementComponent>();
+        auto* ai_mov_cmp = ai_ent.getComponent<MovementComponent>();
         auto& ai_centre  = ai_mov_cmp->cohesion_force;
         auto& ai_count   = ai_mov_cmp->cohesion_count;
 
         for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
             auto& comparision_ent     = context->getEntityByID( (*comparision_it)->getEntityID() );
-            auto* comparision_mov_cmp = comparision_ent->getComponent<MovementComponent>();
+            auto* comparision_mov_cmp = comparision_ent.getComponent<MovementComponent>();
             auto& comparision_centre  = comparision_mov_cmp->cohesion_force;
             auto& comparision_count   = comparision_mov_cmp->cohesion_count;
 

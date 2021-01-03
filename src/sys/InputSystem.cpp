@@ -131,7 +131,7 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t D
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
         [&](std::unique_ptr<InputComponent>& input_cmp) {
             auto& ent = context->getEntityByID(input_cmp->getEntityID());
-            auto* mov = ent->getComponent<MovementComponent>();
+            auto* mov = ent.getComponent<MovementComponent>();
             auto& dir = mov->dir;
             
             dir.x.number = dir.y.number = 0;
