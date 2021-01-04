@@ -36,6 +36,16 @@ struct Entity_t{
     auto begin() { return my_cmps.begin(); }
     auto end()   { return my_cmps.end();   }
 
+//DELETOS
+    void updateComponent(cmpTypeID cmpType, Component_t* new_ptr) {
+        auto it = my_cmps.find(cmpType);
+        
+        if( it != my_cmps.end() ) {
+            it->second = new_ptr;
+        }
+
+    }
+
 private:
     inline static entID counterID  { 0u };
     const         entID ent_id     { 0u };

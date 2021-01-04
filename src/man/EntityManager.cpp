@@ -72,7 +72,9 @@ EntityManager::deleteEntity(entID eid) noexcept {
 
     //Eliminar sus cmps mediante CmpStorage.
     for(auto& cmp : ent) {
-        cmp_storage.deleteCmpByTypeIDAndEntityID(cmp.first , eid);
+        auto* cmp_ptr = cmp_storage.deleteCmpByTypeIDAndEntityID(cmp.first , eid);
+        auto& ent_changed = getEntityByID( cmp_ptr->getEntityID() );
+        ent_changed.updateComponent(cmp.first, cmp_ptr);
     }
 
     //Eliminar entidad.

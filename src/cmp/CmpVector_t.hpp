@@ -5,19 +5,20 @@
 #include <utils/Alias.hpp>
 
 #include <vector>
-#include <algorithm>
+#include <optional>
 
 namespace AIP {
 
 struct CmpCollection {
     virtual ~CmpCollection() = default;
-    virtual void deleteCmpByEntityID(entID eid) = 0;
+    virtual Component_t* deleteCmpByEntityID(entID eid) = 0;
 };
 
 template<typename T>
 struct CmpVector : CmpCollection {
-    explicit CmpVector<T>();
-    void     deleteCmpByEntityID(entID eid) override;
+    explicit     CmpVector<T>();
+    Component_t* deleteCmpByEntityID(entID eid) override;
+    auto         getCmpByID(entID eid) noexcept;
 
     std::vector<T> cmps;
 };
