@@ -21,11 +21,11 @@ CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64
     auto& mov_cmp_vec = context->getMovementCmps();
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), 
-        [&](std::unique_ptr<MovementComponent>& mov_cmp) {
-                auto& ent       = context->getEntityByID(mov_cmp->getEntityID());
+        [&](MovementComponent& mov_cmp) {
+                auto& ent       = context->getEntityByID(mov_cmp.getEntityID());
                 auto* ren_cmp   = ent.getComponent<RenderComponent>();
 
-                      auto& coord  = mov_cmp->coords;
+                      auto& coord  = mov_cmp.coords;
                 const auto size_W  = static_cast<fixed64_t>(ren_cmp->sprite.x);
                 const auto size_H  = static_cast<fixed64_t>(ren_cmp->sprite.y);
 

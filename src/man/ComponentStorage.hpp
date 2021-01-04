@@ -14,9 +14,9 @@ struct ComponentStorage {
     ComponentStorage& operator=(const ComponentStorage& ) = delete;
     ComponentStorage& operator=(const ComponentStorage&&) = delete;
 
-    template<typename T> [[nodiscard]] inline constexpr       std::unique_ptr<T>&              createComponent(const T&& new_cmp) noexcept;
-    template<typename T> [[nodiscard]] inline constexpr       std::vector<std::unique_ptr<T>>& getCmpCollection()                 noexcept;
-    template<typename T> [[nodiscard]] inline constexpr const std::vector<std::unique_ptr<T>>& getCmpCollection() const           noexcept;
+    template<typename T> [[nodiscard]] inline constexpr       T&              createComponent(const T&& new_cmp) noexcept;
+    template<typename T> [[nodiscard]] inline constexpr       std::vector<T>& getCmpCollection()                 noexcept;
+    template<typename T> [[nodiscard]] inline constexpr const std::vector<T>& getCmpCollection() const           noexcept;
 
     inline void deleteCmpByTypeIDAndEntityID(cmpTypeID cid, entID eid);
 

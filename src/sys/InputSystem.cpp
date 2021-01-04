@@ -125,27 +125,27 @@ InputSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t D
      if( keyboard.isKeyPressed(XK_Control_L) ) {
                 auto& ai_vec = context->getAI_Cmps();
                 if( !ai_vec.empty() )
-                    context->deleteEntity( ai_vec.front()->getEntityID() );
+                    context->deleteEntity( ai_vec.front().getEntityID() );
      }
 
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
-        [&](std::unique_ptr<InputComponent>& input_cmp) {
-            auto& ent = context->getEntityByID(input_cmp->getEntityID());
+        [&](InputComponent& input_cmp) {
+            auto& ent = context->getEntityByID(input_cmp.getEntityID());
             auto* mov = ent.getComponent<MovementComponent>();
             auto& dir = mov->dir;
             
             dir.x.number = dir.y.number = 0;
     
-            if( keyboard.isKeyPressed(input_cmp->key_Up) )
+            if( keyboard.isKeyPressed(input_cmp.key_Up) )
                 dir.y -= ENT_MAX_SPEED;
     
-            if( keyboard.isKeyPressed(input_cmp->key_Down) )
+            if( keyboard.isKeyPressed(input_cmp.key_Down) )
                 dir.y += ENT_MAX_SPEED;
             
-            if( keyboard.isKeyPressed(input_cmp->key_Left) )
+            if( keyboard.isKeyPressed(input_cmp.key_Left) )
                 dir.x -= ENT_MAX_SPEED;
             
-            if( keyboard.isKeyPressed(input_cmp->key_Right) )
+            if( keyboard.isKeyPressed(input_cmp.key_Right) )
                 dir.x += ENT_MAX_SPEED;
     });
 

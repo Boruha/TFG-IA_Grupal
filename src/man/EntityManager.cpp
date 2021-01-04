@@ -32,10 +32,10 @@ EntityManager::init() noexcept {
     auto& in_5  = cmp_storage.createComponent( InputComponent(ent5.getID()) );
     auto& combat_5  = cmp_storage.createComponent( CombatComponent(ent5.getID()) );
 
-    ent5.addComponent(mov_5.get());
-    ent5.addComponent(ren_5.get());
-    ent5.addComponent(in_5.get());
-    ent5.addComponent(combat_5.get());
+    ent5.addComponent(&mov_5);
+    ent5.addComponent(&ren_5);
+    ent5.addComponent(&in_5);
+    ent5.addComponent(&combat_5);
 
     player_id = ent5.getID();
 
@@ -57,10 +57,10 @@ EntityManager::createSoldier(const ufixed64_t& size, const fixed64_t& pos_x, con
     auto& ai_cmp  = cmp_storage.createComponent( AI_Component(new_ent.getID()) );
     auto& combat_cmp  = cmp_storage.createComponent( CombatComponent(new_ent.getID()) );
 
-    new_ent.addComponent(mov_cmp.get());
-    new_ent.addComponent(ren_cmp.get());
-    new_ent.addComponent(ai_cmp.get());
-    new_ent.addComponent(combat_cmp.get());
+    new_ent.addComponent(&mov_cmp);
+    new_ent.addComponent(&ren_cmp);
+    new_ent.addComponent(&ai_cmp);
+    new_ent.addComponent(&combat_cmp);
 }
 
 void 

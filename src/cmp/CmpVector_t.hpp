@@ -5,7 +5,6 @@
 #include <utils/Alias.hpp>
 
 #include <vector>
-#include <memory>
 #include <algorithm>
 
 namespace AIP {
@@ -20,7 +19,7 @@ struct CmpVector : CmpCollection {
     explicit CmpVector<T>();
     void     deleteCmpByEntityID(entID eid) override;
 
-    std::vector<std::unique_ptr<T>> cmps;
+    std::vector<T> cmps;
 };
 
 }

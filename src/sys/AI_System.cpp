@@ -22,8 +22,8 @@ bool
 AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
     auto& ai_cmp_vec = context->getAI_Cmps();
     
-    std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), [&](std::unique_ptr<AI_Component>& ai_cmp) {
-        auto& ent     = context->getEntityByID( ai_cmp->getEntityID() );
+    std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), [&](AI_Component& ai_cmp) {
+        auto& ent     = context->getEntityByID( ai_cmp.getEntityID() );
         auto* mov_cmp = ent.getComponent<MovementComponent>();
 
         auto& pj     = context->getEntityByID( context->getPlayerID() );
@@ -34,16 +34,16 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
         auto  distance2  = target_dir.length2();
 
         if( distance2.getNoScaled() > (200l * 200l) ) {
-            ai_cmp->current_behavior = AI_behaviour::patrol_b;
+            ai_cmp.current_behavior = AI_behaviour::patrol_b;
         }
         if( distance2.getNoScaled() > (130l * 130l) && distance2.getNoScaled() < (200l * 200l) ) {
-            ai_cmp->current_behavior = AI_behaviour::chase_b;
+            ai_cmp.current_behavior = AI_behaviour::chase_b;
         } 
         if( distance2.getNoScaled() < (130l * 130l) ) {
-            ai_cmp->current_behavior = AI_behaviour::attack_b;
+            ai_cmp.current_behavior = AI_behaviour::attack_b;
         }
 
-        switch (ai_cmp->current_behavior) {
+        switch (ai_cmp.current_behavior) {
             case AI_behaviour::patrol_b : patrol(ai_cmp, mov_cmp);
             break;
         
@@ -79,8 +79,8 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
 
 /* CONPLEX B. */
 void 
-AI_System::patrol(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp) noexcept {
-    auto& target = ai_cmp->target_vec.at(ai_cmp->target_index);
+AI_System::patrol(AI_Component& ai_cmp, MovementComponent* mov_cmp) noexcept {
+    auto& target = ai_cmp.target_vec.at(ai_cmp.target_index);
     
     if( !arrive(mov_cmp, target) ) {
         if(auto new_target = updatePatrol(ai_cmp))
@@ -90,12 +90,12 @@ AI_System::patrol(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_
 }
 
 void 
-AI_System::chase(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System::chase(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
     arrive(mov_cmp, target_pos);
 }
 
 void 
-AI_System::run_away(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System::run_away(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
     if( !leave(mov_cmp, target_pos) ) {
         mov_cmp->dir.x.number = mov_cmp->dir.y.number = 0;
         mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
@@ -103,7 +103,7 @@ AI_System::run_away(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mo
 }
 
 void
-AI_System::pursue(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
+AI_System::pursue(AI_Component& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
     auto& target_pos    = target_mov_cmp->coords;
     auto  predicted_pos = target_pos + target_mov_cmp->dir;
 
@@ -111,7 +111,7 @@ AI_System::pursue(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_
 }
 
 void
-AI_System::evade(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
+AI_System::evade(AI_Component& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
     auto& target_pos    = target_mov_cmp->coords;
     auto  predicted_pos = target_pos + target_mov_cmp->dir;
 
@@ -122,13 +122,13 @@ AI_System::evade(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_c
 }  
 
 void
-AI_System::attack(std::unique_ptr<AI_Component>& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, const std::unique_ptr<Manager_t>& context) noexcept {
-    auto& ent = context->getEntityByID(ai_cmp->getEntityID());
+AI_System::attack(AI_Component& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, const std::unique_ptr<Manager_t>& context) noexcept {
+    auto& ent = context->getEntityByID(ai_cmp.getEntityID());
     auto* combat_cmp = ent.getComponent<CombatComponent>();
     
     if(combat_cmp->current_attack_cd.number <= 0l) {
         combat_cmp->current_attack_cd = combat_cmp->attack_cd;
-        attack_msg.emplace_back(ai_cmp->getEntityID(), context->getPlayerID(), combat_cmp->damage);
+        attack_msg.emplace_back(ai_cmp.getEntityID(), context->getPlayerID(), combat_cmp->damage);
         std::cout << "MUEREEEE\n\n";
     }
     
@@ -210,15 +210,15 @@ AI_System::leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
 
 /* FLOCKING B. FUNCTIONS */
 void 
-AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept {
+AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<AI_Component>& AI_cmps) noexcept {
     auto end_it = end(AI_cmps);
     
     for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
-        auto& ai_ent     = context->getEntityByID( (*ai_it)->getEntityID() );
+        auto& ai_ent     = context->getEntityByID( (*ai_it).getEntityID() );
         auto* ai_mov_cmp = ai_ent.getComponent<MovementComponent>();
 
         for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
-            auto& comparision_ent     = context->getEntityByID( (*comparision_it)->getEntityID() );
+            auto& comparision_ent     = context->getEntityByID( (*comparision_it).getEntityID() );
             auto* comparision_mov_cmp = comparision_ent.getComponent<MovementComponent>();
 
             auto diff_vec  = ai_mov_cmp->coords - comparision_mov_cmp->coords;
@@ -243,17 +243,17 @@ AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<std
 }
 
 void
-AI_System::cohesion(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept {
+AI_System::cohesion(const std::unique_ptr<Manager_t>& context, std::vector<AI_Component>& AI_cmps) noexcept {
     auto end_it = end(AI_cmps);
     
     for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
-        auto& ai_ent     = context->getEntityByID( (*ai_it)->getEntityID() );
+        auto& ai_ent     = context->getEntityByID( (*ai_it).getEntityID() );
         auto* ai_mov_cmp = ai_ent.getComponent<MovementComponent>();
         auto& ai_centre  = ai_mov_cmp->cohesion_force;
         auto& ai_count   = ai_mov_cmp->cohesion_count;
 
         for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
-            auto& comparision_ent     = context->getEntityByID( (*comparision_it)->getEntityID() );
+            auto& comparision_ent     = context->getEntityByID( (*comparision_it).getEntityID() );
             auto* comparision_mov_cmp = comparision_ent.getComponent<MovementComponent>();
             auto& comparision_centre  = comparision_mov_cmp->cohesion_force;
             auto& comparision_count   = comparision_mov_cmp->cohesion_count;
@@ -290,9 +290,9 @@ AI_System::cohesion(const std::unique_ptr<Manager_t>& context, std::vector<std::
 
 /* AUX FUNCTIONS */
 AI_System::optVec2_refw 
-AI_System::updatePatrol(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
-    auto& route  = ai_cmp->target_vec;
-    auto& index  = ai_cmp->target_index;
+AI_System::updatePatrol(AI_Component& ai_cmp) noexcept {
+    auto& route  = ai_cmp.target_vec;
+    auto& index  = ai_cmp.target_index;
 
     auto index_fwd = (index+1) % route.size();
 
@@ -305,9 +305,9 @@ AI_System::updatePatrol(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
 }
 
 AI_System::optVec2_refw 
-AI_System::updateRoute(std::unique_ptr<AI_Component>& ai_cmp) noexcept {
-    auto& route  = ai_cmp->target_vec;
-    auto& index  = ai_cmp->target_index;
+AI_System::updateRoute(AI_Component& ai_cmp) noexcept {
+    auto& route  = ai_cmp.target_vec;
+    auto& index  = ai_cmp.target_index;
 
     auto index_fwd = index + 1;
 

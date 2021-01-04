@@ -22,24 +22,24 @@ struct AI_System : System_t {
 
 private:
 /* CONPLEX B. */
-    void patrol(std::unique_ptr<AI_Component>& ai_cmp  , MovementComponent* mov_cmp) noexcept;
-    void chase(std::unique_ptr<AI_Component>& ai_cmp   , MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
-    void run_away(std::unique_ptr<AI_Component>& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
-    void pursue(std::unique_ptr<AI_Component>& ai_cmp  , MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
-    void evade(std::unique_ptr<AI_Component>& ai_cmp   , MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
-    void attack(std::unique_ptr<AI_Component>& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, const std::unique_ptr<Manager_t>& context) noexcept;
+    void patrol(AI_Component& ai_cmp  , MovementComponent* mov_cmp) noexcept;
+    void chase(AI_Component& ai_cmp   , MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
+    void run_away(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
+    void pursue(AI_Component& ai_cmp  , MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
+    void evade(AI_Component& ai_cmp   , MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
+    void attack(AI_Component& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, const std::unique_ptr<Manager_t>& context) noexcept;
                                               
 /* STEERING B. BASIC */
     bool arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
     bool leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
 
 /* FLOCKING B. COMPO */
-    void separation(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept;
-    void cohesion(const std::unique_ptr<Manager_t>& context, std::vector<std::unique_ptr<AI_Component>>& AI_cmps) noexcept;
+    void separation(const std::unique_ptr<Manager_t>& context, std::vector<AI_Component>& AI_cmps) noexcept;
+    void cohesion(const std::unique_ptr<Manager_t>& context, std::vector<AI_Component>& AI_cmps) noexcept;
 
 /* AUX */
-    [[nodiscard]] optVec2_refw updatePatrol(std::unique_ptr<AI_Component>& ai_cmp) noexcept;
-    [[nodiscard]] optVec2_refw updateRoute(std::unique_ptr<AI_Component>& ai_cmp) noexcept;
+    [[nodiscard]] optVec2_refw updatePatrol(AI_Component& ai_cmp) noexcept;
+    [[nodiscard]] optVec2_refw updateRoute(AI_Component& ai_cmp) noexcept;
 };
 
 /* Adiciones futuras */

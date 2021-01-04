@@ -19,7 +19,7 @@ struct RenderSystem : System_t {
     
 private:
     vec2<uint32_t> continuous_to_screen(const fixed_vec2& cont) noexcept;
-    void draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<RenderComponent>& render_cmp) noexcept;
+    void draw_debug(MovementComponent* mov_cmp, const RenderComponent& render_cmp) noexcept;
     void bresenham_line(const vec2<uint32_t>& screen_p_ini, const vec2<uint32_t>& screen_p_fin, int32_t dY, int32_t dX, const Color& color) noexcept;
     
     void draw_line_X(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_end, int32_t dY, const int32_t dX, const Color& color) noexcept;

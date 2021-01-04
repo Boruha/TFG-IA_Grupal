@@ -11,8 +11,8 @@ template<typename T>
 void 
 CmpVector<T>::deleteCmpByEntityID(entID eid) {
     auto it_cmp = std::find_if(cmps.begin(), cmps.end(), 
-        [&eid](std::unique_ptr<T>& cmp) { 
-            return cmp->getEntityID() == eid; 
+        [&eid](T& cmp) { 
+            return cmp.getEntityID() == eid; 
         }
     );
 

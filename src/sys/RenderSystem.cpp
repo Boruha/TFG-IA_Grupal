@@ -45,8 +45,8 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t 
 
     //pintar todos los render_cmp
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
-        [&](const std::unique_ptr<RenderComponent>& render_cmp) {
-            auto& ent     = context->getEntityByID(render_cmp->getEntityID());
+        [&](const RenderComponent& render_cmp) {
+            auto& ent     = context->getEntityByID(render_cmp.getEntityID());
             auto* mov_cmp = ent.getComponent<MovementComponent>();
 
             //paso de continuo a pixel
@@ -57,8 +57,8 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t 
                   screen_ptr += (screen_coords.y * window_w) + screen_coords.x;
 
             //pintar sprite
-            for(uint32_t i=0; i<render_cmp->sprite.y.getNoScaled(); ++i) {
-                std::fill(screen_ptr, screen_ptr + render_cmp->sprite.y.getNoScaled(), static_cast<uint32_t>(render_cmp->sprite_C));
+            for(uint32_t i=0; i<render_cmp.sprite.y.getNoScaled(); ++i) {
+                std::fill(screen_ptr, screen_ptr + render_cmp.sprite.y.getNoScaled(), static_cast<uint32_t>(render_cmp.sprite_C));
                 screen_ptr += window_w;
             }
 
@@ -116,7 +116,7 @@ RenderSystem::bresenham_line(const vec2<uint32_t>& screen_p_ini, const vec2<uint
 }
 
 void
-RenderSystem::draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<RenderComponent>& render_cmp) noexcept {
+RenderSystem::draw_debug(MovementComponent* mov_cmp, const RenderComponent& render_cmp) noexcept {
     auto& dir   = mov_cmp->dir;
     auto& accel = mov_cmp->accel_to_target;
     auto& separ = mov_cmp->sep_copy_to_draw;
@@ -124,8 +124,8 @@ RenderSystem::draw_debug(MovementComponent* mov_cmp, const std::unique_ptr<Rende
     
     //ajustamos el inicio de los vectores de steer.
     auto p_ini = mov_cmp->coords;
-    p_ini.x += (static_cast<fixed64_t>(render_cmp->sprite.x)/2);
-    p_ini.y += (static_cast<fixed64_t>(render_cmp->sprite.y)/2);
+    p_ini.x += (static_cast<fixed64_t>(render_cmp.sprite.x)/2);
+    p_ini.y += (static_cast<fixed64_t>(render_cmp.sprite.y)/2);
     p_ini.x  = std::clamp(p_ini.x, (half_window_w64*-1), half_window_w64);
     p_ini.y  = std::clamp(p_ini.y, (half_window_h64*-1), half_window_h64);
     

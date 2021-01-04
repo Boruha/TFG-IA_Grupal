@@ -19,8 +19,8 @@ struct Component_t {
 private:
     inline static cmpID     counterID     { 0u };
     inline static cmpTypeID counterTypeID { 0u };
-    const         cmpID     cmp_id        { 0u };
-    const         entID     ent_id        { 0u };
+                  cmpID     cmp_id        { 0u };
+                  entID     ent_id        { 0u };
 };
 
 }
