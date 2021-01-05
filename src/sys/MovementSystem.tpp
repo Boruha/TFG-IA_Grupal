@@ -1,7 +1,5 @@
 #include <sys/MovementSystem.hpp>
 
-#include <man/Manager_t.hpp>
-
 #include <cmp/MovementComponent.hpp>
 
 #include <utils/AI_Constants.hpp>
@@ -10,12 +8,10 @@
 
 namespace AIP {
 
-void
-MovementSystem::init() noexcept { }
-
+template <typename Context_t>
 bool
-MovementSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
-    auto& mov_cmp_vec = context->getMovementCmps();
+MovementSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noexcept {
+    auto& mov_cmp_vec = context.template getComponentVector<MovementComponent>();
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), 
         [&](MovementComponent& mov_cmp) {

@@ -5,13 +5,10 @@
 
 namespace AIP {
 
-struct Manager_t;
-
+template <typename Context_t>
 struct InputSystem : System_t {
     explicit InputSystem();
-
-    void init() noexcept override;
-    bool update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept override;
+    bool     update(Context_t& context, const fixed64_t DeltaTime) noexcept;
 
 private:
     static void onkeypress(KeySym key);

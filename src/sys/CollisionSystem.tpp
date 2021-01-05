@@ -1,7 +1,5 @@
 #include <sys/CollisionSystem.hpp>
 
-#include <man/Manager_t.hpp>
-
 #include <cmp/MovementComponent.hpp>
 #include <cmp/RenderComponent.hpp>
 
@@ -13,17 +11,15 @@
 
 namespace AIP {
 
-void
-CollisionSystem::init() noexcept { }
-
+template <typename Context_t>
 bool
-CollisionSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
-    auto& mov_cmp_vec = context->getMovementCmps();
+CollisionSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noexcept {
+    auto& mov_cmp_vec = context.template getComponentVector<MovementComponent>();
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), 
         [&](MovementComponent& mov_cmp) {
-                auto& ent       = context->getEntityByID(mov_cmp.getEntityID());
-                auto* ren_cmp   = ent.getComponent<RenderComponent>();
+                auto& ent       = context.getEntityByID(mov_cmp.getEntityID());
+                auto* ren_cmp   = ent.template getComponent<RenderComponent>();
 
                       auto& coord  = mov_cmp.coords;
                 const auto size_W  = static_cast<fixed64_t>(ren_cmp->sprite.x);

@@ -1,7 +1,5 @@
 #include <sys/RenderSystem.hpp>
 
-#include <man/Manager_t.hpp>
-
 #include <ent/Entity_t.hpp>
 
 #include <cmp/MovementComponent.hpp>
@@ -13,8 +11,10 @@ extern "C" {
 #include <algorithm>
 
 namespace AIP {
-//Cambiar al uso de las constantes y/o generar métodos para redimensionar y demas.
-RenderSystem::RenderSystem(const uint32_t w, const uint32_t h)
+
+//CTOR / DTOR
+template <typename Context_t>    
+RenderSystem<Context_t>::RenderSystem(const uint32_t w, const uint32_t h)
     : window_w(w), window_h(h), half_window_w(w/2), half_window_h(h/2), framebuffer_size(w*h)
     , half_window_w64( static_cast<int64_t>(w/2) ), half_window_h64( static_cast<int64_t>(h/2) )
     , framebuffer( std::make_unique<uint32_t[]>(w*h) ) {
@@ -25,19 +25,17 @@ RenderSystem::RenderSystem(const uint32_t w, const uint32_t h)
     std::fill(screen_ptr, screen_ptr + framebuffer_size, static_cast<uint32_t>(Color::Black));
 }
 
-RenderSystem::~RenderSystem() {
+template <typename Context_t>   
+RenderSystem<Context_t>::~RenderSystem() {
     ptc_close();
     framebuffer.~unique_ptr();
 }
 
-void
-RenderSystem::init() noexcept {
-
-}
-
+//LOOP
+template <typename Context_t>
 bool
-RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {    
-    const auto& render_cmp_vec = context->getRenderCmps();
+RenderSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noexcept {    
+    const auto& render_cmp_vec = context.template getComponentVector<RenderComponent>();
           auto* screen_ptr     = framebuffer.get();
     
     //clean de pantalla
@@ -46,8 +44,8 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t 
     //pintar todos los render_cmp
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
         [&](const RenderComponent& render_cmp) {
-            auto& ent     = context->getEntityByID(render_cmp.getEntityID());
-            auto* mov_cmp = ent.getComponent<MovementComponent>();
+            auto& ent     = context.getEntityByID(render_cmp.getEntityID());
+            auto* mov_cmp = ent.template getComponent<MovementComponent>();
 
             //paso de continuo a pixel
             const auto screen_coords  = continuous_to_screen(mov_cmp->coords);
@@ -73,16 +71,21 @@ RenderSystem::update(const std::unique_ptr<Manager_t>& context, const fixed64_t 
     return true;
 }
 
+//AUX
+template <typename Context_t>
 vec2<uint32_t>
-RenderSystem::continuous_to_screen(const fixed_vec2& cont) noexcept {
+RenderSystem<Context_t>::continuous_to_screen(const fixed_vec2& cont) noexcept {
     auto new_x = static_cast<uint32_t>( cont.x.getNoScaled() + half_window_w );
     auto new_y = static_cast<uint32_t>( cont.y.getNoScaled() + half_window_h );
 
     return vec2<uint32_t> { new_x, new_y };
 }
 
+
+//DRAW LINES DEBUG
+template <typename Context_t>
 void
-RenderSystem::bresenham_line(const vec2<uint32_t>& screen_p_ini, const vec2<uint32_t>& screen_p_fin
+RenderSystem<Context_t>::bresenham_line(const vec2<uint32_t>& screen_p_ini, const vec2<uint32_t>& screen_p_fin
                             , int32_t dY, int32_t dX, const Color& color) noexcept {
 
     if( (dX * dX) >= (dY * dY) ) {
@@ -115,12 +118,13 @@ RenderSystem::bresenham_line(const vec2<uint32_t>& screen_p_ini, const vec2<uint
     }
 }
 
+template <typename Context_t>
 void
-RenderSystem::draw_debug(MovementComponent* mov_cmp, const RenderComponent& render_cmp) noexcept {
-    auto& dir   = mov_cmp->dir;
-    auto& accel = mov_cmp->accel_to_target;
-    auto& separ = mov_cmp->sep_copy_to_draw;
-    auto& cohes = mov_cmp->coh_copy_to_draw;
+RenderSystem<Context_t>::draw_debug(const MovementComponent* mov_cmp, const RenderComponent& render_cmp) noexcept {
+    const auto& dir   = mov_cmp->dir;
+    const auto& accel = mov_cmp->accel_to_target;
+    const auto& separ = mov_cmp->sep_copy_to_draw;
+    const auto& cohes = mov_cmp->coh_copy_to_draw;
     
     //ajustamos el inicio de los vectores de steer.
     auto p_ini = mov_cmp->coords;
@@ -181,8 +185,9 @@ RenderSystem::draw_debug(MovementComponent* mov_cmp, const RenderComponent& rend
 
 }
 
+template <typename Context_t>
 void
-RenderSystem::draw_line_X(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_end, int32_t dY, const int32_t dX, const Color& color) noexcept { 
+RenderSystem<Context_t>::draw_line_X(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_end, int32_t dY, const int32_t dX, const Color& color) noexcept { 
     int32_t iy = window_w;
     uint32_t y_limit = p_ini.y;
 
@@ -212,8 +217,9 @@ RenderSystem::draw_line_X(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_e
     }
 }
 
+template <typename Context_t>
 void
-RenderSystem::draw_line_Y(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_end, int32_t dX, const int32_t dY, const Color& color) noexcept { 
+RenderSystem<Context_t>::draw_line_Y(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_end, int32_t dX, const int32_t dY, const Color& color) noexcept { 
     int32_t ix = 1;
     uint32_t x_limit = p_ini.x;
 
@@ -243,8 +249,9 @@ RenderSystem::draw_line_Y(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_e
     }
 }
 
+template <typename Context_t>
 void
-RenderSystem::draw_line_H(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_end, const Color& color) noexcept { 
+RenderSystem<Context_t>::draw_line_H(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_end, const Color& color) noexcept { 
     auto* screen_ptr  = framebuffer.get();
           screen_ptr += (p_ini.y * window_w) + p_ini.x;
     
@@ -254,8 +261,9 @@ RenderSystem::draw_line_H(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_e
     }
 }
 
+template <typename Context_t>
 void
-RenderSystem::draw_line_V(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_end, const Color& color) noexcept { 
+RenderSystem<Context_t>::draw_line_V(const vec2<uint32_t>& p_ini, const vec2<uint32_t>& p_end, const Color& color) noexcept { 
     auto* screen_ptr  = framebuffer.get();
           screen_ptr += (p_ini.y * window_w) + p_ini.x;
         

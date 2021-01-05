@@ -3,6 +3,7 @@
 #include <cmp/CmpVector_t.tpp>
 
 #include <unordered_map>
+#include <memory>
 
 namespace AIP {
 

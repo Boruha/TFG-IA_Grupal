@@ -9,16 +9,15 @@
 
 namespace AIP {
 
-struct Manager_t;
 struct AI_Component;
 struct MovementComponent;
 
+template <typename Context_t>
 struct AI_System : System_t {
     using optVec2_refw   = std::optional<std::reference_wrapper<fixed_vec2>>;
-    explicit AI_System() = default;
 
-    void init() noexcept override;
-    bool update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept override;
+    void init() noexcept;
+    bool update(Context_t& context, const fixed64_t DeltaTime) noexcept;
 
 private:
 /* CONPLEX B. */
@@ -27,15 +26,15 @@ private:
     void run_away(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
     void pursue(AI_Component& ai_cmp  , MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
     void evade(AI_Component& ai_cmp   , MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
-    void attack(AI_Component& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, const std::unique_ptr<Manager_t>& context) noexcept;
+    void attack(AI_Component& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, Context_t& context) noexcept;
                                               
 /* STEERING B. BASIC */
     bool arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
     bool leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
 
 /* FLOCKING B. COMPO */
-    void separation(const std::unique_ptr<Manager_t>& context, std::vector<AI_Component>& AI_cmps) noexcept;
-    void cohesion(const std::unique_ptr<Manager_t>& context, std::vector<AI_Component>& AI_cmps) noexcept;
+    void separation(Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept;
+    void cohesion(Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept;
 
 /* AUX */
     [[nodiscard]] optVec2_refw updatePatrol(AI_Component& ai_cmp) noexcept;

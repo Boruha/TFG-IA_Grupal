@@ -1,9 +1,6 @@
 #include <man/GameManager.hpp>
-#include <man/EntityManager.hpp>
 
 #include <ent/Entity_t.hpp>
-
-#include <sys/SysIncludeList.hpp>
 
 #include <utils/ScreenData.hpp>
 
@@ -13,24 +10,24 @@
 namespace AIP {
 
 GameManager::GameManager() {
-    
-    systems.reserve(10);
 
-    systems.emplace_back( std::make_unique<RenderSystem>( WINDOW_W, WINDOW_H ) ); //aqui se crea la ventana de tinyPTC
-    systems.emplace_back( std::make_unique<InputSystem>() );                      //por lo que todos los cambios relacionados tienen                                                                                  
-    systems.emplace_back( std::make_unique<AI_System>() );                        //ir a posteriori. Ejemplo, los callbacks del input.
-    systems.emplace_back( std::make_unique<MovementSystem>() );
-    systems.emplace_back( std::make_unique<CollisionSystem>() );
-    systems.emplace_back( std::make_unique<AttackSystem>() );
-    manager = std::make_unique<EntityManager>();
 }
 
 bool
 GameManager::update() noexcept {
-    for(auto& sys : systems) {
-        if(!sys->update(manager, DeltaTime))
-            return false;
-    }
+
+    render.update(ent_man, DeltaTime);
+    
+    if( !input.update(ent_man, DeltaTime) )
+        return false;
+
+    ia.update(ent_man, DeltaTime);
+    movement.update(ent_man, DeltaTime);
+    collision.update(ent_man, DeltaTime);
+    
+    if( !attack.update(ent_man, DeltaTime) )
+        return false;
+
     checkFpsMsg();
 
     return true;
@@ -38,7 +35,7 @@ GameManager::update() noexcept {
 
 void
 GameManager::checkFpsMsg() noexcept {
-    auto& msgs = systems.front()->fps_msg;
+    auto& msgs = movement.fps_msg;
     
     while (!msgs.empty()) {
         auto& last_msg = msgs.back();

@@ -1,7 +1,5 @@
 #include <sys/AI_System.hpp>
 
-#include <man/Manager_t.hpp>
-
 #include <ent/Entity_t.hpp>
 
 #include <cmp/AI_Component.hpp>
@@ -15,19 +13,17 @@
 
 namespace AIP {
 
-void
-AI_System::init() noexcept { }
-
+template <typename Context_t>
 bool
-AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept {
-    auto& ai_cmp_vec = context->getAI_Cmps();
+AI_System<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noexcept {
+    auto& ai_cmp_vec = context.template getComponentVector<AI_Component>();
     
     std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), [&](AI_Component& ai_cmp) {
-        auto& ent     = context->getEntityByID( ai_cmp.getEntityID() );
-        auto* mov_cmp = ent.getComponent<MovementComponent>();
+        auto& ent     = context.getEntityByID( ai_cmp.getEntityID() );
+        auto* mov_cmp = ent.template getComponent<MovementComponent>();
 
-        auto& pj     = context->getEntityByID( context->getPlayerID() );
-        auto* pj_mov = pj.getComponent<MovementComponent>();
+        auto& pj     = context.getEntityByID( context.getPlayerID() );
+        auto* pj_mov = pj.template getComponent<MovementComponent>();
         auto& pj_pos = pj_mov->coords;
 
         auto  target_dir = pj_pos - mov_cmp->coords;
@@ -78,8 +74,9 @@ AI_System::update(const std::unique_ptr<Manager_t>& context, const fixed64_t Del
 
 
 /* CONPLEX B. */
+template <typename Context_t>
 void 
-AI_System::patrol(AI_Component& ai_cmp, MovementComponent* mov_cmp) noexcept {
+AI_System<Context_t>::patrol(AI_Component& ai_cmp, MovementComponent* mov_cmp) noexcept {
     auto& target = ai_cmp.target_vec.at(ai_cmp.target_index);
     
     if( !arrive(mov_cmp, target) ) {
@@ -89,29 +86,33 @@ AI_System::patrol(AI_Component& ai_cmp, MovementComponent* mov_cmp) noexcept {
 
 }
 
+template <typename Context_t>
 void 
-AI_System::chase(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System<Context_t>::chase(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
     arrive(mov_cmp, target_pos);
 }
 
+template <typename Context_t>
 void 
-AI_System::run_away(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System<Context_t>::run_away(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
     if( !leave(mov_cmp, target_pos) ) {
         mov_cmp->dir.x.number = mov_cmp->dir.y.number = 0;
         mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
     }
 }
 
+template <typename Context_t>
 void
-AI_System::pursue(AI_Component& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
+AI_System<Context_t>::pursue(AI_Component& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
     auto& target_pos    = target_mov_cmp->coords;
     auto  predicted_pos = target_pos + target_mov_cmp->dir;
 
     arrive(mov_cmp, predicted_pos);
 }
 
+template <typename Context_t>
 void
-AI_System::evade(AI_Component& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
+AI_System<Context_t>::evade(AI_Component& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
     auto& target_pos    = target_mov_cmp->coords;
     auto  predicted_pos = target_pos + target_mov_cmp->dir;
 
@@ -121,14 +122,15 @@ AI_System::evade(AI_Component& ai_cmp, MovementComponent* mov_cmp, MovementCompo
     }
 }  
 
+template <typename Context_t>
 void
-AI_System::attack(AI_Component& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, const std::unique_ptr<Manager_t>& context) noexcept {
-    auto& ent = context->getEntityByID(ai_cmp.getEntityID());
-    auto* combat_cmp = ent.getComponent<CombatComponent>();
+AI_System<Context_t>::attack(AI_Component& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, Context_t& context) noexcept {
+    auto& ent = context.getEntityByID(ai_cmp.getEntityID());
+    auto* combat_cmp = ent.template getComponent<CombatComponent>();
     
     if(combat_cmp->current_attack_cd.number <= 0l) {
         combat_cmp->current_attack_cd = combat_cmp->attack_cd;
-        attack_msg.emplace_back(ai_cmp.getEntityID(), context->getPlayerID(), combat_cmp->damage);
+        attack_msg.emplace_back(ai_cmp.getEntityID(), context.getPlayerID(), combat_cmp->damage);
         std::cout << "MUEREEEE\n\n";
     }
     
@@ -137,8 +139,9 @@ AI_System::attack(AI_Component& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2
 
 
 /* BASIC BEHAVIOURS FUNCTIONS */
+template <typename Context_t>
 bool
-AI_System::arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System<Context_t>::arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
     auto& my_coords = mov_cmp->coords;
     auto& my_accel  = mov_cmp->accel_to_target;
     auto& my_direct = mov_cmp->dir;
@@ -172,8 +175,9 @@ AI_System::arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
     return true;
 }
 
+template <typename Context_t>
 bool
-AI_System::leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System<Context_t>::leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
     auto& my_coords = mov_cmp->coords;
     auto& my_accel  = mov_cmp->accel_to_target;
     auto& my_direct = mov_cmp->dir;
@@ -209,17 +213,18 @@ AI_System::leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
 
 
 /* FLOCKING B. FUNCTIONS */
+template <typename Context_t>
 void 
-AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<AI_Component>& AI_cmps) noexcept {
+AI_System<Context_t>::separation(Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept {
     auto end_it = end(AI_cmps);
     
     for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
-        auto& ai_ent     = context->getEntityByID( (*ai_it).getEntityID() );
-        auto* ai_mov_cmp = ai_ent.getComponent<MovementComponent>();
+        auto& ai_ent     = context.getEntityByID( (*ai_it).getEntityID() );
+        auto* ai_mov_cmp = ai_ent.template getComponent<MovementComponent>();
 
         for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
-            auto& comparision_ent     = context->getEntityByID( (*comparision_it).getEntityID() );
-            auto* comparision_mov_cmp = comparision_ent.getComponent<MovementComponent>();
+            auto& comparision_ent     = context.getEntityByID( (*comparision_it).getEntityID() );
+            auto* comparision_mov_cmp = comparision_ent.template getComponent<MovementComponent>();
 
             auto diff_vec  = ai_mov_cmp->coords - comparision_mov_cmp->coords;
             auto distance2 = diff_vec.length2();
@@ -242,19 +247,20 @@ AI_System::separation(const std::unique_ptr<Manager_t>& context, std::vector<AI_
     }// END FOR AI
 }
 
+template <typename Context_t>
 void
-AI_System::cohesion(const std::unique_ptr<Manager_t>& context, std::vector<AI_Component>& AI_cmps) noexcept {
+AI_System<Context_t>::cohesion(Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept {
     auto end_it = end(AI_cmps);
     
     for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
-        auto& ai_ent     = context->getEntityByID( (*ai_it).getEntityID() );
-        auto* ai_mov_cmp = ai_ent.getComponent<MovementComponent>();
+        auto& ai_ent     = context.getEntityByID( (*ai_it).getEntityID() );
+        auto* ai_mov_cmp = ai_ent.template getComponent<MovementComponent>();
         auto& ai_centre  = ai_mov_cmp->cohesion_force;
         auto& ai_count   = ai_mov_cmp->cohesion_count;
 
         for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
-            auto& comparision_ent     = context->getEntityByID( (*comparision_it).getEntityID() );
-            auto* comparision_mov_cmp = comparision_ent.getComponent<MovementComponent>();
+            auto& comparision_ent     = context.getEntityByID( (*comparision_it).getEntityID() );
+            auto* comparision_mov_cmp = comparision_ent.template getComponent<MovementComponent>();
             auto& comparision_centre  = comparision_mov_cmp->cohesion_force;
             auto& comparision_count   = comparision_mov_cmp->cohesion_count;
 
@@ -289,8 +295,9 @@ AI_System::cohesion(const std::unique_ptr<Manager_t>& context, std::vector<AI_Co
 }
 
 /* AUX FUNCTIONS */
-AI_System::optVec2_refw 
-AI_System::updatePatrol(AI_Component& ai_cmp) noexcept {
+template <typename Context_t>
+typename AI_System<Context_t>::optVec2_refw 
+AI_System<Context_t>::updatePatrol(AI_Component& ai_cmp) noexcept {
     auto& route  = ai_cmp.target_vec;
     auto& index  = ai_cmp.target_index;
 
@@ -304,8 +311,9 @@ AI_System::updatePatrol(AI_Component& ai_cmp) noexcept {
     return { };
 }
 
-AI_System::optVec2_refw 
-AI_System::updateRoute(AI_Component& ai_cmp) noexcept {
+template <typename Context_t>
+typename AI_System<Context_t>::optVec2_refw 
+AI_System<Context_t>::updateRoute(AI_Component& ai_cmp) noexcept {
     auto& route  = ai_cmp.target_vec;
     auto& index  = ai_cmp.target_index;
 

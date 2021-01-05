@@ -10,10 +10,10 @@ namespace AIP {
 
 template<typename T>
 struct vec2 {
-    vec2<T>() = default;
-    constexpr explicit vec2<T>(const T X,  const T Y ) : x(X), y(Y) { }
-    constexpr vec2<T>(const vec2<T>& cpy_vec) : x(cpy_vec.x), y(cpy_vec.y) { } //cpy ctor
-    constexpr vec2<T>(vec2<T>&& mov_vec)      : x(std::move(mov_vec.x)), y(std::move(mov_vec.y)) { } //move ctor
+    vec2() = default;
+    constexpr explicit vec2(const T X,  const T Y ) : x(X), y(Y) { }
+    constexpr vec2(const vec2<T>& cpy_vec) : x(cpy_vec.x), y(cpy_vec.y) { } //cpy ctor
+    constexpr vec2(vec2<T>&& mov_vec)      : x(std::move(mov_vec.x)), y(std::move(mov_vec.y)) { } //move ctor
 
     T x { 0 };
     T y { 0 };
@@ -249,6 +249,11 @@ struct fixed_vec2 {
 
     constexpr fixed64_t
     length2() {
+        return (x*x) + (y*y);
+    }
+
+    constexpr const fixed64_t
+    length2() const {
         return (x*x) + (y*y);
     }
 

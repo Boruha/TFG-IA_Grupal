@@ -1,8 +1,8 @@
 #pragma once
 
-#include <sys/RenderSystem.hpp>
-#include <sys/MovementSystem.hpp>
-#include <sys/CollisionSystem.hpp>
-#include <sys/AI_System.hpp>
-#include <sys/InputSystem.hpp>
-#include <sys/AttackSystem.hpp>
+#include <sys/RenderSystem.tpp>
+#include <sys/MovementSystem.tpp>
+#include <sys/CollisionSystem.tpp>
+#include <sys/AI_System.tpp>
+#include <sys/InputSystem.tpp>
+#include <sys/AttackSystem.tpp>

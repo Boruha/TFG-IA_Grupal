@@ -11,7 +11,7 @@ struct Component_t {
     [[nodiscard]] const entID& getEntityID()    const { return ent_id; }
 
     template<typename T>
-    static decltype(auto) getCmpTypeID() { 
+    static cmpTypeID getCmpTypeID() { 
         static const cmpTypeID type_id { ++counterTypeID };
         return  type_id;
     }

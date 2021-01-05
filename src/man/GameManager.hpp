@@ -1,7 +1,7 @@
 #pragma once
-#include <man/Manager_t.hpp>
+#include <man/EntityManager.hpp>
 
-#include <sys/System_t.hpp>
+#include <sys/SysIncludeList.hpp>
 
 #include <utils/ufixed64_t.hpp>
 
@@ -24,8 +24,14 @@ struct GameManager {
     fixed64_t getDeltaTime() noexcept;
 
 private:
-    std::vector<std::unique_ptr<System_t>> systems;
-    std::unique_ptr<Manager_t> manager;
+    EntityManager ent_man;
+
+    RenderSystem<EntityManager>    render { WINDOW_W, WINDOW_H }; //aqui se crea la ventana de tinyPTC
+    InputSystem<EntityManager>     input;                         //por lo que todos los cambios relacionados tienen                                                                                  
+    AI_System<EntityManager>       ia;                            //ir a posteriori. Ejemplo, los callbacks del input.
+    MovementSystem<EntityManager>  movement;
+    CollisionSystem<EntityManager> collision;
+    AttackSystem<EntityManager>    attack;
 
     fixed64_t setLoopTime()  noexcept;
     fixed64_t setDeltaTime() noexcept;

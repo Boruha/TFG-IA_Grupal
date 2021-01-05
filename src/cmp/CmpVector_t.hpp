@@ -16,7 +16,7 @@ struct CmpCollection {
 
 template<typename T>
 struct CmpVector : CmpCollection {
-    explicit     CmpVector<T>();
+    explicit     CmpVector();
     Component_t* deleteCmpByEntityID(entID eid) override;
     auto         getCmpByID(entID eid) noexcept;
 

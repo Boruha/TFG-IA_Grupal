@@ -7,13 +7,13 @@
 
 namespace AIP {
 
-struct Manager_t;
+struct Context_t;
 
 struct System_t {
     virtual ~System_t() = default;
     
-    virtual void init() noexcept = 0;
-    virtual bool update(const std::unique_ptr<Manager_t>& context, const fixed64_t DeltaTime) noexcept = 0;
+    //virtual void init() noexcept = 0;
+    //virtual bool update(const std::unique_ptr<Context_t>& context, const fixed64_t DeltaTime) noexcept = 0;
 
     inline static std::vector<FPS_Message>   fps_msg;
     inline static std::vector<AttackMessage> attack_msg;

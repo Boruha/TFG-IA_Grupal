@@ -8,7 +8,7 @@
 int main() {
   using timer = std::chrono::steady_clock;
 
-  auto  gameManager    { std::make_unique<AIP::GameManager>() };
+  AIP::GameManager gameManager;
   bool  gameCondition  { true };
 
   //glock
@@ -19,9 +19,9 @@ int main() {
   while (gameCondition) {
     timeElapse = std::chrono::duration_cast<std::chrono::microseconds>(time.now() - lastUpdateTime);
 
-    if(timeElapse.count() >= gameManager->getLoopTime().number) {
+    if(timeElapse.count() >= gameManager.getLoopTime().number) {
       lastUpdateTime = time.now();
-      gameCondition  = gameManager->update();
+      gameCondition  = gameManager.update();
     }
   }
 
