@@ -44,11 +44,10 @@ RenderSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) n
     //pintar todos los render_cmp
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
         [&](const RenderComponent& render_cmp) {
-            auto& ent     = context.getEntityByID(render_cmp.getEntityID());
-            auto* mov_cmp = ent.template getComponent<MovementComponent>();
-
+            auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( render_cmp.getEntityID() );
+            
             //paso de continuo a pixel
-            const auto screen_coords  = continuous_to_screen(mov_cmp->coords);
+            const auto screen_coords  = continuous_to_screen(mov_cmp.coords);
 
             //puntero a posicion al sprite.
             auto* screen_ptr  = framebuffer.get();
@@ -120,14 +119,14 @@ RenderSystem<Context_t>::bresenham_line(const vec2<uint32_t>& screen_p_ini, cons
 
 template <typename Context_t>
 void
-RenderSystem<Context_t>::draw_debug(const MovementComponent* mov_cmp, const RenderComponent& render_cmp) noexcept {
-    const auto& dir   = mov_cmp->dir;
-    const auto& accel = mov_cmp->accel_to_target;
-    const auto& separ = mov_cmp->sep_copy_to_draw;
-    const auto& cohes = mov_cmp->coh_copy_to_draw;
+RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const RenderComponent& render_cmp) noexcept {
+    const auto& dir   = mov_cmp.dir;
+    const auto& accel = mov_cmp.accel_to_target;
+    const auto& separ = mov_cmp.sep_copy_to_draw;
+    const auto& cohes = mov_cmp.coh_copy_to_draw;
     
     //ajustamos el inicio de los vectores de steer.
-    auto p_ini = mov_cmp->coords;
+    auto p_ini = mov_cmp.coords;
     p_ini.x += (static_cast<fixed64_t>(render_cmp.sprite.x)/2);
     p_ini.y += (static_cast<fixed64_t>(render_cmp.sprite.y)/2);
     p_ini.x  = std::clamp(p_ini.x, (half_window_w64*-1), half_window_w64);

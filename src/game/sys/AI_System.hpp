@@ -20,16 +20,16 @@ struct AI_System : System_t {
 
 private:
 /* CONPLEX B. */
-    void patrol(AI_Component& ai_cmp  , MovementComponent* mov_cmp) noexcept;
-    void chase(AI_Component& ai_cmp   , MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
-    void run_away(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
-    void pursue(AI_Component& ai_cmp  , MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
-    void evade(AI_Component& ai_cmp   , MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept;
-    void attack(AI_Component& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, Context_t& context) noexcept;
+    void patrol(AI_Component& ai_cmp  , MovementComponent& mov_cmp) noexcept;
+    void chase(AI_Component& ai_cmp   , MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept;
+    void run_away(AI_Component& ai_cmp, MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept;
+    void pursue(AI_Component& ai_cmp  , MovementComponent& mov_cmp, MovementComponent& target_mov_cmp) noexcept;
+    void evade(AI_Component& ai_cmp   , MovementComponent& mov_cmp, MovementComponent& target_mov_cmp) noexcept;
+    void attack(AI_Component& ai_cmp  , MovementComponent& mov_cmp, fixed_vec2& target_pos, Context_t& context) noexcept;
                                               
 /* STEERING B. BASIC */
-    bool arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
-    bool leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept;
+    bool arrive(MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept;
+    bool leave(MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept;
 
 /* FLOCKING B. COMPO */
     void separation(Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept;

@@ -10,19 +10,23 @@ CmpVector<T>::CmpVector() {
 }
 
 template <typename T>
-Component_t* 
-CmpVector<T>::deleteCmpByEntityID(entID eid) {
+bool 
+CmpVector<T>::deleteCmpByEntityID(entID eid) noexcept {
+    auto result = true;
     auto it_cmp = findCmpByEntityID(eid);
-    if(!it_cmp) return nullptr;
     
-    auto it = *it_cmp;
+    if(!it_cmp) 
+        result = false;
+    else {
+        auto it = *it_cmp;
 
-    if( it + 1 != cmps.end() )
-        *it = cmps.back();
+        if( it + 1 != cmps.end() )
+            *it = cmps.back();
 
-    cmps.pop_back();
+        cmps.pop_back();
+    }
 
-    return it.base();
+    return result;
 }
 
 template <typename T>
@@ -34,7 +38,8 @@ CmpVector<T>::findCmpByEntityID(entID eid) noexcept {
             }
         );
         
-    if( it_cmp == cmps.end() ) it_cmp.reset();
+    if( it_cmp == cmps.end() )
+        it_cmp.reset();
 
     return it_cmp;
 }

@@ -16,12 +16,11 @@ CollisionSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), 
         [&](MovementComponent& mov_cmp) {
-                auto& ent       = context.getEntityByID(mov_cmp.getEntityID());
-                auto* ren_cmp   = ent.template getComponent<RenderComponent>();
+                auto& ren_cmp   = context.template getCmpByEntityID<RenderComponent>( mov_cmp.getEntityID() );
 
                       auto& coord  = mov_cmp.coords;
-                const auto size_W  = static_cast<fixed64_t>(ren_cmp->sprite.x);
-                const auto size_H  = static_cast<fixed64_t>(ren_cmp->sprite.y);
+                const auto size_W  = static_cast<fixed64_t>(ren_cmp.sprite.x);
+                const auto size_H  = static_cast<fixed64_t>(ren_cmp.sprite.y);
 
                 //eje X
                 if( coord.x + size_W > HALF_WINDOW_W )

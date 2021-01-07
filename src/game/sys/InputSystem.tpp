@@ -49,9 +49,8 @@ InputSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) no
 
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
         [&](InputComponent& input_cmp) {
-            auto& ent = context.getEntityByID(input_cmp.getEntityID());
-            auto* mov = ent.template getComponent<MovementComponent>();
-            auto& dir = mov->dir;
+            auto& mov = context.template getCmpByEntityID<MovementComponent>( input_cmp.getEntityID() );
+            auto& dir = mov.dir;
             
             dir.x.number = dir.y.number = 0;
     

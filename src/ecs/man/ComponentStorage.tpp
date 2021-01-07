@@ -34,25 +34,34 @@ ComponentStorage::getCmpCollection() const noexcept {
 template<typename T> constexpr
 T& 
 ComponentStorage::getCmpByEntityID(const entID eid) noexcept {
-    auto&  cmp_vec_ref = getCmpCollection<T>();
-    auto opt_it        = cmp_vec_ref.findCmpByEntityID(eid);
-    
-    if(!opt_it)
+    auto& cmp_vec_ref = getCmpCollection<T>();
+
+    auto it_cmp = std::find_if(cmp_vec_ref.begin(), cmp_vec_ref.end(),
+            [&eid](T& cmp) {
+                return cmp.getEntityID() == eid;
+            }
+        );
+
+    if( it_cmp == cmp_vec_ref.end() )
         std::exit(EXIT_FAILURE);
-    
-    return (*opt_it).base(); //content del opt: vec_iterator
+
+    return *it_cmp; //vec_iterator *-> cmp
 }
 
 
 
 //DELETOS
-inline Component_t* 
+inline bool 
 ComponentStorage::deleteCmpByTypeIDAndEntityID(cmpTypeID cid, entID eid) noexcept {
-    auto it = cmp_map.find(cid);
+    auto result = true;
+    auto it     = cmp_map.find(cid);
 
-    if(it == cmp_map.end()) return nullptr; //BAD D D D D
+    if(it == cmp_map.end())
+        result = false;
+    else
+        result = it->second->deleteCmpByEntityID(eid);
 
-    return it->second->deleteCmpByEntityID(eid);
+    return result;
 }
 
 }

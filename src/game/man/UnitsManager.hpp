@@ -19,8 +19,13 @@ struct UnitsManager {
       template <typename CMP_t>
       std::vector<CMP_t>&
       getComponentVector() noexcept {
-            auto& ref = ent_man.getComponentVector<CMP_t>();
-            return ref;
+            return ent_man.getComponentVector<CMP_t>();
+      }
+
+      template<typename CMP_t> constexpr 
+      CMP_t& 
+      getCmpByEntityID(const BECS::entID eid) noexcept {
+            return ent_man.getCmpByEntityID<CMP_t>(eid);
       }
 
       void deleteEntity(BECS::entID eid) noexcept { return ent_man.deleteEntity(eid); }

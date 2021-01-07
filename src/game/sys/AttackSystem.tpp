@@ -3,8 +3,6 @@
 
 #include <ecs/ent/Entity_t.hpp>
 
-#include <iostream>
-
 namespace AIP {
 
 template <typename Context_t>
@@ -15,12 +13,11 @@ AttackSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) n
         
         auto& last_msg = attack_msg.back();
 
-        auto& ent        = context.getEntityByID(last_msg.eid_damaged);
-        auto* combat_cmp = ent.template getComponent<CombatComponent>();
+        auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( last_msg.eid_damaged );
         
-        combat_cmp->health -= last_msg.amount;
+        combat_cmp.health -= last_msg.amount;
 
-        if(combat_cmp->health <= 0) {
+        if(combat_cmp.health <= 0) {
             context.deleteEntity(last_msg.eid_damaged);
             attack_msg.pop_back(); //ESTO NO DEBERIA ESTAR AQUI
             return false;

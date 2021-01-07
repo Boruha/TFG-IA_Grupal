@@ -1,5 +1,7 @@
 #include <ecs/man/EntityManager.hpp>
 
+#include <game/utils/ufixed64_t.hpp>
+
 #include <algorithm>
 
 namespace BECS {
@@ -10,34 +12,27 @@ EntityManager::EntityManager() {
     ent_map.reserve(MAX_ENTITIES);
 }
 
-Entity_t&
+const entID
 EntityManager::createEntity_t() noexcept {
     Entity_t new_ent { };
     auto new_insert_it = ent_map.insert( std::make_pair(new_ent.getID(), new_ent) );
-    return new_insert_it.first->second;
+    return new_insert_it.first->first;
 }
 
 void 
 EntityManager::deleteEntity(entID eid) noexcept {
-    //Seleccionar entidad.
-    if(ent_map.empty()) return;
+    if( ent_map.empty() ) return;
 
-    auto& ent = getEntityByID(eid);
+    auto& ent       = getEntityByID(eid);
+    auto& cmp_types = ent.getComponentsType();
 
-    //Eliminar sus cmps mediante CmpStorage.
-    for(auto& cmp : ent) {
-        auto* cmp_ptr = cmp_storage.deleteCmpByTypeIDAndEntityID(cmp.first , eid);
-        auto& ent_changed = getEntityByID( cmp_ptr->getEntityID() );
-        ent_changed.updateComponent(cmp.first, cmp_ptr);
-    }
-
-    //Eliminar entidad.
+    for(auto type : cmp_types)
+        cmp_storage.deleteCmpByTypeIDAndEntityID(type , eid);
+    
     auto it_ent = std::find_if( ent_map.begin(), ent_map.end(), 
             [&](const auto& e) { return e.second.getID() == eid; } );
     
     ent_map.erase(it_ent);
-
-    std::cout << "Eliminada entidad: " << eid << "\n";
 }
 
 } // namespace

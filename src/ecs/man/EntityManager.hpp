@@ -2,8 +2,6 @@
 #include <ecs/man/ComponentStorage.tpp>
 #include <ecs/ent/Entity_t.hpp>
 
-#include <game/utils/ufixed64_t.hpp>
-
 namespace BECS {
 
 //pasar templates al tpp
@@ -15,15 +13,15 @@ struct EntityManager {
       EntityManager& operator=(const EntityManager& ) = delete;
       EntityManager& operator=(const EntityManager&&) = delete;
 
-      [[nodiscard]] Entity_t& createEntity_t() noexcept;
+      [[nodiscard]] const entID createEntity_t() noexcept;
 
       template <typename T>
       void 
       addComponentToEntity(const T& new_cmp, const entID eid) noexcept {
-            auto& ref_cmp = cmp_storage.createComponent(new_cmp);
+            cmp_storage.createComponent(new_cmp);
             auto& ref_ent = getEntityByID(eid);
 
-            ref_ent.addComponent(&ref_cmp);
+            ref_ent.addComponent( Component_t::getCmpTypeID<T>() );
       }
       
       template <typename CMP_t>
@@ -32,6 +30,11 @@ struct EntityManager {
             return cmp_storage.getCmpCollection<CMP_t>();
       }
 
+      template<typename CMP_t> [[nodiscard]] constexpr 
+      CMP_t& 
+      getCmpByEntityID(const entID eid) noexcept {
+            return cmp_storage.getCmpByEntityID<CMP_t>(eid);
+      }
 
       void deleteEntity(entID eid) noexcept; //necesita rework
 

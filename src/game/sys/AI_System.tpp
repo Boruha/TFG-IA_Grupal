@@ -17,14 +17,12 @@ AI_System<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noex
     auto& ai_cmp_vec = context.template getComponentVector<AI_Component>();
     
     std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), [&](AI_Component& ai_cmp) {
-        auto& ent     = context.getEntityByID( ai_cmp.getEntityID() );
-        auto* mov_cmp = ent.template getComponent<MovementComponent>();
+        auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( ai_cmp.getEntityID() );
 
-        auto& pj     = context.getEntityByID( context.getPlayerID() );
-        auto* pj_mov = pj.template getComponent<MovementComponent>();
-        auto& pj_pos = pj_mov->coords;
+        auto& pj_mov = context.template getCmpByEntityID<MovementComponent>( context.getPlayerID() );
+        auto& pj_pos = pj_mov.coords;
 
-        auto  target_dir = pj_pos - mov_cmp->coords;
+        auto  target_dir = pj_pos - mov_cmp.coords;
         auto  distance2  = target_dir.length2();
 
         if( distance2.getNoScaled() > (200l * 200l) ) {
@@ -57,8 +55,8 @@ AI_System<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noex
             break;
 
         default: 
-                mov_cmp->dir.x.number = mov_cmp->dir.y.number = 0;
-                mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
+                mov_cmp.dir.x.number = mov_cmp.dir.y.number = 0;
+                mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
             break;
         }
     });
@@ -74,7 +72,7 @@ AI_System<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noex
 /* CONPLEX B. */
 template <typename Context_t>
 void 
-AI_System<Context_t>::patrol(AI_Component& ai_cmp, MovementComponent* mov_cmp) noexcept {
+AI_System<Context_t>::patrol(AI_Component& ai_cmp, MovementComponent& mov_cmp) noexcept {
     auto& target = ai_cmp.target_vec.at(ai_cmp.target_index);
     
     if( !arrive(mov_cmp, target) ) {
@@ -86,50 +84,48 @@ AI_System<Context_t>::patrol(AI_Component& ai_cmp, MovementComponent* mov_cmp) n
 
 template <typename Context_t>
 void 
-AI_System<Context_t>::chase(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System<Context_t>::chase(AI_Component& ai_cmp, MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept {
     arrive(mov_cmp, target_pos);
 }
 
 template <typename Context_t>
 void 
-AI_System<Context_t>::run_away(AI_Component& ai_cmp, MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System<Context_t>::run_away(AI_Component& ai_cmp, MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept {
     if( !leave(mov_cmp, target_pos) ) {
-        mov_cmp->dir.x.number = mov_cmp->dir.y.number = 0;
-        mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
+        mov_cmp.dir.x.number = mov_cmp.dir.y.number = 0;
+        mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
     }
 }
 
 template <typename Context_t>
 void
-AI_System<Context_t>::pursue(AI_Component& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
-    auto& target_pos    = target_mov_cmp->coords;
-    auto  predicted_pos = target_pos + target_mov_cmp->dir;
+AI_System<Context_t>::pursue(AI_Component& ai_cmp, MovementComponent& mov_cmp, MovementComponent& target_mov_cmp) noexcept {
+    auto& target_pos    = target_mov_cmp.coords;
+    auto  predicted_pos = target_pos + target_mov_cmp.dir;
 
     arrive(mov_cmp, predicted_pos);
 }
 
 template <typename Context_t>
 void
-AI_System<Context_t>::evade(AI_Component& ai_cmp, MovementComponent* mov_cmp, MovementComponent* target_mov_cmp) noexcept {
-    auto& target_pos    = target_mov_cmp->coords;
-    auto  predicted_pos = target_pos + target_mov_cmp->dir;
+AI_System<Context_t>::evade(AI_Component& ai_cmp, MovementComponent& mov_cmp, MovementComponent& target_mov_cmp) noexcept {
+    auto& target_pos    = target_mov_cmp.coords;
+    auto  predicted_pos = target_pos + target_mov_cmp.dir;
 
     if( !leave(mov_cmp, predicted_pos) ) {
-        mov_cmp->dir.x.number = mov_cmp->dir.y.number = 0;
-        mov_cmp->accel_to_target.x.number = mov_cmp->accel_to_target.y.number = 0;
+        mov_cmp.dir.x.number = mov_cmp.dir.y.number = 0;
+        mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
     }
 }  
 
 template <typename Context_t>
 void
-AI_System<Context_t>::attack(AI_Component& ai_cmp  , MovementComponent* mov_cmp, fixed_vec2& target_pos, Context_t& context) noexcept {
-    auto& ent = context.getEntityByID(ai_cmp.getEntityID());
-    auto* combat_cmp = ent.template getComponent<CombatComponent>();
+AI_System<Context_t>::attack(AI_Component& ai_cmp  , MovementComponent& mov_cmp, fixed_vec2& target_pos, Context_t& context) noexcept {
+    auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( ai_cmp.getEntityID() );
     
-    if(combat_cmp->current_attack_cd.number <= 0l) {
-        combat_cmp->current_attack_cd = combat_cmp->attack_cd;
-        attack_msg.emplace_back(ai_cmp.getEntityID(), context.getPlayerID(), combat_cmp->damage);
-        std::cout << "MUEREEEE\n\n";
+    if(combat_cmp.current_attack_cd.number <= 0l) {
+        combat_cmp.current_attack_cd = combat_cmp.attack_cd;
+        attack_msg.emplace_back(ai_cmp.getEntityID(), context.getPlayerID(), combat_cmp.damage);
     }
     
     arrive(mov_cmp, target_pos);
@@ -139,10 +135,10 @@ AI_System<Context_t>::attack(AI_Component& ai_cmp  , MovementComponent* mov_cmp,
 /* BASIC BEHAVIOURS FUNCTIONS */
 template <typename Context_t>
 bool
-AI_System<Context_t>::arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
-    auto& my_coords = mov_cmp->coords;
-    auto& my_accel  = mov_cmp->accel_to_target;
-    auto& my_direct = mov_cmp->dir;
+AI_System<Context_t>::arrive(MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept {
+    auto& my_coords = mov_cmp.coords;
+    auto& my_accel  = mov_cmp.accel_to_target;
+    auto& my_direct = mov_cmp.dir;
 
     auto  target_dir = target_pos - my_coords;
     auto  distance2  = target_dir.length2();
@@ -175,10 +171,10 @@ AI_System<Context_t>::arrive(MovementComponent* mov_cmp, fixed_vec2& target_pos)
 
 template <typename Context_t>
 bool
-AI_System<Context_t>::leave(MovementComponent* mov_cmp, fixed_vec2& target_pos) noexcept {
-    auto& my_coords = mov_cmp->coords;
-    auto& my_accel  = mov_cmp->accel_to_target;
-    auto& my_direct = mov_cmp->dir;
+AI_System<Context_t>::leave(MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept {
+    auto& my_coords = mov_cmp.coords;
+    auto& my_accel  = mov_cmp.accel_to_target;
+    auto& my_direct = mov_cmp.dir;
 
     auto  target_dir = my_coords - target_pos;
     auto  distance2  = target_dir.length2();
@@ -217,14 +213,12 @@ AI_System<Context_t>::separation(Context_t& context, std::vector<AI_Component>& 
     auto end_it = end(AI_cmps);
     
     for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
-        auto& ai_ent     = context.getEntityByID( (*ai_it).getEntityID() );
-        auto* ai_mov_cmp = ai_ent.template getComponent<MovementComponent>();
+        auto& ai_mov_cmp = context.template getCmpByEntityID<MovementComponent>( (*ai_it).getEntityID() );
 
         for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
-            auto& comparision_ent     = context.getEntityByID( (*comparision_it).getEntityID() );
-            auto* comparision_mov_cmp = comparision_ent.template getComponent<MovementComponent>();
+            auto& comparision_mov_cmp = context.template getCmpByEntityID<MovementComponent>( (*comparision_it).getEntityID() );
 
-            auto diff_vec  = ai_mov_cmp->coords - comparision_mov_cmp->coords;
+            auto diff_vec  = ai_mov_cmp.coords - comparision_mov_cmp.coords;
             auto distance2 = diff_vec.length2();
 
             if(distance2 < ENT_SEPARATION_DIST2) {
@@ -232,14 +226,14 @@ AI_System<Context_t>::separation(Context_t& context, std::vector<AI_Component>& 
                 diff_vec.normalize();
                 auto result   = diff_vec * strength;
 
-                ai_mov_cmp->separation_force          += result;
-                comparision_mov_cmp->separation_force += result * -1;
+                ai_mov_cmp.separation_force          += result;
+                comparision_mov_cmp.separation_force += result * -1;
             }
         }// END FOR COMPARISION
 
-        if(ai_mov_cmp->separation_force.length2() > ENT_MAX_ACCEL2) {
-            ai_mov_cmp->separation_force.normalize();
-            ai_mov_cmp->separation_force *= ENT_MAX_ACCEL;
+        if(ai_mov_cmp.separation_force.length2() > ENT_MAX_ACCEL2) {
+            ai_mov_cmp.separation_force.normalize();
+            ai_mov_cmp.separation_force *= ENT_MAX_ACCEL;
         }
 
     }// END FOR AI
@@ -251,30 +245,28 @@ AI_System<Context_t>::cohesion(Context_t& context, std::vector<AI_Component>& AI
     auto end_it = end(AI_cmps);
     
     for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
-        auto& ai_ent     = context.getEntityByID( (*ai_it).getEntityID() );
-        auto* ai_mov_cmp = ai_ent.template getComponent<MovementComponent>();
-        auto& ai_centre  = ai_mov_cmp->cohesion_force;
-        auto& ai_count   = ai_mov_cmp->cohesion_count;
+        auto& ai_mov_cmp = context.template getCmpByEntityID<MovementComponent>( (*ai_it).getEntityID() );
+        auto& ai_centre  = ai_mov_cmp.cohesion_force;
+        auto& ai_count   = ai_mov_cmp.cohesion_count;
 
         for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
-            auto& comparision_ent     = context.getEntityByID( (*comparision_it).getEntityID() );
-            auto* comparision_mov_cmp = comparision_ent.template getComponent<MovementComponent>();
-            auto& comparision_centre  = comparision_mov_cmp->cohesion_force;
-            auto& comparision_count   = comparision_mov_cmp->cohesion_count;
+            auto& comparision_mov_cmp = context.template getCmpByEntityID<MovementComponent>( (*comparision_it).getEntityID() );
+            auto& comparision_centre  = comparision_mov_cmp.cohesion_force;
+            auto& comparision_count   = comparision_mov_cmp.cohesion_count;
 
-            auto diff_vec = ai_mov_cmp->coords - comparision_mov_cmp->coords;
+            auto diff_vec = ai_mov_cmp.coords - comparision_mov_cmp.coords;
 
             if(diff_vec.length2() < ENT_COHESION_DIST2) {
-                ai_centre += comparision_mov_cmp->coords;
+                ai_centre += comparision_mov_cmp.coords;
                 ai_count  += 1;
-                comparision_centre += ai_mov_cmp->coords;
+                comparision_centre += ai_mov_cmp.coords;
                 comparision_count  += 1;
             }
         }// END FOR COMPARISION
 
         if(ai_count.number > 0) {
             ai_centre        /= ai_count;
-            auto target_dir   = ai_centre - ai_mov_cmp->coords;
+            auto target_dir   = ai_centre - ai_mov_cmp.coords;
             auto target_speed = ENT_MAX_SPEED * ( target_dir.length_fix() / (ENT_SEPARATION_DIST/2) );
         
             target_dir.normalize();
