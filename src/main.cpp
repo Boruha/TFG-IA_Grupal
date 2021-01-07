@@ -1,6 +1,6 @@
 #include <main.hpp>
 
-#include <man/GameManager.hpp>
+#include <game/man/GameManager.hpp>
 
 #include <memory>
 #include <chrono>
@@ -8,7 +8,7 @@
 int main() {
   using timer = std::chrono::steady_clock;
 
-  AIP::GameManager gameManager;
+  AIP::GameManager gameManager { };
   bool  gameCondition  { true };
 
   //glock
