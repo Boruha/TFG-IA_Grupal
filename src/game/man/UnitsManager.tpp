@@ -1,11 +1,17 @@
 #include <game/man/UnitsManager.hpp>
+#include <game/utils/fint_t.tpp>
 
 #include <algorithm>
+#include <iostream>
+#include <utility>
 
 namespace AIP {
 
 inline void
 UnitsManager::init() noexcept {
+
+
+
     createSoldier(ufixed64_t(20ul), fixed64_t(30l), fixed64_t(30l), Color::White); //(?) pasar tipos básicos y que se creen dentro?
     createSoldier(ufixed64_t(20ul), fixed64_t(60l), fixed64_t(-10l), Color::White);
     createSoldier(ufixed64_t(20ul), fixed64_t(-10l), fixed64_t(20l), Color::White);
