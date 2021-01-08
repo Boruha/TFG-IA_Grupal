@@ -24,7 +24,7 @@ struct AttackMessage {
 
     BECS::entID eid_deal    { 0u };
     BECS::entID eid_damaged { 0u };
-    int64_t amount    { 0  };
+    int64_t     amount      { 0  };
 };
 
 } // NS
