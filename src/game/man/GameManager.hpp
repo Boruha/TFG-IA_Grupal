@@ -1,6 +1,5 @@
 #pragma once
-//#include <ecs/man/EntityManager.hpp>
-#include <game/man/UnitsManager.hpp>
+#include <game/man/UnitsManager.tpp>
 #include <game/sys/SysIncludeList.hpp>
 #include <game/utils/ufixed64_t.hpp>
 
@@ -17,8 +16,7 @@ struct GameManager {
     GameManager& operator=(const GameManager& ) = delete;
     GameManager& operator=(const GameManager&&) = delete;
 
-    bool update() noexcept;
-    
+    bool      update()       noexcept;
     fixed64_t getLoopTime()  noexcept;
     fixed64_t getDeltaTime() noexcept;
 
