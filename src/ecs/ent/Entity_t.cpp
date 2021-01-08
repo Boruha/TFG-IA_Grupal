@@ -12,10 +12,14 @@ Entity_t::addComponent(cmpTypeID cmpType) noexcept {
 }
 
 std::vector<cmpTypeID>&
-Entity_t::getComponentsType() noexcept { return cmp_types; }
+Entity_t::getComponentsType() noexcept { 
+    return cmp_types; 
+}
 
 const entID
-Entity_t::getID() const noexcept { return ent_id; }
+Entity_t::getID() const noexcept { 
+    return ent_id; 
+}
 
 
 } //NS

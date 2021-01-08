@@ -1,5 +1,5 @@
 #pragma once
-#include <game/sys/System_t.hpp>
+#include <game/utils/EventHandler.hpp>
 #include <game/utils/Vec2.hpp>
 
 #include <vector>
@@ -12,8 +12,8 @@ struct AI_Component;
 struct MovementComponent;
 
 template <typename Context_t>
-struct AI_System : System_t {
-    using optVec2_refw   = std::optional<std::reference_wrapper<fixed_vec2>>;
+struct AI_System : EventHandler {
+    using optVec2_refw = std::optional<std::reference_wrapper<fixed_vec2>>;
 
     void init() noexcept;
     bool update(Context_t& context, const fixed64_t DeltaTime) noexcept;

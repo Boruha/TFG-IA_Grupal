@@ -33,7 +33,7 @@ GameManager::update() noexcept {
 
 void
 GameManager::checkFpsMsg() noexcept {
-    auto& msgs = movement.fps_msg;
+    auto& msgs = ia.fps_msg;
     
     while (!msgs.empty()) {
         auto& last_msg = msgs.back();

@@ -1,5 +1,4 @@
 #pragma once
-#include <game/sys/System_t.hpp>
 #include <game/cmp/RenderComponent.hpp>
 
 namespace AIP {
@@ -7,7 +6,7 @@ namespace AIP {
 struct MovementComponent;
 
 template <typename Context_t>
-struct RenderSystem : System_t {
+struct RenderSystem {
     explicit RenderSystem(const uint32_t w, const uint32_t h);
             ~RenderSystem();
 

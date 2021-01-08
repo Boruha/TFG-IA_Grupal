@@ -4,7 +4,6 @@
 
 namespace BECS {
 
-//pasar templates al tpp
 struct EntityManager {
       explicit EntityManager();
 
@@ -13,37 +12,18 @@ struct EntityManager {
       EntityManager& operator=(const EntityManager& ) = delete;
       EntityManager& operator=(const EntityManager&&) = delete;
 
-      [[nodiscard]] const entID createEntity_t() noexcept;
+      [[nodiscard]] const entID     createEntity_t()         noexcept;
+                          void      deleteEntity(entID eid)  noexcept; 
+                          Entity_t& getEntityByID(entID eid) noexcept;
 
-      template <typename T>
-      void 
-      addComponentToEntity(const T& new_cmp, const entID eid) noexcept {
-            cmp_storage.createComponent(new_cmp);
-            auto& ref_ent = getEntityByID(eid);
-
-            ref_ent.addComponent( Component_t::getCmpTypeID<T>() );
-      }
-      
-      template <typename CMP_t>
-      std::vector<CMP_t>&
-      getComponentVector() noexcept { 
-            return cmp_storage.getCmpCollection<CMP_t>();
-      }
-
-      template<typename CMP_t> [[nodiscard]] constexpr 
-      CMP_t& 
-      getCmpByEntityID(const entID eid) noexcept {
-            return cmp_storage.getCmpByEntityID<CMP_t>(eid);
-      }
-
-      void deleteEntity(entID eid) noexcept; //necesita rework
-
-      std::unordered_map<entID, Entity_t>&  getEntities()            noexcept { return ent_map; }
-      Entity_t&                             getEntityByID(entID eid) noexcept { return ent_map.at(eid); }
+      template <typename CMP_t>           void                addComponentToEntity(const CMP_t& new_cmp, const entID eid) noexcept;
+      template <typename CMP_t> constexpr std::vector<CMP_t>& getComponentVector()                                        noexcept;
+      template <typename CMP_t> constexpr CMP_t&              getCmpByEntityID(const entID eid)                           noexcept;
 
 private:
-      std::unordered_map<entID, Entity_t> ent_map     { };
-      ComponentStorage                    cmp_storage { };
+      std::unordered_map<entID, Entity_t> ent_map      {     };
+      ComponentStorage                    cmp_storage  {     };
+      const std::size_t                   MAX_ENTITIES { 10u };
 };
 
 } // namespace AIP

@@ -1,5 +1,5 @@
 #pragma once
-#include <ecs/man/EntityManager.hpp>
+#include <ecs/man/EntityManager.tpp>
 
 namespace AIP {
 

@@ -3,11 +3,16 @@
 
 #include <unordered_map>
 #include <memory>
+#include <optional>
+#include <functional>
 
 namespace BECS {
 
 struct ComponentStorage {
-    explicit ComponentStorage() = default;
+    template <typename ref>
+    using opt_refw = std::optional< std::reference_wrapper<ref> >;
+    
+      explicit ComponentStorage()                         = default;
              
                ComponentStorage(const ComponentStorage& ) = delete;
                ComponentStorage(const ComponentStorage&&) = delete;
@@ -17,7 +22,7 @@ struct ComponentStorage {
     template<typename T>               constexpr       T&              createComponent(const T& new_cmp) noexcept;
 
     template<typename T> [[nodiscard]] constexpr       std::vector<T>& getCmpCollection()                noexcept;
-    template<typename T> [[nodiscard]] constexpr const std::vector<T>& getCmpCollection() const          noexcept;
+    //template<typename T> [[nodiscard]] constexpr const std::vector<T>& getCmpCollection() const          noexcept;
 
     template<typename T> [[nodiscard]] constexpr       T&              getCmpByEntityID(const entID eid) noexcept;
     //template<typename T> [[nodiscard]] constexpr const T&              getCmpByEntityID(const entID eid) const noexcept;
