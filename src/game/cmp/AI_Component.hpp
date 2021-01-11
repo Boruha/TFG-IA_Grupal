@@ -1,7 +1,7 @@
 #pragma once
 #include <ecs/cmp/Component_t.hpp>
 
-#include <game/utils/Vec2.hpp>
+#include <game/utils/fvec2.hpp>
 
 #include <vector>
 
@@ -21,8 +21,11 @@ enum class AI_behaviour : uint16_t {
 struct AI_Component : BECS::Component_t {
     explicit AI_Component(BECS::entID eid) : Component_t(eid) { }
 
-    std::vector<fixed_vec2> target_vec { fixed_vec2 { -300, -300 }, fixed_vec2 {  200, -300 }
-                                       , fixed_vec2 {  200,  200 }, fixed_vec2 { -300,  200 } };
+    std::vector< fvec2<fint_t<int64_t>> > target_vec { fvec2<fint_t<int64_t>> { fint_t<int64_t> { -300l }, fint_t<int64_t> { -300l } }
+                                                     , fvec2<fint_t<int64_t>> { fint_t<int64_t> {  200l }, fint_t<int64_t> { -300l } }
+                                                     , fvec2<fint_t<int64_t>> { fint_t<int64_t> {  200l }, fint_t<int64_t> {  200l } }
+                                                     , fvec2<fint_t<int64_t>> { fint_t<int64_t> { -300l }, fint_t<int64_t> {  200l } } 
+                                                     };
     std::size_t target_index { 0u };
     AI_behaviour current_behavior { AI_behaviour::patrol_b };
 };

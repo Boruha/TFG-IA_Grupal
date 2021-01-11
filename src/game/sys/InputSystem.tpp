@@ -35,7 +35,7 @@ InputSystem<Context_t>::InputSystem() {
 
 template <typename Context_t>
 bool 
-InputSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noexcept {
+InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
     auto& input_cmp_vec = context.template getComponentVector<InputComponent>();
 
     if( ptc_process_events() ) //ESC = 1;

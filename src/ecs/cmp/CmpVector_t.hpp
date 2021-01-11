@@ -1,5 +1,4 @@
 #pragma once
-
 #include <game/cmp/CmpIncludeList.hpp>
 #include <ecs/utils/Alias.hpp>
 

@@ -1,7 +1,5 @@
 #include <ecs/man/EntityManager.hpp>
 
-#include <game/utils/ufixed64_t.hpp>
-
 #include <algorithm>
 
 namespace BECS {

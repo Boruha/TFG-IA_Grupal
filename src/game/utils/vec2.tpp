@@ -1,11 +1,13 @@
-#include <game/utils/vec.hpp>
+#include <game/utils/vec2.hpp>
 
 namespace AIP {
+
 
 /* ASSIGMENT */
 template <typename NumType> constexpr vec2<NumType>::vec2(const NumType X,  const NumType Y ) noexcept : x(X), y(Y) { }
 template <typename NumType> constexpr vec2<NumType>::vec2(const vec2<NumType>& cpy_vec)       noexcept : x(cpy_vec.x), y(cpy_vec.y) { } //cpy ctor
 template <typename NumType> constexpr vec2<NumType>::vec2(vec2<NumType>&& mov_vec)            noexcept : x(std::move(mov_vec.x)), y(std::move(mov_vec.y)) { } //move ctor
+
 
 /* ASSIGMENT */
 template <typename NumType> 
@@ -37,6 +39,22 @@ vec2<NumType>&
 vec2<NumType>::operator-=(const vec2<NumType>& num) noexcept {
     x -= num.x;
     y -= num.y;
+    return *this;
+}
+
+template <typename NumType> 
+vec2<NumType>& 
+vec2<NumType>::operator*=(const vec2<NumType>& num) noexcept {
+    x *= num.x;
+    y *= num.y;
+    return *this;
+}
+
+template <typename NumType> 
+vec2<NumType>& 
+vec2<NumType>::operator/=(const vec2<NumType>& num) noexcept {
+    x /= num.x;
+    y /= num.y;
     return *this;
 }
 
@@ -80,6 +98,33 @@ vec2<NumType>::operator/(const vec2<NumType>& num) const noexcept {
 
 
 /* OPERATIONS W/ NO VEC*/
+template <typename NumType> constexpr
+vec2<NumType> 
+vec2<NumType>::operator+(const NumType& num) const noexcept {
+    vec2<NumType> new_vec { };
+    new_vec.x = x + num; 
+    new_vec.y = y + num; 
+    return new_vec;
+}
+
+template <typename NumType> constexpr
+vec2<NumType> 
+vec2<NumType>::operator-(const NumType& num) const noexcept {
+    vec2<NumType> new_vec { };
+    new_vec.x = x - num; 
+    new_vec.y = y - num; 
+    return new_vec;
+}
+
+template <typename NumType> constexpr
+vec2<NumType> 
+vec2<NumType>::operator*(const NumType& num) const noexcept {
+    vec2<NumType> new_vec { };
+    new_vec.x = x * num; 
+    new_vec.y = y * num; 
+    return new_vec;
+}
+
 template <typename NumType> constexpr
 vec2<NumType> 
 vec2<NumType>::operator/(const NumType& num) const noexcept {

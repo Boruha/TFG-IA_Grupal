@@ -41,7 +41,7 @@ fint_t<NumType>::operator-=(const fint_t<NumType>& num) noexcept {
 template <typename NumType> constexpr 
 fint_t<NumType>& 
 fint_t<NumType>::operator*=(const fint_t<NumType>& num) noexcept {
-    this->number = (this->number * num.number) / SCALE_S;
+    number = (number * num.number) / SCALE;
     return *this;
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <game/man/UnitsManager.tpp>
 #include <game/sys/SysIncludeList.hpp>
-#include <game/utils/ufixed64_t.hpp>
+#include <game/utils/fint_t.hpp>
 
 #include <vector>
 #include <memory>
@@ -16,9 +16,9 @@ struct GameManager {
     GameManager& operator=(const GameManager& ) = delete;
     GameManager& operator=(const GameManager&&) = delete;
 
-    bool      update()       noexcept;
-    fixed64_t getLoopTime()  noexcept;
-    fixed64_t getDeltaTime() noexcept;
+    bool            update()       noexcept;
+    fint_t<int64_t> getLoopTime()  noexcept;
+    fint_t<int64_t> getDeltaTime() noexcept;
 
 private:
     UnitsManager units_man;
@@ -30,18 +30,18 @@ private:
     CollisionSystem<UnitsManager> collision;
     AttackSystem<UnitsManager>    attack;
 
-    fixed64_t setLoopTime()                   noexcept;
-    fixed64_t setDeltaTime()                  noexcept;
-    void      checkFpsMsg()                   noexcept;   
-    void      changeLoopTime(bool operation)  noexcept;
-    void      changeDeltaTime(bool operation) noexcept;
+    fint_t<int64_t> setLoopTime()                   noexcept;
+    fint_t<int64_t> setDeltaTime()                  noexcept;
+    void            checkFpsMsg()                   noexcept;   
+    void            changeLoopTime(bool operation)  noexcept;
+    void            changeDeltaTime(bool operation) noexcept;
     
     //TimeInfo
-    float       FPS_LT      { 60.f };
-    float       FPS_DT      { 60.f };
-    const float Micro_multi { 1000000.f };
-    fixed64_t   LoopTime    { setLoopTime()  };
-    fixed64_t   DeltaTime   { setDeltaTime() };
+    float           FPS_LT      { 60.f };
+    float           FPS_DT      { 60.f };
+    const float     Micro_multi { 1000000.f };
+    fint_t<int64_t> LoopTime    { setLoopTime()  };
+    fint_t<int64_t> DeltaTime   { setDeltaTime() };
 
 };
 

@@ -9,6 +9,7 @@ extern "C" {
 }
 
 #include <algorithm>
+#include <iostream>
 
 namespace AIP {
 
@@ -34,7 +35,7 @@ RenderSystem<Context_t>::~RenderSystem() {
 //LOOP
 template <typename Context_t>
 bool
-RenderSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noexcept {    
+RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {    
     const auto& render_cmp_vec = context.template getComponentVector<RenderComponent>();
           auto* screen_ptr     = framebuffer.get();
 
@@ -45,24 +46,30 @@ RenderSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) n
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
         [&](const RenderComponent& render_cmp) {
             auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( render_cmp.getEntityID() );
-            
+
             //paso de continuo a pixel
             const auto screen_coords  = continuous_to_screen(mov_cmp.coords);
 
             //puntero a posicion al sprite.
             auto* screen_ptr  = framebuffer.get();
                   screen_ptr += (screen_coords.y * window_w) + screen_coords.x;
-
+/*
+            std::cout << "mov_cmp content:\n";
+            std::cout << "\tpos :" << mov_cmp.coords.x.getNoScaled() << " , " << mov_cmp.coords.y.getNoScaled() << "\n";
+            std::cout << "\tdir :" << mov_cmp.dir.x.getNoScaled() << " , " << mov_cmp.dir.y.getNoScaled() << "\n";
+            std::cout << "\tacc :" << mov_cmp.accel_to_target.x.getNoScaled() << " , " << mov_cmp.accel_to_target.y.getNoScaled() << "\n";
+            std::cout << "\tsep :" << mov_cmp.sep_copy_to_draw.x.getNoScaled() << " , " << mov_cmp.sep_copy_to_draw.y.getNoScaled() << "\n";
+            std::cout << "\tcoh :" << mov_cmp.coh_copy_to_draw.x.getNoScaled() << " , " << mov_cmp.coh_copy_to_draw.y.getNoScaled() << "\n\n";
+*/
             //pintar sprite
             for(uint32_t i=0; i<render_cmp.sprite.y.getNoScaled(); ++i) {
                 std::fill(screen_ptr, screen_ptr + render_cmp.sprite.y.getNoScaled(), static_cast<uint32_t>(render_cmp.sprite_C));
                 screen_ptr += window_w;
             }
 
-            //pintar vectores steer
-            if(debug_mode) {
+            if(debug_mode)
                 draw_debug(mov_cmp, render_cmp);
-            }
+
     });
 
     ptc_update(screen_ptr);
@@ -73,7 +80,7 @@ RenderSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) n
 //AUX
 template <typename Context_t>
 vec2<uint32_t>
-RenderSystem<Context_t>::continuous_to_screen(const fixed_vec2& cont) noexcept {
+RenderSystem<Context_t>::continuous_to_screen(const fvec2<fint_t<int64_t>>& cont) noexcept {
     auto new_x = static_cast<uint32_t>( cont.x.getNoScaled() + half_window_w );
     auto new_y = static_cast<uint32_t>( cont.y.getNoScaled() + half_window_h );
 
@@ -127,15 +134,15 @@ RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const Rend
     
     //ajustamos el inicio de los vectores de steer.
     auto p_ini = mov_cmp.coords;
-    p_ini.x += (static_cast<fixed64_t>(render_cmp.sprite.x)/2);
-    p_ini.y += (static_cast<fixed64_t>(render_cmp.sprite.y)/2);
+    p_ini.x.number += ( static_cast<int64_t>(render_cmp.sprite.x.number) / 2 );
+    p_ini.y.number += ( static_cast<int64_t>(render_cmp.sprite.y.number) / 2 );
     p_ini.x  = std::clamp(p_ini.x, (half_window_w64*-1), half_window_w64);
     p_ini.y  = std::clamp(p_ini.y, (half_window_h64*-1), half_window_h64);
     
     const auto screen_p_ini = continuous_to_screen(p_ini);
     
     if(dir.length2().number != 0) {
-        auto p_fin = p_ini + (dir / 2);
+        auto p_fin = p_ini + dir;
         p_fin.x = std::clamp(p_fin.x, (half_window_w64*-1), half_window_w64);
         p_fin.y = std::clamp(p_fin.y, (half_window_h64*-1), half_window_h64);
 
@@ -147,7 +154,7 @@ RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const Rend
     }
 
     if(accel.length2().number != 0) {
-        auto p_fin = p_ini + (accel * 2);
+        auto p_fin = p_ini + accel;
         p_fin.x = std::clamp(p_fin.x, (half_window_w64*-1), half_window_w64);
         p_fin.y = std::clamp(p_fin.y, (half_window_h64*-1), half_window_h64);
 
@@ -159,7 +166,7 @@ RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const Rend
     }
 
     if(separ.length2().number != 0) {
-        auto p_fin = p_ini + (separ * 4);
+        auto p_fin = p_ini + separ;
         p_fin.x = std::clamp(p_fin.x, (half_window_w64*-1), half_window_w64);
         p_fin.y = std::clamp(p_fin.y, (half_window_h64*-1), half_window_h64);
 
@@ -171,7 +178,7 @@ RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const Rend
     }
 
     if(cohes.length2().number != 0) {
-        auto p_fin = p_ini + (cohes * 4);
+        auto p_fin = p_ini + cohes;
         p_fin.x = std::clamp(p_fin.x, (half_window_w64*-1), half_window_w64);
         p_fin.y = std::clamp(p_fin.y, (half_window_h64*-1), half_window_h64);
 

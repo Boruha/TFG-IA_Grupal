@@ -11,16 +11,16 @@ namespace AIP {
 
 template <typename Context_t>
 bool
-CollisionSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noexcept {
+CollisionSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
     auto& mov_cmp_vec = context.template getComponentVector<MovementComponent>();
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), 
         [&](MovementComponent& mov_cmp) {
                 auto& ren_cmp   = context.template getCmpByEntityID<RenderComponent>( mov_cmp.getEntityID() );
 
-                      auto& coord  = mov_cmp.coords;
-                const auto size_W  = static_cast<fixed64_t>(ren_cmp.sprite.x);
-                const auto size_H  = static_cast<fixed64_t>(ren_cmp.sprite.y);
+                                auto& coord  = mov_cmp.coords;
+                const fint_t<int64_t> size_W { static_cast<int64_t>( ren_cmp.sprite.x.getNoScaled() ) };
+                const fint_t<int64_t> size_H { static_cast<int64_t>( ren_cmp.sprite.y.getNoScaled() ) };
 
                 //eje X
                 if( coord.x + size_W > HALF_WINDOW_W )

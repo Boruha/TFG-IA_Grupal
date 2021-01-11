@@ -48,8 +48,8 @@ struct fint_t {
     constexpr NumType getNoScaled() const;
     
 /* DATA */    
-                  NumType number { 0 };
-    static inline NumType SCALE  { 65536 };
+                            NumType number { 0 };
+    constexpr static inline NumType SCALE  { 65536 };
 };
 
 

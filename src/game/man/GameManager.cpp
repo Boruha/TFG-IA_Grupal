@@ -22,7 +22,7 @@ GameManager::update() noexcept {
     ia.update(units_man, DeltaTime);
     movement.update(units_man, DeltaTime);
     collision.update(units_man, DeltaTime);
-    
+
     if( !attack.update(units_man, DeltaTime) )
         return false;
 
@@ -56,24 +56,24 @@ GameManager::checkFpsMsg() noexcept {
     }  
 }
 
-fixed64_t
+fint_t<int64_t>
 GameManager::getLoopTime() noexcept {
     return LoopTime;
 }
 
-fixed64_t
+fint_t<int64_t>
 GameManager::getDeltaTime() noexcept {
     return DeltaTime;
 }
 
-fixed64_t
+fint_t<int64_t>
 GameManager::setLoopTime() noexcept {
-    return fixed64_t { ((1.f / FPS_LT) * Micro_multi) / SCALE_S };
+    return fint_t<int64_t> { ((1.f / FPS_LT) * Micro_multi) / fint_t<int64_t>::SCALE };
 }
 
-fixed64_t
+fint_t<int64_t>
 GameManager::setDeltaTime() noexcept {
-    return fixed64_t { 1.f / FPS_DT };
+    return fint_t<int64_t> { 1.f / FPS_DT };
 }
 
 void

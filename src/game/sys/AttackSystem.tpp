@@ -7,7 +7,7 @@ namespace AIP {
 
 template <typename Context_t>
 bool 
-AttackSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noexcept {
+AttackSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
 
     while( !attack_msg.empty() ) {
         

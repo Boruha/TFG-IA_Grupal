@@ -1,6 +1,6 @@
 #pragma once
 #include <game/utils/EventHandler.hpp>
-#include <game/utils/Vec2.hpp>
+#include <game/utils/fvec2.hpp>
 
 #include <vector>
 #include <optional>
@@ -13,23 +13,23 @@ struct MovementComponent;
 
 template <typename Context_t>
 struct AI_System : EventHandler {
-    using optVec2_refw = std::optional<std::reference_wrapper<fixed_vec2>>;
+    using optVec2_refw = std::optional<std::reference_wrapper< fvec2< fint_t<int64_t> >  >>;
 
     void init() noexcept;
-    bool update(Context_t& context, const fixed64_t DeltaTime) noexcept;
+    bool update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept;
 
 private:
 /* CONPLEX B. */
     void patrol(AI_Component& ai_cmp  , MovementComponent& mov_cmp) noexcept;
-    void chase(AI_Component& ai_cmp   , MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept;
-    void run_away(AI_Component& ai_cmp, MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept;
+    void chase(AI_Component& ai_cmp   , MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept;
+    void run_away(AI_Component& ai_cmp, MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept;
     void pursue(AI_Component& ai_cmp  , MovementComponent& mov_cmp, MovementComponent& target_mov_cmp) noexcept;
     void evade(AI_Component& ai_cmp   , MovementComponent& mov_cmp, MovementComponent& target_mov_cmp) noexcept;
-    void attack(AI_Component& ai_cmp  , MovementComponent& mov_cmp, fixed_vec2& target_pos, Context_t& context) noexcept;
+    void attack(AI_Component& ai_cmp  , MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos, Context_t& context) noexcept;
                                               
 /* STEERING B. BASIC */
-    bool arrive(MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept;
-    bool leave(MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept;
+    bool arrive(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept;
+    bool leave(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept;
 
 /* FLOCKING B. COMPO */
     void separation(Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept;

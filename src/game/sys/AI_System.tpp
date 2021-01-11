@@ -13,7 +13,7 @@ namespace AIP {
 
 template <typename Context_t>
 bool
-AI_System<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noexcept {
+AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
     auto& ai_cmp_vec = context.template getComponentVector<AI_Component>();
     
     std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), [&](AI_Component& ai_cmp) {
@@ -84,13 +84,13 @@ AI_System<Context_t>::patrol(AI_Component& ai_cmp, MovementComponent& mov_cmp) n
 
 template <typename Context_t>
 void 
-AI_System<Context_t>::chase(AI_Component& ai_cmp, MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System<Context_t>::chase(AI_Component& ai_cmp, MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept {
     arrive(mov_cmp, target_pos);
 }
 
 template <typename Context_t>
 void 
-AI_System<Context_t>::run_away(AI_Component& ai_cmp, MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System<Context_t>::run_away(AI_Component& ai_cmp, MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept {
     if( !leave(mov_cmp, target_pos) ) {
         mov_cmp.dir.x.number = mov_cmp.dir.y.number = 0;
         mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
@@ -120,7 +120,7 @@ AI_System<Context_t>::evade(AI_Component& ai_cmp, MovementComponent& mov_cmp, Mo
 
 template <typename Context_t>
 void
-AI_System<Context_t>::attack(AI_Component& ai_cmp  , MovementComponent& mov_cmp, fixed_vec2& target_pos, Context_t& context) noexcept {
+AI_System<Context_t>::attack(AI_Component& ai_cmp  , MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos, Context_t& context) noexcept {
     auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( ai_cmp.getEntityID() );
     
     if(combat_cmp.current_attack_cd.number <= 0l) {
@@ -135,32 +135,29 @@ AI_System<Context_t>::attack(AI_Component& ai_cmp  , MovementComponent& mov_cmp,
 /* BASIC BEHAVIOURS FUNCTIONS */
 template <typename Context_t>
 bool
-AI_System<Context_t>::arrive(MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System<Context_t>::arrive(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept {
     auto& my_coords = mov_cmp.coords;
     auto& my_accel  = mov_cmp.accel_to_target;
     auto& my_direct = mov_cmp.dir;
 
     auto  target_dir = target_pos - my_coords;
     auto  distance2  = target_dir.length2();
-    fixed64_t target_speed { };
+    fint_t<int64_t> target_speed { };
 
     if(distance2 < ENT_ARRIVE_DIST2)
         return false;
 
-    //si esta lejos intenta alcanzar max speed, sino interpola [max_speed, 0]
     if(distance2 > ENT_SLOW_DIST2)
         target_speed = ENT_MAX_SPEED;
     else
         target_speed = ENT_MAX_SPEED * ( target_dir.length_fix() / ENT_SLOW_DIST );
     
-    //calculamos la aceleracion objetivo como la diferencia de  (deseada - actual) 
     target_dir.normalize();
     target_dir *= target_speed;
 
     my_accel  = (target_dir - my_direct);
     my_accel /= ENT_TIME_TO_TARGET;
 
-    //ajustamos la aceleracion para que no sea muy alta.
     if(my_accel.length2() > ENT_MAX_ACCEL2) {
         my_accel.normalize();
         my_accel *= ENT_MAX_ACCEL;
@@ -171,14 +168,14 @@ AI_System<Context_t>::arrive(MovementComponent& mov_cmp, fixed_vec2& target_pos)
 
 template <typename Context_t>
 bool
-AI_System<Context_t>::leave(MovementComponent& mov_cmp, fixed_vec2& target_pos) noexcept {
+AI_System<Context_t>::leave(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept {
     auto& my_coords = mov_cmp.coords;
     auto& my_accel  = mov_cmp.accel_to_target;
     auto& my_direct = mov_cmp.dir;
 
     auto  target_dir = my_coords - target_pos;
     auto  distance2  = target_dir.length2();
-    fixed64_t target_speed { };
+    fint_t<int64_t> target_speed { };
 
     if(distance2 > ENT_FLEE_DIST2)
         return false;
@@ -211,6 +208,7 @@ template <typename Context_t>
 void 
 AI_System<Context_t>::separation(Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept {
     auto end_it = end(AI_cmps);
+    fint_t<int64_t> mod_neg { -1l };
     
     for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
         auto& ai_mov_cmp = context.template getCmpByEntityID<MovementComponent>( (*ai_it).getEntityID() );
@@ -227,7 +225,7 @@ AI_System<Context_t>::separation(Context_t& context, std::vector<AI_Component>& 
                 auto result   = diff_vec * strength;
 
                 ai_mov_cmp.separation_force          += result;
-                comparision_mov_cmp.separation_force += result * -1;
+                comparision_mov_cmp.separation_force += result * mod_neg;
             }
         }// END FOR COMPARISION
 
@@ -267,7 +265,7 @@ AI_System<Context_t>::cohesion(Context_t& context, std::vector<AI_Component>& AI
         if(ai_count.number > 0) {
             ai_centre        /= ai_count;
             auto target_dir   = ai_centre - ai_mov_cmp.coords;
-            auto target_speed = ENT_MAX_SPEED * ( target_dir.length_fix() / (ENT_SEPARATION_DIST/2) );
+            auto target_speed = ENT_MAX_SPEED * ( target_dir.length_fix() / (ENT_SEPARATION_DIST / 2) );
         
             target_dir.normalize();
             target_dir *= target_speed;
@@ -284,10 +282,12 @@ AI_System<Context_t>::cohesion(Context_t& context, std::vector<AI_Component>& AI
     }// END FOR AI
 }
 
+
 /* AUX FUNCTIONS */
 template <typename Context_t>
 typename AI_System<Context_t>::optVec2_refw 
 AI_System<Context_t>::updatePatrol(AI_Component& ai_cmp) noexcept {
+    optVec2_refw next_pos { };
     auto& route  = ai_cmp.target_vec;
     auto& index  = ai_cmp.target_index;
 
@@ -295,15 +295,16 @@ AI_System<Context_t>::updatePatrol(AI_Component& ai_cmp) noexcept {
 
     if(index_fwd != index) {
         index = index_fwd;
-        return std::ref(route.at(index));
+        return next_pos = std::ref(route.at(index));
     }
     
-    return { };
+    return next_pos;
 }
 
 template <typename Context_t>
 typename AI_System<Context_t>::optVec2_refw 
 AI_System<Context_t>::updateRoute(AI_Component& ai_cmp) noexcept {
+    optVec2_refw next_pos { };
     auto& route  = ai_cmp.target_vec;
     auto& index  = ai_cmp.target_index;
 
@@ -311,10 +312,10 @@ AI_System<Context_t>::updateRoute(AI_Component& ai_cmp) noexcept {
 
     if(index_fwd < route.size()) {
         index = index_fwd;
-        return std::ref(route.at(index));
+        return next_pos = std::ref(route.at(index));
     }
 
-    return { };
+    return next_pos;
 }
 
 } //NS

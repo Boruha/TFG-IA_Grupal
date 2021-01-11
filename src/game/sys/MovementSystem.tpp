@@ -1,5 +1,4 @@
 #include <game/sys/MovementSystem.hpp>
-#include <game/cmp/MovementComponent.hpp>
 #include <game/utils/AI_Constants.hpp>
 
 #include <algorithm>
@@ -8,7 +7,7 @@ namespace AIP {
 
 template <typename Context_t>
 bool
-MovementSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime) noexcept {
+MovementSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
     auto& mov_cmp_vec = context.template getComponentVector<MovementComponent>();
 
     std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec), 
@@ -26,7 +25,7 @@ MovementSystem<Context_t>::update(Context_t& context, const fixed64_t DeltaTime)
     
             //calcular la nueva posicion
             mov_cmp.coords += mov_cmp.dir * DeltaTime;
-            
+
             /* resets */
             mov_cmp.sep_copy_to_draw = mov_cmp.separation_force;
             mov_cmp.coh_copy_to_draw = mov_cmp.cohesion_force;

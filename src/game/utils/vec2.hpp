@@ -20,6 +20,8 @@ struct vec2 {
     vec2<NumType>& operator=(vec2<NumType>&& move_from)      noexcept;
     vec2<NumType>& operator+=(const vec2<NumType>& num)      noexcept;
     vec2<NumType>& operator-=(const vec2<NumType>& num)      noexcept;
+    vec2<NumType>& operator*=(const vec2<NumType>& num)      noexcept;
+    vec2<NumType>& operator/=(const vec2<NumType>& num)      noexcept;
 
 /* OPERATIONS */
     constexpr vec2<NumType> operator+(const vec2<NumType>& num) const noexcept;
@@ -28,6 +30,9 @@ struct vec2 {
     constexpr vec2<NumType> operator/(const vec2<NumType>& num) const noexcept;
 
 /* OPERATIONS W/ NO VEC*/
+    constexpr vec2<NumType> operator+(const NumType& num) const noexcept;
+    constexpr vec2<NumType> operator-(const NumType& num) const noexcept;
+    constexpr vec2<NumType> operator*(const NumType& num) const noexcept;
     constexpr vec2<NumType> operator/(const NumType& num) const noexcept;
 
 /* FUNCTIONS */

@@ -1,5 +1,4 @@
 #include <game/man/UnitsManager.hpp>
-#include <game/utils/fint_t.tpp>
 
 #include <algorithm>
 #include <iostream>
@@ -9,22 +8,19 @@ namespace AIP {
 
 inline void
 UnitsManager::init() noexcept {
+    createSoldier(fint_t<uint64_t>(20ul), fint_t<int64_t>(30l), fint_t<int64_t>(30l), Color::White); //(?) pasar tipos básicos y que se creen dentro?
+    createSoldier(fint_t<uint64_t>(20ul), fint_t<int64_t>(60l), fint_t<int64_t>(-10l), Color::White);
+    createSoldier(fint_t<uint64_t>(20ul), fint_t<int64_t>(-10l), fint_t<int64_t>(20l), Color::White);
 
-
-
-    createSoldier(ufixed64_t(20ul), fixed64_t(30l), fixed64_t(30l), Color::White); //(?) pasar tipos básicos y que se creen dentro?
-    createSoldier(ufixed64_t(20ul), fixed64_t(60l), fixed64_t(-10l), Color::White);
-    createSoldier(ufixed64_t(20ul), fixed64_t(-10l), fixed64_t(20l), Color::White);
-
-    //createSoldier(ufixed64_t(20ul), fixed64_t(-60l), fixed64_t(10l), Color::White);
-    //createSoldier(ufixed64_t(20ul), fixed64_t(-20l), fixed64_t(-40l), Color::White);
+    //createSoldier(fint_t<uint64_t>(20ul), fint_t<int64_t>(-60l), fint_t<int64_t>(10l), Color::White);
+    //createSoldier(fint_t<uint64_t>(20ul), fint_t<int64_t>(-20l), fint_t<int64_t>(-40l), Color::White);
     
-    createPlayer(ufixed64_t(20ul), fixed64_t(200l), fixed64_t(200l), Color::Blue);
+    createPlayer(fint_t<uint64_t>(20ul), fint_t<int64_t>(200l), fint_t<int64_t>(200l), Color::Blue);
 }
 
 /* CREATES & DELETE */
 inline void
-UnitsManager::createSoldier(const ufixed64_t& size, const fixed64_t& pos_x, const fixed64_t& pos_y, const Color col) noexcept {
+UnitsManager::createSoldier(const fint_t<uint64_t>& size, const fint_t<int64_t>& pos_x, const fint_t<int64_t>& pos_y, const Color col) noexcept {
     const auto new_ent = ent_man.createEntity_t();
 
     ent_man.addComponentToEntity( MovementComponent( new_ent, pos_x, pos_y   ) , new_ent );
@@ -34,7 +30,7 @@ UnitsManager::createSoldier(const ufixed64_t& size, const fixed64_t& pos_x, cons
 }
 
 inline void
-UnitsManager::createPlayer(const ufixed64_t& size, const fixed64_t& pos_x, const fixed64_t& pos_y, const Color col) noexcept {
+UnitsManager::createPlayer(const fint_t<uint64_t>& size, const fint_t<int64_t>& pos_x, const fint_t<int64_t>& pos_y, const Color col) noexcept {
     const auto new_ent = ent_man.createEntity_t();
 
     ent_man.addComponentToEntity( MovementComponent( new_ent, pos_x, pos_y    ) , new_ent );

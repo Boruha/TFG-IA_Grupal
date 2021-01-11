@@ -1,5 +1,6 @@
 #pragma once
-#include <game/utils/ufixed64_t.hpp>
+//#include <game/utils/ufixed64_t.hpp>
+#include <game/utils/fint_t.tpp>
 
 #include <cmath>
 #include <iostream>
@@ -7,104 +8,7 @@
 
 
 namespace AIP {
-
-template<typename T>
-struct vec2 {
-    vec2() = default;
-    constexpr explicit vec2(const T X,  const T Y ) : x(X), y(Y) { }
-    constexpr vec2(const vec2<T>& cpy_vec) : x(cpy_vec.x), y(cpy_vec.y) { } //cpy ctor
-    constexpr vec2(vec2<T>&& mov_vec)      : x(std::move(mov_vec.x)), y(std::move(mov_vec.y)) { } //move ctor
-
-    T x { 0 };
-    T y { 0 };
-
-    /* OPERATORS */
-    vec2<T>& operator=(const vec2<T>& copy_from) { //copy assigment 
-        x = copy_from.x; 
-        y = copy_from.y; 
-        return *this; 
-    }
-
-    vec2<T>& operator=(vec2<T>&& move_from) noexcept { //move assigment
-        x = std::move(move_from.x); 
-        y = std::move(move_from.y);
-        return *this;
-    }
-
-    vec2<T>& operator+=(const vec2<T>& num) {
-        x += num.x;
-        y += num.y;
-        return *this;
-    }
-
-    vec2<T>& operator-=(const vec2<T>& num) {
-        x -= num.x;
-        y -= num.y;
-        return *this;
-    }
-
-    vec2<T> operator+(const vec2<T>& num) const {
-        vec2<T> new_vec { };
-        new_vec.x = this->x + num.x;
-        new_vec.y = this->y + num.y;
-        return new_vec;
-    }
-
-    vec2<T> operator-(const vec2<T>& num) const {
-        vec2<T> new_vec { };
-        new_vec.x = this->x - num.x; 
-        new_vec.y = this->y - num.y; 
-        return new_vec;
-    }
-
-    vec2<T> operator*(const vec2<T>& num) const {
-        vec2<T> new_vec { };
-        new_vec.x = this->x * num.x; 
-        new_vec.y = this->y * num.y; 
-        return new_vec;
-    }
-
-    vec2<T> operator/(const vec2<T>& num) const {
-        vec2<T> new_vec { };
-        new_vec.x = this->x / num.x; 
-        new_vec.y = this->y / num.y; 
-        return new_vec;
-    }
-
-    vec2<T> operator/(const T& num) const {
-        vec2<T> new_vec { };
-        new_vec.x = this->x / num; 
-        new_vec.y = this->y / num; 
-        return new_vec;
-    }
-
-    /* FUNCTIONS */
-    constexpr T 
-    length() {
-        return std::sqrt( (x * x) + (y * y) );
-    }
-
-    constexpr T 
-    length2() {
-        return (x*x) + (y*y);
-    }
-
-    constexpr void 
-    normalize() {
-        auto module = length();
-        if(module != 0) {
-            x /= module;
-            y /= module;
-        }
-        else
-        {
-            x = 0;
-            y = 0;
-        }
-        
-    }
-};
-
+/*
 struct fixed_vec2 {
     fixed_vec2() = default;
     constexpr explicit fixed_vec2(const fixed64_t  X,  const fixed64_t  Y ) : x(X), y(Y) { }
@@ -115,7 +19,6 @@ struct fixed_vec2 {
     fixed64_t x { 0l };
     fixed64_t y { 0l };
 
-    /* OPERATORS */
     fixed_vec2& operator=(const fixed_vec2& copy_from) { //copy assigment 
         x = copy_from.x; 
         y = copy_from.y;
@@ -235,7 +138,6 @@ struct fixed_vec2 {
     }
 
 
-    /* FUNCTIONS */
     constexpr int64_t
     length() {
         return std::sqrt(( x.getNoScaled() * x.getNoScaled() ) + ( y.getNoScaled() * y.getNoScaled() ));
@@ -283,7 +185,6 @@ struct ufixed_vec2 {
     ufixed64_t x { 0ul };
     ufixed64_t y { 0ul };
 
-    /* OPERATORS */
     ufixed_vec2& operator=(const ufixed_vec2& copy_from) { //copy assigment 
         x = copy_from.x; 
         y = copy_from.y; 
@@ -390,7 +291,6 @@ struct ufixed_vec2 {
         return new_vec;
     }
 
-    /* FUNCTIONS */
     constexpr uint64_t
     length() {
         return std::sqrt( (x.getNoScaled() * x.getNoScaled()) + (y.getNoScaled() * y.getNoScaled() ) );
@@ -415,5 +315,56 @@ struct ufixed_vec2 {
         }   
     }
 };
+
+*/
+
+template<typename NumType>
+struct fvec2 {
+    fvec2() = default;
+    constexpr explicit fvec2(const NumType X,  const NumType Y ) noexcept;
+    constexpr          fvec2(const fvec2<NumType>& cpy_vec)      noexcept; //cpy ctor
+    constexpr          fvec2(fvec2<NumType>&& mov_vec)           noexcept; //move ctor
+
+    NumType x { 0l };
+    NumType y { 0l };
+
+/* ASSIGMENT */
+    fvec2<NumType>& operator=(const fvec2<NumType>& copy_from) noexcept;
+    fvec2<NumType>& operator=(fvec2<NumType>&& move_from)      noexcept;
+    fvec2<NumType>& operator+=(const fvec2<NumType>& num)      noexcept;
+    fvec2<NumType>& operator-=(const fvec2<NumType>& num)      noexcept;
+    fvec2<NumType>& operator*=(const fvec2<NumType>& num)      noexcept;
+    fvec2<NumType>& operator/=(const fvec2<NumType>& num)      noexcept;
+
+/* ASSIGMENT W/ NO VEC*/
+    fvec2<NumType>& operator=(const NumType& copy_from) noexcept;
+    fvec2<NumType>& operator=(NumType&& move_from)      noexcept;
+    fvec2<NumType>& operator+=(const NumType& num)      noexcept;
+    fvec2<NumType>& operator-=(const NumType& num)      noexcept;
+    fvec2<NumType>& operator*=(const NumType& num)      noexcept;
+    fvec2<NumType>& operator/=(const NumType& num)      noexcept;
+
+/* OPERATIONS */
+    constexpr fvec2<NumType> operator+(const fvec2<NumType>& num) const noexcept;
+    constexpr fvec2<NumType> operator-(const fvec2<NumType>& num) const noexcept;
+    constexpr fvec2<NumType> operator*(const fvec2<NumType>& num) const noexcept;
+    constexpr fvec2<NumType> operator/(const fvec2<NumType>& num) const noexcept;
+
+/* OPERATIONS W/ NO VEC*/
+    constexpr fvec2<NumType> operator+(const NumType& num) const noexcept;
+    constexpr fvec2<NumType> operator-(const NumType& num) const noexcept;
+    constexpr fvec2<NumType> operator*(const NumType& num) const noexcept;
+    constexpr fvec2<NumType> operator/(const NumType& num) const noexcept;
+
+/* FUNCTIONS */
+    constexpr auto    length()     const noexcept;
+    constexpr NumType length_fix() const noexcept;
+    constexpr NumType length2()    const noexcept;
+    constexpr void    normalize()        noexcept;
+};
+
+
+
+
 
 }// NS
