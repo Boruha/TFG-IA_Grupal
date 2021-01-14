@@ -18,7 +18,6 @@ struct MovementComponent : BECS::Component_t {
   //componentes aux
   fvec2<fint_t<int64_t>> sep_copy_to_draw { { 0l }, { 0l } };
   fvec2<fint_t<int64_t>> coh_copy_to_draw { { 0l }, { 0l } };
-  fint_t<int64_t>  cohesion_count   { 0l };
 };
 
 }

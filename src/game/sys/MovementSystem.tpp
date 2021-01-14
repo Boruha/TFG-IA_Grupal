@@ -26,7 +26,6 @@ MovementSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> Delt
             /* resets */
             mov_cmp.sep_copy_to_draw      = std::move(mov_cmp.separation_force);
             mov_cmp.coh_copy_to_draw      = std::move(mov_cmp.cohesion_force);
-            mov_cmp.cohesion_count.number = 0;
     });
     
 }

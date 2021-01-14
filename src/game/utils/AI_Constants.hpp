@@ -22,7 +22,7 @@ constexpr fint_t<int64_t> ENT_FAR_SLOW_DIST2 { ENT_FAR_SLOW_DIST * ENT_FAR_SLOW_
 //SEPARATION B.
 constexpr fint_t<int64_t> ENT_SEPARATION_DIST  { 180l };
 constexpr fint_t<int64_t> ENT_SEPARATION_DIST2 { ENT_SEPARATION_DIST * ENT_SEPARATION_DIST };
-constexpr fint_t<int64_t> DECAY_COEFICIENT     { 2400l };
+constexpr fint_t<int64_t> DECAY_COEFICIENT     { 3500l };
 
 //COHESION B.
 constexpr fint_t<int64_t> ENT_COHESION_DIST  { 300l };
