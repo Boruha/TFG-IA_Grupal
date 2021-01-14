@@ -24,7 +24,7 @@ AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime
         auto  target_dir = pj_pos - mov_cmp.coords;
         auto  distance2  = target_dir.length2();
 
-        if( distance2.getNoScaled() > (200l * 200l) ) {         //Terrorismo en est0 pur0
+        if( distance2.getNoScaled() > (200l * 200l) ) {         //Terrorismo en estad0 pur0
             ai_cmp.current_behavior = AI_behaviour::patrol_b;
         }
         if( distance2.getNoScaled() > (130l * 130l) && distance2.getNoScaled() < (200l * 200l) ) {
