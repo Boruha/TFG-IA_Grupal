@@ -56,12 +56,12 @@ GameManager::checkFpsMsg() noexcept {
     }  
 }
 
-fint_t<int64_t>
+fint_t<int64_t>&
 GameManager::getLoopTime() noexcept {
     return LoopTime;
 }
 
-fint_t<int64_t>
+fint_t<int64_t>&
 GameManager::getDeltaTime() noexcept {
     return DeltaTime;
 }

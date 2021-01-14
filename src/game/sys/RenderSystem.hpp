@@ -27,7 +27,7 @@ private:
     const uint32_t window_w { 0 }, window_h { 0 }, half_window_w { 0 }, half_window_h { 0 }, framebuffer_size { 0 };
     const fint_t<int64_t> half_window_w64 { 0l }, half_window_h64 { 0l };
     std::unique_ptr<uint32_t[]> framebuffer { nullptr };
-    bool debug_mode { true };
+    bool debug_mode { false };
 };
 
 }

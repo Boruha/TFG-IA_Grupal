@@ -4,9 +4,6 @@ namespace AIP {
 
 
 template <typename NumType> constexpr fvec2<NumType>::fvec2(const NumType X,  const NumType Y ) noexcept : x(X), y(Y) { }
-template <typename NumType> constexpr fvec2<NumType>::fvec2(const fvec2<NumType>& cpy_vec)      noexcept : x(cpy_vec.x), y(cpy_vec.y) { } //cpy ctor
-template <typename NumType> constexpr fvec2<NumType>::fvec2(fvec2<NumType>&& mov_vec)           noexcept : x(std::move(mov_vec.x)), y(std::move(mov_vec.y)) { } //move ctor
-
 
 /* ASSIGMENT */
 template <typename NumType> 
@@ -20,8 +17,8 @@ fvec2<NumType>::operator=(const fvec2<NumType>& copy_from) noexcept { //copy ass
 template <typename NumType> 
 fvec2<NumType>& 
 fvec2<NumType>::operator=(fvec2<NumType>&& move_from) noexcept { //move assigment
-    x = std::move(move_from.x); 
-    y = std::move(move_from.y);
+    x = std::exchange(move_from.x, NumType { }); 
+    y = std::exchange(move_from.y, NumType { });
     return *this;
 }
 
@@ -70,7 +67,7 @@ fvec2<NumType>::operator=(const NumType& copy_from) noexcept { //copy assigment
 template <typename NumType> 
 fvec2<NumType>& 
 fvec2<NumType>::operator=(NumType&& move_from) noexcept { //move assigment
-    x = y = std::move(move_from);
+    x = y = std::exchange(move_from, NumType { });
     return *this;
 }
 

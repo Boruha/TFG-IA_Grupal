@@ -16,7 +16,7 @@ struct EntityManager {
                           void      deleteEntity(entID eid)  noexcept; 
                           Entity_t& getEntityByID(entID eid) noexcept;
 
-      template <typename CMP_t>           void                addComponentToEntity(const CMP_t& new_cmp, const entID eid) noexcept;
+      template <typename CMP_t>           void                addComponentToEntity(const entID eid, const CMP_t& new_cmp) noexcept;
       template <typename CMP_t> constexpr std::vector<CMP_t>& getComponentVector()                                        noexcept;
       template <typename CMP_t> constexpr CMP_t&              getCmpByEntityID(const entID eid)                           noexcept;
 

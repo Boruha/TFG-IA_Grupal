@@ -29,7 +29,6 @@ RenderSystem<Context_t>::RenderSystem(const uint32_t w, const uint32_t h)
 template <typename Context_t>   
 RenderSystem<Context_t>::~RenderSystem() {
     ptc_close();
-    framebuffer.~unique_ptr();
 }
 
 //LOOP
@@ -51,20 +50,13 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
             const auto screen_coords  = continuous_to_screen(mov_cmp.coords);
 
             //puntero a posicion al sprite.
-            auto* screen_ptr  = framebuffer.get();
-                  screen_ptr += (screen_coords.y * window_w) + screen_coords.x;
-/*
-            std::cout << "mov_cmp content:\n";
-            std::cout << "\tpos :" << mov_cmp.coords.x.getNoScaled() << " , " << mov_cmp.coords.y.getNoScaled() << "\n";
-            std::cout << "\tdir :" << mov_cmp.dir.x.getNoScaled() << " , " << mov_cmp.dir.y.getNoScaled() << "\n";
-            std::cout << "\tacc :" << mov_cmp.accel_to_target.x.getNoScaled() << " , " << mov_cmp.accel_to_target.y.getNoScaled() << "\n";
-            std::cout << "\tsep :" << mov_cmp.sep_copy_to_draw.x.getNoScaled() << " , " << mov_cmp.sep_copy_to_draw.y.getNoScaled() << "\n";
-            std::cout << "\tcoh :" << mov_cmp.coh_copy_to_draw.x.getNoScaled() << " , " << mov_cmp.coh_copy_to_draw.y.getNoScaled() << "\n\n";
-*/
+            auto* screen_pos  = framebuffer.get();
+                  screen_pos += (screen_coords.y * window_w) + screen_coords.x;
+
             //pintar sprite
             for(uint32_t i=0; i<render_cmp.sprite.y.getNoScaled(); ++i) {
-                std::fill(screen_ptr, screen_ptr + render_cmp.sprite.y.getNoScaled(), static_cast<uint32_t>(render_cmp.sprite_C));
-                screen_ptr += window_w;
+                std::fill(screen_pos, screen_pos + render_cmp.sprite.y.getNoScaled(), static_cast<uint32_t>(render_cmp.sprite_C));
+                screen_pos += window_w;
             }
 
             if(debug_mode)

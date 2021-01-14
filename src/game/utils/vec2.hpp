@@ -9,8 +9,8 @@ template<typename NumType>
 struct vec2 {
     vec2() = default;
     constexpr explicit vec2(const NumType X,  const NumType Y ) noexcept;
-    constexpr          vec2(const vec2<NumType>& cpy_vec)       noexcept; //cpy ctor
-    constexpr          vec2(vec2<NumType>&& mov_vec)            noexcept; //move ctor
+    constexpr          vec2(const vec2<NumType>& cpy_vec)       noexcept = default; //cpy ctor
+    constexpr          vec2(vec2<NumType>&& mov_vec)            noexcept = default; //move ctor
 
     NumType x { 0 };
     NumType y { 0 };

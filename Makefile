@@ -44,13 +44,13 @@ CC          := $(CCACHE) g++
 C           := $(CCACHE) gcc
 
 # FLAGS
-FLAGS       := -pthread -Wall -pedantic -fno-exceptions
-CCFLAGS     := $(FLAGS) -std=c++17
+FLAGS       := -pthread -Wall -pedantic -fno-exceptions -O3
+CCFLAGS     := $(FLAGS) -std=c++17 
 CFLAGS      := $(FLAGS)
 
-ifeq ($(debug), true)
-	CCFLAGS   += -O3
-endif
+#ifeq ($(opt), false)
+#	CCFLAGS   += -O3
+#endif
 
 # STRUCTURE FOLDERS
 APPDIR      := 		                              #EXECUTABLE DIRECTORY (Folder root)

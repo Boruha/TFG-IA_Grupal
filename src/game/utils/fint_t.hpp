@@ -8,10 +8,10 @@ template <typename NumType>
 struct fint_t {
     fint_t() = default;
 
-    constexpr explicit fint_t(NumType num)       noexcept; //ctor
+    constexpr fint_t(NumType num)       noexcept; //ctor
     constexpr explicit fint_t(float   num)       noexcept; //ctor
-    constexpr fint_t(const fint_t<NumType>& num) noexcept; //copy ctor
-    constexpr fint_t(fint_t<NumType>&& num)      noexcept; //move ctor
+    constexpr fint_t(const fint_t<NumType>& num) noexcept = default; //copy ctor
+    constexpr fint_t(fint_t<NumType>&& num)      noexcept = default; //move ctor
 
 /* ASSIGMENT */
               fint_t<NumType>& operator=(const fint_t<NumType>& copy_from) noexcept; //copy assigment

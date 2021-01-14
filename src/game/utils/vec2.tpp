@@ -3,11 +3,7 @@
 namespace AIP {
 
 
-/* ASSIGMENT */
 template <typename NumType> constexpr vec2<NumType>::vec2(const NumType X,  const NumType Y ) noexcept : x(X), y(Y) { }
-template <typename NumType> constexpr vec2<NumType>::vec2(const vec2<NumType>& cpy_vec)       noexcept : x(cpy_vec.x), y(cpy_vec.y) { } //cpy ctor
-template <typename NumType> constexpr vec2<NumType>::vec2(vec2<NumType>&& mov_vec)            noexcept : x(std::move(mov_vec.x)), y(std::move(mov_vec.y)) { } //move ctor
-
 
 /* ASSIGMENT */
 template <typename NumType> 
@@ -21,8 +17,8 @@ vec2<NumType>::operator=(const vec2<NumType>& copy_from) noexcept { //copy assig
 template <typename NumType> 
 vec2<NumType>& 
 vec2<NumType>::operator=(vec2<NumType>&& move_from) noexcept { //move assigment
-    x = std::move(move_from.x); 
-    y = std::move(move_from.y);
+    x = std::exchange(move_from.x, 0); 
+    y = std::exchange(move_from.y, 0);
     return *this;
 }
 

@@ -17,8 +17,8 @@ struct GameManager {
     GameManager& operator=(const GameManager&&) = delete;
 
     bool            update()       noexcept;
-    fint_t<int64_t> getLoopTime()  noexcept;
-    fint_t<int64_t> getDeltaTime() noexcept;
+    fint_t<int64_t>& getLoopTime()  noexcept;
+    fint_t<int64_t>& getDeltaTime() noexcept;
 
 private:
     UnitsManager units_man;

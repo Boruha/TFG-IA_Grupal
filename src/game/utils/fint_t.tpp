@@ -5,8 +5,6 @@ namespace AIP {
 /* CTORS & COPY/MOVE */
 template <typename NumType> constexpr fint_t<NumType>::fint_t(NumType num)                noexcept : number(num * SCALE)           { } //ctor
 template <typename NumType> constexpr fint_t<NumType>::fint_t(float   num)                noexcept : number(num * SCALE)           { } //ctor
-template <typename NumType> constexpr fint_t<NumType>::fint_t(const fint_t<NumType>& num) noexcept : number(num.number)            { } //copy ctor
-template <typename NumType> constexpr fint_t<NumType>::fint_t(fint_t<NumType>&& num)      noexcept : number(std::move(num.number)) { } //move ctor
 
 
 /* ASSIGMENT */
@@ -20,7 +18,7 @@ fint_t<NumType>::operator=(const fint_t<NumType>& copy_from) noexcept{ //copy as
 template <typename NumType>
 fint_t<NumType>& 
 fint_t<NumType>::operator=(fint_t<NumType>&& move_from) noexcept { //move assigment
-    number = std::move(move_from.number);
+    number = std::exchange(move_from.number, 0);
     return *this;
 }
 

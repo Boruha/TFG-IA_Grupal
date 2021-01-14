@@ -1,4 +1,5 @@
 #include <game/man/UnitsManager.hpp>
+#include <game/utils/fvec2.tpp>
 
 #include <algorithm>
 #include <iostream>
@@ -8,35 +9,35 @@ namespace AIP {
 
 inline void
 UnitsManager::init() noexcept {
-    createSoldier(fint_t<uint64_t>(20ul), fint_t<int64_t>(30l), fint_t<int64_t>(30l), Color::White); //(?) pasar tipos básicos y que se creen dentro?
-    createSoldier(fint_t<uint64_t>(20ul), fint_t<int64_t>(60l), fint_t<int64_t>(-10l), Color::White);
-    createSoldier(fint_t<uint64_t>(20ul), fint_t<int64_t>(-10l), fint_t<int64_t>(20l), Color::White);
+    createSoldier(20ul,  30l,  30l, Color::White);
+    createSoldier(20ul,  60l, -10l, Color::White);
+    createSoldier(20ul, -10l,  20l, Color::White);
 
-    //createSoldier(fint_t<uint64_t>(20ul), fint_t<int64_t>(-60l), fint_t<int64_t>(10l), Color::White);
-    //createSoldier(fint_t<uint64_t>(20ul), fint_t<int64_t>(-20l), fint_t<int64_t>(-40l), Color::White);
+    //createSoldier(20ul, -60l, 10l, Color::White);
+    //createSoldier(20ul, -20l, -40l, Color::White);
     
-    createPlayer(fint_t<uint64_t>(20ul), fint_t<int64_t>(200l), fint_t<int64_t>(200l), Color::Blue);
+    createPlayer(20ul, 200l, 200l, Color::Blue);
 }
 
 /* CREATES & DELETE */
 inline void
-UnitsManager::createSoldier(const fint_t<uint64_t>& size, const fint_t<int64_t>& pos_x, const fint_t<int64_t>& pos_y, const Color col) noexcept {
+UnitsManager::createSoldier(const uint64_t size, const int64_t pos_x, const int64_t pos_y, const Color col) noexcept {
     const auto new_ent = ent_man.createEntity_t();
 
-    ent_man.addComponentToEntity( MovementComponent( new_ent, pos_x, pos_y   ) , new_ent );
-    ent_man.addComponentToEntity( RenderComponent(   new_ent, size, size, col) , new_ent );
-    ent_man.addComponentToEntity( CombatComponent(   new_ent )                 , new_ent );
-    ent_man.addComponentToEntity( AI_Component(      new_ent )                 , new_ent );
+    ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
+    ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent, { size } , { size }, col) );
+    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent ) );
+    ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent ) );
 }
 
 inline void
-UnitsManager::createPlayer(const fint_t<uint64_t>& size, const fint_t<int64_t>& pos_x, const fint_t<int64_t>& pos_y, const Color col) noexcept {
+UnitsManager::createPlayer(const uint64_t size, const int64_t pos_x, const int64_t pos_y, const Color col) noexcept {
     const auto new_ent = ent_man.createEntity_t();
 
-    ent_man.addComponentToEntity( MovementComponent( new_ent, pos_x, pos_y    ) , new_ent );
-    ent_man.addComponentToEntity( RenderComponent(   new_ent, size, size, col ) , new_ent );
-    ent_man.addComponentToEntity( CombatComponent(   new_ent )                  , new_ent );
-    ent_man.addComponentToEntity( InputComponent(    new_ent )                  , new_ent );
+    ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }     ) );
+    ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent, { size } , { size }, col ) );
+    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent ) );
+    ent_man.addComponentToEntity( new_ent, InputComponent(    new_ent ) );
 
     player_id = new_ent;
 }
