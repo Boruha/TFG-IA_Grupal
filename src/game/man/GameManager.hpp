@@ -29,6 +29,7 @@ private:
     MovementSystem<UnitsManager>  movement;
     CollisionSystem<UnitsManager> collision;
     AttackSystem<UnitsManager>    attack;
+    CooldownSystem<UnitsManager>  cd;
 
     fint_t<int64_t> setLoopTime()                   noexcept;
     fint_t<int64_t> setDeltaTime()                  noexcept;

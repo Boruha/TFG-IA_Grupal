@@ -6,3 +6,4 @@
 #include <game/sys/AI_System.tpp>
 #include <game/sys/InputSystem.tpp>
 #include <game/sys/AttackSystem.tpp>
+#include <game/sys/CooldownSystem.tpp>

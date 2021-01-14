@@ -13,8 +13,8 @@ UnitsManager::init() noexcept {
     createSoldier(20ul,  60l, -10l, Color::White);
     createSoldier(20ul, -10l,  20l, Color::White);
 
-    //createSoldier(20ul, -60l, 10l, Color::White);
-    //createSoldier(20ul, -20l, -40l, Color::White);
+    createSoldier(20ul, -60l, 10l, Color::White);
+    createSoldier(20ul, -20l, -40l, Color::White);
     
     createPlayer(20ul, 200l, 200l, Color::Blue);
 }

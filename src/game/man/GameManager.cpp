@@ -22,6 +22,7 @@ GameManager::update() noexcept {
     render.update(units_man, DeltaTime);
     movement.update(units_man, DeltaTime);
     collision.update(units_man, DeltaTime);
+    cd.update(units_man, DeltaTime);
 
     if( !attack.update(units_man, DeltaTime) )
         return false;

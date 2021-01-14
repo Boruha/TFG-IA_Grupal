@@ -7,7 +7,6 @@
 #include <ecs/ent/Entity_t.hpp>
 
 #include <algorithm>
-#include <iostream>
 
 namespace AIP {
 
@@ -250,7 +249,7 @@ AI_System<Context_t>::cohesion(Context_t& context, std::vector<AI_Component>& AI
             auto distance2 { diff_vec.length2() };
 
             if(distance2 < ENT_COHESION_DIST2) {
-                auto strength { std::min(distance2 / DECAY_COEFICIENT, ENT_MAX_ACCEL) };
+                auto strength { std::min(distance2 / (DECAY_COEFICIENT/2), ENT_MAX_ACCEL) };
                 diff_vec.normalize();
                 auto result   { diff_vec * strength };
 
