@@ -10,7 +10,7 @@ struct RenderComponent : BECS::Component_t {
     explicit RenderComponent(const BECS::entID entityID, const fint_t<uint64_t> s_W, const fint_t<uint64_t> s_H, const Color col) 
         : Component_t(entityID), sprite(s_W, s_H), sprite_C(col) { }
 
-    fvec2<fint_t<uint64_t>> sprite { fint_t<uint64_t> { 0ul }, fint_t<uint64_t> { 0ul } };
+    fvec2<fint_t<uint64_t>> sprite { { 0ul }, { 0ul } };
     Color sprite_C { Color::Red };
 };
 

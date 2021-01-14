@@ -11,8 +11,7 @@ AttackSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
 
     while( !attack_msg.empty() ) {
         
-        auto& last_msg = attack_msg.back();
-
+        auto& last_msg   = attack_msg.back();
         auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( last_msg.eid_damaged );
         
         combat_cmp.health -= last_msg.amount;

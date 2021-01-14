@@ -17,8 +17,8 @@ fvec2<NumType>::operator=(const fvec2<NumType>& copy_from) noexcept { //copy ass
 template <typename NumType> 
 fvec2<NumType>& 
 fvec2<NumType>::operator=(fvec2<NumType>&& move_from) noexcept { //move assigment
-    x = std::exchange(move_from.x, NumType { }); 
-    y = std::exchange(move_from.y, NumType { });
+    x = std::exchange(move_from.x, 0l); 
+    y = std::exchange(move_from.y, 0l);
     return *this;
 }
 

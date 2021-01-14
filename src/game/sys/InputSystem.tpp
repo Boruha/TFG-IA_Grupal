@@ -1,8 +1,9 @@
 #include <game/sys/InputSystem.hpp>
 #include <game/cmp/InputComponent.hpp>
 #include <game/cmp/MovementComponent.hpp>
-#include <game/cmp/AI_Component.hpp> //ONLY TEST TEST TEST TEST
 #include <game/utils/AI_Constants.hpp>
+
+//#include <game/cmp/AI_Component.hpp> //ONLY TEST TEST TEST TEST
 
 #include <ecs/ent/Entity_t.hpp>
 
@@ -41,11 +42,11 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
     if( ptc_process_events() ) //ESC = 1;
         return false;
 
-     if( keyboard.isKeyPressed(XK_Control_L) ) {
-                auto& ai_vec = context.template getComponentVector<AI_Component>();
-                if( !ai_vec.empty() )
-                    context.deleteEntity( ai_vec.front().getEntityID() );
-     }
+    //if( keyboard.isKeyPressed(XK_Control_L) ) {
+    //           auto& ai_vec = context.template getComponentVector<AI_Component>();
+    //           if( !ai_vec.empty() )
+    //               context.deleteEntity( ai_vec.front().getEntityID() );
+    //}
 
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
         [&](InputComponent& input_cmp) {

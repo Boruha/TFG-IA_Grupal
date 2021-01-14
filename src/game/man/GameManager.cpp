@@ -14,12 +14,12 @@ GameManager::GameManager() {
 
 bool
 GameManager::update() noexcept {
-    render.update(units_man, DeltaTime);
-    
+
     if( !input.update(units_man, DeltaTime) )
         return false;
 
     ia.update(units_man, DeltaTime);
+    render.update(units_man, DeltaTime);
     movement.update(units_man, DeltaTime);
     collision.update(units_man, DeltaTime);
 

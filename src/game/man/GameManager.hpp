@@ -23,7 +23,7 @@ struct GameManager {
 private:
     UnitsManager units_man;
 
-    RenderSystem<UnitsManager>    render { WINDOW_W, WINDOW_H }; //aqui se crea la ventana de tinyPTC
+    RenderSystem<UnitsManager>    render { U_WINDOW_W, U_WINDOW_H }; //aqui se crea la ventana de tinyPTC
     InputSystem<UnitsManager>     input;                         //por lo que todos los cambios relacionados tienen                                                                                  
     AI_System<UnitsManager>       ia;                            //ir a posteriori. Ejemplo, los callbacks del input.
     MovementSystem<UnitsManager>  movement;

@@ -7,7 +7,7 @@ namespace AIP {
 
 template <typename Context_t>
 struct MovementSystem{
-    bool update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept;
+    void update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept;
 };
 
 } //NS
