@@ -1,28 +1,6 @@
 \chapter{Marco teórico}
 \label{Marco_teorico}
 
-%\section{Estudio de mercado}
-%A lo largo de los años los \ac{RTS} siempre han contado con una gran aceptación entre
-%los usuarios de \ac{PC}, un claro ejemplo de esto puede ser el juego \textit{`Age of
-%Empire II: The Age of Kings'}\footnote{Desarrollado por `Ensemble Studios' y lanzado a
-%finales de 1999.} el cual se posicionó como uno de los juegos más vendidos del momento
-%superando el millón de copias. Actualmente el juego cuenta con una remasterización
-%\footnote{Co-desarrollado por Forgotten Empires, Tantalus Media y Wicked
-%Witch. Lanzado en noviembre de 2019.} la cual ha conseguido vender más de 50.000
-%copias en \textit{`Steam'}. Datos extraídos de su articulo en \citeauthor*{Wiki_AoE2}.
-
-%Si miramos en el panoráma nacional actual, podemos encontar el juego \textit{`They Are
-%Billions'} \footnote{Desarollado por Numantian Games y lanzado en junio de 2019.}
-%disponible inicialmente para \ac{PC} y posteriormente lanzado en \textit{`PlayStation 4'}
-%y \textit{`Xbox One'} debido a su éxito. A día de hoy el juego a conseguido vender
-%solamente en \textit{`Steam'} más de 25.000 unidades consiguiendo una valoración muy
-%positiva por parte de los usuarios de la plaforma como podemos ver en la página 
-%del juego de \citeauthor*{TaB2019} en dicha tienda.
-
-%El género puede aparentar ser cosa del pasado pero vistas las cifras podemos concluir
-%que sigue siendo un reclamo para los jugadores.
-
-\section{Referentes}
 Cuando uno busca desarrollar un producto es una buena práctica el investigar que se ha realizado
 previamente en entregas similares, ver que ténicas se han utilizado y que problemas se han
 encontrado y como los solventaron. También es interesante ver que mecánicas se han ido consevando
@@ -31,7 +9,7 @@ y que innovaciones se han ido introduciendo con el paso del tiempo.
 A continuación vamos a detallar aspectos de interés encontrados en diversas entregas
 las cuales nos servirán de referentes.
 
-\subsection{Age of Empires II: The Age of Kings}
+\section{Age of Empires II: The Age of Kings}
 En primer lugar encontramos el juego \textit{'Age of Empires II: The Age of Kings'}, en
 este juego encontraremos una serie de campañas a través de las cuales encarnaremos a personajes
 históricos como `Juana de Arco' o `William Wallace' y los acompañaremos en sus conquistas y
@@ -149,7 +127,7 @@ y con una escena competitiva que se basa en ser el más rápido jugando\footnote
 por lo que una reacción instantánea de las unidades es un factor importante para  estos
 jugadores.
 
-\subsection{The Are Billions}
+\section{The Are Billions}
 En segundo lugar podemos encontrar el juego \textit{'\acf{TaB}'} el cual se localiza en un
 mundo postapocalíptico infestado de zombis donde quedan muy pocos superviventes, el juego
 cuenta con dos modos:
@@ -257,6 +235,64 @@ máquina haga trampas, para apoyar sus palabras nos redirije a un \textit{post} 
 donde \citeauthor*{Pikachunet2018} nos muestra capturas de un posible editor de niveles del
 juego en el que se nos muestran multitud de opciones, entre las que encontramos la cantidad de
 enemigos, como se disponen en el mapa, o si tendrán esa iniciativa de ir al centro de la base.
+
+
+\section{Sea Salt}
+Como podemos observar en los anteriores referentes, dentro del género \ac{RTS} da la sensación
+de que todos los recursos destinados a \ac{IA} estaban reservados para la toma de decisiones y 
+en gestionar la civilización, dejando el desplazamiento de las unidades y el combate como algo
+trivial. \\
+Dicho sea que el género nació cuando no había casi capacidad de procesamiento
+y ,con el paso del tiempo, el hecho de intentar consevar la esencia del género a ocasionado la
+herencia de experiencias de juego un ``poco básicas``.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{imagenes/marco_teo/referentes/ss_1.png}
+\caption{Menú principal}
+\label{img:ss_1}
+\end{figure}
+
+Por otro lado, hay juegos que han aportado experiencias y mecánicas nuevas, ya sea combinando
+géneros y/o incluyendo técnicas más modernas que nos ofrecen resultados distintos. Este es el
+caso de \textit{`Sea Salt'}, juego que combina estrategia, acción y cartas en el que encarnaremos 
+a `Dagon' una antigua deidad marina la cual planea castigar a la humanidad por haberse 
+opuesto a sus designios.
+
+El juego se compone de una serie de niveles que representan distintas partes de la ciudad
+donde se desarrolla la historia, cada nivel tiene a su vez distintas salas donde encontraremos
+diversos obstáculos y enemigos que abatir. Para abrirnos paso por el nivel manejaremos al
+ejercito de `Dagon' el cual se compone de diversas criaturas cada una con sus carácteristicas 
+únicas, a lo largo de los niveles encontraremos altares donde podremos invocar nuevas unidades
+para aumentar el grueso de nuestras filas. 
+
+En este caso los puntos que más nos interesa tratar es el uso de \textit{`Flocking'} y el 
+control de las unidades que controla el jugador.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.7\textwidth]{imagenes/marco_teo/referentes/ss_4.png}
+\caption{Criaturas de `Dagon'}
+\label{img:ss_4}
+\end{figure}
+
+En cuanto a la jugabilidad y los controles, el jugador no manejará de forma
+explícita las criaturas del ejercito, sino que, mediante las teclas `w', `a', `s', `d'
+moverá una marca por el mapa la cual será seguida por las unidades. Además, con la
+`barra espaciadora' las unidades se lanzarán al ataque de los enemigos en su rango de 
+acción, aparentemente al más cercano. Por último encontramos la tecla `ctrl' la cual
+nos permitirá hacer que las unidades se reagrupen en la marca del jugador y el `shift'
+el cual 
+hará que todas las unidades avancen a la misma velocidad. \\
+Mediante estas acciones tendremos que arreglarnos las para matar a la unidades enemigas y
+esquivar sus ataque, sobretodo en las peleas con jefes al final de los niveles.
+
+Por otro lado encontramos el uso de \textit{'Flocking'} el cual aporta un toque ``errático''
+en el desplazamiento de las unidades que, junto a los controles, juega mucho con la temática 
+de monstruos/criaturas malvadas. \\
+La técnica ayuda a darle vida y sensación de individualidad
+a cada una de las unidades, a la vez que refuerza la visión de conjunto al ver como las
+unidades se encuentran en todo momento actuando de la misma forma. 
 
 
 \section{Técnicas de inteligencia articificial}
