@@ -29,7 +29,7 @@ private:
 
     const uint32_t              framebuffer_size { 0 };
     std::unique_ptr<uint32_t[]> framebuffer      { nullptr };
-    bool                        debug_mode       { true };
+    bool                        debug_mode       { false };
 };
 
 }

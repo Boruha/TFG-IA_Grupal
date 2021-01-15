@@ -4,7 +4,6 @@
 
 #include <ecs/ent/Entity_t.hpp>
 
-
 extern "C" {
   #include "tinyPTC/tinyptc.h"
 }
@@ -39,14 +38,45 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
         [&](const RenderComponent& render_cmp) {
             auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( render_cmp.getEntityID() );
+            
+            //draw sprite
+            auto            screen_coords  { continuous_to_screen(mov_cmp.coords) };
+            auto*           screen_ptr     { framebuffer.get() };
+                            screen_ptr    += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
+            vec2<uint64_t>  sprite         { render_cmp.sprite.y.getNoScaled(), render_cmp.sprite.x.getNoScaled() };
 
-            const auto screen_coords  = continuous_to_screen(mov_cmp.coords);
-            auto*      screen_ptr     = framebuffer.get();
-                       screen_ptr    += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
-            auto       size_y         = render_cmp.sprite.y.getNoScaled();
+            for(uint32_t i=0; i<sprite.y; ++i) {
+                std::fill( screen_ptr, screen_ptr + sprite.x, static_cast<uint32_t>(render_cmp.sprite_C) );
+                screen_ptr += U_WINDOW_W;
+            }
 
-            for(uint32_t i=0; i<size_y; ++i) {
-                std::fill(screen_ptr, screen_ptr + size_y, static_cast<uint32_t>(render_cmp.sprite_C));
+            //draw head mark
+                //coords -> vec2<uint32_t> / fvec2<fint<int64_t>>
+                //sprite -> vec2<uint64_t> / fvec2<fint<uint64_t>>
+                //dir    -> fvec2<fint<int64_t>>
+
+                //res    -> vec2<uint32_t>
+            auto sprite_x_64 { ( static_cast<int64_t>(sprite.x) / 2 ) };
+            auto sprite_y_64 { ( static_cast<int64_t>(sprite.y) / 2 ) };
+            auto sprite_x    { ( static_cast<int64_t>(render_cmp.sprite.x.number) / 2 ) };
+            auto sprite_y    { ( static_cast<int64_t>(render_cmp.sprite.y.number) / 2 ) };
+            auto q_sprite    { sprite / 4 };
+            auto p_ini       { mov_cmp.coords };
+            auto dir         { mov_cmp.dir };
+            dir.normalize();
+            
+            p_ini.x.number += sprite_x;
+            p_ini.y.number += sprite_y;      
+            dir.x.number   *= sprite_x_64;
+            dir.y.number   *= sprite_y_64;
+            
+            const auto screen_p_fin { clip_2_draw(p_ini + dir) };
+
+            screen_ptr  = framebuffer.get();
+            screen_ptr += (screen_p_fin.y * U_WINDOW_W) + (screen_p_fin.x - q_sprite.x);
+
+            for(uint32_t i=0; i<q_sprite.y; ++i) {
+                std::fill( screen_ptr, screen_ptr + q_sprite.x, static_cast<uint32_t>(Color::Red) );
                 screen_ptr += U_WINDOW_W;
             }
 
