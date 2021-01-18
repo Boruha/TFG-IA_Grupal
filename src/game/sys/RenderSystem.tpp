@@ -40,46 +40,40 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
             auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( render_cmp.getEntityID() );
             
             //draw sprite
-            auto            screen_coords  { continuous_to_screen(mov_cmp.coords) };
-            auto*           screen_ptr     { framebuffer.get() };
-                            screen_ptr    += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
-            vec2<uint64_t>  sprite         { render_cmp.sprite.y.getNoScaled(), render_cmp.sprite.x.getNoScaled() };
+            auto  screen_coords  { continuous_to_screen(mov_cmp.coords) };
+            auto* screen_ptr     { framebuffer.get() };
+                  screen_ptr    += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
+            vec2  sprite         { render_cmp.sprite.y, render_cmp.sprite.x };
 
             for(uint32_t i=0; i<sprite.y; ++i) {
                 std::fill( screen_ptr, screen_ptr + sprite.x, static_cast<uint32_t>(render_cmp.sprite_C) );
                 screen_ptr += U_WINDOW_W;
             }
 
-            //draw head mark
-                //coords -> vec2<uint32_t> / fvec2<fint<int64_t>>
-                //sprite -> vec2<uint64_t> / fvec2<fint<uint64_t>>
-                //dir    -> fvec2<fint<int64_t>>
-
-                //res    -> vec2<uint32_t>
-            auto sprite_x_64 { ( static_cast<int64_t>(sprite.x) / 2 ) };
-            auto sprite_y_64 { ( static_cast<int64_t>(sprite.y) / 2 ) };
-            auto sprite_x    { ( static_cast<int64_t>(render_cmp.sprite.x.number) / 2 ) };
-            auto sprite_y    { ( static_cast<int64_t>(render_cmp.sprite.y.number) / 2 ) };
-            auto q_sprite    { sprite / 4 };
-            auto p_ini       { mov_cmp.coords };
-            auto dir         { mov_cmp.dir };
+            auto head { sprite/4 }; 
+            auto h_sp { sprite/2 }; 
+            auto dir  { mov_cmp.dir };
+            
             dir.normalize();
             
-            p_ini.x.number += sprite_x;
-            p_ini.y.number += sprite_y;      
-            dir.x.number   *= sprite_x_64;
-            dir.y.number   *= sprite_y_64;
-            
-            const auto screen_p_fin { clip_2_draw(p_ini + dir) };
+            dir.x.number  *= h_sp.x;
+            dir.y.number  *= h_sp.y;
+            dir           += mov_cmp.coords; 
 
+            screen_coords  = continuous_to_screen(dir);
+            screen_coords += h_sp - head/2;
+        
             screen_ptr  = framebuffer.get();
-            screen_ptr += (screen_p_fin.y * U_WINDOW_W) + (screen_p_fin.x - q_sprite.x);
+            screen_ptr += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
 
-            for(uint32_t i=0; i<q_sprite.y; ++i) {
-                std::fill( screen_ptr, screen_ptr + q_sprite.x, static_cast<uint32_t>(Color::Red) );
+            for(uint32_t i=0; i<head.y; ++i) {
+                std::fill( screen_ptr, screen_ptr + head.x, static_cast<uint32_t>(Color::Red) );
                 screen_ptr += U_WINDOW_W;
             }
-
+            
+            
+            
+            
             if(debug_mode)
                 draw_debug(mov_cmp, render_cmp);
     });
@@ -125,10 +119,10 @@ RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const Rend
     const auto& cohes = mov_cmp.coh_copy_to_draw;
     
     //ajustamos el inicio de los vectores de steer.
-          auto p_ini           = mov_cmp.coords;
-               p_ini.x.number += ( static_cast<int64_t>(render_cmp.sprite.x.number) / 2 );
-               p_ini.y.number += ( static_cast<int64_t>(render_cmp.sprite.y.number) / 2 );
-    const auto screen_p_ini    = clip_2_draw(p_ini);
+          auto p_ini         = mov_cmp.coords;
+               p_ini.x      += ( static_cast<int64_t>(render_cmp.sprite.x) / 2 );
+               p_ini.y      += ( static_cast<int64_t>(render_cmp.sprite.y) / 2 );
+    const auto screen_p_ini  = clip_2_draw(p_ini);
     
     if(dir.length2().number != 0) {
         const auto screen_p_fin = clip_2_draw(p_ini + dir);

@@ -1,5 +1,6 @@
 #pragma once
 #include <game/cmp/RenderComponent.hpp>
+#include <game/utils/fvec2.hpp>
 #include <game/utils/vec2.tpp>
 
 namespace AIP {

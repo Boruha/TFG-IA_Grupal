@@ -19,8 +19,8 @@ CollisionSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> Del
                 auto& ren_cmp   = context.template getCmpByEntityID<RenderComponent>( mov_cmp.getEntityID() );
 
                         auto& coord = mov_cmp.coords;
-                const fint_t size_W { static_cast<int64_t>( ren_cmp.sprite.x.getNoScaled() ) };
-                const fint_t size_H { static_cast<int64_t>( ren_cmp.sprite.y.getNoScaled() ) };
+                const fint_t size_W { static_cast<int64_t>( ren_cmp.sprite.x ) };
+                const fint_t size_H { static_cast<int64_t>( ren_cmp.sprite.y ) };
 
                 //eje X
                 if( coord.x + size_W > F_H_WINDOW_W )
