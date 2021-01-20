@@ -13,10 +13,11 @@ namespace AIP {
 template <typename Context_t>
 bool
 AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
-    auto& ai_cmp_vec = context.template getComponentVector<AI_Component>();
+    auto& enemies_ids = context.template getEnemyIDs();
     
-    std::for_each(begin(ai_cmp_vec), end(ai_cmp_vec), [&](AI_Component& ai_cmp) {
-        auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( ai_cmp.getEntityID()  );
+    std::for_each(begin(enemies_ids), end(enemies_ids), [&](BECS::entID eid) {
+        auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>( eid );
+        auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( eid );
         auto& pj_mov  = context.template getCmpByEntityID<MovementComponent>( context.getPlayerID() );
         auto& pj_pos  = pj_mov.coords;
 
@@ -57,11 +58,12 @@ AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime
                 mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
             break;
         }
+
     });
 
     //cuando haya mas de un bando habra que cambiarlo
-    separation(context, ai_cmp_vec);
-    cohesion(context, ai_cmp_vec);
+    separation(context);
+    cohesion(context, enemies_ids);
 
     return true;
 }
@@ -121,7 +123,7 @@ AI_System<Context_t>::attack(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>&
     
     if(combat_cmp.current_attack_cd.number <= 0l) {
         combat_cmp.current_attack_cd = combat_cmp.attack_cd;
-        attack_msg.emplace_back(mov_cmp.getEntityID(), context.getPlayerID(), combat_cmp.damage); //rediseño para X enemigo
+        //attack_msg.emplace_back(mov_cmp.getEntityID(), context.getPlayerID(), combat_cmp.damage); //rediseño para X enemigo
     }
     
     arrive(mov_cmp, target_pos);
@@ -202,17 +204,16 @@ AI_System<Context_t>::leave(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& 
 /* FLOCKING B. FUNCTIONS */
 template <typename Context_t>
 void 
-AI_System<Context_t>::separation(Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept {
-    auto end_it { end(AI_cmps) };
+AI_System<Context_t>::separation(Context_t& context) noexcept {
+    auto& mov_vec = context.template getComponentVector<MovementComponent>();
+    auto  end_it  = end(mov_vec);
     
-    for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
-        auto& ai_mov_cmp = context.template getCmpByEntityID<MovementComponent>( (*ai_it).getEntityID() );
-        auto& sep_force  = ai_mov_cmp.separation_force;
+    for(auto mov_it = begin(mov_vec); mov_it < end_it; ++mov_it) {
+        auto& mov_cmp   = *mov_it;
+        auto& sep_force = mov_cmp.separation_force;
 
-        for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
-            auto& comparision_mov_cmp = context.template getCmpByEntityID<MovementComponent>( (*comparision_it).getEntityID() );
-
-            auto diff_vec  { ai_mov_cmp.coords - comparision_mov_cmp.coords };
+        std::for_each(mov_it+1, end_it, [&](MovementComponent& ally_mov_cmp) {
+            auto diff_vec  { mov_cmp.coords - ally_mov_cmp.coords };
             auto distance2 { diff_vec.length2() };
 
             if(distance2 < ENT_SEPARATION_DIST2) {
@@ -220,10 +221,10 @@ AI_System<Context_t>::separation(Context_t& context, std::vector<AI_Component>& 
                 diff_vec.normalize();
                 auto result   { diff_vec * strength };
 
-                sep_force                            += result;
-                comparision_mov_cmp.separation_force += result * -1;
+                sep_force                     += result;
+                ally_mov_cmp.separation_force += result * -1;
             }
-        }// END FOR COMPARISION
+        });
 
         if(sep_force.length2() > ENT_MAX_ACCEL2) {
             sep_force.normalize();
@@ -235,17 +236,17 @@ AI_System<Context_t>::separation(Context_t& context, std::vector<AI_Component>& 
 
 template <typename Context_t>
 void
-AI_System<Context_t>::cohesion(Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept {
-    auto end_it { end(AI_cmps) };
+AI_System<Context_t>::cohesion(Context_t& context, std::vector<BECS::entID>& eids) noexcept {
+    auto end_it = end(eids);
     
-    for(auto ai_it = begin(AI_cmps) ; ai_it < end_it ; ++ai_it) {
-        auto& ai_mov_cmp  = context.template getCmpByEntityID<MovementComponent>( (*ai_it).getEntityID() );
-        auto& ai_cohesion = ai_mov_cmp.cohesion_force;
+    for(auto eid_it = begin(eids); eid_it < end_it; ++eid_it) {
+        auto& mov_cmp  = context.template getCmpByEntityID<MovementComponent>( (*eid_it) );
+        auto& cohesion = mov_cmp.cohesion_force;
 
-        for(auto comparision_it = ai_it+1 ; comparision_it < end_it ; ++comparision_it) {
-            auto& comparision_mov_cmp  = context.template getCmpByEntityID<MovementComponent>( (*comparision_it).getEntityID() );
-
-            auto diff_vec  { comparision_mov_cmp.coords - ai_mov_cmp.coords };
+        std::for_each(eid_it+1, end_it, [&](BECS::entID ally_eid){
+            auto& ally_mov_cmp = context.template getCmpByEntityID<MovementComponent>( ally_eid );
+        
+            auto diff_vec  { ally_mov_cmp.coords - mov_cmp.coords };
             auto distance2 { diff_vec.length2() };
 
             if(distance2 < ENT_COHESION_DIST2) {
@@ -253,15 +254,16 @@ AI_System<Context_t>::cohesion(Context_t& context, std::vector<AI_Component>& AI
                 diff_vec.normalize();
                 auto result   { diff_vec * strength };
 
-                ai_cohesion                        += result;
-                comparision_mov_cmp.cohesion_force += result * -1;
+                cohesion                    += result;
+                ally_mov_cmp.cohesion_force += result * -1;
             }
-        }// END FOR COMPARISION
+        });
 
-        if(ai_cohesion.length2() > ENT_MAX_ACCEL2) {
-            ai_cohesion.normalize();
-            ai_cohesion *= ENT_MAX_ACCEL;
+        if(cohesion.length2() > ENT_MAX_ACCEL2) {
+            cohesion.normalize();
+            cohesion *= ENT_MAX_ACCEL;
         }
+        
     }// END FOR AI
 }
 

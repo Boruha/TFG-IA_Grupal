@@ -9,13 +9,14 @@ namespace AIP {
 
 inline void
 UnitsManager::init() noexcept {
-    createSoldier(20,  30l,  30l, Color::White);
-    createSoldier(20,  60l, -10l, Color::White);
-    createSoldier(20, -10l,  20l, Color::White);
-
-    createSoldier(20, -60l, 10l, Color::White);
-    createSoldier(20, -20l, -40l, Color::White);
+    enemies_vec.reserve(5);
     
+    createSoldier(20,  30l,  30l, Color::Red);
+    createSoldier(20,  60l, -10l, Color::Red);
+    createSoldier(20, -10l,  20l, Color::Red);
+    createSoldier(20, -60l,  10l, Color::Red);
+    createSoldier(20, -20l, -40l, Color::Red);
+
     createPlayer(20, 200l, 200l, Color::Blue);
 }
 
@@ -23,6 +24,8 @@ UnitsManager::init() noexcept {
 inline void
 UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col) noexcept {
     const auto new_ent = ent_man.createEntity_t();
+
+    enemies_vec.push_back(new_ent);
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
@@ -75,6 +78,13 @@ inline BECS::entID
 UnitsManager::getPlayerID() noexcept { 
     return player_id; 
 }
+
+inline constexpr 
+std::vector<BECS::entID>& 
+UnitsManager::getEnemyIDs() noexcept {
+    return enemies_vec;
+} 
+
 
 
 } // namespace AIP

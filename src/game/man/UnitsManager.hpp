@@ -1,6 +1,8 @@
 #pragma once
 #include <ecs/man/EntityManager.tpp>
 
+#include <vector>
+
 namespace AIP {
 
 struct UnitsManager {
@@ -20,6 +22,7 @@ struct UnitsManager {
       template <typename CMP_t> constexpr std::vector<CMP_t>& getComponentVector()                    noexcept;
       template <typename CMP_t> constexpr CMP_t&              getCmpByEntityID(const BECS::entID eid) noexcept;
 
+      constexpr std::vector<BECS::entID>& getEnemyIDs() noexcept;
 
       BECS::Entity_t&    getEntityByID(BECS::entID eid)       noexcept;
       const BECS::entID  getPlayerID()                  const noexcept;  
@@ -28,6 +31,8 @@ struct UnitsManager {
 private:
       BECS::EntityManager ent_man   {    };
       BECS::entID         player_id { 0u };
+
+      std::vector<BECS::entID> enemies_vec;
 };
 
 } // namespace AIP

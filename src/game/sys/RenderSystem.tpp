@@ -67,7 +67,7 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
             screen_ptr += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
 
             for(uint32_t i=0; i<head.y; ++i) {
-                std::fill( screen_ptr, screen_ptr + head.x, static_cast<uint32_t>(Color::Red) );
+                std::fill( screen_ptr, screen_ptr + head.x, static_cast<uint32_t>(Color::White) );
                 screen_ptr += U_WINDOW_W;
             }
             

@@ -32,8 +32,8 @@ private:
     bool leave( MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept;
 
 /* FLOCKING B. COMPO */
-    void separation(Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept;
-    void cohesion(  Context_t& context, std::vector<AI_Component>& AI_cmps) noexcept;
+    void separation(Context_t& context) noexcept;
+    void cohesion(  Context_t& context, std::vector<BECS::entID>& eids) noexcept;
 
 /* AUX */
     [[nodiscard]] optVec2_refw updatePatrol(AI_Component& ai_cmp) noexcept;
