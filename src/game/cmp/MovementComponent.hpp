@@ -6,6 +6,7 @@
 namespace AIP {
 
 struct MovementComponent : BECS::Component_t {
+
   explicit MovementComponent(const BECS::entID entityID, const fint_t<int64_t> c_X, const fint_t<int64_t> c_Y) 
     : Component_t(entityID), coords(c_X, c_Y) { }
 

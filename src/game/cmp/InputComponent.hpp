@@ -15,6 +15,9 @@ struct InputComponent : BECS::Component_t {
     KeySym key_Left  { XK_Left  };
     KeySym key_Right { XK_Right };
 
+    KeySym key_b     { XK_b };
+    KeySym key_space { XK_space };
+
 };
 
 } //NS

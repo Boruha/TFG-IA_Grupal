@@ -11,21 +11,30 @@ inline void
 UnitsManager::init() noexcept {
     enemies_vec.reserve(5);
     
-    createSoldier(20,  30l,  30l, Color::Red);
-    createSoldier(20,  60l, -10l, Color::Red);
-    createSoldier(20, -10l,  20l, Color::Red);
-    createSoldier(20, -60l,  10l, Color::Red);
-    createSoldier(20, -20l, -40l, Color::Red);
+    createSoldier(20,  30l,  30l, Color::Red, false);
+    createSoldier(20,  60l, -10l, Color::Red, false);
+    createSoldier(20, -10l,  20l, Color::Red, false);
+    createSoldier(20, -60l,  10l, Color::Red, false);
+    createSoldier(20, -20l, -40l, Color::Red, false);
 
-    createPlayer(20, 200l, 200l, Color::Blue);
+    createSoldier(20, 380l, 400l, Color::Blue, true);
+    createSoldier(20, 400l, 420l, Color::Blue, true);
+    createSoldier(20, 380l, 420l, Color::Blue, true);
+    //createSoldier(20, -60l,  10l, Color::Blue, true);
+    //createSoldier(20, -20l, -40l, Color::Blue, true);
+
+    createPlayerPointer(20, 400l, 400l, Color::Green);
 }
 
 /* CREATES & DELETE */
 inline void
-UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col) noexcept {
+UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team) noexcept {
     const auto new_ent = ent_man.createEntity_t();
 
-    enemies_vec.push_back(new_ent);
+    if(team)
+        allies_vec.push_back(new_ent);
+    else    
+        enemies_vec.push_back(new_ent);
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
@@ -34,12 +43,11 @@ UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int6
 }
 
 inline void
-UnitsManager::createPlayer(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col) noexcept {
+UnitsManager::createPlayerPointer(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col) noexcept {
     const auto new_ent = ent_man.createEntity_t();
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }     ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent, { size } , { size }, col ) );
-    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent ) );
     ent_man.addComponentToEntity( new_ent, InputComponent(    new_ent ) );
 
     player_id = new_ent;
@@ -84,6 +92,12 @@ std::vector<BECS::entID>&
 UnitsManager::getEnemyIDs() noexcept {
     return enemies_vec;
 } 
+
+inline constexpr 
+std::vector<BECS::entID>& 
+UnitsManager::getAllyIDs() noexcept {
+    return allies_vec;
+}
 
 
 

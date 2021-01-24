@@ -19,24 +19,33 @@ La ficha técnica es la siguientes:
 
 \section{Mecánicas}
 Durante el juego podremos ejecutar una serie de ordenes sobre nuestras unidades para cambiar
-su distribución, ordenarles que se desplazen y/o que ataquen a enemigos.
+su distribución, ordenarles que se desplazen y/o que ataquen a enemigos.\\
+Para el desplazamiento por el mapa, el jugador contará con un marcador en el mapa el cual
+será capaz de desplazar para que sus unidades lo sigan mientras les sea posible~\ref{fig:mockup_following}.
 
-El jugador será capaz de seleccionar con el ratón las unidades sobre las que
-quiere lanzar la acción y seleccionar o deseleccionar todas la unidades a su
-disposición mediante atajos de teclado en cualquier momento~\ref{fig:unit-selec} .
+%El jugador será capaz de seleccionar con el ratón las unidades sobre las que
+%quiere lanzar la acción y seleccionar o deseleccionar todas la unidades a su
+%disposición mediante atajos de teclado en cualquier momento~\ref{fig:unit-selec} .
 
+
+%\begin{figure}[ht]
+%\centering
+%\begin{minipage}[c]{0.45\linewidth}
+%	\hspace{1cm}
+%	\includegraphics[width=0.7\textwidth]{imagenes/gdd/non-selection.png}
+%\end{minipage}
+%\begin{minipage}[c]{0.45\linewidth}
+%	\includegraphics[width=0.7\textwidth]{imagenes/gdd/selection.png}
+%\end{minipage}	
+%\caption{MockUp selección.}
+%\label{fig:unit-selec}
+%\end{figure}
 
 \begin{figure}[ht]
 \centering
-\begin{minipage}[c]{0.45\linewidth}
-	\hspace{1cm}
-	\includegraphics[width=0.7\textwidth]{imagenes/gdd/non-selection.png}
-\end{minipage}
-\begin{minipage}[c]{0.45\linewidth}
-	\includegraphics[width=0.7\textwidth]{imagenes/gdd/selection.png}
-\end{minipage}	
-\caption{MockUp selección.}
-\label{fig:unit-selec}
+\includegraphics[width=0.35\textwidth]{imagenes/gdd/Following.png}
+\caption{MockUp Seguimiento de la marca del jugador.}
+\label{fig:mockup_following}
 \end{figure}
 
 En cuanto a las posibles formaciones para nuestras unidades, encontramos las siguientes:
@@ -72,9 +81,9 @@ no haber unidad escoltada el centro estará vacío.
 \label{mockup_anillo}
 \end{figure}
 
-Las acciones posibles serán realizadas en función del objeto y/o lugar donde el jugador haga
-click, si el jugador selecciona una unidad enemiga las unidades marcadas iniciarán un ataque hacía
-esa unidad. Si el objetivo es un punto vacío del mapa, las unidades se desplazarán a el.
+%Las acciones posibles serán realizadas en función del objeto y/o lugar donde el jugador haga
+%click, si el jugador selecciona una unidad enemiga las unidades marcadas iniciarán un ataque hacía
+%esa unidad. Si el objetivo es un punto vacío del mapa, las unidades se desplazarán a el.
 
 Por último podemos ordenar a las unidades que mantengan una estrategia definida:
 
@@ -140,16 +149,13 @@ Las teclas para navegar por los menús son las siguientes:
 Las asignadas para jugar son las siguientes:
 
 \begin{itemize}
-	\item \textbf{Click derecho:} mediante esta tecla del ratón podremos seleccionar la
-	unidad sobre la que queremos trabajar, si mantenemos pulsado y arrastramos por el
-	escenario podremos seleccionar varias unidades cercanas. Si no se selecciona ninguna
-	unidad, se deshará la selección actual.
-	\item \textbf{Click izquierdo:} con esta otra podremos seleccionar donde queremos
-	desplazar a las unidades seleccionadas y/o atacar a otras unidades.
-	\item \textbf{R:} usaremos esta tecla para deseleccionar todas las unidades desde
-	el teclado.
-	\item \textbf{T:} la usaremos para seleccionar a todas las unidades,
-	independientemente de donde se encuentren.
+	\item \textbf{W/A/S/D:} mediante estas teclas podremos desplazar el puntero por el mapa.
+	\item \textbf{Barra Espaciadora:} con esta otra podremos ordenar atacar a nuestras unidades,
+									  si no encuentran una unidades enemiga en su rango se mantendrá
+									  en seguimiento del puntero, si un aliado cercano entra en combate
+									  se unirá a la afrenta junto a él.
+	\item \textbf{B:} activa el modo huída y las unidades dejarán de combatir y seguirán el
+					  puntero aunque tengan enemigos en su campo de visión.									  
 \end{itemize}
 
 \section{Pantallas}

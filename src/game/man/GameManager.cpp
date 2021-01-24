@@ -37,7 +37,7 @@ GameManager::checkFpsMsg() noexcept {
     auto& msgs = ia.fps_msg;
     
     while (!msgs.empty()) {
-        auto& last_msg = msgs.back();
+        auto& last_msg = msgs.front();
         
         switch (last_msg.Target) {
         case FPS_Opc::LoopTime : changeLoopTime(last_msg.Action);
@@ -53,7 +53,7 @@ GameManager::checkFpsMsg() noexcept {
         default:
             break;
         }
-        msgs.pop_back();
+        msgs.pop();
     }  
 }
 

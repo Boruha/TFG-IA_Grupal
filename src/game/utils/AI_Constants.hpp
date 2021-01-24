@@ -4,6 +4,10 @@
 namespace AIP {
 
 //ARRIVE B.
+constexpr fint_t<int64_t> VISION_DIST  { 150l };
+constexpr fint_t<int64_t> VISION_DIST2 { VISION_DIST * VISION_DIST };
+
+//ARRIVE B.
 constexpr fint_t<int64_t> ENT_ARRIVE_DIST  { 40l };
 constexpr fint_t<int64_t> ENT_ARRIVE_DIST2 { ENT_ARRIVE_DIST * ENT_ARRIVE_DIST };
 
@@ -25,7 +29,7 @@ constexpr fint_t<int64_t> ENT_SEPARATION_DIST2 { ENT_SEPARATION_DIST * ENT_SEPAR
 constexpr fint_t<int64_t> DECAY_COEFICIENT     { 3500l };
 
 //COHESION B.
-constexpr fint_t<int64_t> ENT_COHESION_DIST  { 300l };
+constexpr fint_t<int64_t> ENT_COHESION_DIST  { 220l };
 constexpr fint_t<int64_t> ENT_COHESION_DIST2 { ENT_COHESION_DIST * ENT_COHESION_DIST };
 
 //MOVEMENT_SYS

@@ -24,7 +24,7 @@ struct Keyboard_t {
 
 private:
     std::unordered_map<KeySym, bool> keys {
-          { XK_BackSpace, false }
+          { XK_space    , false }
         , { XK_Tab      , false }
         , { XK_Escape   , false }
         , { XK_Shift_L  , false }

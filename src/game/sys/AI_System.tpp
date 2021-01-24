@@ -1,5 +1,5 @@
 #include <game/sys/AI_System.hpp>
-#include <game/cmp/AI_Component.hpp>
+
 #include <game/cmp/MovementComponent.hpp>
 #include <game/cmp/CombatComponent.hpp>
 #include <game/utils/AI_Constants.hpp>
@@ -7,6 +7,7 @@
 #include <ecs/ent/Entity_t.hpp>
 
 #include <algorithm>
+#include <iostream>
 
 namespace AIP {
 
@@ -14,131 +15,156 @@ template <typename Context_t>
 bool
 AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
     auto& enemies_ids = context.template getEnemyIDs();
+    auto& allies_ids  = context.template getAllyIDs();
     
-    std::for_each(begin(enemies_ids), end(enemies_ids), [&](BECS::entID eid) {
+    //update IA units
+    std::for_each(begin(enemies_ids), end(enemies_ids), [&](BECS::entID eid) {     
         auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>( eid );
         auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( eid );
-        auto& pj_mov  = context.template getCmpByEntityID<MovementComponent>( context.getPlayerID() );
-        auto& pj_pos  = pj_mov.coords;
-
-        auto  target_dir = pj_pos - mov_cmp.coords;
-        auto  distance2  = target_dir.length2();
-
-        if( distance2.getNoScaled() > (200l * 200l) ) {         //Terrorismo en estad0 pur0
-            ai_cmp.current_behavior = AI_behaviour::patrol_b;
-        }
-        if( distance2.getNoScaled() > (130l * 130l) && distance2.getNoScaled() < (200l * 200l) ) {
-            ai_cmp.current_behavior = AI_behaviour::chase_b;
-        } 
-        if( distance2.getNoScaled() < (130l * 130l) ) {
-            ai_cmp.current_behavior = AI_behaviour::attack_b;
-        }
+        
+        decisionMakingIA(context, eid, allies_ids);
 
         switch (ai_cmp.current_behavior) {
-            case AI_behaviour::patrol_b : patrol(ai_cmp, mov_cmp);
+            case AI_behaviour::patrol_b : patrol(context, eid);
             break;
         
-            case AI_behaviour::chase_b : chase(mov_cmp, pj_pos);
+            case AI_behaviour::chase_b : chase(context, eid);
             break;
 
-            case AI_behaviour::runaway_b : run_away(mov_cmp, pj_pos);
-            break;
+            //case AI_behaviour::attack_b : attack(context, eid);
+            //break;
 
-            case AI_behaviour::pursue_b : pursue(mov_cmp, pj_mov);
-            break;
-
-            case AI_behaviour::evade_b : evade(mov_cmp, pj_mov);
-            break;
-
-            case AI_behaviour::attack_b : attack(mov_cmp, pj_pos, context);
-            break;
-
-        default: 
+            default: 
                 mov_cmp.dir.x.number             = mov_cmp.dir.y.number             = 0;
                 mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
             break;
         }
-
     });
 
+    auto comand = AI_behaviour::no_b;
+    
+    if( !comand_msg.empty() ) {
+        comand = comand_msg.front().action;
+        comand_msg.pop();
+    }
+    
+    //update PJ units
+    std::for_each(begin(allies_ids), end(allies_ids), [&](BECS::entID eid) {     
+        auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>( eid );
+        auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( eid );
+
+        decisionMakingPJ(context, eid, enemies_ids, comand);
+
+        switch (ai_cmp.current_behavior) {
+            case AI_behaviour::follow_b : chase(context, eid);
+            break;
+        
+            case AI_behaviour::chase_b : chase(context, eid);
+            break;
+
+            //case AI_behaviour::attack_b : attack(context, eid);
+            //break;
+
+            default: 
+                mov_cmp.dir.x.number             = mov_cmp.dir.y.number             = 0;
+                mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
+            break;
+        }
+    });
+
+    
+    
     //cuando haya mas de un bando habra que cambiarlo
     separation(context);
     cohesion(context, enemies_ids);
+    cohesion(context, allies_ids);
 
     return true;
 }
 
 
-/* CONPLEX B. */
+/* COMPLEX B. */
 template <typename Context_t>
-void 
-AI_System<Context_t>::patrol(AI_Component& ai_cmp, MovementComponent& mov_cmp) noexcept {
-    auto& target = ai_cmp.target_vec.at(ai_cmp.target_index);
+constexpr void
+AI_System<Context_t>::patrol(Context_t& context, BECS::entID eid) noexcept {
+    if( !arrive(context, eid) ) {
+        if( updatePatrol(context, eid) )
+            arrive(context, eid);
+    }
+}
+
+template <typename Context_t>
+constexpr void 
+AI_System<Context_t>::chase(Context_t& context, BECS::entID eid) noexcept {
+    auto& ai_cmp      = context.template getCmpByEntityID<AI_Component>( eid );
+    auto& mov_cmp     = context.template getCmpByEntityID<MovementComponent>( ai_cmp.target_ent );
+    ai_cmp.target_pos = mov_cmp.coords;
     
-    if( !arrive(mov_cmp, target) ) {
-        if( auto new_target = updatePatrol(ai_cmp) )
-            arrive(mov_cmp, (*new_target).get());
-    }
-
+    arrive(context, eid);
 }
 
 template <typename Context_t>
-void 
-AI_System<Context_t>::chase(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept {
-    arrive(mov_cmp, target_pos);
-}
-
-template <typename Context_t>
-void 
-AI_System<Context_t>::run_away(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept {
-    if( !leave(mov_cmp, target_pos) ) {
-        mov_cmp.dir.x.number = mov_cmp.dir.y.number = 0;
-        mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
-    }
-}
-
-template <typename Context_t>
-void
-AI_System<Context_t>::pursue(MovementComponent& mov_cmp, MovementComponent& target_mov_cmp) noexcept {
-    auto  predicted_pos { target_mov_cmp.coords + target_mov_cmp.dir };
-
-    arrive(mov_cmp, predicted_pos);
-}
-
-template <typename Context_t>
-void
-AI_System<Context_t>::evade(MovementComponent& mov_cmp, MovementComponent& target_mov_cmp) noexcept {
-    auto  predicted_pos { target_mov_cmp.coords + target_mov_cmp.dir };
-
-    if( !leave(mov_cmp, predicted_pos) ) {
-        mov_cmp.dir.x.number = mov_cmp.dir.y.number = 0;
-        mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
-    }
-}  
-
-template <typename Context_t>
-void
-AI_System<Context_t>::attack(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos, Context_t& context) noexcept {
-    auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( mov_cmp.getEntityID() );
+constexpr void
+AI_System<Context_t>::attack(Context_t& context, BECS::entID eid) noexcept {
+    auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( eid );
+    auto& ai_cmp     = context.template getCmpByEntityID<AI_Component>( eid );
     
     if(combat_cmp.current_attack_cd.number <= 0l) {
         combat_cmp.current_attack_cd = combat_cmp.attack_cd;
-        //attack_msg.emplace_back(mov_cmp.getEntityID(), context.getPlayerID(), combat_cmp.damage); //rediseño para X enemigo
+        attack_msg.emplace(eid, ai_cmp.target_ent, combat_cmp.damage); //rediseño para X enemigo
     }
     
-    arrive(mov_cmp, target_pos);
+    arrive(context, eid);
 }
+
+template <typename Context_t>
+constexpr void 
+AI_System<Context_t>::run_away(Context_t& context, BECS::entID eid) noexcept {
+    auto& ai_cmp = context.template getCmpByEntityID<AI_Component>(eid);
+    
+    if( !leave(context, eid) ) 
+        ai_cmp.current_behavior = AI_behaviour::no_b;
+    
+}
+
+template <typename Context_t>
+constexpr void
+AI_System<Context_t>::pursue(Context_t& context, BECS::entID eid) noexcept {
+    auto& ai_cmp        = context.template getCmpByEntityID<AI_Component>(eid);
+    auto& enemy_mov_cmp = context.template getCmpByEntityID<MovementComponent>(ai_cmp.target_ent);
+
+    ai_cmp.target_pos = enemy_mov_cmp.coords + enemy_mov_cmp.dir;
+
+    arrive(context, eid);
+}
+
+template <typename Context_t>
+constexpr void
+AI_System<Context_t>::evade(Context_t& context, BECS::entID eid) noexcept {
+    auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>(eid);
+    auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>(ai_cmp.target_ent);
+    
+    ai_cmp.target_pos = mov_cmp.coords + mov_cmp.dir;
+
+    if( !leave(context, eid) )
+        ai_cmp.current_behavior = AI_behaviour::no_b;
+
+}  
 
 
 /* BASIC BEHAVIOURS FUNCTIONS */
+
 template <typename Context_t>
-bool
-AI_System<Context_t>::arrive(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept {
+constexpr bool
+AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid) noexcept {
+    auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>(eid);
+    auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>(eid);
+    
     auto& my_coords = mov_cmp.coords;
     auto& my_accel  = mov_cmp.accel_to_target;
     auto& my_direct = mov_cmp.dir;
 
-    auto            target_dir   { target_pos - my_coords };
+    auto            target_dir   { ai_cmp.target_pos - my_coords };
     auto            distance2    { target_dir.length2()   };
     fint_t<int64_t> target_speed { };
 
@@ -165,13 +191,16 @@ AI_System<Context_t>::arrive(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>&
 }
 
 template <typename Context_t>
-bool
-AI_System<Context_t>::leave(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& target_pos) noexcept {
+constexpr bool
+AI_System<Context_t>::leave(Context_t& context, BECS::entID eid) noexcept {
+    auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>(eid);
+    auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>(eid);
+    
     auto& my_coords = mov_cmp.coords;
     auto& my_accel  = mov_cmp.accel_to_target;
     auto& my_direct = mov_cmp.dir;
 
-    auto            target_dir   { my_coords - target_pos };
+    auto            target_dir   { my_coords - ai_cmp.target_pos };
     auto            distance2    { target_dir.length2()   };
     fint_t<int64_t> target_speed { };
 
@@ -203,7 +232,7 @@ AI_System<Context_t>::leave(MovementComponent& mov_cmp, fvec2<fint_t<int64_t>>& 
 
 /* FLOCKING B. FUNCTIONS */
 template <typename Context_t>
-void 
+constexpr void 
 AI_System<Context_t>::separation(Context_t& context) noexcept {
     auto& mov_vec = context.template getComponentVector<MovementComponent>();
     auto  end_it  = end(mov_vec);
@@ -235,7 +264,7 @@ AI_System<Context_t>::separation(Context_t& context) noexcept {
 }
 
 template <typename Context_t>
-void
+constexpr void
 AI_System<Context_t>::cohesion(Context_t& context, std::vector<BECS::entID>& eids) noexcept {
     auto end_it = end(eids);
     
@@ -268,37 +297,165 @@ AI_System<Context_t>::cohesion(Context_t& context, std::vector<BECS::entID>& eid
 }
 
 
-/* AUX FUNCTIONS */
+/* DECISION FUNCTIONS */
 template <typename Context_t>
-typename AI_System<Context_t>::optVec2_refw 
-AI_System<Context_t>::updatePatrol(AI_Component& ai_cmp) noexcept {
-    optVec2_refw next_pos  { };
-    auto&        route     = ai_cmp.target_vec;
-    auto&        index     = ai_cmp.target_index;
-    auto         index_fwd { (index+1) % route.size() };
+constexpr void
+AI_System<Context_t>::decisionMakingIA(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept {
+        auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>( eid );
+        auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( eid );
 
-    if(index_fwd != index) {
-        index = index_fwd;
-        next_pos = std::ref(route.at(index));
-    }
-    
-    return next_pos;
+        auto& curr_behavior = ai_cmp.current_behavior;
+
+        if( curr_behavior == AI_behaviour::patrol_b || curr_behavior == AI_behaviour::no_b ) {
+            if( findNearEnemy(context, eid, enemy_eids) ) {
+                curr_behavior = AI_behaviour::chase_b;
+                return;
+            }
+        }
+
+        if( curr_behavior == AI_behaviour::chase_b ) {
+            auto  target_dir = ai_cmp.target_pos - mov_cmp.coords;
+            auto  distance2  = target_dir.length2();
+
+            if(distance2 > VISION_DIST2) {
+                curr_behavior     = AI_behaviour::patrol_b;
+                ai_cmp.target_ent = 0u;
+                ai_cmp.target_pos = ai_cmp.target_vec.at(ai_cmp.target_index);
+                return;
+            }
+        }
+
+        if( curr_behavior == AI_behaviour::no_b )
+            curr_behavior = AI_behaviour::patrol_b;
 }
 
 template <typename Context_t>
-typename AI_System<Context_t>::optVec2_refw 
-AI_System<Context_t>::updateRoute(AI_Component& ai_cmp) noexcept {
-    optVec2_refw next_pos  { };
-    auto&        route     = ai_cmp.target_vec;
-    auto&        index     = ai_cmp.target_index;
-    auto         index_fwd { index + 1 };
+constexpr void
+AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids, AI_behaviour comand) noexcept {
+        auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>( eid );
+        auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( eid );
+
+        auto& curr_behavior = ai_cmp.current_behavior;
+
+        if(comand != AI_behaviour::no_b) {
+            curr_behavior = comand;
+
+            switch (curr_behavior) {
+                case AI_behaviour::follow_b : {
+                        auto  pj_eid  = context.template getPlayerID();
+                        auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( pj_eid );
+
+                        curr_behavior     = AI_behaviour::follow_b;
+                        ai_cmp.target_ent = pj_eid;
+                        ai_cmp.target_pos = mov_cmp.coords;
+                } break;
+            
+                case AI_behaviour::chase_b : {
+                        if( findNearEnemy(context, eid, enemy_eids) )
+                            curr_behavior = AI_behaviour::chase_b;
+                } break;
+
+                //case AI_behaviour::attack_b : attack(context, eid);
+                //break;
+
+                default: 
+                break;
+            }
+        }
+
+/*
+        if( curr_behavior == AI_behaviour::follow_b || curr_behavior == AI_behaviour::no_b ) {
+            if( findNearEnemy(context, eid, enemy_eids) ) {
+                    curr_behavior = AI_behaviour::chase_b;
+                    return;
+            }
+        }
+
+        if( curr_behavior == AI_behaviour::chase_b ) {
+            auto  target_dir = ai_cmp.target_pos - mov_cmp.coords;
+            auto  distance2  = target_dir.length2();
+
+            if(distance2 > VISION_DIST2) {
+                auto  pj_eid  = context.template getPlayerID();
+                auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( pj_eid );
+
+                curr_behavior     = AI_behaviour::follow_b;
+                ai_cmp.target_ent = pj_eid;
+                ai_cmp.target_pos = mov_cmp.coords;
+                return;
+            }
+        }
+
+        if( curr_behavior == AI_behaviour::no_b ) {
+            auto  pj_eid  = context.template getPlayerID();
+            auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( pj_eid );
+
+            curr_behavior     = AI_behaviour::follow_b;
+            ai_cmp.target_ent = pj_eid;
+            ai_cmp.target_pos = mov_cmp.coords;
+        }
+*/
+}
+
+
+/* AUX FUNCTIONS */
+template <typename Context_t> constexpr 
+bool 
+AI_System<Context_t>::findNearEnemy(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept {
+    auto  result    { false };
+    auto& ai_cmp    = context.template getCmpByEntityID<AI_Component>( eid );
+    auto& mov_cmp   = context.template getCmpByEntityID<MovementComponent>( eid );
+    auto& my_coords = mov_cmp.coords;
+    
+    auto dist { VISION_DIST2 };
+
+    std::for_each(begin(enemy_eids), end(enemy_eids), [&](BECS::entID enemy_eid) {
+        auto& enemy_mov_cmp = context.template getCmpByEntityID<MovementComponent>( enemy_eid );
+        auto  new_coords    = enemy_mov_cmp.coords - my_coords;    
+        auto  new_dist      = new_coords.length2();
+
+        if(new_dist < dist ) {
+            dist = new_dist;
+            ai_cmp.target_pos = enemy_mov_cmp.coords;
+            ai_cmp.target_ent = enemy_eid;
+            result            = true;
+        }
+    });
+
+    return result;
+}
+
+template <typename Context_t> constexpr
+bool
+AI_System<Context_t>::updatePatrol(Context_t& context, BECS::entID eid) noexcept {
+    auto& ai_cmp = context.template getCmpByEntityID<AI_Component>(eid);
+    auto& route  = ai_cmp.target_vec;
+    auto& index  = ai_cmp.target_index;
+
+    index             = (index+1) % route.size();
+    ai_cmp.target_pos = route.at(index);
+
+    return true;
+    
+}
+
+template <typename Context_t> constexpr
+bool
+AI_System<Context_t>::updateRoute(Context_t& context, BECS::entID eid) noexcept {
+    bool  result { false };
+
+    auto& ai_cmp    = context.template getCmpByEntityID<AI_Component>(eid);
+    auto& route     = ai_cmp.target_vec;
+    auto& index     = ai_cmp.target_index;
+    auto  index_fwd = index + 1;
 
     if(index_fwd < route.size()) {
-        index = index_fwd;
-        next_pos = std::ref(route.at(index));
+        index             = index_fwd;
+        result            = true;
+        ai_cmp.target_pos = route.at(index);
     }
 
-    return next_pos;
+    return result;
 }
 
 } //NS

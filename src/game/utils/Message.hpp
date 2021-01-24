@@ -27,4 +27,12 @@ struct AttackMessage {
     int64_t     amount      { 0  };
 };
 
+struct ComandMessage {
+    constexpr explicit ComandMessage(AI_behaviour status) 
+        : action(status) { }
+
+    AI_behaviour action { AI_behaviour::no_b };
+};
+
+
 } // NS
