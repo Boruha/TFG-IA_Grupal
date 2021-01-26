@@ -14,18 +14,26 @@ GameManager::GameManager() {
 
 bool
 GameManager::update() noexcept {
+    //timers and dmg
+    cd_sys.update(units_man, DeltaTime);
+    attack_sys.update(units_man, DeltaTime);
 
-    if( !input.update(units_man, DeltaTime) )
+    //pj decision
+    if( !input_sys.update(units_man, DeltaTime) )
         return false;
 
-    ia.update(units_man, DeltaTime);
-    render.update(units_man, DeltaTime);
-    movement.update(units_man, DeltaTime);
-    collision.update(units_man, DeltaTime);
-    cd.update(units_man, DeltaTime);
+    //ia decision
+    ia_sys.update(units_man, DeltaTime);
 
-    if( !attack.update(units_man, DeltaTime) )
-        return false;
+    //physics
+    movement_sys.update(units_man, DeltaTime);
+    collision_sys.update(units_man, DeltaTime);
+
+    //draw
+    render_sys.update(units_man, DeltaTime);
+    
+    //deleted entities
+    death_sys.update(units_man, DeltaTime);
 
     checkFpsMsg();
 
@@ -34,7 +42,7 @@ GameManager::update() noexcept {
 
 void
 GameManager::checkFpsMsg() noexcept {
-    auto& msgs = ia.fps_msg;
+    auto& msgs = ia_sys.fps_msg;
     
     while (!msgs.empty()) {
         auto& last_msg = msgs.front();

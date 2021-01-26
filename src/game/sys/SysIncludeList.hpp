@@ -7,3 +7,4 @@
 #include <game/sys/InputSystem.tpp>
 #include <game/sys/AttackSystem.tpp>
 #include <game/sys/CooldownSystem.tpp>
+#include <game/sys/DeathSystem.tpp>

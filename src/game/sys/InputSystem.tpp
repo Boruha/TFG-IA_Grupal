@@ -46,7 +46,6 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
         [&](InputComponent& input_cmp) {
             auto& mov = context.template getCmpByEntityID<MovementComponent>( input_cmp.getEntityID() );
             auto& dir = mov.dir;
-            auto  com = AI_behaviour::no_b;
             
             dir.x.number = dir.y.number = 0;
     
@@ -62,18 +61,11 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
             if( keyboard.isKeyPressed(input_cmp.key_Right) )
                 dir.x += ENT_MAX_SPEED;
 
-            if( keyboard.isKeyPressed(input_cmp.key_b) ) {
-                com = AI_behaviour::follow_b;
-                std::cout << "follow comanda'\n";
-            }
+            if( keyboard.isKeyPressed(input_cmp.key_b) )
+                comand_msg.emplace(AI_behaviour::follow_b);
 
-            if( keyboard.isKeyPressed(input_cmp.key_space) ) {
-                com = AI_behaviour::chase_b;
-                std::cout << "attack comanda'\n";
-            }
-
-            if(com != AI_behaviour::no_b) //para no introducir 900 mensajes iguales
-                comand_msg.emplace(com);
+            if( keyboard.isKeyPressed(input_cmp.key_space) )
+                comand_msg.emplace(AI_behaviour::chase_b);
     });
 
     return true;

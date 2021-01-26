@@ -16,20 +16,21 @@ struct GameManager {
     GameManager& operator=(const GameManager& ) = delete;
     GameManager& operator=(const GameManager&&) = delete;
 
-    bool            update()       noexcept;
+    bool             update()       noexcept;
     fint_t<int64_t>& getLoopTime()  noexcept;
     fint_t<int64_t>& getDeltaTime() noexcept;
 
 private:
     UnitsManager units_man;
 
-    RenderSystem<UnitsManager>    render { U_WINDOW_W, U_WINDOW_H }; //aqui se crea la ventana de tinyPTC
-    InputSystem<UnitsManager>     input;                         //por lo que todos los cambios relacionados tienen                                                                                  
-    AI_System<UnitsManager>       ia;                            //ir a posteriori. Ejemplo, los callbacks del input.
-    MovementSystem<UnitsManager>  movement;
-    CollisionSystem<UnitsManager> collision;
-    AttackSystem<UnitsManager>    attack;
-    CooldownSystem<UnitsManager>  cd;
+    RenderSystem<UnitsManager>    render_sys { U_WINDOW_W, U_WINDOW_H }; //aqui se crea la ventana de tinyPTC
+    InputSystem<UnitsManager>     input_sys;                             //por lo que todos los cambios relacionados tienen                                                                                  
+    AI_System<UnitsManager>       ia_sys;                                //ir a posteriori. Ejemplo, los callbacks del input.
+    MovementSystem<UnitsManager>  movement_sys;
+    CollisionSystem<UnitsManager> collision_sys;
+    AttackSystem<UnitsManager>    attack_sys;
+    CooldownSystem<UnitsManager>  cd_sys;
+    DeathSystem<UnitsManager>     death_sys;
 
     fint_t<int64_t> setLoopTime()                   noexcept;
     fint_t<int64_t> setDeltaTime()                  noexcept;

@@ -14,7 +14,7 @@ template <typename Context_t>
 struct AI_System : EventHandler {
 
     void init() noexcept;
-    bool update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept;
+    void update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept;
 
 private:
 /* CONPLEX B. */

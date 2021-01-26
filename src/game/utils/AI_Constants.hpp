@@ -3,9 +3,12 @@
 
 namespace AIP {
 
-//ARRIVE B.
+//SENSOR
 constexpr fint_t<int64_t> VISION_DIST  { 150l };
 constexpr fint_t<int64_t> VISION_DIST2 { VISION_DIST * VISION_DIST };
+
+constexpr fint_t<int64_t> ATTACK_DIST  { 45l };
+constexpr fint_t<int64_t> ATTACK_DIST2 { ATTACK_DIST * ATTACK_DIST };
 
 //ARRIVE B.
 constexpr fint_t<int64_t> ENT_ARRIVE_DIST  { 40l };

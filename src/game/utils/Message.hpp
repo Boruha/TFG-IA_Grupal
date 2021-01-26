@@ -1,4 +1,5 @@
 #pragma once
+#include <game/cmp/AI_Component.hpp>
 
 #include <ecs/utils/Alias.hpp>
 
@@ -25,6 +26,13 @@ struct AttackMessage {
     BECS::entID eid_deal    { 0u };
     BECS::entID eid_damaged { 0u };
     int64_t     amount      { 0  };
+};
+
+struct DeathMessage {
+    constexpr explicit DeathMessage(BECS::entID id)
+        : eid(id) { }
+
+    BECS::entID eid { 0u };
 };
 
 struct ComandMessage {

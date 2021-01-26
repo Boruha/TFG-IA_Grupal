@@ -20,8 +20,9 @@ UnitsManager::init() noexcept {
     createSoldier(20, 380l, 400l, Color::Blue, true);
     createSoldier(20, 400l, 420l, Color::Blue, true);
     createSoldier(20, 380l, 420l, Color::Blue, true);
-    //createSoldier(20, -60l,  10l, Color::Blue, true);
-    //createSoldier(20, -20l, -40l, Color::Blue, true);
+    createSoldier(20, 400l, 380l, Color::Blue, true);
+    createSoldier(20, 350l, 380l, Color::Blue, true);
+    createSoldier(20, 450l, 380l, Color::Blue, true);
 
     createPlayerPointer(20, 400l, 400l, Color::Green);
 }
@@ -54,8 +55,25 @@ UnitsManager::createPlayerPointer(const uint32_t size, const int64_t pos_x, cons
 }
 
 inline void 
-UnitsManager::deleteEntity(BECS::entID eid) noexcept { 
-    return ent_man.deleteEntity(eid); 
+UnitsManager::deleteEntity(BECS::entID eid) noexcept { //Bastante fe00 por tu parte
+    auto it = std::find_if(enemies_vec.begin(), enemies_vec.end(), [&](BECS::entID id) {
+                  return id == eid;
+              });
+
+    if(it != enemies_vec.end() ) {
+        enemies_vec.erase(it);
+        ent_man.deleteEntity(eid);
+        return;
+    }
+    
+    it = std::find_if(allies_vec.begin(), allies_vec.end(), [&](BECS::entID id) {
+             return id == eid;
+         });
+              
+    if(it != allies_vec.end() ) {
+        allies_vec.erase(it);
+        ent_man.deleteEntity(eid);
+    }
 }
 
 
