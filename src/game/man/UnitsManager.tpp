@@ -9,7 +9,9 @@ namespace AIP {
 
 inline void
 UnitsManager::init() noexcept {
-    enemies_vec.reserve(5);
+    enemies_vec.reserve(21);
+
+    createPlayerPointer(20, 400l, 400l, Color::Green);
     
     createSoldier(20,  30l,  30l, Color::Red, false);
     createSoldier(20,  60l, -10l, Color::Red, false);
@@ -23,8 +25,14 @@ UnitsManager::init() noexcept {
     createSoldier(20, 400l, 380l, Color::Blue, true);
     createSoldier(20, 350l, 380l, Color::Blue, true);
     createSoldier(20, 450l, 380l, Color::Blue, true);
+}
 
-    createPlayerPointer(20, 400l, 400l, Color::Green);
+inline void
+UnitsManager::clear() noexcept {
+    ent_man.clear();
+    enemies_vec.clear();
+    allies_vec.clear();    
+    player_id = 0u;
 }
 
 /* CREATES & DELETE */

@@ -12,7 +12,21 @@ GameManager::GameManager() {
     units_man.init();
 }
 
-bool
+void
+GameManager::init() noexcept {
+    FPS_LT      = 60.f;
+    FPS_DT      = 60.f;
+    LoopTime    = setLoopTime();
+    DeltaTime   = setDeltaTime();
+    units_man.init();
+}
+
+void
+GameManager::clear() noexcept {
+    units_man.clear();
+}
+
+GameConditions
 GameManager::update() noexcept {
     //timers and dmg
     cd_sys.update(units_man, DeltaTime);
@@ -20,7 +34,7 @@ GameManager::update() noexcept {
 
     //pj decision
     if( !input_sys.update(units_man, DeltaTime) )
-        return false;
+        return GameConditions::Cerrar;
 
     //ia decision
     ia_sys.update(units_man, DeltaTime);
@@ -31,13 +45,13 @@ GameManager::update() noexcept {
 
     //draw
     render_sys.update(units_man, DeltaTime);
-    
-    //deleted entities
-    death_sys.update(units_man, DeltaTime);
 
     checkFpsMsg();
-
-    return true;
+ 
+    //deleted entities
+    result = death_sys.update(units_man, DeltaTime);
+ 
+    return result;
 }
 
 void

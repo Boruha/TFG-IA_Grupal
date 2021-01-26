@@ -19,6 +19,9 @@ struct ComponentStorage {
     ComponentStorage& operator=(const ComponentStorage& ) = delete;
     ComponentStorage& operator=(const ComponentStorage&&) = delete;
 
+    void clear() noexcept;
+
+
     template<typename T>               constexpr       T&              createComponent(const T& new_cmp) noexcept;
 
     template<typename T> [[nodiscard]] constexpr       std::vector<T>& getCmpCollection()                noexcept;

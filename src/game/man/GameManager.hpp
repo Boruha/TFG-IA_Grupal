@@ -2,6 +2,7 @@
 #include <game/man/UnitsManager.tpp>
 #include <game/sys/SysIncludeList.hpp>
 #include <game/utils/fint_t.hpp>
+#include <game/utils/GameConditions.hpp>
 
 #include <vector>
 #include <memory>
@@ -16,7 +17,9 @@ struct GameManager {
     GameManager& operator=(const GameManager& ) = delete;
     GameManager& operator=(const GameManager&&) = delete;
 
-    bool             update()       noexcept;
+    void             init()         noexcept;
+    void             clear()        noexcept;
+    GameConditions   update()       noexcept;
     fint_t<int64_t>& getLoopTime()  noexcept;
     fint_t<int64_t>& getDeltaTime() noexcept;
 
@@ -32,6 +35,8 @@ private:
     CooldownSystem<UnitsManager>  cd_sys;
     DeathSystem<UnitsManager>     death_sys;
 
+    GameConditions result { GameConditions::Loop };
+
     fint_t<int64_t> setLoopTime()                   noexcept;
     fint_t<int64_t> setDeltaTime()                  noexcept;
     void            checkFpsMsg()                   noexcept;   
@@ -44,7 +49,6 @@ private:
     const float     Micro_multi { 1000000.f };
     fint_t<int64_t> LoopTime    { setLoopTime()  };
     fint_t<int64_t> DeltaTime   { setDeltaTime() };
-
 };
 
 }

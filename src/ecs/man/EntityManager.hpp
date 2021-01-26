@@ -12,8 +12,10 @@ struct EntityManager {
       EntityManager& operator=(const EntityManager& ) = delete;
       EntityManager& operator=(const EntityManager&&) = delete;
 
+      void clear() noexcept;
+
       [[nodiscard]] const entID     createEntity_t()         noexcept;
-                          void      deleteEntity(entID eid)  noexcept; 
+                          void      deleteEntity(entID eid)  noexcept;
                           Entity_t& getEntityByID(entID eid) noexcept;
 
       template <typename CMP_t>           void                addComponentToEntity(const entID eid, const CMP_t& new_cmp) noexcept;

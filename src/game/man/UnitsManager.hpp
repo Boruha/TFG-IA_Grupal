@@ -14,6 +14,7 @@ struct UnitsManager {
       UnitsManager& operator=(const UnitsManager&&) = delete;
 
       void init()                        noexcept;
+      void clear()                       noexcept;
       void deleteEntity(BECS::entID eid) noexcept;
 
       void createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team) noexcept;

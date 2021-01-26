@@ -11,6 +11,12 @@ ComponentStorage::createComponent(const T& new_cmp) noexcept {
     return cmp_vec_ref.emplace_back( new_cmp );
 }
 
+inline void 
+ComponentStorage::clear() noexcept {
+    cmp_map.clear();
+}
+
+
 template<typename T> constexpr 
 std::vector<T>&
 ComponentStorage::getCmpCollection() noexcept {

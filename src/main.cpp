@@ -1,31 +1,41 @@
 #include <main.hpp>
 
 #include <game/man/GameManager.hpp>
+#include <game/utils/GameConditions.hpp>
 
-#include <memory>
 #include <chrono>
 
 int main() {
   using timer = std::chrono::steady_clock;
 
-  AIP::GameManager gameManager { };
-  bool  gameCondition  { true };
+  AIP::GameManager gameManager   { };
+  GameConditions   gameCondition { GameConditions::Loop };
 
   //glock
   timer time           { };
   auto  lastUpdateTime { time.now() };
   auto  timeElapse     { std::chrono::microseconds { 0 } };
 
-  while (gameCondition) {
+  while (gameCondition != GameConditions::Cerrar) {
     timeElapse = std::chrono::duration_cast<std::chrono::microseconds>(time.now() - lastUpdateTime);
 
     if(timeElapse.count() >= gameManager.getLoopTime().number) {
       lastUpdateTime = time.now();
       gameCondition  = gameManager.update();
     }
-  }
 
-  //cuando me ponga con el delta time mirar de dejar esto más bonito con funciones que te den el reloj, delta time y demases.
+    if(gameCondition == GameConditions::Victoria) {
+      gameManager.clear();
+      gameManager.init();
+      gameCondition = GameConditions::Loop;
+    }
+
+    if(gameCondition == GameConditions::Derrota) {
+      gameManager.clear();
+      gameManager.init();
+      gameCondition = GameConditions::Loop;
+    }
+  }
 
   return 0;
 }

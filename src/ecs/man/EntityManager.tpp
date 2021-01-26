@@ -9,6 +9,13 @@ EntityManager::EntityManager() {
     ent_map.reserve(MAX_ENTITIES);
 }
 
+inline void 
+EntityManager::clear() noexcept { 
+    cmp_storage.clear();
+    ent_map.clear();
+    ent_map.reserve(MAX_ENTITIES);
+}
+
 /* CREATE / DELETE  */
 inline const entID
 EntityManager::createEntity_t() noexcept {
@@ -43,8 +50,7 @@ EntityManager::deleteEntity(entID eid) noexcept {
 }
 
 /* GETTERS  */
-inline
-Entity_t& 
+inline Entity_t& 
 EntityManager::getEntityByID(entID eid) noexcept { 
     return ent_map.at(eid); 
 }
