@@ -140,11 +140,73 @@ struct fint_t {
 };
 \end{lstlisting}
 
-\placeholdertext{\%--}
 
 Por otro lado, se comenzó a trabajar en la \ac{IA} del juego creando los primeros comportamientos
-y herramientas para cambiar entre ello. Como veremos más adelante también, aquí caeremos en los primeros
-errores de concepto a la hora de trabajar con los \textit{`Steering behaviors'}.
+y herramientas para alternar entre ellos. Aquí caeremos en los primeros errores de concepto a la
+hora de trabajar con los \textit{`Steering behaviors'}, ya que, a la hora de implementar los
+usamos un plateamiento y cálculos de movimiento cinético, trabajando directamente con la 
+velocidad.\\
+En su lugar, lo planteado por la técnica es usar la aceleración de la entidad en lugar de actuar
+sobre la velocidad, de esta forma la aceleración representará el movimiento deseado
+en un momento puntual y la velocidad acumulada el movimiento que resultante. Esto nos 
+proporcionará un movimiento continuado y dinámico en lugar de cambiar drásticamente de dirección
+y velocidad.
+
+Uno de los comportamientos más sencillos y básicos es el \textit{`Arrive'}, el cual nos
+llevará a la posición objetivo de forma directa y conforme estemos llegando a este, la 
+acceleración disminuirá parando una vez hayamos llegado al destino. En esta función podremos
+apreciar como calculamos la velocidad objetivo en función de la distancia hasta llegar a
+la posición objetivo, una vez se calcula se compara con el desplazamiento actual de la entidad
+y es la resta de ambas la que nos dará la acceleración necesaria para alcanzar la velocidad
+objetivo, siempre controlando que la acceleración y la velocidad no exceden los límites 
+marcados.\\
+Además, contamos con dos modeficadores adicionales como son el tiempo deseado para alcanzar el
+objetivo y un límite de distancia con el objetivo para evitar solapes y/o oscilar sobre el.
+
+\newpage
+
+\begin{lstlisting}[style=CodigoC++, caption={Arrive behavior},label=ia_arrive]
+template <typename Context_t>
+constexpr bool
+AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid) noexcept {
+    auto& ai_cmp  = context.template 
+    			getCmpByEntityID<AI_Component>(eid);
+    auto& mov_cmp = context.template 
+    			getCmpByEntityID<MovementComponent>(eid);
+    
+    auto& my_coords = mov_cmp.coords;
+    auto& my_accel  = mov_cmp.accel_to_target;
+    auto& my_direct = mov_cmp.dir;
+
+    auto            target_dir   { ai_cmp.target_pos - my_coords };
+    auto            distance2    { target_dir.length2()   };
+    fint_t<int64_t> target_speed { };
+
+    if(distance2 < ENT_ARRIVE_DIST2)
+        return false;
+
+    if(distance2 > ENT_SLOW_DIST2)
+        target_speed = ENT_MAX_SPEED;
+    else
+        target_speed = ENT_MAX_SPEED * 
+        		( target_dir.length_fix() / ENT_SLOW_DIST );
+    
+    target_dir.normalize();
+    target_dir *= target_speed;
+
+    my_accel  = (target_dir - my_direct);
+    my_accel /= ENT_TIME_TO_TARGET;
+
+    if(my_accel.length2() > ENT_MAX_ACCEL2) {
+        my_accel.normalize();
+        my_accel *= ENT_MAX_ACCEL;
+    }
+
+    return true;
+}
+\end{lstlisting}
+
+\placeholdertext{\%--}
 
 Durante esta tercera iteración los objetivos eran los de corregir el funcionamiento de los
 \textit{`Steering behaviors'}, añadir elementos visuales que ayuden al debug de la \ac{IA}
