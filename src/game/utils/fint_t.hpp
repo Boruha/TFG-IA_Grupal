@@ -45,7 +45,7 @@ struct fint_t {
     constexpr bool operator!=(const fint_t<NumType>& num) const noexcept;
 
 /* GETTERS */
-    constexpr NumType getNoScaled() const;
+    constexpr NumType getNoScaled() const noexcept;
     
 /* DATA */    
                             NumType number { 0 };

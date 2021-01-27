@@ -10,36 +10,18 @@ del mapa a otro a un personaje importante y/o eliminar a todas las entidades ene
 La ficha técnica es la siguientes:
 
 \begin{itemize}
-	\item \textbf{Título:} \placeholdertext{N/A.}
+	%\item \textbf{Título:} \placeholdertext{N/A.}
 	\item \textbf{Plataforma:} \ac{PC} (Windows y Linux).
 	\item \textbf{Género:} \acf{RTS}.
 	\item \textbf{Idioma:} Inglés.
-	\item \textbf{Clasificación:} PEGI 7\footnote{Web de la asociación https://pegi.info}
+	%\item \textbf{Clasificación:} PEGI 7\footnote{Web de la asociación https://pegi.info}
 \end{itemize}
 
 \section{Mecánicas}
 Durante el juego podremos ejecutar una serie de ordenes sobre nuestras unidades para cambiar
 su distribución, ordenarles que se desplazen y/o que ataquen a enemigos.\\
 Para el desplazamiento por el mapa, el jugador contará con un marcador en el mapa el cual
-será capaz de desplazar para que sus unidades lo sigan mientras les sea posible~\ref{fig:mockup_following}.
-
-%El jugador será capaz de seleccionar con el ratón las unidades sobre las que
-%quiere lanzar la acción y seleccionar o deseleccionar todas la unidades a su
-%disposición mediante atajos de teclado en cualquier momento~\ref{fig:unit-selec} .
-
-
-%\begin{figure}[ht]
-%\centering
-%\begin{minipage}[c]{0.45\linewidth}
-%	\hspace{1cm}
-%	\includegraphics[width=0.7\textwidth]{imagenes/gdd/non-selection.png}
-%\end{minipage}
-%\begin{minipage}[c]{0.45\linewidth}
-%	\includegraphics[width=0.7\textwidth]{imagenes/gdd/selection.png}
-%\end{minipage}	
-%\caption{MockUp selección.}
-%\label{fig:unit-selec}
-%\end{figure}
+será capaz de desplazar para que sus unidades lo sigan mientras les sea posible.
 
 \begin{figure}[ht]
 \centering
@@ -51,40 +33,38 @@ será capaz de desplazar para que sus unidades lo sigan mientras les sea posible
 En cuanto a las posibles formaciones para nuestras unidades, encontramos las siguientes:
 
 \begin{itemize}
-\item \textbf{Por filas:}~\ref{mockup_en_fila} las unidades se dispondrán en función de su rango,
+\item \textbf{Por filas:} las unidades se dispondrán en función de su rango,
 siendo encabezado el pelotón por las unidades de ataque a \textit{melee}.
-
-\item \textbf{Sin formación:}~\ref{mockup_desordenada} las unidades no tendrán nigún paramétro de ordenación.
-
-\item \textbf{En anillo:}~\ref{mockup_anillo} formación circular alrededor de una unidad especial. En caso de
-no haber unidad escoltada el centro estará vacío. 
-\end{itemize} 
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.45\textwidth]{imagenes/gdd/Formacion-en-fila.png}
+\includegraphics[width=0.39\textwidth]{imagenes/gdd/Formacion-en-fila.png}
 \caption{MockUp formacion en fila.}
 \label{mockup_en_fila}
 \end{figure}
 
+\item \textbf{Sin formación:} las unidades no tendrán nigún paramétro de ordenación.
+
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.45\textwidth]{imagenes/gdd/Formacion-desordenada.png}
+\includegraphics[width=0.32\textwidth]{imagenes/gdd/Formacion-desordenada.png}
 \caption{MockUp formacion desordenada.}
 \label{mockup_desordenada}
 \end{figure}
 
+\item \textbf{En anillo:} formación circular alrededor de una unidad especial. En caso de
+no haber unidad escoltada el centro estará vacío. 
+\end{itemize} 
+
+
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.3\textwidth]{imagenes/gdd/Formacion-anillo.png}
+\includegraphics[width=0.32\textwidth]{imagenes/gdd/Formacion-anillo.png}
 \caption{MockUp formacion en anillo.}
 \label{mockup_anillo}
 \end{figure}
 
-%Las acciones posibles serán realizadas en función del objeto y/o lugar donde el jugador haga
-%click, si el jugador selecciona una unidad enemiga las unidades marcadas iniciarán un ataque hacía
-%esa unidad. Si el objetivo es un punto vacío del mapa, las unidades se desplazarán a el.
-
+\newpage
 Por último podemos ordenar a las unidades que mantengan una estrategia definida:
 
 \begin{itemize}
@@ -117,6 +97,7 @@ Los tipos son los siguientes:
 							supervivencia.
 \end{itemize}
 
+\begin{table}[ht]
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -128,8 +109,11 @@ Soldado & 1    & 5    & Melee \\
 Arquero & 2    & 3    & Largo \\ 
 \hline
 \end{tabular}\\
+\caption{Unidades y estadísticas}
 \placeholdertext{Valores totalmente provisionales}
 \end{center}
+\end{table}
+
 
 \section{Controles}
 A la hora de jugar tendremos una serie de teclas asignadas a las acciones que el
@@ -160,26 +144,27 @@ Las asignadas para jugar son las siguientes:
 
 \section{Pantallas}
 Al ejecutar el programa la primera pantalla que aparecerá será la de 
-inicio~\ref{mockup_ini}. Se compone del título del juego, la fecha de lanzamiento,
+inicio. Se compone del título del juego, la fecha de lanzamiento,
 el nombre del desarrollador y un mensaje que nos indica que tenemos que pulsar al tecla
 \textit{entre} para continuar, esta pantalla se mantendrá hasta que el jugador presione
-dicha tecla.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.45\textwidth]{imagenes/gdd/pantallas/Pantalla_ini.png}
-\caption{MockUp pantalla de inicio.}
-\label{mockup_ini}
-\end{figure}
-
+dicha tecla.\\
 Una vez pulsado el botón indicado se procederá a cargar el juego mientras se muestra
-una barra que indica el progreso de cargado~\ref{mockup_carga}.
+una barra que indica el progreso de cargado.
 
-\begin{figure}[ht]
+\begin{figure}[h]
 \centering
-\includegraphics[width=0.45\textwidth]{imagenes/gdd/pantallas/Pantalla_carga.png}
-\caption{MockUp pantalla de carga.}
-\label{mockup_carga}
+\begin{minipage}[c]{0.42\linewidth}
+	\hspace{9mm}
+	\includegraphics[width=0.7\textwidth]{imagenes/gdd/pantallas/Pantalla_ini.png}
+	\caption{MockUp inicio.}
+	\label{mockup_ini}
+\end{minipage}
+\begin{minipage}[c]{0.42\linewidth}
+	\hspace{9mm}
+	\includegraphics[width=0.7\textwidth]{imagenes/gdd/pantallas/Pantalla_carga.png}
+	\caption{MockUp carga.}
+	\label{mockup_carga}
+\end{minipage}	
 \end{figure}
 
 A continuación de la carga pasaremos directamente al escenario, donde se desarrollará el
@@ -188,17 +173,31 @@ por victoria o derrota del jugador~\ref{mockup_juego}.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.45\textwidth]{imagenes/gdd/pantallas/Pantalla_gameplay.png}
-\caption{MockUp escenario juego.}
-\label{mockup_juego}
+\begin{minipage}[c]{0.45\linewidth}
+	\hspace{9mm}
+	\includegraphics[width=0.7\textwidth]{imagenes/gdd/pantallas/Pantalla_gameplay.png}
+	\caption{MockUp juego.}
+	\label{mockup_juego}
+\end{minipage}
+\begin{minipage}[c]{0.45\linewidth}
+	\hspace{9mm}
+	\includegraphics[width=0.7\textwidth]{imagenes/gdd/pantallas/Pantalla_pausa.png}
+	\caption{MockUp pausa.}
+	\label{mockup_pausa}
+\end{minipage}	
 \end{figure}
 
 El final de la partida nos trae dos posibles escenarios, la victoria y la derrota. 
 Para cada uno saldrá su respectivo mensaje~\ref{mockup_victoria}~\ref{mockup_derrota}
 y pasado un momento se nos mandará automáticamente a la pantalla de
-inicio~\ref{mockup_ini}.
+inicio.
 
-\begin{figure}[hb]
+Como última pantalla con la que el jugador podrá interactuar es la del menú de
+pausa~\ref{mockup_pausa}, en el cual se le dará la opción de salir o de volver a la
+partida, mientras esta pantalla este activa la acción en el juego se paralizará hasta
+que el jugador decida. 
+
+\begin{figure}[ht]
 \centering
 \begin{minipage}[c]{0.45\linewidth}
 	\hspace{9mm}
@@ -212,18 +211,6 @@ inicio~\ref{mockup_ini}.
 	\caption{MockUp derrota.}
 	\label{mockup_derrota}
 \end{minipage}	
-\end{figure}
-
-Como última pantalla con la que el jugador podrá interactuar es la del menú de
-pausa~\ref{mockup_pausa}, en el cual se le dará la opción de salir o de volver a la
-partida, mientras esta pantalla este activa la acción en el juego se paralizará hasta
-que el jugador decida. 
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.45\textwidth]{imagenes/gdd/pantallas/Pantalla_pausa.png}
-\caption{MockUp menú de pausa.}
-\label{mockup_pausa}
 \end{figure}
 
 \section{Estados del juego}
@@ -242,8 +229,7 @@ Dicho esquema podemos encontrarlo en la figura~\ref{esq:flow_juego}.
 
 \section{Escenarios}
 A lo largo de los niveles la intención es que nos encontremos con distintos biomas como
-pueden ser praderas, bosque o desiertos como los que podemos encontrar en \ac{AoE} II
-~\ref{img:aoe_2}~\ref{img:mapa_aoe1}~\ref{img:mapa_aoe2}.
+pueden ser praderas, bosque o desiertos como los que podemos encontrar en \ac{AoE} II.
 
 \begin{figure}[ht]
 \centering
@@ -252,12 +238,12 @@ pueden ser praderas, bosque o desiertos como los que podemos encontrar en \ac{Ao
 \label{img:mapa_aoe1}
 \end{figure}
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.6\textwidth]{imagenes/gdd/mapa_aoe_2.jpg}
-\caption{Ejemplo escenario desértico.}
-\label{img:mapa_aoe2}
-\end{figure}
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=0.6\textwidth]{imagenes/gdd/mapa_aoe_2.jpg}
+%\caption{Ejemplo escenario desértico.}
+%\label{img:mapa_aoe2}
+%\end{figure}
 
 Además de imitar el estilo artístico el juego se desarrollará empleando una cámara
 aerea fija manteniendo una perspectiva isométrica que nos permitirá visualizar desde

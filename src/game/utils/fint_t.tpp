@@ -171,7 +171,7 @@ fint_t<NumType>::operator!=(const fint_t<NumType>& num) const noexcept {
 /* GETTER */
 template <typename NumType> constexpr 
 NumType 
-fint_t<NumType>::getNoScaled() const { 
+fint_t<NumType>::getNoScaled() const noexcept{ 
     return number/SCALE; 
 }
 

@@ -1,28 +1,150 @@
 \chapter{Desarrollo y fases del producto}
 A lo largo de esta sección comentaremos todo el proceso de desarrollo del prototipo y de la 
 memoria, las diferentes iteraciones del producto serán agrupadas en diversas fases con el fin
-de facilitar la lectura y el entendimiento de los objetivos planteados en cada momento.   
+de facilitar la lectura y el entendimiento de los objetivos planteados en cada momento. Además,
+se contarán de forma más extensa los puntos relevantes y objetivos en este proyecto.
 
 \section{Fase 0: Definición del proyecto y primeros pasos}
 Esta primera fase engloba las tres primeras iteraciones donde comenzamos a terminar de definir 
 la idea para el proyecto, ya que, todavía era un poco difusa la imagen del producto final que se
-quería desarrollar. \\
-Para ir entrando en una dinámica productiva iniciamos el desarrollo de 
-funcionalidades básicas como pueden ser el bucle principal del juego y la intergración de `TinyPTC'
-en el sistema de dibujado para poder abrir una ventana y pintar \textit{sprites} básicos. Además,
-la inclusión de una serie de componentes para poder hacer que las entidades siguieran una patrulla 
-por el mapa.\\
-Por último la preparación de las herramientas de \LaTeX y `Jabref' para redactar la memoria y
-la lectura de las directrices, normas y memorias de compañeros del año pasado.
+quería desarrollar.
 
-A lo largo de la iteración siguiente, seguimos añadiendo sistemas al prototipo como puede ser el
-de \textit{Input} el cual nos permitirá interactuar con el producto, además de herramietas
-como el mapeado del teclado o el tipo de dato en coma fija en el cual profundizaremos más tarde.\\
+Para ir entrando en una dinámica productiva iniciamos el desarrollo de funcionalidades básicas 
+como pueden ser el bucle principal del juego, en el cual usamos de la librería \textit{\textless
+chrono\textgreater} de C++ para medir y limitar el tiempo entre ejecuciones del bucle y el uso 
+de una enumeración que contiene los posibles resultados de un ciclo del juego.
+
+\begin{lstlisting}[style=CodigoC++, caption={Resultados iteración bucle},label=game_conditions]
+enum class GameConditions : int16_t {
+    Loop     = 0u, //continuar con el bucle
+    Cerrar   = 1u, //terminar la ejecución del programa
+    Derrota  = 2u, //el jugador a perdido
+    Victoria = 3u  //el jugador a ganado
+};
+\end{lstlisting}
+
+\begin{lstlisting}[style=CodigoC++, caption={Bucle del juego},label=loop]
+while (gameCondition != GameConditions::Cerrar) {
+    timeElapse = std::chrono::duration_cast<std::chrono::microseconds>(time.now() - lastUpdateTime);
+
+    if(timeElapse.count() >= gameManager.getLoopTime().number) {
+      lastUpdateTime = time.now();
+      gameCondition  = gameManager.update();
+    }
+
+    if(gameCondition == GameConditions::Victoria) {
+      gameManager.clear();
+      gameManager.init();
+      gameCondition = GameConditions::Loop;
+    }
+
+    if(gameCondition == GameConditions::Derrota) {
+      gameManager.clear();
+      gameManager.init();
+      gameCondition = GameConditions::Loop;
+    }
+  }
+\end{lstlisting}
+
+Una vez tenemos el bucle, toca introducir algo que hacer en el, como primer sistema del juego
+encontramos el sistema de dibujado el cual se encargará de crear y manejar la ventana, además
+de pintar nuestras entidades y herramientas visuales. Para incluir todas estas funcionalidades
+sin añadir librerías pesadas incluiremos \textit{\textless TinyPTC\textgreater}, la cual no 
+ncluye demasidas funcionalidades y opciones pero nos permitirá trabajar rápido y de forma 
+sencilla. Los sprites en un inicio serán simples cuadrados de colores por lo que no requeriremos 
+mucho.
+
+\begin{lstlisting}[style=CodigoC++, caption={Dibujado entidades},label=draw_ent]
+auto  screen_coords = continuous_to_screen(mov_cmp.coords);
+auto* screen_ptr    = framebuffer.get();
+      screen_ptr   += (screen_coords.y*U_WINDOW_W) + screen_coords.x;
+vec2  sprite        { render_cmp.sprite.y, render_cmp.sprite.x };
+
+for(uint32_t i=0; i<sprite.y; ++i) {
+    std::fill( screen_ptr, screen_ptr + sprite.x,
+    		   static_cast<uint32_t>(render_cmp.sprite_C) );
+	screen_ptr += U_WINDOW_W;
+}
+\end{lstlisting}
+
+Por último, se añadireron las componentes de movimiento y \ac{IA} que, junto a sus correspondientes
+sistemas, nos permitirán poder crear un comportamiento de patrulla básico entre puntos fijos.
+Además, se terminó la preparación de las herramientas de \LaTeX y `Jabref' para redactar la 
+memoria acompañado de la lectura de las directrices, normas y memorias de compañeros del año 
+pasado.
+
+A lo largo de la iteración siguiente, seguimos añadiendo funcionalidades al prototipo como puede 
+ser el componente y sistema de \textit{Input}, el cual nos permitirá interactuar con el juego
+mediante el mapeado del teclado haciendo uso de la librería \textit{\textless X11\textgreater}
+y \textit{\textless TinyPTC\textgreater}
+
+\newpage
+
+\begin{lstlisting}[style=CodigoC++, caption={Componente de input},label=input_cmp]
+#include <X11/X.h>
+#include <X11/keysym.h>
+
+struct InputComponent : BECS::Component_t {
+    explicit InputComponent(const BECS::entID eid) : Component_t(eid) { }
+
+    KeySym key_Up    { XK_Up    };
+    KeySym key_Down  { XK_Down  };
+    KeySym key_Left  { XK_Left  };
+    KeySym key_Right { XK_Right };
+
+    KeySym key_b     { XK_b };
+    KeySym key_space { XK_space };
+
+};
+\end{lstlisting}
+
+Una de las herramientas implementadas en el proyecto es el tipo de dato entero con coma fija,
+en C++ podemos encontrar el tipo fundamental \textit{float} creado para trabajar con números 
+reales, pero si miramos como funcionan exactamente es posible encontar que no es lo que deseamos
+exactamente. Los \textit{floats} usan ``precisión simple'' lo cual implica que conforme el número 
+sea más grande, la cantidad de bytes destinados a la representación de la parte decimal va 
+disminuyendo ofreciendo así menor precisión. Además, trabajar con ellos es más costoso a nivel
+computacional\footnote{Esto pasa sobretodo en máquinas que no tengan CPUs con unidades destinadas 
+a cálculos en coma flotante} y conllevan un código más pesado debido a la codificación usada 
+al ser compilados.
+
+El tipo con coma fija tiene dos partes, en primer lúgar el valor que se quiere reprentar normal
+y corriente, y por otro la escala, número que indicará la cantidad de valores disponibles
+para la representación decimal. La escala la usaremos para multiplicar o dividir nuestro número
+para convertirlo a coma fija, devolverlo sin escalar y/o operaciones con otros números enteros.\\
+Es importante elegir una escala adecuada para trabajar de forma eficiente, para ello escogeremos
+un número portencia de 2 el cual nos permitirá usar desplazamientos en múltiplicaciones y divisiones,
+hacíendo los calculos mucho más rápidos que si tuvieramos que usar las operaciones comunes.
+
+\newpage
+
+\begin{lstlisting}[style=CodigoC++, caption={Entero coma fija},label=fint_t]
+template <typename NumType>
+struct fint_t {
+    fint_t() = default;
+
+    constexpr fint_t(NumType num)                noexcept; //ctor
+    constexpr explicit fint_t(float   num)       noexcept; //ctor
+    constexpr fint_t(const fint_t<NumType>& num) noexcept = default; 
+    constexpr fint_t(fint_t<NumType>&& num)      noexcept = default;
+
+/* OPERATIONS */
+	//***
+
+/* GETTERS */
+    constexpr NumType getNoScaled() const noexcept;
+    
+/* DATA */    
+                            NumType number { 0 };
+    constexpr static inline NumType SCALE  { 65536 };
+};
+\end{lstlisting}
+
+\placeholdertext{\%--}
+
 Por otro lado, se comenzó a trabajar en la \ac{IA} del juego creando los primeros comportamientos
 y herramientas para cambiar entre ello. Como veremos más adelante también, aquí caeremos en los primeros
-errores de concepto a la hora de trabajar con los \textit{`Steering behaviors'}.\\
-Por último, finalizamos la introducción en el uso de \LaTeX, `JabRef' y la plantilla comenzando 
-así con la redacción de esta memoria.
+errores de concepto a la hora de trabajar con los \textit{`Steering behaviors'}.
 
 Durante esta tercera iteración los objetivos eran los de corregir el funcionamiento de los
 \textit{`Steering behaviors'}, añadir elementos visuales que ayuden al debug de la \ac{IA}
