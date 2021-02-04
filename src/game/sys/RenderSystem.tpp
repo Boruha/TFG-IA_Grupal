@@ -43,7 +43,7 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
             auto  screen_coords  { continuous_to_screen(mov_cmp.coords) };
             auto* screen_ptr     { framebuffer.get() };
                   screen_ptr    += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
-            vec2  sprite         { render_cmp.sprite.y, render_cmp.sprite.x };
+            vec2  sprite         = render_cmp.sprite;
 
             for(uint32_t i=0; i<sprite.y; ++i) {
                 std::fill( screen_ptr, screen_ptr + sprite.x, static_cast<uint32_t>(render_cmp.sprite_C) );
@@ -70,10 +70,7 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
                 std::fill( screen_ptr, screen_ptr + head.x, static_cast<uint32_t>(Color::White) );
                 screen_ptr += U_WINDOW_W;
             }
-            
-            
-            
-            
+           
             if(debug_mode)
                 draw_debug(mov_cmp, render_cmp);
     });
