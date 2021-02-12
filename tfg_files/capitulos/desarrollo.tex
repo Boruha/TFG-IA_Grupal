@@ -52,7 +52,7 @@ quería desarrollar.
 
 Para ir entrando en una dinámica productiva iniciamos el desarrollo de funcionalidades básicas 
 como pueden ser el bucle principal del juego, en el cual usamos de la librería \textit{\textless
-chrono\textgreater} de C++ para medir y limitar el tiempo entre ejecuciones del bucle y el uso 
+chrono\textgreater} de C++ para medir y limitar el tiempo entre ejecuciones del bucle acompañado del uso 
 de una enumeración que contiene los posibles resultados de un ciclo del juego.
 
 \begin{lstlisting}[style=CodigoC++, caption={Resultados iteración bucle},label=game_conditions]
@@ -68,7 +68,7 @@ Una vez tenemos el bucle, toca introducir algo que hacer en el, como primer sist
 encontramos el sistema de dibujado el cual se encargará de crear y manejar la ventana, además
 de pintar nuestras entidades y herramientas visuales. Para incluir todas estas funcionalidades
 sin añadir librerías pesadas incluiremos \textit{\textless TinyPTC\textgreater}, la cual no 
-ncluye demasidas funcionalidades y opciones pero nos permitirá trabajar rápido y de forma 
+incluye demasidas funcionalidades u opciones pero nos permitirá trabajar rápido y de forma 
 sencilla. Los sprites en un inicio serán simples cuadrados de colores por lo que no requeriremos 
 mucho.
 
@@ -127,25 +127,24 @@ hacíendo los calculos mucho más rápidos que si tuvieramos que usar las operac
 \begin{lstlisting}[style=CodigoC++, caption={Entero coma fija},label=fint_t]
 template <typename NumType>
 struct fint_t {
-	fint_t() = default;
+fint_t() = default;
 
-	constexpr fint_t(NumType num)                noexcept; //ctor
-	constexpr explicit fint_t(float   num)       noexcept; //ctor
-	constexpr fint_t(const fint_t<NumType>& num) noexcept = default; 
-	constexpr fint_t(fint_t<NumType>&& num)      noexcept = default;
+constexpr fint_t(NumType num)                noexcept; //ctor
+constexpr explicit fint_t(float   num)       noexcept; //ctor
+constexpr fint_t(const fint_t<NumType>& num) noexcept = default; 
+constexpr fint_t(fint_t<NumType>&& num)      noexcept = default;
 
 /* OPERATIONS */
-	//***
+//***
 
 /* GETTERS */
-	constexpr NumType getNoScaled() const noexcept;
-	
+constexpr NumType getNoScaled() const noexcept;
+
 /* DATA */    
-							NumType number { 0 };
-	constexpr static inline NumType SCALE  { 65536 };
+			NumType number { 0 };
+constexpr static inline NumType SCALE  { 65536 };
 };
 \end{lstlisting}
-
 
 Por otro lado, se comenzó a trabajar en la \ac{IA} del juego creando los primeros comportamientos
 y herramientas para alternar entre ellos. Aquí caeremos en los primeros errores de concepto a la
@@ -187,9 +186,8 @@ template <typename Context_t>
 constexpr bool
 AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid) noexcept {
 	/* Recogida de datos */
-
 	//Las varaibles en mayúscula son constantes definidas fuera
-	//los datos terminados en `2' usan distancia al cuadrado
+	//los datos terminados en `2' usan el valor al cuadrado
 
 	if(distance2 < ENT_ARRIVE_DIST2)
 		return false;
@@ -198,7 +196,7 @@ AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid) noexcept {
 		target_speed = ENT_MAX_SPEED;
 	else
 		target_speed = ENT_MAX_SPEED * 
-				( target_dir.length_fix() / ENT_SLOW_DIST );
+		( target_dir.length_fix() / ENT_SLOW_DIST );
 	
 	target_dir.normalize();
 	target_dir *= target_speed;
@@ -222,7 +220,7 @@ el funcionamiento.
 
 Por otro lado, se añadieron herramientas para debug del movimientos de las entidades y las
 diferentes componentes de este, para el dibujado de los vectores se eligió el algoritmo de
-`\citeauthor*{Bresenham1962}', ya que, nos permite dibujar las rectas de una forma efectiva
+`\citeauthor*{Bresenham1962}', ya que, nos permite dibujar rectas de una forma efectiva
 y sin consumir muchos recursos. Además, el algoritmo esta diseñado para trabajar con enteros,
 cosa que hacemos a lo largo de todo el prototipo. En el esquema~\ref{fig:bresenham} la 
 cuadricula blanca representa los pixeles de la plantalla, en color azul la recta ideal que
@@ -238,7 +236,7 @@ se busca dibujar y en amarillo la recta resultante del algoritmo.
 Otra de las herramientas destinadas a poder análizar el funcionamiento del programa es
 el control del tiempo de ejecución y el tamaño del \textit{`DeltaTime'}. Al poder disminuir
 el número de fotogramas por segundo, podemos visualizar más detenidamente que sucede en
-pantalla y ver que todo va según la previsión, por otra parte de puede aumentar la velocidad
+pantalla y ver que todo va según la previsión, por otra parte se puede aumentar la velocidad
 para llegar antes a un punto de la ejecución en concreto. Además, jugar con el tamaño del
 \textit{`DeltaTime'} nos permite experimentar con los valores de velocidad y/o otros factores
 interpolados para ajustarlos de forma visual. 
