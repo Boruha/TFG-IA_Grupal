@@ -7,8 +7,11 @@ namespace AIP {
 constexpr fint_t<int64_t> VISION_DIST  { 150l };
 constexpr fint_t<int64_t> VISION_DIST2 { VISION_DIST * VISION_DIST };
 
-constexpr fint_t<int64_t> ATTACK_DIST  { 50l };
-constexpr fint_t<int64_t> ATTACK_DIST2 { ATTACK_DIST * ATTACK_DIST };
+constexpr fint_t<int64_t> MEELE_ATK_DIST  { 50l };
+constexpr fint_t<int64_t> MEELE_ATK_DIST2 { MEELE_ATK_DIST * MEELE_ATK_DIST };
+
+constexpr fint_t<int64_t> RANGE_ATK_DIST  { 120l };
+constexpr fint_t<int64_t> RANGE_ATK_DIST2 { RANGE_ATK_DIST * RANGE_ATK_DIST };
 
 //ARRIVE B.
 constexpr fint_t<int64_t> ENT_ARRIVE_DIST  { 50l };

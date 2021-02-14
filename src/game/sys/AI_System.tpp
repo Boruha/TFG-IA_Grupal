@@ -2,7 +2,6 @@
 
 #include <game/cmp/MovementComponent.hpp>
 #include <game/cmp/CombatComponent.hpp>
-#include <game/utils/AI_Constants.hpp>
 
 #include <ecs/ent/Entity_t.hpp>
 
@@ -92,23 +91,33 @@ AI_System<Context_t>::patrol(Context_t& context, BECS::entID eid) noexcept {
 template <typename Context_t>
 constexpr void 
 AI_System<Context_t>::chase(Context_t& context, BECS::entID eid) noexcept {
-    auto& ai_cmp      = context.template getCmpByEntityID<AI_Component>( eid );
-    auto& mov_cmp     = context.template getCmpByEntityID<MovementComponent>( ai_cmp.target_ent );
-    ai_cmp.target_pos = mov_cmp.coords;
+    auto& ai_cmp         = context.template getCmpByEntityID<AI_Component>( eid );
+    auto& mov_cmp        = context.template getCmpByEntityID<MovementComponent>( eid );
+    auto& mov_cmp_target = context.template getCmpByEntityID<MovementComponent>( ai_cmp.target_ent );
+    ai_cmp.target_pos    = mov_cmp_target.coords;
     
-    arrive(context, eid);
+    if( !arrive(context, eid) ) {
+        mov_cmp.dir.x.number             = mov_cmp.dir.y.number             = 0;
+        mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
+    }
 }
 
 template <typename Context_t>
 constexpr void
 AI_System<Context_t>::attack(Context_t& context, BECS::entID eid) noexcept {
+    auto& mov_cmp    = context.template getCmpByEntityID<MovementComponent>( eid );
     auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( eid );
     auto& ai_cmp     = context.template getCmpByEntityID<AI_Component>( eid );
     
     if(combat_cmp.current_attack_cd.number <= 0l) {
         combat_cmp.current_attack_cd = combat_cmp.attack_cd;
-        attack_msg.emplace(eid, ai_cmp.target_ent, combat_cmp.damage); //rediseño para X enemigo
-    }    
+        attack_msg.emplace(eid, ai_cmp.target_ent, combat_cmp.damage);
+    }
+
+    if( !arrive(context, eid, combat_cmp.attack_range,  combat_cmp.attack_range + 5) ) {
+        mov_cmp.dir.x.number             = mov_cmp.dir.y.number             = 0;
+        mov_cmp.accel_to_target.x.number = mov_cmp.accel_to_target.y.number = 0;
+    }
 }
 
 template <typename Context_t>
@@ -150,7 +159,8 @@ AI_System<Context_t>::evade(Context_t& context, BECS::entID eid) noexcept {
 
 template <typename Context_t>
 constexpr bool
-AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid) noexcept {
+AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid, const fint_t<int64_t> arrive_dist, const fint_t<int64_t> slow_dist) noexcept {
+    
     auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>(eid);
     auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>(eid);
     
@@ -162,10 +172,10 @@ AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid) noexcept {
     auto            distance2    { target_dir.length2()   };
     fint_t<int64_t> target_speed { };
 
-    if(distance2 < ENT_ARRIVE_DIST2)
+    if(distance2 < arrive_dist)
         return false;
 
-    if(distance2 > ENT_SLOW_DIST2)
+    if(distance2 > slow_dist)
         target_speed = ENT_MAX_SPEED;
     else
         target_speed = ENT_MAX_SPEED * ( target_dir.length_fix() / ENT_SLOW_DIST );
@@ -308,19 +318,20 @@ AI_System<Context_t>::decisionMakingIA(Context_t& context, BECS::entID eid, std:
         }
 
         if( curr_behavior == AI_behaviour::chase_b || curr_behavior == AI_behaviour::attack_b ) {
-            auto& combat_cmp  = context.template getCmpByEntityID<CombatComponent>( ai_cmp.target_ent );
+            auto& combat_cmp       = context.template getCmpByEntityID<CombatComponent>( eid );
+            auto& combat_cmp_enemy = context.template getCmpByEntityID<CombatComponent>( ai_cmp.target_ent );
 
             auto  target_dir = ai_cmp.target_pos - mov_cmp.coords;
             auto  distance2  = target_dir.length2();
             
-            if( distance2 > VISION_DIST2 || combat_cmp.health <= 0 ) {
+            if( distance2 > VISION_DIST2 || combat_cmp_enemy.health <= 0 ) {
                 curr_behavior     = AI_behaviour::patrol_b;
                 ai_cmp.target_ent = 0u;
                 ai_cmp.target_pos = ai_cmp.target_vec.at(ai_cmp.target_index);
                 return;
             }
 
-            if(distance2 < ATTACK_DIST2)
+            if(distance2 < combat_cmp.attack_range)
                 curr_behavior = AI_behaviour::attack_b;
             else
                 curr_behavior = AI_behaviour::chase_b;
@@ -333,23 +344,24 @@ AI_System<Context_t>::decisionMakingIA(Context_t& context, BECS::entID eid, std:
 template <typename Context_t>
 constexpr void
 AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids, AI_behaviour comand) noexcept {
-        auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>( eid );
+        auto& ai_cmp = context.template getCmpByEntityID<AI_Component>( eid );
 
         auto& curr_behavior = ai_cmp.current_behavior;
 
         if( curr_behavior == AI_behaviour::chase_b || curr_behavior == AI_behaviour::attack_b ) {
-            auto& mov_cmp    = context.template getCmpByEntityID<MovementComponent>( eid );
-            auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( ai_cmp.target_ent );
+            auto& mov_cmp          = context.template getCmpByEntityID<MovementComponent>( eid );
+            auto& combat_cmp       = context.template getCmpByEntityID<CombatComponent>( eid );
+            auto& combat_cmp_enemy = context.template getCmpByEntityID<CombatComponent>( ai_cmp.target_ent );
 
             auto  target_dir = ai_cmp.target_pos - mov_cmp.coords;
             auto  distance2  = target_dir.length2();
             
-            if(distance2 < ATTACK_DIST2)
+            if(distance2 < combat_cmp.attack_range)
                 comand = AI_behaviour::attack_b;
             else
                 comand = AI_behaviour::chase_b;
         
-            if( distance2 > VISION_DIST2 || combat_cmp.health <= 0 )
+            if( distance2 > VISION_DIST2 || combat_cmp_enemy.health <= 0 )
                 comand = AI_behaviour::follow_b;
         }
 

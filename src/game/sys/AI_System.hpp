@@ -2,6 +2,7 @@
 #include <game/utils/EventHandler.hpp>
 #include <game/utils/fvec2.hpp>
 #include <game/cmp/AI_Component.hpp>
+#include <game/utils/AI_Constants.hpp>
 
 #include <vector>
 
@@ -27,7 +28,7 @@ private:
     constexpr void evade(   Context_t& context, BECS::entID eid) noexcept;
                                               
 /* STEERING B. BASIC */
-    constexpr bool arrive(Context_t& context, BECS::entID eid) noexcept;
+    constexpr bool arrive(Context_t& context, BECS::entID eid, const fint_t<int64_t> arrive_dist = ENT_ARRIVE_DIST2, const fint_t<int64_t> slow_dist = ENT_SLOW_DIST2) noexcept;
     constexpr bool leave( Context_t& context, BECS::entID eid) noexcept;
 
 /* FLOCKING B. COMPO */

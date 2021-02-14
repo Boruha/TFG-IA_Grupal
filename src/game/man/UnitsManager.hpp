@@ -18,6 +18,7 @@ struct UnitsManager {
       void deleteEntity(BECS::entID eid) noexcept;
 
       void createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team) noexcept;
+      void createArcher( const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team) noexcept;
       void createPlayerPointer( const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col)     noexcept;
     
       template <typename CMP_t> constexpr std::vector<CMP_t>& getComponentVector()                    noexcept;
