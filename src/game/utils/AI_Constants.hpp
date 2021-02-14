@@ -7,17 +7,17 @@ namespace AIP {
 constexpr fint_t<int64_t> VISION_DIST  { 150l };
 constexpr fint_t<int64_t> VISION_DIST2 { VISION_DIST * VISION_DIST };
 
-constexpr fint_t<int64_t> ATTACK_DIST  { 45l };
+constexpr fint_t<int64_t> ATTACK_DIST  { 50l };
 constexpr fint_t<int64_t> ATTACK_DIST2 { ATTACK_DIST * ATTACK_DIST };
 
 //ARRIVE B.
-constexpr fint_t<int64_t> ENT_ARRIVE_DIST  { 40l };
+constexpr fint_t<int64_t> ENT_ARRIVE_DIST  { 50l };
 constexpr fint_t<int64_t> ENT_ARRIVE_DIST2 { ENT_ARRIVE_DIST * ENT_ARRIVE_DIST };
 
-constexpr fint_t<int64_t> ENT_SLOW_DIST  { 43l };
+constexpr fint_t<int64_t> ENT_SLOW_DIST  { 55l };
 constexpr fint_t<int64_t> ENT_SLOW_DIST2 { ENT_SLOW_DIST * ENT_SLOW_DIST };
 
-constexpr fint_t<int64_t> ENT_TIME_TO_TARGET { 0.1f };
+constexpr fint_t<int64_t> ENT_TIME_TO_TARGET { 0.2f };
 
 //FLEE B.
 constexpr fint_t<int64_t> ENT_FLEE_DIST  { 600l };
@@ -27,19 +27,20 @@ constexpr fint_t<int64_t> ENT_FAR_SLOW_DIST  { 595l };
 constexpr fint_t<int64_t> ENT_FAR_SLOW_DIST2 { ENT_FAR_SLOW_DIST * ENT_FAR_SLOW_DIST };
 
 //SEPARATION B.
-constexpr fint_t<int64_t> ENT_SEPARATION_DIST  { 180l };
+constexpr fint_t<int64_t> ENT_SEPARATION_DIST  { 200l };
 constexpr fint_t<int64_t> ENT_SEPARATION_DIST2 { ENT_SEPARATION_DIST * ENT_SEPARATION_DIST };
-constexpr fint_t<int64_t> DECAY_COEFICIENT     { 3500l };
+constexpr fint_t<int64_t> DECAY_COEFICIENT_SEP { 10000l };
 
 //COHESION B.
-constexpr fint_t<int64_t> ENT_COHESION_DIST  { 220l };
-constexpr fint_t<int64_t> ENT_COHESION_DIST2 { ENT_COHESION_DIST * ENT_COHESION_DIST };
+constexpr fint_t<int64_t> ENT_COHESION_DIST    { 150l };
+constexpr fint_t<int64_t> ENT_COHESION_DIST2   { ENT_COHESION_DIST * ENT_COHESION_DIST };
+constexpr fint_t<int64_t> DECAY_COEFICIENT_COH { 3000l };
 
 //MOVEMENT_SYS
-constexpr fint_t<int64_t> ENT_MAX_SPEED  { 300l };
+constexpr fint_t<int64_t> ENT_MAX_SPEED  { 280l };
 constexpr fint_t<int64_t> ENT_MAX_SPEED2 { ENT_MAX_SPEED * ENT_MAX_SPEED };
 
-constexpr fint_t<int64_t> ENT_MAX_ACCEL  { 25l };
+constexpr fint_t<int64_t> ENT_MAX_ACCEL  { 15l };
 constexpr fint_t<int64_t> ENT_MAX_ACCEL2 { ENT_MAX_ACCEL };
 
 } //NS

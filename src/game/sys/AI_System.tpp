@@ -240,7 +240,7 @@ AI_System<Context_t>::separation(Context_t& context) noexcept {
             auto distance2 { diff_vec.length2() };
 
             if(distance2 < ENT_SEPARATION_DIST2) {
-                auto strength { std::min(DECAY_COEFICIENT / distance2, ENT_MAX_ACCEL) };
+                auto strength { std::min(DECAY_COEFICIENT_SEP / distance2, ENT_MAX_ACCEL) };
                 diff_vec.normalize();
                 auto result   { diff_vec * strength };
 
@@ -273,7 +273,7 @@ AI_System<Context_t>::cohesion(Context_t& context, std::vector<BECS::entID>& eid
             auto distance2 { diff_vec.length2() };
 
             if(distance2 < ENT_COHESION_DIST2) {
-                auto strength { std::min(distance2 / (DECAY_COEFICIENT/2), ENT_MAX_ACCEL) };
+                auto strength { std::min(distance2 / DECAY_COEFICIENT_COH, ENT_MAX_ACCEL) };
                 diff_vec.normalize();
                 auto result   { diff_vec * strength };
 

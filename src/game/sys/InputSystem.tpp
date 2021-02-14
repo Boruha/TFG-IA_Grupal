@@ -42,6 +42,13 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
     if( ptc_process_events() ) //ESC = 1;
         return false;
 
+    //FPS control
+    if( keyboard.isKeyPressed(XK_z) )
+        fps_msg.emplace(FPS_Opc::LoopTime, true);
+
+    if( keyboard.isKeyPressed(XK_x) )
+        fps_msg.emplace(FPS_Opc::LoopTime, false);
+
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
         [&](InputComponent& input_cmp) {
             auto& mov = context.template getCmpByEntityID<MovementComponent>( input_cmp.getEntityID() );

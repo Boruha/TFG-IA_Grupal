@@ -110,7 +110,7 @@ RenderSystem<Context_t>::clean() noexcept {
 template <typename Context_t>
 void
 RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const RenderComponent& render_cmp) noexcept {
-    const auto& dir   = mov_cmp.dir;
+    //const auto& dir   = mov_cmp.dir;
     const auto& accel = mov_cmp.accel_to_target;
     const auto& separ = mov_cmp.sep_copy_to_draw;
     const auto& cohes = mov_cmp.coh_copy_to_draw;
@@ -120,7 +120,7 @@ RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const Rend
                p_ini.x      += ( static_cast<int64_t>(render_cmp.sprite.x) / 2 );
                p_ini.y      += ( static_cast<int64_t>(render_cmp.sprite.y) / 2 );
     const auto screen_p_ini  = clip_2_draw(p_ini);
-    
+/*    
     if(dir.length2().number != 0) {
         const auto screen_p_fin = clip_2_draw(p_ini + dir);
 
@@ -128,7 +128,7 @@ RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const Rend
         int32_t dY = screen_p_fin.y - screen_p_ini.y;
         bresenham_line(screen_p_ini, screen_p_fin, dY, dX, Color::White);
     }
-
+*/
     if(accel.length2().number != 0) {
         const auto screen_p_fin = clip_2_draw(p_ini + accel);
 
