@@ -16,16 +16,16 @@ UnitsManager::init() noexcept {
     
     createSoldier(20,  30l,  30l, Color::Red, false);
     createArcher(20,  60l, -10l, Color::Red, false);
-/*    createSoldier(20, -10l,  20l, Color::Red, false);
-    createSoldier(20, -60l,  10l, Color::Red, false);
-    createSoldier(20, -20l, -40l, Color::Red, false);*/
+    createSoldier(20, -10l,  20l, Color::Red, false);
+    createArcher(20, -60l,  10l, Color::Red, false);
+    createSoldier(20, -20l, -40l, Color::Red, false);
 
     createSoldier(20, 380l, 400l, Color::Blue, true);
     createArcher(20, 400l, 420l, Color::Blue, true);
-/*    createSoldier(20, 380l, 420l, Color::Blue, true);
-    createSoldier(20, 400l, 380l, Color::Blue, true);
+    createArcher(20, 380l, 420l, Color::Blue, true);
+    createArcher(20, 400l, 380l, Color::Blue, true);
     createSoldier(20, 350l, 380l, Color::Blue, true);
-    createSoldier(20, 450l, 380l, Color::Blue, true);*/
+    createSoldier(20, 450l, 380l, Color::Blue, true);
 }
 
 inline void

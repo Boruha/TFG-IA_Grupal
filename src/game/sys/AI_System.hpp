@@ -22,18 +22,13 @@ private:
     constexpr void patrol(Context_t& context, BECS::entID eid) noexcept;
     constexpr void chase( Context_t& context, BECS::entID eid) noexcept;
     constexpr void attack(Context_t& context, BECS::entID eid) noexcept;
-
-    constexpr void run_away(Context_t& context, BECS::entID eid) noexcept;
-    constexpr void pursue(  Context_t& context, BECS::entID eid) noexcept;
-    constexpr void evade(   Context_t& context, BECS::entID eid) noexcept;
                                               
 /* STEERING B. BASIC */
     constexpr bool arrive(Context_t& context, BECS::entID eid, const fint_t<int64_t> arrive_dist = ENT_ARRIVE_DIST2, const fint_t<int64_t> slow_dist = ENT_SLOW_DIST2) noexcept;
-    constexpr bool leave( Context_t& context, BECS::entID eid) noexcept;
 
 /* FLOCKING B. COMPO */
-    constexpr void separation(Context_t& context) noexcept;
-    constexpr void cohesion(  Context_t& context, std::vector<BECS::entID>& eids) noexcept;
+    constexpr void separation(Context_t& context, std::vector<BECS::entID>& eids) noexcept;
+    constexpr void cohesion(  Context_t& context, BECS::entID eid_ent, std::vector<BECS::entID>& eids) noexcept;
 
 /* DECISION FUNCTIONS */
     constexpr void decisionMakingIA(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept;
@@ -42,8 +37,7 @@ private:
 /* AUX */
     constexpr bool findNearEnemy(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept;
     constexpr bool updatePatrol( Context_t& context, BECS::entID eid) noexcept;
-
-    constexpr bool updateRoute(Context_t& context, BECS::entID eid) noexcept;
+    constexpr bool updateRoute(  Context_t& context, BECS::entID eid) noexcept;
 };
 
 /* Adiciones futuras posibles */
@@ -53,3 +47,12 @@ private:
     //direction aligment
 
 } //NS
+
+
+/*
+    constexpr void run_away(Context_t& context, BECS::entID eid) noexcept;
+    constexpr void pursue(  Context_t& context, BECS::entID eid) noexcept;
+    constexpr void evade(   Context_t& context, BECS::entID eid) noexcept;
+    constexpr bool leave( Context_t& context, BECS::entID eid) noexcept;
+
+*/
