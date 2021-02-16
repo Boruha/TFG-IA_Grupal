@@ -52,27 +52,39 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
         [&](InputComponent& input_cmp) {
             auto& mov = context.template getCmpByEntityID<MovementComponent>( input_cmp.getEntityID() );
-            auto& dir = mov.dir;
+            auto& dir   = mov.dir;
+            auto& accel = mov.accel_to_target;
             
-            dir.x.number = dir.y.number = 0;
+            fvec2<fint_t<int64_t>> target_dir { };
     
             if( keyboard.isKeyPressed(input_cmp.key_Up) )
-                dir.y -= ENT_MAX_SPEED;
+                target_dir.y -= ENT_MAX_SPEED;
     
             if( keyboard.isKeyPressed(input_cmp.key_Down) )
-                dir.y += ENT_MAX_SPEED;
+                target_dir.y += ENT_MAX_SPEED;
             
             if( keyboard.isKeyPressed(input_cmp.key_Left) )
-                dir.x -= ENT_MAX_SPEED;
+                target_dir.x -= ENT_MAX_SPEED;
             
             if( keyboard.isKeyPressed(input_cmp.key_Right) )
-                dir.x += ENT_MAX_SPEED;
+                target_dir.x += ENT_MAX_SPEED;
 
             if( keyboard.isKeyPressed(input_cmp.key_b) )
                 comand_msg.emplace(AI_behaviour::follow_b);
 
             if( keyboard.isKeyPressed(input_cmp.key_space) )
                 comand_msg.emplace(AI_behaviour::chase_b);
+
+            target_dir.normalize();
+            target_dir *= ENT_MAX_SPEED;
+
+            accel  = (target_dir - dir);
+            accel /= ENT_TIME_TO_TARGET;
+
+            if(accel.length2() > ENT_MAX_ACCEL2) {
+                accel.normalize();
+                accel *= ENT_MAX_ACCEL;
+            }
     });
 
     return true;

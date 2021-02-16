@@ -27,6 +27,7 @@ private:
 /* STEERING B. BASIC */
     constexpr bool arrive(Context_t& context, BECS::entID eid, const fint_t<int64_t> arrive_dist = ENT_ARRIVE_DIST2, const fint_t<int64_t> slow_dist = ENT_SLOW_DIST2) noexcept;
     constexpr void velocity_matching(Context_t& context, BECS::entID director, BECS::entID follower);
+
 /* FLOCKING B. COMPO */
     constexpr void separation(Context_t& context, std::vector<BECS::entID>& eids) noexcept;
     constexpr void cohesion(  Context_t& context, BECS::entID eid_ent, std::vector<BECS::entID>& eids) noexcept;

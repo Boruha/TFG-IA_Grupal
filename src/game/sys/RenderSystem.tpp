@@ -50,17 +50,17 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
                 screen_ptr += U_WINDOW_W;
             }
 
-            auto head { sprite/4 }; 
-            auto h_sp { sprite/2 }; 
-            auto dir  { mov_cmp.dir };
+            auto head         { sprite/4 }; 
+            auto h_sp         { sprite/2 }; 
+            auto orientation  { mov_cmp.orientation };
             
-            dir.normalize();
+            orientation.normalize();
             
-            dir.x.number  *= h_sp.x;
-            dir.y.number  *= h_sp.y;
-            dir           += mov_cmp.coords; 
+            orientation.x.number  *= h_sp.x;
+            orientation.y.number  *= h_sp.y;
+            orientation           += mov_cmp.coords; 
 
-            screen_coords  = continuous_to_screen(dir);
+            screen_coords  = continuous_to_screen(orientation);
             screen_coords += h_sp - head/2;
         
             screen_ptr  = framebuffer.get();
@@ -111,7 +111,7 @@ template <typename Context_t>
 void
 RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const RenderComponent& render_cmp) noexcept {
     //const auto& dir   = mov_cmp.dir;
-    const auto& accel = mov_cmp.accel_to_target;
+    const auto& accel = mov_cmp.acc_copy_to_draw;
     const auto& separ = mov_cmp.sep_copy_to_draw;
     const auto& cohes = mov_cmp.coh_copy_to_draw;
     

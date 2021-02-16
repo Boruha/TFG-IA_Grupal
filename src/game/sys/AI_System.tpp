@@ -138,10 +138,8 @@ AI_System<Context_t>::follow(Context_t& context, BECS::entID eid_ent, BECS::entI
     
     ai_cmp.target_pos = mov_cmp.coords;
     
-    //Si está lejos del puntero -> ir
     if(!arrive(context, eid))
         velocity_matching(context, eid_ent, eid);
-    //Si esta cerca -> matching
 }
 
 /* BASIC BEHAVIOURS FUNCTIONS */
