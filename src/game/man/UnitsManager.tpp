@@ -10,7 +10,8 @@ namespace AIP {
 
 inline void
 UnitsManager::init() noexcept {
-    enemies_vec.reserve(21);
+    enemies_vec.reserve(10);
+    allies_vec.reserve(10);
 
     createPlayerPointer(20, 400l, 400l, Color::Green);
     
@@ -63,7 +64,7 @@ UnitsManager::createArcher(const uint32_t size, const int64_t pos_x, const int64
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
-    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, RANGE_ATK_DIST2           ) );
+    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, RANGE_ATK_DIST2         ) );
     ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent ) );
 }
 

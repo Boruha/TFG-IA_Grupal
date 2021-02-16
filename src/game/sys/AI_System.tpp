@@ -60,7 +60,8 @@ AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime
 
         switch (ai_cmp.current_behavior) {
             case AI_behaviour::follow_b : { 
-                chase(context, eid);
+                velocity_matching(context, ai_cmp.target_ent, eid); //change
+                //chase(context, eid);
                 cohesion(context, eid, allies_ids);
             } break;
         
@@ -134,7 +135,6 @@ AI_System<Context_t>::attack(Context_t& context, BECS::entID eid) noexcept {
 template <typename Context_t>
 constexpr bool
 AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid, const fint_t<int64_t> arrive_dist, const fint_t<int64_t> slow_dist) noexcept {
-    
     auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>(eid);
     auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>(eid);
     
@@ -142,17 +142,15 @@ AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid, const fint_t<i
     auto& my_accel  = mov_cmp.accel_to_target;
     auto& my_direct = mov_cmp.dir;
 
-    auto            target_dir   { ai_cmp.target_pos - my_coords };
-    auto            distance2    { target_dir.length2()   };
-    fint_t<int64_t> target_speed { };
+    auto target_dir   { ai_cmp.target_pos - my_coords };
+    auto distance2    { target_dir.length2()   };
+    auto target_speed = ENT_MAX_SPEED;
 
     if(distance2 < arrive_dist)
         return false;
 
-    if(distance2 > slow_dist)
-        target_speed = ENT_MAX_SPEED;
-    else
-        target_speed = ENT_MAX_SPEED * ( target_dir.length_fix() / ENT_SLOW_DIST );
+    if(distance2 < slow_dist)
+        target_speed *= ( target_dir.length_fix() / ENT_SLOW_DIST );
     
     target_dir.normalize();
     target_dir *= target_speed;
@@ -166,6 +164,28 @@ AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid, const fint_t<i
     }
 
     return true;
+}
+
+template <typename Context_t>
+constexpr void 
+AI_System<Context_t>::velocity_matching(Context_t& context, BECS::entID director, BECS::entID follower) {
+    auto& dir_mov  = context.template getCmpByEntityID<MovementComponent>( director );
+    auto& foll_mov = context.template getCmpByEntityID<MovementComponent>( follower );
+    auto& my_accel = foll_mov.accel_to_target;
+
+    auto target_dir = dir_mov.dir;
+
+    target_dir.normalize();
+    target_dir *= ENT_MAX_SPEED;
+
+    my_accel  = (target_dir - foll_mov.dir);
+    my_accel /= ENT_TIME_TO_TARGET;
+
+    if(my_accel.length2() > ENT_MAX_ACCEL2) {
+        my_accel.normalize();
+        my_accel *= ENT_MAX_ACCEL;
+    }
+
 }
 
 
