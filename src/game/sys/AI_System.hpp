@@ -22,6 +22,7 @@ private:
     constexpr void patrol(Context_t& context, BECS::entID eid) noexcept;
     constexpr void chase( Context_t& context, BECS::entID eid) noexcept;
     constexpr void attack(Context_t& context, BECS::entID eid) noexcept;
+    constexpr void follow(Context_t& context, BECS::entID eid_ent, BECS::entID eid) noexcept;
                                               
 /* STEERING B. BASIC */
     constexpr bool arrive(Context_t& context, BECS::entID eid, const fint_t<int64_t> arrive_dist = ENT_ARRIVE_DIST2, const fint_t<int64_t> slow_dist = ENT_SLOW_DIST2) noexcept;
