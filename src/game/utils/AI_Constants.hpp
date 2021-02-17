@@ -30,6 +30,7 @@ constexpr fint_t<int64_t> DECAY_COEFICIENT_SEP { 20000l };
 constexpr fint_t<int64_t> ENT_COHESION_DIST    { 150l };
 constexpr fint_t<int64_t> ENT_COHESION_DIST2   { ENT_COHESION_DIST * ENT_COHESION_DIST };
 constexpr fint_t<int64_t> DECAY_COEFICIENT_COH { 3000l };
+constexpr fint_t<int64_t> DECAY_SOFT_COEFT_COH { 6000l };
 
 //MOVEMENT_SYS
 constexpr fint_t<int64_t> ENT_MAX_SPEED  { 280l };

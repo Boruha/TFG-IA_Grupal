@@ -30,7 +30,7 @@ private:
 
 /* FLOCKING B. COMPO */
     constexpr void separation(Context_t& context, std::vector<BECS::entID>& eids) noexcept;
-    constexpr void cohesion(  Context_t& context, BECS::entID eid_ent, std::vector<BECS::entID>& eids) noexcept;
+    constexpr void cohesion(  Context_t& context, BECS::entID eid_ent, std::vector<BECS::entID>& eids, const fint_t<int64_t> coeficient = DECAY_COEFICIENT_COH) noexcept;
 
 /* DECISION FUNCTIONS */
     constexpr void decisionMakingIA(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept;

@@ -132,9 +132,10 @@ AI_System<Context_t>::attack(Context_t& context, BECS::entID eid) noexcept {
 template <typename Context_t>
 constexpr void 
 AI_System<Context_t>::follow(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& eids) noexcept {
-    auto& ai_cmp   = context.template getCmpByEntityID<AI_Component>( eid );
-    auto& mov_cmp  = context.template getCmpByEntityID<MovementComponent>( ai_cmp.target_ent );
-    auto& team_cmp = context.template getCmpByEntityID<TeamComponent>( ai_cmp.target_ent );
+    auto& ai_cmp     = context.template getCmpByEntityID<AI_Component>( eid );
+    auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( eid );
+    auto& mov_cmp    = context.template getCmpByEntityID<MovementComponent>( ai_cmp.target_ent );
+    auto& team_cmp   = context.template getCmpByEntityID<TeamComponent>( ai_cmp.target_ent );
     
     ai_cmp.target_pos = mov_cmp.coords;
 
@@ -144,13 +145,20 @@ AI_System<Context_t>::follow(Context_t& context, BECS::entID eid, std::vector<BE
         break;
         
         case Formation::follow_form : {
-            if( !arrive(context, eid) )
-                velocity_matching(context, ai_cmp.target_ent, eid);
+            auto mod = VISION_DIST2 - combat_cmp.attack_range;
             
-            cohesion(context, eid, eids);
+            if( !arrive(context, eid, mod, mod + 5) )
+                velocity_matching(context, ai_cmp.target_ent, eid);
+
         } break;
         
         case Formation::ring_form : {
+            auto mod = VISION_DIST2 - combat_cmp.attack_range;
+            
+            if( !arrive(context, eid, mod, mod + 5) )
+                velocity_matching(context, ai_cmp.target_ent, eid);
+            
+            cohesion(context, eid, eids, DECAY_SOFT_COEFT_COH);
         } break;
     }
 }
@@ -247,7 +255,7 @@ AI_System<Context_t>::separation(Context_t& context, std::vector<BECS::entID>& e
 
 template <typename Context_t>
 constexpr void
-AI_System<Context_t>::cohesion(Context_t& context, BECS::entID eid_ent, std::vector<BECS::entID>& eids) noexcept {
+AI_System<Context_t>::cohesion(Context_t& context, BECS::entID eid_ent, std::vector<BECS::entID>& eids, const fint_t<int64_t> coeficient) noexcept {
     auto& mov_cmp  = context.template getCmpByEntityID<MovementComponent>( eid_ent );
     auto& cohesion = mov_cmp.cohesion_force;
 
@@ -260,7 +268,7 @@ AI_System<Context_t>::cohesion(Context_t& context, BECS::entID eid_ent, std::vec
         auto distance2 { diff_vec.length2() };
 
         if(distance2 < ENT_COHESION_DIST2) {
-            auto strength { std::min(distance2 / DECAY_COEFICIENT_COH, ENT_MAX_ACCEL) };
+            auto strength { std::min(distance2 / coeficient, ENT_MAX_ACCEL) };
             diff_vec.normalize();
             auto result   { diff_vec * strength };
 
