@@ -2,6 +2,7 @@
 
 #include <game/cmp/MovementComponent.hpp>
 #include <game/cmp/CombatComponent.hpp>
+#include <game/cmp/TeamComponent.hpp>
 
 #include <ecs/ent/Entity_t.hpp>
 
@@ -60,9 +61,7 @@ AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime
 
         switch (ai_cmp.current_behavior) {
             case AI_behaviour::follow_b : { 
-                follow(context, ai_cmp.target_ent, eid); //change
-                //chase(context, eid);
-                cohesion(context, eid, allies_ids);
+                follow(context, eid, allies_ids);
             } break;
         
             case AI_behaviour::chase_b : {
@@ -132,14 +131,28 @@ AI_System<Context_t>::attack(Context_t& context, BECS::entID eid) noexcept {
 
 template <typename Context_t>
 constexpr void 
-AI_System<Context_t>::follow(Context_t& context, BECS::entID eid_ent, BECS::entID eid) noexcept {
-    auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>( eid );
-    auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( ai_cmp.target_ent );
+AI_System<Context_t>::follow(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& eids) noexcept {
+    auto& ai_cmp   = context.template getCmpByEntityID<AI_Component>( eid );
+    auto& mov_cmp  = context.template getCmpByEntityID<MovementComponent>( ai_cmp.target_ent );
+    auto& team_cmp = context.template getCmpByEntityID<TeamComponent>( ai_cmp.target_ent );
     
     ai_cmp.target_pos = mov_cmp.coords;
-    
-    if(!arrive(context, eid))
-        velocity_matching(context, eid_ent, eid);
+
+    switch ( team_cmp.current_form )
+    {
+        case Formation::no_form : chase(context, eid);
+        break;
+        
+        case Formation::follow_form : {
+            if( !arrive(context, eid) )
+                velocity_matching(context, ai_cmp.target_ent, eid);
+            
+            cohesion(context, eid, eids);
+        } break;
+        
+        case Formation::ring_form : {
+        } break;
+    }
 }
 
 /* BASIC BEHAVIOURS FUNCTIONS */
@@ -186,8 +199,8 @@ AI_System<Context_t>::velocity_matching(Context_t& context, BECS::entID director
 
     auto target_dir = dir_mov.dir;
 
-    target_dir.normalize();
-    target_dir *= ENT_MAX_SPEED;
+    //target_dir.normalize();
+    //target_dir *= ENT_MAX_SPEED;
 
     my_accel  = (target_dir - foll_mov.dir);
     my_accel /= ENT_TIME_TO_TARGET;

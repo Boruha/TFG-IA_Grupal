@@ -2,6 +2,7 @@
 #include <game/cmp/InputComponent.hpp>
 #include <game/cmp/MovementComponent.hpp>
 #include <game/cmp/AI_Component.hpp>
+#include <game/cmp/TeamComponent.hpp>
 #include <game/utils/AI_Constants.hpp>
 
 #include <ecs/ent/Entity_t.hpp>
@@ -12,7 +13,6 @@ extern "C" {
 }
 
 #include <algorithm>
-#include <iostream>
 
 namespace AIP {
 
@@ -74,6 +74,21 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
 
             if( keyboard.isKeyPressed(input_cmp.key_space) )
                 comand_msg.emplace(AI_behaviour::chase_b);
+            
+            if( keyboard.isKeyPressed(input_cmp.key_0) ) {
+                auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( input_cmp.getEntityID() );
+                team_cmp.current_form = Formation::no_form;
+            }
+
+            if( keyboard.isKeyPressed(input_cmp.key_1) ) {
+                auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( input_cmp.getEntityID() );
+                team_cmp.current_form = Formation::follow_form;
+            }
+
+            if( keyboard.isKeyPressed(input_cmp.key_2) ) {
+                auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( input_cmp.getEntityID() );
+                team_cmp.current_form = Formation::ring_form;
+            }
 
             target_dir.normalize();
             target_dir *= ENT_MAX_SPEED;

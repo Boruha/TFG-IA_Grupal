@@ -17,6 +17,9 @@ struct InputComponent : BECS::Component_t {
 
     KeySym key_b     { XK_b };
     KeySym key_space { XK_space };
+    KeySym key_0     { XK_0 };
+    KeySym key_1     { XK_1 };
+    KeySym key_2     { XK_2 };
 
 };
 

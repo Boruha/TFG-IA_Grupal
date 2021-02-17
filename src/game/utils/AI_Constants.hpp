@@ -24,12 +24,12 @@ constexpr fint_t<int64_t> ENT_TIME_TO_TARGET { 0.2f };
 //SEPARATION B.
 constexpr fint_t<int64_t> ENT_SEPARATION_DIST  { 200l };
 constexpr fint_t<int64_t> ENT_SEPARATION_DIST2 { ENT_SEPARATION_DIST * ENT_SEPARATION_DIST };
-constexpr fint_t<int64_t> DECAY_COEFICIENT_SEP { 10000l };
+constexpr fint_t<int64_t> DECAY_COEFICIENT_SEP { 20000l }; 
 
 //COHESION B.
 constexpr fint_t<int64_t> ENT_COHESION_DIST    { 150l };
 constexpr fint_t<int64_t> ENT_COHESION_DIST2   { ENT_COHESION_DIST * ENT_COHESION_DIST };
-constexpr fint_t<int64_t> DECAY_COEFICIENT_COH { 2000l };
+constexpr fint_t<int64_t> DECAY_COEFICIENT_COH { 3000l };
 
 //MOVEMENT_SYS
 constexpr fint_t<int64_t> ENT_MAX_SPEED  { 280l };

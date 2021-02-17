@@ -14,13 +14,13 @@ UnitsManager::init() noexcept {
     allies_vec.reserve(10);
 
     createPlayerPointer(20, 400l, 400l, Color::Green);
-/*  
+  
     createSoldier(20,  30l,  30l, Color::Red, false);
     createArcher(20,  60l, -10l, Color::Red, false);
     createSoldier(20, -10l,  20l, Color::Red, false);
     createArcher(20, -60l,  10l, Color::Red, false);
     createSoldier(20, -20l, -40l, Color::Red, false);
-*/
+
     createSoldier(20, 380l, 400l, Color::Blue, true);
     createArcher(20, 400l, 420l, Color::Blue, true);
     createArcher(20, 380l, 420l, Color::Blue, true);
@@ -75,6 +75,7 @@ UnitsManager::createPlayerPointer(const uint32_t size, const int64_t pos_x, cons
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }     ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent, { size } , { size }, col ) );
     ent_man.addComponentToEntity( new_ent, InputComponent(    new_ent ) );
+    ent_man.addComponentToEntity( new_ent, TeamComponent(     new_ent ) );
 
     player_id = new_ent;
 }
