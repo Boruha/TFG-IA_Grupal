@@ -86,4 +86,27 @@
   year         = {2018},
 }
 
+@Misc{Bresenham1962,
+  author       = {Bresenham},
+  howpublished = {\url{https://es.wikipedia.org/wiki/Algoritmo_de_Bresenham}},
+  title        = {{Algoritmo de Bresenham}},
+  year         = {1962},
+}
+
+@Misc{BPW_Archive_2021,
+  author       = {{Borja Pozo Wals}},
+  howpublished = {\url{https://archive.org/details/tfg_borja_ia}},
+  month        = feb,
+  title        = {{Página de Archive.org}},
+  year         = {2021},
+}
+
+@Misc{BPW_GitHub_2021,
+  author       = {{Github}},
+  howpublished = {\url{https://github.com/Boruha/TFG-IA_Grupal}},
+  month        = feb,
+  title        = {{Repositorio de GitHub del TFG}},
+  year         = {2021},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
