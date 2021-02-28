@@ -44,7 +44,7 @@ CC          := $(CCACHE) g++
 C           := $(CCACHE) gcc
 
 # FLAGS
-FLAGS       := -pthread -Wall -pedantic -fno-exceptions -O3
+FLAGS       := -pthread -Wall -fno-exceptions -O3
 CCFLAGS     := $(FLAGS) -std=c++17 
 CFLAGS      := $(FLAGS)
 
@@ -55,6 +55,9 @@ CFLAGS      := $(FLAGS)
 # STRUCTURE FOLDERS
 APPDIR      := 		                              #EXECUTABLE DIRECTORY (Folder root)
 MKDIR 		:= mkdir -p
+#IMGUI_DIR   := imgui
+#LIBS_DIR    := libs
+#IMPL_DIR    := backends
 #	source code
 SRC 		:= src
 OBJ 		:= obj
@@ -79,8 +82,8 @@ ALLCPPLIB   := $(shell find $(LIB)/ -type f -iname *.cpp)
 ALLOBJLIB   := $(foreach L,$(ALLCLIB) $(ALLCPPLIB),$(call C2OLIB,$(L)))
 
 # HEADERS AND LIBRARIES
-INCLUDE 	:= -I.$(APPDIR)/$(SRC) -I.$(APPDIR)/$(LIB)
-LIBS 		:= -lX11
+INCLUDE 	:= -I.$(APPDIR)/$(SRC) -I.$(APPDIR)/$(LIB) -I.$(APPDIR)/$(LIB)/gl3w -DIMGUI_IMPL_OPENGL_LOADER_GL3W
+LIBS 		:= -L.$(APPDIR)/$(LIB) -lX11 -lGL -lglfw -ldl
 GOLD_OPTION	:= #-fuse-ld=gold
 
 # CLEAN
