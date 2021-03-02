@@ -7,12 +7,13 @@
 
 #include <ecs/ent/Entity_t.hpp>
 
+#include <engineGL/EngineManager.hpp>
 
-extern "C" {
-  #include "tinyPTC/tinyptc.h"  
-}
-
-#include <algorithm>
+//extern "C" {
+//  #include "tinyPTC/tinyptc.h"  
+//}
+//
+//#include <algorithm>
 
 namespace AIP {
 
@@ -30,25 +31,69 @@ InputSystem<Context_t>::onkeyrelease(KeySym key) {
 
 template <typename Context_t>
 InputSystem<Context_t>::InputSystem() {
-    ptc_set_on_keypress( onkeypress );
-    ptc_set_on_keyrelease( onkeyrelease );
+    //ptc_set_on_keypress( onkeypress );
+    //ptc_set_on_keyrelease( onkeyrelease );
 }
 
 template <typename Context_t>
 bool 
 InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
-    auto& input_cmp_vec = context.template getComponentVector<InputComponent>();
+    //auto& input_cmp_vec = context.template getComponentVector<InputComponent>();
+    auto  pj_id = context.template getPlayerID();
+    auto& mov   = context.template getCmpByEntityID<MovementComponent>( pj_id );
+    auto& dir   = mov.dir;
+    auto& accel = mov.accel_to_target;
 
-    if( ptc_process_events() ) //ESC = 1;
-        return false;
+    fvec2<fint_t<int64_t>> target_dir { };
 
-    //FPS control
-    if( keyboard.isKeyPressed(XK_z) )
-        fps_msg.emplace(FPS_Opc::LoopTime, true);
+    //if( ptc_process_events() ) //ESC = 1;
+    //    return false;
 
-    if( keyboard.isKeyPressed(XK_x) )
-        fps_msg.emplace(FPS_Opc::LoopTime, false);
+    if( ImGui::IsKeyDown(GLFW_KEY_UP) )
+        target_dir.y -= ENT_MAX_SPEED;
+    
+    if( ImGui::IsKeyDown(GLFW_KEY_DOWN) )
+        target_dir.y += ENT_MAX_SPEED;
+    
+    if( ImGui::IsKeyDown(GLFW_KEY_LEFT) )
+        target_dir.x -= ENT_MAX_SPEED;
+    
+    if( ImGui::IsKeyDown(GLFW_KEY_RIGHT) )
+        target_dir.x += ENT_MAX_SPEED;
 
+    if( ImGui::IsKeyDown(GLFW_KEY_B) )
+        comand_msg.emplace(AI_behaviour::follow_b);
+
+    if( ImGui::IsKeyDown(GLFW_KEY_SPACE) )
+        comand_msg.emplace(AI_behaviour::chase_b);
+    
+    if( ImGui::IsKeyDown(GLFW_KEY_1) ) {
+        auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( pj_id );
+        team_cmp.current_form = Formation::no_form;
+    }
+
+    if( ImGui::IsKeyPressed(GLFW_KEY_2) ) {
+        auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( pj_id );
+        team_cmp.current_form = Formation::follow_form;
+    }
+
+    if( ImGui::IsKeyPressed(GLFW_KEY_3) ) {
+        auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( pj_id );
+        team_cmp.current_form = Formation::ring_form;
+    }
+
+    target_dir.normalize();
+    target_dir *= ENT_MAX_SPEED;
+
+    accel  = (target_dir - dir);
+    accel /= ENT_TIME_TO_TARGET;
+
+    if(accel.length2() > ENT_MAX_ACCEL2) {
+        accel.normalize();
+        accel *= ENT_MAX_ACCEL;
+    }
+
+/*
     std::for_each(begin(input_cmp_vec), end(input_cmp_vec), 
         [&](InputComponent& input_cmp) {
             auto& mov = context.template getCmpByEntityID<MovementComponent>( input_cmp.getEntityID() );
@@ -101,7 +146,7 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
                 accel *= ENT_MAX_ACCEL;
             }
     });
-
+*/
     return true;
 }
 

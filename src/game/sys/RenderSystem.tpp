@@ -4,36 +4,26 @@
 
 #include <ecs/ent/Entity_t.hpp>
 
-extern "C" {
-  #include "tinyPTC/tinyptc.h"
-}
+//extern "C" {
+//  #include "tinyPTC/tinyptc.h"
+//}
 
 #include <algorithm>
 #include <iostream>
 
 namespace AIP {
-
+//framebuffer_size(w*h), framebuffer( std::make_unique<uint32_t[]>(w*h) ),
 template <typename Context_t>    
 RenderSystem<Context_t>::RenderSystem(const uint32_t w, const uint32_t h)
-    : framebuffer_size(w*h), framebuffer( std::make_unique<uint32_t[]>(w*h) ) {
-
-    ptc_open("AI Prototype", w, h);
-    clean();
-}
-
-template <typename Context_t>   
-RenderSystem<Context_t>::~RenderSystem() {
-    ptc_close();
-}
-
+    : engine( std::make_unique<eGL::EngineManager>(w, h, "Hola") ) { }
 
 //LOOP
 template <typename Context_t>
-void
+bool
 RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {    
     const auto& render_cmp_vec = context.template getComponentVector<RenderComponent>();
 
-    clean();
+    engine->start_frame();
 
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
         [&](const RenderComponent& render_cmp) {
@@ -41,14 +31,11 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
             
             //draw sprite
             auto  screen_coords  { continuous_to_screen(mov_cmp.coords) };
-            auto* screen_ptr     { framebuffer.get() };
-                  screen_ptr    += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
+            //auto* screen_ptr     { framebuffer.get() };
+                  //screen_ptr    += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
             vec2  sprite         = render_cmp.sprite;
 
-            for(uint32_t i=0; i<sprite.y; ++i) {
-                std::fill( screen_ptr, screen_ptr + sprite.x, static_cast<uint32_t>(render_cmp.sprite_C) );
-                screen_ptr += U_WINDOW_W;
-            }
+            engine->drawRectFilled(screen_coords.x, screen_coords.y, sprite.x, sprite.y, static_cast<uint32_t>(render_cmp.sprite_C));
 
             auto head         { sprite/4 }; 
             auto h_sp         { sprite/2 }; 
@@ -63,21 +50,19 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
             screen_coords  = continuous_to_screen(orientation);
             screen_coords += h_sp - head/2;
         
-            screen_ptr  = framebuffer.get();
-            screen_ptr += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
+            //screen_ptr  = framebuffer.get();
+            //screen_ptr += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
 
-            for(uint32_t i=0; i<head.y; ++i) {
-                std::fill( screen_ptr, screen_ptr + head.x, static_cast<uint32_t>(Color::White) );
-                screen_ptr += U_WINDOW_W;
-            }
-           
-            if(debug_mode)
-                draw_debug(mov_cmp, render_cmp);
+            engine->drawRectFilled(screen_coords.x, screen_coords.y, head.x, head.y, static_cast<uint32_t>(Color::White));
+         
+            //if(debug_mode)
+                //draw_debug(mov_cmp, render_cmp);
     });
 
-    ptc_update(framebuffer.get());
-}
+    engine->render();
 
+    return engine->shouldClose();
+}
 
 //AUX
 template <typename Context_t>
@@ -98,13 +83,13 @@ RenderSystem<Context_t>::clip_2_draw(fvec2<fint_t<int64_t>> point) noexcept {
     return this->continuous_to_screen(point);
 }
 
+/*
 template <typename Context_t>
 void
 RenderSystem<Context_t>::clean() noexcept {
     auto screen_ptr = framebuffer.get();
     std::fill(screen_ptr, screen_ptr + framebuffer_size, static_cast<uint32_t>(Color::Black));
 }
-
 
 //DRAW LINES DEBUG
 template <typename Context_t>
@@ -120,7 +105,7 @@ RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const Rend
                p_ini.x      += ( static_cast<int64_t>(render_cmp.sprite.x) / 2 );
                p_ini.y      += ( static_cast<int64_t>(render_cmp.sprite.y) / 2 );
     const auto screen_p_ini  = clip_2_draw(p_ini);
-/*    
+   
     if(dir.length2().number != 0) {
         const auto screen_p_fin = clip_2_draw(p_ini + dir);
 
@@ -128,7 +113,7 @@ RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const Rend
         int32_t dY = screen_p_fin.y - screen_p_ini.y;
         bresenham_line(screen_p_ini, screen_p_fin, dY, dX, Color::White);
     }
-*/
+
     if(accel.length2().number != 0) {
         const auto screen_p_fin = clip_2_draw(p_ini + accel);
 
@@ -275,5 +260,7 @@ RenderSystem<Context_t>::draw_line_V(const vec2<uint32_t>& p_ini, const vec2<uin
         screen_ptr += U_WINDOW_W;
     }
 }
+
+*/
 
 } //NS
