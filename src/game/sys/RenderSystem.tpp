@@ -4,15 +4,10 @@
 
 #include <ecs/ent/Entity_t.hpp>
 
-//extern "C" {
-//  #include "tinyPTC/tinyptc.h"
-//}
-
 #include <algorithm>
 #include <iostream>
 
 namespace AIP {
-//framebuffer_size(w*h), framebuffer( std::make_unique<uint32_t[]>(w*h) ),
 template <typename Context_t>    
 RenderSystem<Context_t>::RenderSystem(const uint32_t w, const uint32_t h)
     : engine( std::make_unique<eGL::EngineManager>(w, h, "Hola") ) { }
@@ -31,8 +26,6 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
             
             //draw sprite
             auto  screen_coords  { continuous_to_screen(mov_cmp.coords) };
-            //auto* screen_ptr     { framebuffer.get() };
-                  //screen_ptr    += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
             vec2  sprite         = render_cmp.sprite;
 
             engine->drawRectFilled(screen_coords.x, screen_coords.y, sprite.x, sprite.y, static_cast<uint32_t>(render_cmp.sprite_C));
@@ -50,17 +43,10 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
             screen_coords  = continuous_to_screen(orientation);
             screen_coords += h_sp - head/2;
         
-            //screen_ptr  = framebuffer.get();
-            //screen_ptr += (screen_coords.y * U_WINDOW_W) + screen_coords.x;
-
             engine->drawRectFilled(screen_coords.x, screen_coords.y, head.x, head.y, static_cast<uint32_t>(Color::White));
-         
-            //if(debug_mode)
-                //draw_debug(mov_cmp, render_cmp);
     });
 
-    engine->render();
-
+           engine->render();
     return engine->shouldClose();
 }
 
