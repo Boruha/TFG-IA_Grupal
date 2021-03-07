@@ -4,47 +4,58 @@ memoria, las diferentes iteraciones del producto serán agrupadas en diversas fa
 de facilitar la lectura y el entendimiento de los objetivos planteados en cada momento. Además,
 se contarán de forma más extensa los puntos relevantes y objetivos en este proyecto.
 
+\begin{longtable}[c]{|c|c|c|}
+\hline
+Terminado es esta iteración & Terminado en otra iteración & Sin definir cuando se terminará \\ 
+\hline
+			(vacio)			&             It.X            &             $\infty$            \\ 
+\hline
+\caption{Leyenda finalización de tareas.}
+\end{longtable}
+
 \section{Fase 0: Definición del proyecto y primeros pasos}
 
-\begin{longtable}[c]{|c|p{7cm}|c|c|}
+\begin{longtable}[c]{|p{7cm}|c|c|}
 \hline
-Iteraciones & De la 0 a la 2                                                & Completado    & Terminado en \\ 
+Iteraciones                                               & \% Completado    & Terminado en   \\ 
 \hline
-Objetivos   &   \textbf{0.1.} Definir la idea.                              & 60\%          & It.2         \\
-	\cmidrule[.006pt]{2-4}
-			&   \textbf{0.2.} Iniciar desarrollo del prototipo
-								Integrar TinyPTC y dibujar por pantalla.    & 100\%         & x            \\
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{0.3.} Adquirir hábito de escribir, preparar
-								las herramientas y entorno de LaTex.        & 50\%          & It.2         \\
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{0.4.} Prototipado del movimiento usando 
-								\textit{Steering behavior}.                 & 30\%          & It.1         \\
-\cmidrule[1pt]{2-4}
-			&	\textbf{1.1.} Creación tipo con coma fija.                  & 100\%         & x            \\
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{1.2.} Busqueda de referentes                        & 40\%          & It.3         \\
-	\cmidrule[.006pt]{2-4}
-	    	&	\textbf{1.3.} Corregir funcionamiento de los
-								\textit{Steering behavior} y
-								prototipar todos los posibles               & 100\%         & x            \\
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{1.4.} Sistema de debug visual: vectores.            & 100\%         & x            \\ 
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{1.5.} Herramientras control de ejecución.           & 50\%          & $\infty$     \\ 
-\cmidrule[1.5pt]{2-4}
-			&	\textbf{2.1.} Trabajar más la memoria.                      & 65\%          & $\infty$     \\
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{2.2.} Terminar de definir idea (GDD).               & 100\%         & x            \\
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{2.3.} Implementar el mínimo producto.               & 20\%          & It.4         \\
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{2.4.} Experimentación y análisis de resultados.     & 0\%           & $\infty$     \\
+\textbf{0.1.} Definir la idea.                              & 60\%          & It.2         \\
+	\cmidrule[.006pt]{1-3}
+\textbf{0.2.} Iniciar desarrollo del prototipo
+				Integrar TinyPTC y dibujar por pantalla.    & 100\%         &              \\
+	\cmidrule[.006pt]{1-3}
+\textbf{0.3.} Adquirir hábito de escribir, preparar
+				las herramientas y entorno de LaTex.        & 50\%          & It.2         \\
+	\cmidrule[.006pt]{1-3}
+\textbf{0.4.} Prototipado del movimiento usando 
+				\textit{Steering behavior}.                 & 30\%          & It.1         \\
+
+\cmidrule[1pt]{1-3}
+
+\textbf{1.1.} Creación tipo con coma fija.                  & 100\%         &              \\
+	\cmidrule[.006pt]{1-3}
+\textbf{1.2.} Busqueda de referentes                        & 40\%          & It.3         \\
+	\cmidrule[.006pt]{1-3}
+\textbf{1.3.} Corregir funcionamiento de los
+				\textit{Steering behavior} y
+				prototipar todos los posibles               & 100\%         &              \\
+	\cmidrule[.006pt]{1-3}
+\textbf{1.4.} Sistema de debug visual: vectores.            & 100\%         &              \\ 
+	\cmidrule[.006pt]{1-3}
+\textbf{1.5.} Herramientras control de ejecución.           & 50\%          & $\infty$     \\ 
+
+\cmidrule[1pt]{1-3}
+
+\textbf{2.1.} Trabajar más la memoria.                      & 65\%          & $\infty$     \\
+	\cmidrule[.006pt]{1-3}
+\textbf{2.2.} Terminar de definir idea (GDD).               & 100\%         &              \\
+	\cmidrule[.006pt]{1-3}
+\textbf{2.3.} Implementar el mínimo producto.               & 20\%          & It.4         \\
+	\cmidrule[.006pt]{1-3}
+\textbf{2.4.} Experimentación y análisis de resultados.     & 0\%           & $\infty$     \\
 \hline
 \caption{Resumen fase 0}
 \end{longtable}
-
-\newpage
 
 Esta primera fase engloba las tres primeras iteraciones donde comenzamos a terminar de definir 
 la idea para el proyecto, ya que, todavía era un poco difusa la imagen del producto final que se
@@ -55,14 +66,12 @@ como pueden ser el bucle principal del juego, en el cual usamos de la librería 
 chrono\textgreater} de C++ para medir y limitar el tiempo entre ejecuciones del bucle acompañado del uso 
 de una enumeración que contiene los posibles resultados de un ciclo del juego.
 
-\begin{lstlisting}[style=CodigoC++, caption={Resultados iteración bucle},label=game_conditions]
-enum class GameConditions : int16_t {
-	Loop     = 0u, //continuar con el bucle
-	Cerrar   = 1u, //terminar la ejecución del programa
-	Derrota  = 2u, //el jugador a perdido
-	Victoria = 3u  //el jugador a ganado
-};
-\end{lstlisting}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.4\textwidth]{imagenes/diario_desarrollo/Loop_juego.png}
+\caption{Posibles resultados del bucle de juego.}
+\label{fig:game_loop}
+\end{figure} 
 
 Una vez tenemos el bucle, toca introducir algo que hacer en el, como primer sistema del juego
 encontramos el sistema de dibujado el cual se encargará de crear y manejar la ventana, además
@@ -77,29 +86,6 @@ sistemas, nos permitirán poder crear un comportamiento de patrulla básico entr
 Además, se terminó la preparación de las herramientas de \LaTeX y `Jabref' para redactar la 
 memoria acompañado de la lectura de las directrices, normas y memorias de compañeros del año 
 pasado.
-
-\begin{lstlisting}[style=CodigoC++, caption={Componente de Movimiento},label=mov_cmp]
-struct MovementComponent : BECS::Component_t {
-
-  explicit MovementComponent(const BECS::entID entityID, const fint_t<int64_t> c_X, const fint_t<int64_t> c_Y) 
-	: Component_t(entityID), coords(c_X, c_Y) { }
-
-  //posicion actual.
-  fvec2<fint_t<int64_t>> coords           { { 0l }, { 0l } };
-  //desplazamiento final de la entidad.
-  fvec2<fint_t<int64_t>> dir              { { 0l }, { 0l } };
-  //acceleracion hacia la posición deseada.
-  fvec2<fint_t<int64_t>> accel_to_target  { { 0l }, { 0l } };
-  //si hay entidades cercanas, fuerza que las agrupa.
-  fvec2<fint_t<int64_t>> cohesion_force   { { 0l }, { 0l } };
-  //si hay entidades cercanas, fuerza que las separa.
-  fvec2<fint_t<int64_t>> separation_force { { 0l }, { 0l } };
-
-  //aux debug mode
-  fvec2<fint_t<int64_t>> sep_copy_to_draw { { 0l }, { 0l } };
-  fvec2<fint_t<int64_t>> coh_copy_to_draw { { 0l }, { 0l } };
-};
-\end{lstlisting}
 
 A lo largo de la iteración siguiente, seguimos añadiendo funcionalidades al prototipo como puede 
 ser el componente y sistema de \textit{Input}, el cual nos permitirá interactuar con el juego
@@ -268,42 +254,62 @@ este desarollo.
 
 \section{Fase 1: Producto mínimo viable}
 
-\begin{longtable}[c]{|c|p{7cm}|c|c|}
+\begin{longtable}[c]{|p{7cm}|c|c|}
 \hline
-Iteraciones & De la 3 a la 5                                               & \% Completado & Termindo en \\ 
+Iteraciones                                               & \% Completado & Termindo en \\ 
 \hline
-Objetivos   &   \textbf{3.1.} Cambios en el motor ECS.                     & 100\% & x \\
-	\cmidrule[.006pt]{2-4}
-			&   \textbf{3.2.} Cambios en el almacenamiento de datos.       & 100\% & x \\ 
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{3.3.} Cambio tipos propios a template.             & 100\% & x \\ 
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{3.4.} Cambio en el sistema de clases.              & 100\% & x \\
-\cmidrule[1pt]{2-4}
-			&	\textbf{4.1.} Añadir referente que use 
-								\textit{Steering Behavior}.                & 100\% & x \\
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{4.2.} Diagrama y explicación de las fases de 
-								una iteración.                             & 100\% & x \\
-	\cmidrule[.006pt]{2-4}
-			&   \textbf{4.3.} Agrupar iteración en fases y describir el
-								desarrollo hasta la fecha.                 & 30\%  &  \\
-	\cmidrule[.006pt]{2-4}
-			&   \textbf{4.4.} Implementar mínimo producto.                 & 85\%  &  \\
-	\cmidrule[.006pt]{2-4}
-			&   \textbf{4.5.} Análisis de resultados del MVP.              & 10\%  &  \\
-\cmidrule[1.5pt]{2-4}
-			&   \textbf{5.1.} Crear unidad de ataque a distancia.          & \% &  \\
-	\cmidrule[.006pt]{2-4}
-			&   \textbf{5.2.} Adición de formación en anillo.              & \% &  \\ 
-	\cmidrule[.006pt]{2-4}
-			&	\textbf{5.3.} Balanceo de las unidades.                    & \% &  \\ 
-	\cmidrule[.006pt]{2-4}		
-			&	\textbf{5.4.} Profundizar los objetivos en el GDD y 
-								explicar método de balanceo.               & \% &  \\ 
-	\cmidrule[.006pt]{2-4}		
-			&	\textbf{5.5.} Incluir tabla resumen al inicio de fase
-								e incluir información extra como el set-up.& \% &  \\
+\textbf{3.1.} Cambios en el motor ECS.                     & 100\% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{3.2.} Cambios en el almacenamiento de datos.       & 100\% &   \\ 
+	\cmidrule[.003pt]{1-3}
+\textbf{3.3.} Cambio tipos propios a template.             & 100\% &   \\ 
+	\cmidrule[.003pt]{1-3}
+\textbf{3.4.} Cambio en el sistema de clases.              & 100\% &   \\
+	
+	\cmidrule[1pt]{1-3}
+
+\textbf{4.1.} Añadir referente que use 
+				\textit{Steering Behavior}.                & 100\% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{4.2.} Diagrama y explicación de las fases de 
+				una iteración.                             & 100\% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{4.3.} Agrupar iteración en fases y describir el
+				desarrollo hasta la fecha.                 & 30\%  &  It.x \\
+	\cmidrule[.003pt]{1-3}
+\textbf{4.4.} Implementar mínimo producto.                 & 85\%  &  It.x \\
+	\cmidrule[.003pt]{1-3}
+\textbf{4.5.} Análisis de resultados del MVP.              & 10\%  &  It.x \\
+	
+	\cmidrule[1pt]{1-3}
+	
+\textbf{5.1.} Crear unidad de ataque a distancia.          & 100\% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{5.2.} Adición de formación en anillo.              & 80\%  &  It.x \\ 
+	\cmidrule[.003pt]{1-3}
+\textbf{5.3.} Balanceo de las unidades.                    & 0\%   &  It.x \\ 
+	\cmidrule[.003pt]{1-3}		
+\textbf{5.4.} Profundizar los objetivos en el GDD y 
+				explicar método de balanceo.               & 0\%   &  It.x \\ 
+	\cmidrule[.003pt]{1-3}		
+\textbf{5.5.} Incluir tabla resumen al inicio de fase
+				e incluir información extra como el set-up.& 100\%  &  \\
+
+	\cmidrule[1pt]{1-3}
+
+\textbf{6.1.} Experimentar con la formación en anillo
+				y fuerzas cuadráticas.                     & \% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{6.2.} Sistema de proyectiles para terminar la
+				unidad a distancia.                        & \% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{6.3.} Remplazar  TinyPTC por Dear ImGUI y
+				hacer una interfaz básica.                 & \% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{6.4.} Ajustar y continuar con la memoria.          & \% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{6.5.} Profundizar en el GDD y listar cuestiones
+				tecnológicas que hacen falta.              & \% &   \\
 \hline
 \caption{Resumen fase 1}
 \end{longtable}
@@ -360,13 +366,13 @@ vaciando y volviendo a cargar los elementos del juego.
 
 Para incluir los nuevos sistemas y funcionalidades a la rutina de las unidades, se ha ampliado
 el apartado de toma de decisión incluyendo métodos para detectar si hay unidades enemigas 
-cercanas y seleccionar como objetivo a la más cercana, que en caso de morir se lanzará una nueva
+cerca y seleccionar como objetivo a la más cercana, que en caso de morir se lanzará una nueva
 búsqueda. De forma similar, cuando no haya unidades enemigas cercanas se regresará al estado de
 patrulla (en caso de la IA) y las manejadas por el jugador volveran a la posición de su
 marcador en el mapa. 
 
-En cuanto a las unidades de la partida, se creó un manejador de equipos donde se gestiona que
-unidades pertenecen a cada facción, proporcionar métodos para obtener los \textit{ID}s de las
+En cuanto a la gestión de las unidades en partida, se creó un manejador de equipos donde se gestiona que
+unidades pertenecen a cada facción, y proporcionar métodos para obtener los \textit{ID}s de las
 unidades por equipo e ir actualizando los equipos cuanda haya bajas. Además de, tener métodos
 para crear tipos de unidades en concreto trabajando a la vez de ``fábrica''.
 
@@ -376,7 +382,7 @@ entienda mejor y de forma visual el desplazamiento o acción actual. Este marcad
 tamaño relativo al del sprite de la unidad y serán siempre de color blanco para que sea
 fácil de identificar. 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \begin{minipage}[c]{0.42\linewidth}
 	\hspace{9mm}
@@ -401,4 +407,41 @@ refleja en el \ac{GDD}, actualmente el jugador no maneja directamente a las unid
 ratón ni las selecciona de forma individual, sino que controla un marcador verde el cual será
 seguido por sus tropas y mediante ordenenes activará los distintos comportamientos de sus 
 unidades. 
+
+A lo largo de la siguiente iteración se trabajó sobretodo en las mecánicas de juego, con el fin
+de acercarse un poco más a la obtención de un prototipo que cumpla con los requisitos del \acs{MVP},
+en concreto se comenzó el desarollo de un segundo tipo de unidad basada en ataques a distancia y 
+la posibilidad de controlar la formación que siguen nuestras unidades, pudiendo alternar entre un
+movimiento sin orden o una formación en anillo.
+
+En cuanto a la unidad a distancia, gracias a que tenemos la componente de combate podemos ajustar de una
+forma muy sencilla el rango de ataque de cada unidad, dejándonos la creación de un sistema de proyectiles
+como tarea para completar el funcionamiento de dicha unidad. Un proyectil consistirá en una entidad 
+formada solamente por una componente física para su desplazamiento y calculo de colisiones, y una visual
+para poder dibujarla. Una vez se lance un proyectil, este seguirá la dirección que tenía la unidad al
+momento de disparar, por lo que solo hará daño si la unidad enemiga no cambia de posición lo suficiente
+para esquivar el área de impacto. A la hora de programar las colisiones, solamente contaremos las unidades
+del bando contrario para optimizar el número de comprobaciones, para ello tendrémos un vector de proyectiles
+por cada bando.
+
+\placeholdertext{incluir imagenes disparo}
+
+Por otro lado encontramos la formación en anillo, la cual cuenta con una primera versión que se basa en
+modificar el rango de cohesión al centro del grupo en función de la distacia de ataque. Probando esta forma 
+de configurar la posición de las unidades nos hemos dado cuenta de que no muestras buenos resultados en
+conjuntos grandes de unidades, ya que, numerosas unidades quedan atrapadas en posiciones incorrectas y la
+distribución resultante no es muy optima.
+
+\placeholdertext{capturar formación actual}
+
+Por último, se ha introducido en la memoria una lista con las herramientas que han sido utilizadas 
+durante el desarrollo, donde se incluye el nombre de las librerías, la versión y los sistemas sobre los que
+puede ser lanzado el juego. Todo con el fin de ayudar a quién quiera utilizar, recompilar y/o 
+modificar el prototipo. Además, se ha añadido al comienzo de cada fase una tabla resumen donde se indican
+las tareas principales de cada iteración, el portentaje estimado de completado y, en caso de no haber sido
+terminada, la iteración donde se ha finalizado.
+
+
+
+
 

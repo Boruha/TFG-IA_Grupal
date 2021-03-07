@@ -7,8 +7,8 @@ namespace BECS {
 struct Component_t {
     explicit Component_t(const entID entityID) : cmp_id(++counterID), ent_id(entityID) { }
 
-    [[nodiscard]] const cmpID& getComponentID() const { return cmp_id; }
-    [[nodiscard]] const entID& getEntityID()    const { return ent_id; }
+    [[nodiscard]] const cmpID getComponentID() const { return cmp_id; }
+    [[nodiscard]] const entID getEntityID()    const { return ent_id; }
 
     template<typename T>
     static cmpTypeID getCmpTypeID() { 

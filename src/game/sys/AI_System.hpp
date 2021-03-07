@@ -13,20 +13,22 @@ struct MovementComponent;
 
 template <typename Context_t>
 struct AI_System : EventHandler {
+    using fvec2_int = fvec2<fint_t<int64_t>>;
 
     void init() noexcept;
     void update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept;
 
 private:
 /* CONPLEX B. */
-    constexpr void patrol(Context_t& context, BECS::entID eid) noexcept;
-    constexpr void chase( Context_t& context, BECS::entID eid) noexcept;
-    constexpr void attack(Context_t& context, BECS::entID eid) noexcept;
-    constexpr void follow(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& eids) noexcept;
+    constexpr void patrol(AI_Component& ai, MovementComponent& mov) noexcept;
+    constexpr void chase( Context_t& context, AI_Component& ai, MovementComponent& mov) noexcept;
+    constexpr void attack(Context_t& context, AI_Component& ai, MovementComponent& mov) noexcept;
+    constexpr void follow(Context_t& context, AI_Component& ai, MovementComponent& mov, std::vector<BECS::entID>& eids) noexcept;
                                               
 /* STEERING B. BASIC */
-    constexpr bool arrive(Context_t& context, BECS::entID eid, const fint_t<int64_t> arrive_dist = ENT_ARRIVE_DIST2, const fint_t<int64_t> slow_dist = ENT_SLOW_DIST2) noexcept;
-    constexpr void velocity_matching(Context_t& context, BECS::entID director, BECS::entID follower);
+    constexpr void seek(MovementComponent& mov, fvec2_int& target_pos) noexcept;
+    constexpr bool arrive(MovementComponent& mov, fvec2_int& target_pos, const fint_t<int64_t> arrive_dist = ENT_ARRIVE_DIST2, const fint_t<int64_t> slow_dist = ENT_SLOW_DIST2) noexcept;
+    constexpr void velocity_matching(MovementComponent& mov, fvec2_int& target_dir);
 
 /* FLOCKING B. COMPO */
     constexpr void separation(Context_t& context, std::vector<BECS::entID>& eids) noexcept;
@@ -38,8 +40,10 @@ private:
 
 /* AUX */
     constexpr bool findNearEnemy(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept;
-    constexpr bool updatePatrol( Context_t& context, BECS::entID eid) noexcept;
-    constexpr bool updateRoute(  Context_t& context, BECS::entID eid) noexcept;
+    constexpr bool updatePatrol( AI_Component& ai) noexcept;
+    constexpr bool updateRoute(  AI_Component& ai) noexcept;
+
+    constexpr fvec2_int accelFromDir(fvec2_int target_dir, fvec2_int my_dir) noexcept;
 };
 
 /* Adiciones futuras posibles */
@@ -49,12 +53,3 @@ private:
     //direction aligment
 
 } //NS
-
-
-/*
-    constexpr void run_away(Context_t& context, BECS::entID eid) noexcept;
-    constexpr void pursue(  Context_t& context, BECS::entID eid) noexcept;
-    constexpr void evade(   Context_t& context, BECS::entID eid) noexcept;
-    constexpr bool leave( Context_t& context, BECS::entID eid) noexcept;
-
-*/

@@ -10,7 +10,7 @@
 namespace AIP {
 template <typename Context_t>    
 RenderSystem<Context_t>::RenderSystem(const uint32_t w, const uint32_t h)
-    : engine( std::make_unique<eGL::EngineManager>(w, h, "Hola") ) { }
+    : engine( std::make_unique<eGL::EngineManager>(w, h, "Prototype_IA") ) { }
 
 //LOOP
 template <typename Context_t>
@@ -69,14 +69,14 @@ RenderSystem<Context_t>::clip_2_draw(fvec2<fint_t<int64_t>> point) noexcept {
     point.x         = std::clamp(point.x, (F_H_WINDOW_W_N), F_H_WINDOW_W);
     point.y         = std::clamp(point.y, (F_H_WINDOW_H_N), F_H_WINDOW_H);
     
-    return this->continuous_to_screen(point);
+    return continuous_to_screen(point);
 }
 
 //DRAW LINES DEBUG
 template <typename Context_t>
 void
 RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const RenderComponent& render_cmp) noexcept {
-    const auto& dir   = mov_cmp.dir;
+    //const auto& dir   = mov_cmp.dir;
     const auto& accel = mov_cmp.acc_copy_to_draw;
     const auto& separ = mov_cmp.sep_copy_to_draw;
     const auto& cohes = mov_cmp.coh_copy_to_draw;
@@ -86,12 +86,12 @@ RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const Rend
                p_ini.x      += ( static_cast<int64_t>(render_cmp.sprite.x) / 2 );
                p_ini.y      += ( static_cast<int64_t>(render_cmp.sprite.y) / 2 );
     const auto screen_p_ini  = clip_2_draw(p_ini);
-   
+/*   
     if(dir.length2().number != 0) {
         const auto screen_p_fin = clip_2_draw(p_ini + dir);
         engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_fin.x, screen_p_fin.y, static_cast<uint32_t>(Color::White));
     }
-
+*/
     if(accel.length2().number != 0) {
         const auto screen_p_fin = clip_2_draw(p_ini + accel);
         engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_fin.x, screen_p_fin.y, static_cast<uint32_t>(Color::Green));

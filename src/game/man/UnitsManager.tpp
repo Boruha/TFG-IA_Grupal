@@ -14,13 +14,13 @@ UnitsManager::init() noexcept {
     allies_vec.reserve(10);
 
     createPlayerPointer(20, 400l, 400l, Color::Green);
- 
+/*
     createSoldier(20,  30l,  30l, Color::Red, false);
     createArcher(20,  60l, -10l, Color::Red, false);
     createSoldier(20, -10l,  20l, Color::Red, false);
     createArcher(20, -60l,  10l, Color::Red, false);
     createSoldier(20, -20l, -40l, Color::Red, false);
-/*
+*/
     createSoldier(20, 380l, 390l, Color::Blue, true);
     createSoldier(20, 360l, 400l, Color::Blue, true);
     createArcher(20, 400l, 420l, Color::White, true);
@@ -30,7 +30,7 @@ UnitsManager::init() noexcept {
     createArcher(20, 420l, 380l, Color::White, true);
     createSoldier(20, 350l, 380l, Color::Blue, true);
     createSoldier(20, 340l, 380l, Color::Blue, true);
-    createSoldier(20, 410l, 380l, Color::Blue, true);*/
+    createSoldier(20, 410l, 380l, Color::Blue, true);
 }
 
 inline void
@@ -53,7 +53,7 @@ UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int6
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
-    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, MEELE_ATK_DIST2         ) );
+    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, MEELE_ATK_DIST          ) );
     ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent ) );
 }
 
@@ -68,7 +68,7 @@ UnitsManager::createArcher(const uint32_t size, const int64_t pos_x, const int64
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
-    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, RANGE_ATK_DIST2         ) );
+    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, RANGE_ATK_DIST          ) );
     ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent ) );
 }
 

@@ -46,11 +46,6 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
 
     if( ImGui::IsKeyPressed(GLFW_KEY_2) ) {
         auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( pj_id );
-        team_cmp.current_form = Formation::follow_form;
-    }
-
-    if( ImGui::IsKeyPressed(GLFW_KEY_3) ) {
-        auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( pj_id );
         team_cmp.current_form = Formation::ring_form;
     }
 

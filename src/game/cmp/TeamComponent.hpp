@@ -7,7 +7,7 @@ namespace AIP {
 
 enum class Formation : uint32_t {
     no_form     = 0u,
-    follow_form = 1u,
+    //follow_form = 1u,
     ring_form   = 2u
 };
 

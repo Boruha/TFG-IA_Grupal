@@ -26,9 +26,9 @@ struct GameManager {
 private:
     UnitsManager units_man;
 
-    RenderSystem<UnitsManager>    render_sys { U_WINDOW_W, U_WINDOW_H }; //aqui se crea la ventana de tinyPTC
+    RenderSystem<UnitsManager>    render_sys { U_WINDOW_W, U_WINDOW_H }; //aqui se crea la ventana de openGL/GLFW
     InputSystem<UnitsManager>     input_sys;                             //por lo que todos los cambios relacionados tienen                                                                                  
-    AI_System<UnitsManager>       ia_sys;                                //ir a posteriori. Ejemplo, los callbacks del input.
+    AI_System<UnitsManager>       ia_sys;                                //ir a posteriori. Ejemplo, el input.
     MovementSystem<UnitsManager>  movement_sys;
     CollisionSystem<UnitsManager> collision_sys;
     AttackSystem<UnitsManager>    attack_sys;
