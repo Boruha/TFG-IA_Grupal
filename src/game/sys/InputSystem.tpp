@@ -36,7 +36,7 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
     if( ImGui::IsKeyDown(GLFW_KEY_B) )
         comand_msg.emplace(AI_behaviour::follow_b);
 
-    if( ImGui::IsKeyDown(GLFW_KEY_SPACE) )
+    if( ImGui::IsKeyDown(GLFW_KEY_RIGHT_CONTROL) )
         comand_msg.emplace(AI_behaviour::chase_b);
     
     if( ImGui::IsKeyDown(GLFW_KEY_1) ) {

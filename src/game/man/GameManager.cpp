@@ -45,12 +45,12 @@ GameManager::update() noexcept {
 
     //draw
     if( render_sys.update(units_man, DeltaTime) )
-        result = GameConditions::Cerrar;
+        return GameConditions::Cerrar;
 
     checkFpsMsg();
  
     //deleted entities
-    //result = death_sys.update(units_man, DeltaTime);
+    result = death_sys.update(units_man, DeltaTime);
  
     return result;
 }
