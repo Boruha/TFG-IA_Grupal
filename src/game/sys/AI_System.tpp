@@ -143,19 +143,19 @@ AI_System<Context_t>::follow(Context_t& context, AI_Component& ai, MovementCompo
         } break;
         
         case Formation::ring_form : {
-            auto form_centre { mov.coords - targetPos };
-            form_centre.normalize();
-            targetPos += form_centre * ((VISION_DIST+40) - combat.attack_range);
+            auto from_centre { mov.coords - targetPos };
+            from_centre.normalize();
+            targetPos += from_centre * (RING_MAX_DIST - combat.attack_range);
 
-            if( !arrive(mov, targetPos, { 20l*20l }, { 20l*20l }) ) //TEST NEEDED!!!!!!
+            if( !arrive(mov, targetPos, RING_ARRIVE, RING_ARRIVE) )
                 velocity_matching(mov, mov_enemy.dir);
 
         } break;
     }
 }
 
-/* BASIC BEHAVIOURS FUNCTIONS */
 
+/* BASIC BEHAVIOURS FUNCTIONS */
 template <typename Context_t> 
 constexpr void 
 AI_System<Context_t>::seek(MovementComponent& mov, fvec2_int& target_pos) noexcept {
@@ -212,7 +212,8 @@ AI_System<Context_t>::separation(Context_t& context, std::vector<BECS::entID>& e
             auto  distance2 { diff_vec.length2() };
 
             if(distance2 < ENT_SEPARATION_DIST2) {
-                auto strength { std::min(DECAY_COEFICIENT_SEP / distance2, ENT_MAX_ACCEL) };
+                distance2 *= distance2;
+                auto strength { std::min(DECAY_COEFICIENT_SEP / distance2, ENT_MAX_SEP) };
                 diff_vec.normalize();
                 auto result   { diff_vec * strength };
 
@@ -221,9 +222,9 @@ AI_System<Context_t>::separation(Context_t& context, std::vector<BECS::entID>& e
             }
         });
 
-        if(sep_force.length2() > ENT_MAX_ACCEL2) {
+        if(sep_force.length2() > ENT_MAX_SEP) {
             sep_force.normalize();
-            sep_force *= ENT_MAX_ACCEL;
+            sep_force *= ENT_MAX_SEP;
         }
 
     }// END FOR AI

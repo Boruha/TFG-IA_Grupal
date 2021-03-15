@@ -21,6 +21,12 @@ UnitsManager::init() noexcept {
     createArcher(20, -60l,  10l, Color::Red, false);
     createSoldier(20, -20l, -40l, Color::Red, false);
 
+    createSoldier(20,  100l,  100l, Color::Red, false);
+    createArcher(20,  60l, -100l, Color::Red, false);
+    createSoldier(20, -130l,  20l, Color::Red, false);
+    createArcher(20, -60l,  100l, Color::Red, false);
+    createSoldier(20, -200l, -400l, Color::Red, false);
+/**
     createSoldier(20, 380l, 390l, Color::Blue, true);
     createSoldier(20, 360l, 400l, Color::Blue, true);
     createArcher(20, 400l, 420l, Color::White, true);
@@ -29,7 +35,7 @@ UnitsManager::init() noexcept {
     createArcher(20, 380l, 400l, Color::White, true);
     createArcher(20, 420l, 380l, Color::White, true);
     createSoldier(20, 350l, 380l, Color::Blue, true);
-    createSoldier(20, 340l, 380l, Color::Blue, true);
+    createSoldier(20, 340l, 380l, Color::Blue, true);*/
     createSoldier(20, 410l, 380l, Color::Blue, true);
 }
 
