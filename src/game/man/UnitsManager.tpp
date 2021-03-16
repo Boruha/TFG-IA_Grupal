@@ -25,8 +25,8 @@ UnitsManager::init() noexcept {
     createArcher(20,  60l, -100l, Color::Red, false);
     createSoldier(20, -130l,  20l, Color::Red, false);
     createArcher(20, -60l,  100l, Color::Red, false);
-    createSoldier(20, -200l, -400l, Color::Red, false);
-/**
+    createSoldier(20, -200l, -200l, Color::Red, false);
+/*
     createSoldier(20, 380l, 390l, Color::Blue, true);
     createSoldier(20, 360l, 400l, Color::Blue, true);
     createArcher(20, 400l, 420l, Color::White, true);
@@ -114,6 +114,12 @@ UnitsManager::deleteEntity(BECS::entID eid) noexcept { //Bastante fe00 por tu pa
 
 
 /* GETTERS */
+template <typename SCMP_t> constexpr
+SCMP_t& 
+UnitsManager::getSCmpByType() noexcept {
+    return std::get<SCMP_t>(singletonCmps);
+}
+
 template <typename CMP_t> constexpr
 std::vector<CMP_t>&
 UnitsManager::getComponentVector() noexcept {

@@ -2,6 +2,7 @@
 #include <ecs/man/EntityManager.tpp>
 
 #include <vector>
+#include <tuple>
 
 namespace AIP {
 
@@ -24,6 +25,8 @@ struct UnitsManager {
       template <typename CMP_t> constexpr std::vector<CMP_t>& getComponentVector()                    noexcept;
       template <typename CMP_t> constexpr CMP_t&              getCmpByEntityID(const BECS::entID eid) noexcept;
 
+      template <typename SCMP_t> constexpr SCMP_t& getSCmpByType() noexcept;
+
       constexpr std::vector<BECS::entID>& getEnemyIDs() noexcept;
       constexpr std::vector<BECS::entID>& getAllyIDs() noexcept;
 
@@ -37,6 +40,7 @@ private:
 
       std::vector<BECS::entID> enemies_vec;
       std::vector<BECS::entID> allies_vec;
+      std::tuple<InterfaceControl> singletonCmps { };
 };
 
 } // namespace AIP

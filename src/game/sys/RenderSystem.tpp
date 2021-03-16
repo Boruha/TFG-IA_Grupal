@@ -1,5 +1,6 @@
 #include <game/sys/RenderSystem.hpp>
 #include <game/cmp/MovementComponent.hpp>
+#include <game/cmp/InterfaceControl.hpp>
 #include <game/utils/ScreenData.hpp>
 
 #include <ecs/ent/Entity_t.hpp>
@@ -17,18 +18,25 @@ template <typename Context_t>
 bool
 RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {    
     const auto& render_cmp_vec = context.template getComponentVector<RenderComponent>();
+          auto& control        = context.template getSCmpByType<InterfaceControl>();
 
     engine->start_frame();
+
+    if( control.showDebug )
+        engine->debugInterface(debug_mode, control.deltaTime, control.deltaSize, control.changed);
+
+    engine->minimap();
 
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
         [&](const RenderComponent& render_cmp) {
             auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( render_cmp.getEntityID() );
             
             //draw sprite
-            auto  screen_coords  { continuous_to_screen(mov_cmp.coords) };
-            vec2  sprite         = render_cmp.sprite;
+            auto  screen_coords { continuous_to_screen(mov_cmp.coords) };
+            vec2  sprite        = render_cmp.sprite;
 
-            engine->drawRectFilled(screen_coords.x, screen_coords.y, sprite.x, sprite.y, static_cast<uint32_t>(render_cmp.sprite_C));
+            engine->drawRectFilled(screen_coords.x, screen_coords.y, sprite.x, sprite.y, static_cast<uint32_t>(render_cmp.sprite_C) );
+            engine->drawInMinimap( screen_coords.x, screen_coords.y, sprite.x, sprite.y, static_cast<uint32_t>(render_cmp.sprite_C) );
 
             auto head         { sprite/4 }; 
             auto h_sp         { sprite/2 }; 
@@ -36,9 +44,9 @@ RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
             
             orientation.normalize();
             
-            orientation.x.number  *= h_sp.x;
-            orientation.y.number  *= h_sp.y;
-            orientation           += mov_cmp.coords; 
+            orientation.x.number *= h_sp.x;
+            orientation.y.number *= h_sp.y;
+            orientation          += mov_cmp.coords; 
 
             screen_coords  = continuous_to_screen(orientation);
             screen_coords += h_sp - head/2;

@@ -4,22 +4,16 @@
 
 namespace eGL {
 
-//static void glfw_error_callback(int error, const char* description) {
-//    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
-//}
-
-
+/* ENGINE SETUP */
 EngineManager::EngineManager(int win_w, int win_h, const char* name) {
 //OpenGL & GLFW
-    // Setup window
     glfwSetErrorCallback( [](int error, const char* description) {
-        std::cout << "GLFW Error " << error << " : " << description << "\n";
+        std::cout << "GLFW Error " << error << ": " << description << "\n";
     });
 
     if (!glfwInit())
         std::terminate();
 
-    // GL v3.0 + GLSL v130 versions
     constexpr const char* glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
@@ -60,6 +54,11 @@ EngineManager::~EngineManager() {
     glfwTerminate();
 }
 
+
+/* BASIC RENDER FUCTIONS
+    - RENDER     : CLEANS, DRAWS ALL CONTENT IN NEW FRAME
+    - START_FRAME: READS ALL WINDOW EVENTS AND SET NEW ITEAM LIST
+*/
 void 
 EngineManager::render() noexcept {
     ImGui::Render();
@@ -85,17 +84,27 @@ EngineManager::start_frame() noexcept {
     ImGui::NewFrame();
 }
 
+
+/* GETTERS
+    - GET WINDOW STATUS
+    - GET WINDOW DIMENSIONS
+*/
 bool
 EngineManager::shouldClose() noexcept {
     return glfwWindowShouldClose(window);
 }
-
 
 constexpr const std::tuple<int, int> 
 EngineManager::getWindowSize() const noexcept {
     return { display_w, display_h };
 }
 
+/* WIDGETS FUNTIONS AND SECUNDARY WINDOWS SETTERS
+    - DRAW FILL RECTAGLES
+    - DRAW LINES
+    - OPEN A DEBUG INTERFACE
+    - OPEN A GAMEPLAY INTERFACE
+*/
 void 
 EngineManager::drawRectFilled(uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color) noexcept {
     const auto* viewport = ImGui::GetMainViewport();
@@ -104,7 +113,6 @@ EngineManager::drawRectFilled(uint32_t pos_x, uint32_t pos_y, uint32_t size_x, u
   
     bg_draw->AddRectFilled(ImVec2(work_pos.x + pos_x, work_pos.y + pos_y), ImVec2(pos_x + size_x, pos_y + size_y), color);
 }
-
 
 void 
 EngineManager::drawLine(uint32_t p1_x, uint32_t p1_y, uint32_t p2_x, uint32_t p2_y, uint32_t color) noexcept {
@@ -115,5 +123,58 @@ EngineManager::drawLine(uint32_t p1_x, uint32_t p1_y, uint32_t p2_x, uint32_t p2
     bg_draw->AddLine(ImVec2(work_pos.x + p1_x, work_pos.y + p1_y), ImVec2(work_pos.x + p2_x, work_pos.y + p2_y), color);  
 }
 
+void 
+EngineManager::debugInterface(bool& showDebug, float& DT, float& LT, bool& changed) const noexcept {
+    ImGui::SetNextWindowPos(ImVec2(0,0));
+    ImGui::SetNextWindowSize(ImVec2(300,150));
+    {
+    ImGui::Begin("Debug controller");
+        ImGui::Checkbox("Show Debug Vectors", &showDebug);
+        if( ImGui::SliderFloat("DeltaTime", &DT, 15.f, 120.f, "%.2f", 1.f) )
+            changed = true;
+        if( ImGui::SliderFloat("LoopTime", &LT, 15.f, 120.f, "%.2f", 1.f) )
+            changed = true;
+        if( ImGui::SliderFloat("Both", &LT, 15.f, 120.f, "%.2f", 1.f) ) {
+            DT = LT;
+            changed = true;
+        }
+    ImGui::End();
+    }
+}
+
+void 
+EngineManager::minimap() noexcept {
+    const auto* viewport = ImGui::GetMainViewport();
+          auto  viewSize = viewport->Size;
+          auto  p_open   { true };
+    
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration 
+                                  | ImGuiWindowFlags_AlwaysAutoResize 
+                                  | ImGuiWindowFlags_NoMove 
+                                  | ImGuiWindowFlags_NoFocusOnAppearing 
+                                  | ImGuiWindowFlags_NoNav;
+
+    ImGui::SetNextWindowPos( ImVec2(viewSize.x - 1, viewSize.y - 1), ImGuiCond_Always, ImVec2(1.0,1.0) );
+    ImGui::SetNextWindowSize( ImVec2(viewSize.x/5, viewSize.y/5));
+    {
+    ImGui::Begin("MiniMap boy", &p_open, window_flags);
+    ImGui::End();
+    }
+}
+
+void 
+EngineManager::drawInMinimap(uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color) noexcept {
+    {
+    ImGui::Begin("MiniMap boy");
+        auto  winPos   = ImGui::GetWindowPos();
+        auto  fraction = 1.f/5.f;
+        auto* drawList = ImGui::GetWindowDrawList();
+        auto  p1       = ImVec2( winPos.x + (pos_x*fraction), winPos.y + (pos_y*fraction) );
+
+        drawList->AddRectFilled(p1, ImVec2(p1.x + (size_x*fraction), p1.y + (size_y*fraction)), color);
+    ImGui::End();
+    }
+
+}
 
 } //NS

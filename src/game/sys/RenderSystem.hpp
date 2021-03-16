@@ -23,7 +23,7 @@ private:
 
     void draw_debug(const MovementComponent& mov_cmp, const RenderComponent& render_cmp) noexcept;
 
-    bool debug_mode { true };
+    bool debug_mode { false };
     std::unique_ptr<eGL::EngineManager> engine { nullptr };
 };
 

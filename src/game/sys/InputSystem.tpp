@@ -1,7 +1,9 @@
 #include <game/sys/InputSystem.hpp>
+
 #include <game/cmp/MovementComponent.hpp>
 #include <game/cmp/AI_Component.hpp>
 #include <game/cmp/TeamComponent.hpp>
+#include <game/cmp/InterfaceControl.hpp>
 #include <game/utils/AI_Constants.hpp>
 
 #include <ecs/ent/Entity_t.hpp>
@@ -34,7 +36,7 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
         target_dir.x += ENT_MAX_SPEED;
 
     if( ImGui::IsKeyDown(GLFW_KEY_B) )
-        comand_msg.emplace(AI_behaviour::follow_b);
+        comand_msg.emplace(AI_behaviour::follow_b); //change to singletonCmp !!!000!!!!!!
 
     if( ImGui::IsKeyDown(GLFW_KEY_RIGHT_CONTROL) )
         comand_msg.emplace(AI_behaviour::chase_b);
@@ -47,6 +49,11 @@ InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTi
     if( ImGui::IsKeyPressed(GLFW_KEY_2) ) {
         auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( pj_id );
         team_cmp.current_form = Formation::ring_form;
+    }
+
+    if( ImGui::IsKeyPressed(GLFW_KEY_D) ) {
+        auto& control     = context.template getSCmpByType<InterfaceControl>();
+        control.showDebug = !control.showDebug;
     }
 
     target_dir.normalize();

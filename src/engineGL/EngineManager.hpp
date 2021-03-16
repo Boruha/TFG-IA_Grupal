@@ -20,8 +20,12 @@ struct EngineManager {
     EngineManager& operator=(const EngineManager&&) = delete;
 
     void drawRectFilled(uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color) noexcept;
-    void drawLine(uint32_t p1_x, uint32_t p1_y, uint32_t p2_x, uint32_t p2_y, uint32_t color)             noexcept;
-    
+    void drawLine(      uint32_t p1_x , uint32_t p1_y , uint32_t p2_x  , uint32_t p2_y  , uint32_t color) noexcept;
+    void drawInMinimap( uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color) noexcept;
+
+    void debugInterface(bool& showDebug, float& DT, float& LT, bool& changed) const noexcept;
+
+    void minimap()     noexcept;
     void render()      noexcept;
     void start_frame() noexcept;
     bool shouldClose() noexcept;

@@ -37,11 +37,11 @@ private:
 
     GameConditions result { GameConditions::Loop };
 
-    fint_t<int64_t> setLoopTime()                   noexcept;
-    fint_t<int64_t> setDeltaTime()                  noexcept;
-    void            checkFpsMsg()                   noexcept;   
-    void            changeLoopTime(bool operation)  noexcept;
-    void            changeDeltaTime(bool operation) noexcept;
+    fint_t<int64_t> setLoopTime()     noexcept;
+    fint_t<int64_t> setDeltaTime()    noexcept;
+    void            checkFps()        noexcept;   
+    void            changeLoopTime(InterfaceControl& control)  noexcept;
+    void            changeDeltaTime(InterfaceControl& control) noexcept;
     
     //TimeInfo
     float           FPS_LT      { 60.f };
