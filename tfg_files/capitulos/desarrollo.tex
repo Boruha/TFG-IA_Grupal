@@ -277,7 +277,7 @@ Iteraciones                                               & \% Completado & Term
 \textbf{4.3.} Agrupar iteración en fases y describir el
 				desarrollo hasta la fecha.                 & 30\%  &  It.x \\
 	\cmidrule[.003pt]{1-3}
-\textbf{4.4.} Implementar mínimo producto.                 & 85\%  &  It.x \\
+\textbf{4.4.} Implementar mínimo producto.                 & 85\%  &  It.6 \\
 	\cmidrule[.003pt]{1-3}
 \textbf{4.5.} Análisis de resultados del MVP.              & 10\%  &  It.x \\
 	
@@ -285,7 +285,7 @@ Iteraciones                                               & \% Completado & Term
 	
 \textbf{5.1.} Crear unidad de ataque a distancia.          & 100\% &   \\
 	\cmidrule[.003pt]{1-3}
-\textbf{5.2.} Adición de formación en anillo.              & 80\%  &  It.x \\ 
+\textbf{5.2.} Adición de formación en anillo.              & 80\%  &  It.6 \\ 
 	\cmidrule[.003pt]{1-3}
 \textbf{5.3.} Balanceo de las unidades.                    & 0\%   &  It.x \\ 
 	\cmidrule[.003pt]{1-3}		
@@ -298,13 +298,13 @@ Iteraciones                                               & \% Completado & Term
 	\cmidrule[1pt]{1-3}
 
 \textbf{6.1.} Experimentar con la formación en anillo
-				y fuerzas cuadráticas.                     & \% &   \\
+				y fuerzas cuadráticas.                     & 100\% &   \\
 	\cmidrule[.003pt]{1-3}
 \textbf{6.2.} Sistema de proyectiles para terminar la
-				unidad a distancia.                        & \% &   \\
+				unidad a distancia.                        & 100\% &   \\
 	\cmidrule[.003pt]{1-3}
 \textbf{6.3.} Remplazar  TinyPTC por Dear ImGUI y
-				hacer una interfaz básica.                 & \% &   \\
+				hacer una interfaz básica.                 & 100\% &   \\
 	\cmidrule[.003pt]{1-3}
 \textbf{6.4.} Ajustar y continuar con la memoria.          & \% &   \\
 	\cmidrule[.003pt]{1-3}
@@ -416,15 +416,7 @@ movimiento sin orden o una formación en anillo.
 
 En cuanto a la unidad a distancia, gracias a que tenemos la componente de combate podemos ajustar de una
 forma muy sencilla el rango de ataque de cada unidad, dejándonos la creación de un sistema de proyectiles
-como tarea para completar el funcionamiento de dicha unidad. Un proyectil consistirá en una entidad 
-formada solamente por una componente física para su desplazamiento y calculo de colisiones, y una visual
-para poder dibujarla. Una vez se lance un proyectil, este seguirá la dirección que tenía la unidad al
-momento de disparar, por lo que solo hará daño si la unidad enemiga no cambia de posición lo suficiente
-para esquivar el área de impacto. A la hora de programar las colisiones, solamente contaremos las unidades
-del bando contrario para optimizar el número de comprobaciones, para ello tendrémos un vector de proyectiles
-por cada bando.
-
-\placeholdertext{incluir imagenes disparo}
+como tarea para completar el funcionamiento de dicha unidad. 
 
 Por otro lado encontramos la formación en anillo, la cual cuenta con una primera versión que se basa en
 modificar el rango de cohesión al centro del grupo en función de la distacia de ataque. Probando esta forma 
@@ -432,7 +424,7 @@ de configurar la posición de las unidades nos hemos dado cuenta de que no muest
 conjuntos grandes de unidades, ya que, numerosas unidades quedan atrapadas en posiciones incorrectas y la
 distribución resultante no es muy optima.
 
-\placeholdertext{capturar formación actual}
+\placeholdertext{añadir esquema fuerzas}
 
 Por último, se ha introducido en la memoria una lista con las herramientas que han sido utilizadas 
 durante el desarrollo, donde se incluye el nombre de las librerías, la versión y los sistemas sobre los que
@@ -442,6 +434,60 @@ las tareas principales de cada iteración, el portentaje estimado de completado 
 terminada, la iteración donde se ha finalizado.
 
 
+\placeholdertext{it 6}
 
+En la cuarta y última iteración de esta fase, el objetivo es el de terminar todas las mecánicas del prototipo
+y sustituir \textit{\textless TinyPTC\textgreater} por \textit{\textless Dear ImGUI\textgreater} para poder
+centrarnos más adelante en el diseño del nivel/es del prototipo de cara a la entrega final. Además de, poder
+añadir alguna funcionalidad extra si es necesario para crear una experiencia de juego mejor.
 
+Llegados a este punto, queremos crear una interfaz y tener la posibilidad de poder añadir algún elemento
+visual al proyecto, por lo que necesitamos de una libreria que ofreza más opciones a la hora de trabajar
+con ella. En este caso hemos elegido \textit{\textless Dear ImGUI\textgreater}, la cual, propone una nueva
+forma de trabajar las interfaces\footnote{\textit{IMGUI (Immediate Mode GUI) paradigm.}} en auge actualmente
+y además, nos proporciona una serie de \textit{widgets} y herramientas predefinidas que nos permitirán crear 
+un HUD fácil y sencillo.
+Además, funciona con \textit{GLFW} y \textit{OpenGL} así que si necesitamos revisar el funcionamiento de
+alguna funcionalidad, no tendremos excesivos problemas ya que hemos trabajado con ellas anteriormente.
 
+\placeholdertext{añadir links a explicaciones de IMGUI}
+
+Para comenzar a trastear con esta librería, hemos implementado una pequeña ventana que nos permitirá manejar
+en tiempo real el número de veces que se ejecutará el bucle del juego por segundo y/o el tamaño del 
+\textit{DeltaTime}, además tiene un \textit{checkbox} para activar el debug visual del movimiento de las
+entidades.
+
+\placeholdertext{captura interfaz debug}
+
+Por otro lado, se ha creado una segunda ventana que hará de "minimapa" y mostrará la ubícación de los unidades
+tanto aliadas como enemigas y el marcador. Esto nos puede servir de cara a una versión del juego en el que el
+mapeado sea más grande que la pantalla, para que nos permita visualizar y ubicarnos en el nivel.
+
+\placeholdertext{captura minimapa}
+
+En cuanto a las mecánicas del juego, hemos añadido un sistema de lanzamiento de proyectiles para las unidades
+que ataquen a distacia, esto incluye: la creación de las balas siguiendo la orientación del personaje, la
+destrucción de las proyectiles una vez alcanzan su distancia máxima y/o impactan contra un objetivo.
+La creación y destrucción de entidades se realiza al final del bucle del juego, al igual que con las
+demás entidades. 
+
+Un proyectil consiste en una entidad formada solamente por una componente física para su desplazamiento
+y calculo de colisiones, y una visual para poder dibujarla. Una vez se lance un proyectil, este seguirá la
+dirección que tenía la unidad al momento de disparar, por lo que solo hará daño si la unidad enemiga no 
+cambia de posición lo suficiente para esquivar el área de impacto. A la hora de programar las colisiones,
+solamente contaremos las unidades del bando contrario para optimizar el número de comprobaciones, para ello
+tendrémos un vector de proyectiles por cada bando.
+
+\placeholdertext{incluir imagenes disparo}
+
+Otra de las mecánicas que han sido mejoradas, es la formación en anillo de nuestras unidades. Los resultados
+y la forma generada eran poco satisfactorios por lo que se cambió de trabajar con la intensidad de la cohesión
+a calcular una posición deseada para cada unidad en relación a su distancia de ataque. Para ello, mediante el
+trazado de rayos creamos una recta entre el marcador del jugador y cada una de las distintas unidades, sobre esa
+recta se marcará un punto el cual deberá ser alcanzado por la unidad, de esta forma solventamos los solapes entre
+unidades y que se queden encerradas en lugares encorrectos, además de ser más escalable en caso de adición de
+nuevas unidades en el futuro.
+
+Por último se ha cambiado el cálculo de las fuerzas de cohesión y separación para que tenga un crecimiento
+cuadrático en lugar de lineal, de esta forma reducimos su presencia en la media/larga distacia y la aumentamos
+en las cercanías.   
