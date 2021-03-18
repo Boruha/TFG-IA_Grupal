@@ -15,7 +15,7 @@ namespace AIP {
 
 template <typename Context_t>
 bool 
-InputSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
+InputSystem<Context_t>::update(Context_t& context) noexcept {
     auto  pj_id = context.template getPlayerID();
     auto& mov   = context.template getCmpByEntityID<MovementComponent>( pj_id );
     auto& dir   = mov.dir;

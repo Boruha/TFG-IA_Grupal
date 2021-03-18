@@ -111,13 +111,21 @@ AI_System<Context_t>::chase(Context_t& context, AI_Component& ai, MovementCompon
 template <typename Context_t>
 constexpr void
 AI_System<Context_t>::attack(Context_t& context, AI_Component& ai, MovementComponent& mov) noexcept {
-    auto& mov_target = context.template getCmpByEntityID<MovementComponent>( ai.target_ent    );
-    auto& combat     = context.template getCmpByEntityID<CombatComponent>(   ai.getEntityID() );
+    auto  eid        = ai.getEntityID();
+    auto& mov_target = context.template getCmpByEntityID<MovementComponent>( ai.target_ent );
+    auto& combat     = context.template getCmpByEntityID<CombatComponent>( eid );
     ai.target_pos    = mov_target.coords;
 
     if(combat.current_attack_cd.number <= 0l) {
         combat.current_attack_cd = combat.attack_cd;
-        attack_msg.emplace(ai.getEntityID(), ai.target_ent, combat.damage);
+        switch (combat.attack_range.getNoScaled()) {
+            case MEELE_ATK_DIST.getNoScaled():
+                    attack_msg.emplace(eid, ai.target_ent, combat.damage);
+                break;
+            case RANGE_ATK_DIST.getNoScaled():
+                    bullet_msg.emplace(eid, mov.orientation, mov.coords.x.getNoScaled(), mov.coords.y.getNoScaled(), combat.team, combat.damage);
+                break;
+        }        
     }
 
     if( !arrive(mov, ai.target_pos, combat.attack_range2,  combat.attack_range2 + 5) ) {

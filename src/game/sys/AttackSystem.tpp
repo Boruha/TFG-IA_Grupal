@@ -7,7 +7,7 @@ namespace AIP {
 
 template <typename Context_t>
 void 
-AttackSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
+AttackSystem<Context_t>::update(Context_t& context) noexcept {
 
     while( !attack_msg.empty() ) {
         auto& first_msg    = attack_msg.front();
@@ -15,7 +15,7 @@ AttackSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaT
         combat_cmp.health -= first_msg.amount;
 
         if(combat_cmp.health <= 0)
-            death_msg.emplace(first_msg.eid_damaged);
+            death_msg.emplace(first_msg.eid_damaged, EntType::Human);
 
         attack_msg.pop();
     }

@@ -1,5 +1,4 @@
 #include <game/man/UnitsManager.hpp>
-#include <game/utils/fvec2.tpp>
 #include <game/utils/AI_Constants.hpp>
 
 #include <algorithm>
@@ -12,6 +11,8 @@ inline void
 UnitsManager::init() noexcept {
     enemies_vec.reserve(10);
     allies_vec.reserve(10);
+    ally_bullets.reserve(15);
+    enem_bullets.reserve(15);
 
     createPlayerPointer(20, 400l, 400l, Color::Green);
 
@@ -26,16 +27,16 @@ UnitsManager::init() noexcept {
     createSoldier(20, -130l,  20l, Color::Red, false);
     createArcher(20, -60l,  100l, Color::Red, false);
     createSoldier(20, -200l, -200l, Color::Red, false);
-/*
+
     createSoldier(20, 380l, 390l, Color::Blue, true);
     createSoldier(20, 360l, 400l, Color::Blue, true);
-    createArcher(20, 400l, 420l, Color::White, true);
-    createArcher(20, 380l, 420l, Color::White, true);
-    createArcher(20, 300l, 420l, Color::White, true);
-    createArcher(20, 380l, 400l, Color::White, true);
-    createArcher(20, 420l, 380l, Color::White, true);
+    createArcher(20, 400l, 420l, Color::Blue, true);
+    createArcher(20, 380l, 420l, Color::Blue, true);
+    createArcher(20, 300l, 420l, Color::Blue, true);
+    createArcher(20, 380l, 400l, Color::Blue, true);
+    createArcher(20, 420l, 380l, Color::Blue, true);
     createSoldier(20, 350l, 380l, Color::Blue, true);
-    createSoldier(20, 340l, 380l, Color::Blue, true);*/
+    createSoldier(20, 340l, 380l, Color::Blue, true);
     createSoldier(20, 410l, 380l, Color::Blue, true);
 }
 
@@ -59,7 +60,7 @@ UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int6
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
-    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, MEELE_ATK_DIST          ) );
+    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, MEELE_ATK_DIST, team    ) );
     ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent ) );
 }
 
@@ -74,7 +75,7 @@ UnitsManager::createArcher(const uint32_t size, const int64_t pos_x, const int64
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
-    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, RANGE_ATK_DIST          ) );
+    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, RANGE_ATK_DIST, team    ) );
     ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent ) );
 }
 
@@ -89,6 +90,23 @@ UnitsManager::createPlayerPointer(const uint32_t size, const int64_t pos_x, cons
 
     player_id = new_ent;
 }
+
+inline void 
+UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y, bool team) noexcept {
+    const auto new_ent = ent_man.createEntity_t();
+
+    if(team)
+        ally_bullets.push_back(new_ent);
+    else    
+        enem_bullets.push_back(new_ent);
+
+    auto& mov = ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }             ) );
+                ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent, { 10u }  , { 10u }, Color::White ) );
+
+    nDir.normalize();
+    mov.dir = (nDir * (ENT_MAX_SPEED/2));
+}
+
 
 inline void 
 UnitsManager::deleteEntity(BECS::entID eid) noexcept { //Bastante fe00 por tu parte
@@ -108,6 +126,28 @@ UnitsManager::deleteEntity(BECS::entID eid) noexcept { //Bastante fe00 por tu pa
               
     if(it != allies_vec.end() ) {
         allies_vec.erase(it);
+        ent_man.deleteEntity(eid);
+    }
+}
+
+inline void 
+UnitsManager::deleteBullet(BECS::entID eid) noexcept { //Bastante fe00 por tu parte
+    auto it = std::find_if(enem_bullets.begin(), enem_bullets.end(), [&](BECS::entID id) {
+                  return id == eid;
+              });
+
+    if(it != enem_bullets.end() ) {
+        enem_bullets.erase(it);
+        ent_man.deleteEntity(eid);
+        return;
+    }
+    
+    it = std::find_if(ally_bullets.begin(), ally_bullets.end(), [&](BECS::entID id) {
+             return id == eid;
+         });
+              
+    if(it != ally_bullets.end() ) {
+        ally_bullets.erase(it);
         ent_man.deleteEntity(eid);
     }
 }
@@ -159,6 +199,16 @@ UnitsManager::getAllyIDs() noexcept {
     return allies_vec;
 }
 
+inline constexpr 
+std::vector<BECS::entID>& 
+UnitsManager::getEnemBullets() noexcept {
+    return enem_bullets;
+}
 
+inline constexpr 
+std::vector<BECS::entID>& 
+UnitsManager::getAllyBullets() noexcept {
+    return ally_bullets;
+}
 
 } // namespace AIP

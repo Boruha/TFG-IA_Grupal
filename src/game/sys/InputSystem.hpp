@@ -6,7 +6,7 @@ namespace AIP {
 
 template <typename Context_t>
 struct InputSystem : EventHandler {
-    bool     update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept;
+    bool     update(Context_t& context) noexcept;
 };
 
 

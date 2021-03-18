@@ -8,3 +8,4 @@
 #include <game/sys/AttackSystem.tpp>
 #include <game/sys/CooldownSystem.tpp>
 #include <game/sys/DeathSystem.tpp>
+#include <game/sys/BulletLifeSystem.tpp>

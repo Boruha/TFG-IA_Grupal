@@ -16,16 +16,15 @@ RenderSystem<Context_t>::RenderSystem(const uint32_t w, const uint32_t h)
 //LOOP
 template <typename Context_t>
 bool
-RenderSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {    
+RenderSystem<Context_t>::update(Context_t& context) noexcept {    
     const auto& render_cmp_vec = context.template getComponentVector<RenderComponent>();
           auto& control        = context.template getSCmpByType<InterfaceControl>();
 
     engine->start_frame();
+    engine->minimap();
 
     if( control.showDebug )
         engine->debugInterface(debug_mode, control.deltaTime, control.deltaSize, control.changed);
-
-    engine->minimap();
 
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
         [&](const RenderComponent& render_cmp) {

@@ -30,10 +30,10 @@ GameConditions
 GameManager::update() noexcept {
     //timers and dmg
     cd_sys.update(units_man, DeltaTime);
-    attack_sys.update(units_man, DeltaTime);
+    attack_sys.update(units_man);
 
     //pj decision
-    if( !input_sys.update(units_man, DeltaTime) )
+    if( !input_sys.update(units_man) )
         return GameConditions::Cerrar;
 
     //ia decision
@@ -41,16 +41,17 @@ GameManager::update() noexcept {
 
     //physics
     movement_sys.update(units_man, DeltaTime);
-    collision_sys.update(units_man, DeltaTime);
+    collision_sys.update(units_man);
 
     //draw
-    if( render_sys.update(units_man, DeltaTime) )
+    if( render_sys.update(units_man) )
         return GameConditions::Cerrar;
 
     checkFps();
  
     //deleted entities
-    result = death_sys.update(units_man, DeltaTime);
+    bulletLife_sys.update(units_man);
+    result = death_sys.update(units_man);
  
     return result;
 }

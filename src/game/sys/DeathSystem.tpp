@@ -7,12 +7,20 @@ namespace AIP {
 
 template <typename Context_t>
 GameConditions 
-DeathSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
+DeathSystem<Context_t>::update(Context_t& context) noexcept {
     auto& enemies_ids = context.template getEnemyIDs();
     auto& allies_ids  = context.template getAllyIDs();
 
     while( !death_msg.empty() ) {
-        context.deleteEntity(death_msg.front().eid);
+        auto& msg = death_msg.front();
+        
+        switch (msg.type) {
+            case EntType::Human:  context.deleteEntity(msg.eid);
+                break;
+            case EntType::Bullet: context.deleteBullet(msg.eid);
+                break;        
+        }
+
         death_msg.pop();
         if( enemies_ids.size() == 0)
             return GameConditions::Victoria;

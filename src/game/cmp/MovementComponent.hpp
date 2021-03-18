@@ -8,8 +8,9 @@ namespace AIP {
 struct MovementComponent : BECS::Component_t {
 
   explicit MovementComponent(const BECS::entID entityID, const fint_t<int64_t> c_X, const fint_t<int64_t> c_Y) 
-    : Component_t(entityID), coords(c_X, c_Y) { }
+    : Component_t(entityID), spawnPos(c_X, c_Y), coords(c_X, c_Y) { }
 
+  fvec2<fint_t<int64_t>> spawnPos         { { 0l }, { 0l } }; //posicion ini.    MAL SFOLAMOEGJO!! !! ! ! ! ! ! 
   fvec2<fint_t<int64_t>> coords           { { 0l }, { 0l } }; //posicion actual.
   fvec2<fint_t<int64_t>> orientation      { { 0l }, { 0l } }; //lugar hacia donde se mira.
   fvec2<fint_t<int64_t>> dir              { { 0l }, { 0l } }; //desplazamiento final de la entidad.

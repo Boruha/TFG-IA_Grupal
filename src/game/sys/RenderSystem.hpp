@@ -15,7 +15,7 @@ template <typename Context_t>
 struct RenderSystem {
     explicit RenderSystem(const uint32_t w, const uint32_t h);
 
-    bool update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept;
+    bool update(Context_t& context) noexcept;
 
 private:
     vec2<uint32_t> continuous_to_screen(const fvec2<fint_t<int64_t>>& cont) noexcept;

@@ -7,7 +7,7 @@ namespace AIP {
 
 template <typename Context_t>
 struct DeathSystem : EventHandler {
-    GameConditions update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept;
+    GameConditions update(Context_t& context) noexcept;
 };
 
 } // NS
