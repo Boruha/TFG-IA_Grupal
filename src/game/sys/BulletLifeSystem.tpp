@@ -12,7 +12,7 @@ BulletLifeSystem<Context_t>::update(Context_t& context) noexcept {
     auto lifeCheck = [&](BECS::entID& bullet) {
         auto& mov  = context.template getCmpByEntityID<MovementComponent>(bullet);
         
-        constexpr fint_t<int64_t> dist { 100l };
+        constexpr fint_t<int64_t> dist { 300l };
         auto  diff { mov.coords - mov.spawnPos };
 
         if( dist < diff.length() )
