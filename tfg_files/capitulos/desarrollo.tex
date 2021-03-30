@@ -14,11 +14,11 @@ Terminado es esta iteración & Terminado en otra iteración & Sin definir cuando
 \end{longtable}
 
 \section{Fase 0: Definición del proyecto y primeros pasos}
-
 \begin{longtable}[c]{|p{7cm}|c|c|}
 \hline
-Iteraciones                                               & \% Completado    & Terminado en   \\ 
+Iteraciones                                               & \% Completado    & Terminado en \\
 \hline
+\endhead
 \textbf{0.1.} Definir la idea.                              & 60\%          & It.2         \\
 	\cmidrule[.006pt]{1-3}
 \textbf{0.2.} Iniciar desarrollo del prototipo
@@ -61,6 +61,7 @@ Esta primera fase engloba las tres primeras iteraciones donde comenzamos a termi
 la idea para el proyecto, ya que, todavía era un poco difusa la imagen del producto final que se
 quería desarrollar.
 
+\subsection*{Iteración 0}
 Para ir entrando en una dinámica productiva iniciamos el desarrollo de funcionalidades básicas 
 como pueden ser el bucle principal del juego, en el cual usamos de la librería \textit{\textless
 chrono\textgreater} de C++ para medir y limitar el tiempo entre ejecuciones del bucle acompañado del uso 
@@ -76,7 +77,8 @@ de una enumeración que contiene los posibles resultados de un ciclo del juego.
 Una vez tenemos el bucle, toca introducir algo que hacer en el, como primer sistema del juego
 encontramos el sistema de dibujado el cual se encargará de crear y manejar la ventana, además
 de pintar nuestras entidades y herramientas visuales. Para incluir todas estas funcionalidades
-sin añadir librerías pesadas incluiremos \textit{\textless TinyPTC\textgreater}, la cual no 
+sin añadir librerías pesadas incluiremos \textit{\textless TinyPTC\textgreater} de \newline
+\citeauthor*{tinyptc2019}, la cual no 
 incluye demasidas funcionalidades u opciones pero nos permitirá trabajar rápido y de forma 
 sencilla. Los sprites en un inicio serán simples cuadrados de colores por lo que no requeriremos 
 mucho.
@@ -87,10 +89,11 @@ Además, se terminó la preparación de las herramientas de \LaTeX y `Jabref' pa
 memoria acompañado de la lectura de las directrices, normas y memorias de compañeros del año 
 pasado.
 
+\subsection*{Iteración 1}
 A lo largo de la iteración siguiente, seguimos añadiendo funcionalidades al prototipo como puede 
 ser el componente y sistema de \textit{Input}, el cual nos permitirá interactuar con el juego
 mediante el mapeado del teclado haciendo uso de la librería \textit{\textless X11\textgreater}
-y \textit{\textless TinyPTC\textgreater}
+y \textit{\textless TinyPTC\textgreater}.
 
 Una de las herramientas implementadas en el proyecto es el tipo de dato entero con coma fija,
 en C++ podemos encontrar el tipo fundamental \textit{float} creado para trabajar con números 
@@ -199,6 +202,7 @@ AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid) noexcept {
 }
 \end{lstlisting}
 
+\subsection*{Iteración 2}
 Durante la tercera iteración nos centramos en la mejora de algunos \textit{`Steering behaviors'}
 para terminar de hacerlos más fáciles de usar y combinar, con el fin de tener un código más 
 limpio y legible, también se mejoró el uso de la coma fija añadiendo más operaciones y ajustando
@@ -253,11 +257,11 @@ este desarollo.
 \newpage
 
 \section{Fase 1: Producto mínimo viable}
-
 \begin{longtable}[c]{|p{7cm}|c|c|}
 \hline
 Iteraciones                                               & \% Completado & Termindo en \\ 
 \hline
+\endhead
 \textbf{3.1.} Cambios en el motor ECS.                     & 100\% &   \\
 	\cmidrule[.003pt]{1-3}
 \textbf{3.2.} Cambios en el almacenamiento de datos.       & 100\% &   \\ 
@@ -314,6 +318,7 @@ Iteraciones                                               & \% Completado & Term
 \caption{Resumen fase 1}
 \end{longtable}
 
+\subsection*{Iteración 3}
 La fase comenzó con una iteración corta debido a las vacaciones de Navidad y final de año, en la
 que el foco estuvo despositado en refactorizar y dejar en mejor estado el código desarrollado
 hasta el momento, donde se separó el nucleo principal del motor \ac{ECS} del conjunto de sistemas y
@@ -353,6 +358,7 @@ Por último se siguieron modificando los tipos propios, tanto el \textit{fint\_t
 los \textit{vec2} y \textit{fvec2} para trabajar como plantillas, pudiendo así librarnos de
 la necesidad de crear un tipo completo para cada tipo básico con el que queramos usarlos.
 
+\subsection*{Iteración 4}
 Durante el mes de enero se implementaron diversas funcionalidades, en primer lugar abordamos
 el sistema de combate del juego, para ello se creó una componente para almacenar elementos como
 la vida de la unidad, su daño, el rango y el tiempo entre ataques, además, los sistemas de 
@@ -408,6 +414,7 @@ ratón ni las selecciona de forma individual, sino que controla un marcador verd
 seguido por sus tropas y mediante ordenenes activará los distintos comportamientos de sus 
 unidades. 
 
+\subsection*{Iteración 5}
 A lo largo de la siguiente iteración se trabajó sobretodo en las mecánicas de juego, con el fin
 de acercarse un poco más a la obtención de un prototipo que cumpla con los requisitos del \acs{MVP},
 en concreto se comenzó el desarollo de un segundo tipo de unidad basada en ataques a distancia y 
@@ -424,7 +431,12 @@ de configurar la posición de las unidades nos hemos dado cuenta de que no muest
 conjuntos grandes de unidades, ya que, numerosas unidades quedan atrapadas en posiciones incorrectas y la
 distribución resultante no es muy optima.
 
-\placeholdertext{añadir esquema fuerzas}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.45\textwidth]{imagenes/diario_desarrollo/anillo1.png}\\
+\caption{Formación anillo por rango de cohesión}
+\label{fig:anillo1}
+\end{figure}
 
 Por último, se ha introducido en la memoria una lista con las herramientas que han sido utilizadas 
 durante el desarrollo, donde se incluye el nombre de las librerías, la versión y los sistemas sobre los que
@@ -434,8 +446,7 @@ las tareas principales de cada iteración, el portentaje estimado de completado 
 terminada, la iteración donde se ha finalizado.
 
 
-\placeholdertext{it 6}
-
+\subsection*{Iteración 6}
 En la cuarta y última iteración de esta fase, el objetivo es el de terminar todas las mecánicas del prototipo
 y sustituir \textit{\textless TinyPTC\textgreater} por \textit{\textless Dear ImGUI\textgreater} para poder
 centrarnos más adelante en el diseño del nivel/es del prototipo de cara a la entrega final. Además de, poder
@@ -443,27 +454,37 @@ añadir alguna funcionalidad extra si es necesario para crear una experiencia de
 
 Llegados a este punto, queremos crear una interfaz y tener la posibilidad de poder añadir algún elemento
 visual al proyecto, por lo que necesitamos de una libreria que ofreza más opciones a la hora de trabajar
-con ella. En este caso hemos elegido \textit{\textless Dear ImGUI\textgreater}, la cual, propone una nueva
+con ella. En este caso hemos elegido \textit{\textless Dear ImGUI\textgreater}
+de \citeauthor*{dearimgui2021}, la cual, propone una nueva
 forma de trabajar las interfaces\footnote{\textit{IMGUI (Immediate Mode GUI) paradigm.}} en auge actualmente
 y además, nos proporciona una serie de \textit{widgets} y herramientas predefinidas que nos permitirán crear 
 un HUD fácil y sencillo.
 Además, funciona con \textit{GLFW} y \textit{OpenGL} así que si necesitamos revisar el funcionamiento de
 alguna funcionalidad, no tendremos excesivos problemas ya que hemos trabajado con ellas anteriormente.
 
-\placeholdertext{añadir links a explicaciones de IMGUI}
 
 Para comenzar a trastear con esta librería, hemos implementado una pequeña ventana que nos permitirá manejar
 en tiempo real el número de veces que se ejecutará el bucle del juego por segundo y/o el tamaño del 
 \textit{DeltaTime}, además tiene un \textit{checkbox} para activar el debug visual del movimiento de las
 entidades.
 
-\placeholdertext{captura interfaz debug}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.45\textwidth]{imagenes/diario_desarrollo/hudDebug.png}\\
+\caption{Herramienta depuración en tiempo de ejecución}
+\label{fig:hudDebug}
+\end{figure}
 
 Por otro lado, se ha creado una segunda ventana que hará de "minimapa" y mostrará la ubícación de los unidades
 tanto aliadas como enemigas y el marcador. Esto nos puede servir de cara a una versión del juego en el que el
 mapeado sea más grande que la pantalla, para que nos permita visualizar y ubicarnos en el nivel.
 
-\placeholdertext{captura minimapa}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.45\textwidth]{imagenes/diario_desarrollo/minimap.png}\\
+\caption{Mini Mapa.}
+\label{fig:minimap}
+\end{figure}
 
 En cuanto a las mecánicas del juego, hemos añadido un sistema de lanzamiento de proyectiles para las unidades
 que ataquen a distacia, esto incluye: la creación de las balas siguiendo la orientación del personaje, la
@@ -488,6 +509,51 @@ recta se marcará un punto el cual deberá ser alcanzado por la unidad, de esta 
 unidades y que se queden encerradas en lugares encorrectos, además de ser más escalable en caso de adición de
 nuevas unidades en el futuro.
 
+\begin{figure}[ht]
+\centering
+\begin{minipage}[c]{0.42\linewidth}
+	\hspace{9mm}
+	\includegraphics[width=0.7\textwidth]{imagenes/diario_desarrollo/anillo2.png} \\
+	\label{anillo2}
+\end{minipage}
+\begin{minipage}[c]{0.42\linewidth}
+	\hspace{9mm}
+	\includegraphics[width=0.7\textwidth]{imagenes/diario_desarrollo/anillo3.png} \\
+	\label{anillo3}
+\end{minipage}
+\caption{Formación anillo con trazado de rayos.}
+\end{figure}
+
 Por último se ha cambiado el cálculo de las fuerzas de cohesión y separación para que tenga un crecimiento
 cuadrático en lugar de lineal, de esta forma reducimos su presencia en la media/larga distacia y la aumentamos
 en las cercanías.   
+
+\begin{longtable}[c]{|c|c|c|}
+\hline
+Distancia & Lineal  & Cuadrado \\
+\hline
+\endhead
+40  & \multicolumn{1}{S|}{5.59}   & \multicolumn{1}{S|}{31.25}  \\
+\cmidrule[0.15pt]{0-2}
+60  & \multicolumn{1}{S|}{2.484}  & \multicolumn{1}{S|}{6.1728} \\ 
+\cmidrule[0.15pt]{0-2}
+80  & \multicolumn{1}{S|}{1.3975} & \multicolumn{1}{S|}{1.953}  \\ 
+\cmidrule[0.15pt]{0-2}
+100 & \multicolumn{1}{S|}{0.8944} & \multicolumn{1}{S|}{0.8}    \\
+\cmidrule[0.15pt]{0-2}
+120 & \multicolumn{1}{S|}{0.621}  & \multicolumn{1}{S|}{0.3858} \\
+\cmidrule[0.15pt]{0-2}
+140 & \multicolumn{1}{S|}{0.4563} & \multicolumn{1}{S|}{0.2082} \\
+\cmidrule[0.15pt]{0-2}
+160 & \multicolumn{1}{S|}{0.3494} & \multicolumn{1}{S|}{0.1221} \\
+\cmidrule[0.15pt]{0-2}
+180 & \multicolumn{1}{S|}{0.2760} & \multicolumn{1}{S|}{0.0762} \\
+\cmidrule[0.15pt]{0-2}
+200 & \multicolumn{1}{S|}{0.2236} & \multicolumn{1}{S|}{0.05}   \\
+\cmidrule[0.15pt]{0-2}
+220 & \multicolumn{1}{S|}{0.1848} & \multicolumn{1}{S|}{0.0342} \\
+\hline
+\caption{Fuerzas de separación en función de la distancia}
+\end{longtable}
+
+%	\cmidrule[1pt]{1-3}

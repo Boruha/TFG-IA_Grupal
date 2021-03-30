@@ -4,6 +4,7 @@
 #include <game/cmp/AI_Component.hpp>
 #include <game/cmp/TeamComponent.hpp>
 #include <game/cmp/InterfaceControl.hpp>
+#include <game/cmp/EventCmp_t.hpp>
 #include <game/utils/AI_Constants.hpp>
 
 #include <ecs/ent/Entity_t.hpp>
@@ -18,6 +19,8 @@ bool
 InputSystem<Context_t>::update(Context_t& context) noexcept {
     auto  pj_id = context.template getPlayerID();
     auto& mov   = context.template getCmpByEntityID<MovementComponent>( pj_id );
+    auto& team  = context.template getCmpByEntityID<TeamComponent>( pj_id );
+
     auto& dir   = mov.dir;
     auto& accel = mov.accel_to_target;
 
@@ -36,20 +39,19 @@ InputSystem<Context_t>::update(Context_t& context) noexcept {
         target_dir.x += ENT_MAX_SPEED;
 
     if( ImGui::IsKeyDown(GLFW_KEY_B) )
-        comand_msg.emplace(AI_behaviour::follow_b); //change to singletonCmp !!!000!!!!!!
-
-    if( ImGui::IsKeyDown(GLFW_KEY_RIGHT_CONTROL) )
-        comand_msg.emplace(AI_behaviour::chase_b);
+        team.action = AI_behaviour::follow_b;
     
-    if( ImGui::IsKeyDown(GLFW_KEY_1) ) {
-        auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( pj_id );
-        team_cmp.current_form = Formation::no_form;
-    }
+    if( ImGui::IsKeyDown(GLFW_KEY_RIGHT_CONTROL) )
+        team.action = AI_behaviour::chase_b;
+    
+    if( ImGui::IsKeyDown(GLFW_KEY_RIGHT_SHIFT) )
+        team.action = AI_behaviour::no_b;
+    
+    if( ImGui::IsKeyDown(GLFW_KEY_1) )
+        team.current_form = Formation::no_form;
 
-    if( ImGui::IsKeyPressed(GLFW_KEY_2) ) {
-        auto& team_cmp        = context.template getCmpByEntityID<TeamComponent>( pj_id );
-        team_cmp.current_form = Formation::ring_form;
-    }
+    if( ImGui::IsKeyPressed(GLFW_KEY_2) )
+        team.current_form = Formation::ring_form;
 
     if( ImGui::IsKeyPressed(GLFW_KEY_D) ) {
         auto& control     = context.template getSCmpByType<InterfaceControl>();

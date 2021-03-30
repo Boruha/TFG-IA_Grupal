@@ -7,3 +7,5 @@
 #include <game/cmp/CombatComponent.hpp>
 #include <game/cmp/TeamComponent.hpp>
 #include <game/cmp/InterfaceControl.hpp>
+#include <game/cmp/Collider2DCmp.hpp>
+#include <game/cmp/EventCmp_t.hpp>

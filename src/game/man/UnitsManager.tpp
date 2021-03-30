@@ -44,7 +44,9 @@ inline void
 UnitsManager::clear() noexcept {
     ent_man.clear();
     enemies_vec.clear();
-    allies_vec.clear();    
+    allies_vec.clear();
+    ally_bullets.clear();
+    enem_bullets.clear(); 
     player_id = 0u;
 }
 
@@ -60,6 +62,7 @@ UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int6
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
+    ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,    size  ,  size        ) );
     ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, MEELE_ATK_DIST, team    ) );
     ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent ) );
 }
@@ -75,6 +78,7 @@ UnitsManager::createArcher(const uint32_t size, const int64_t pos_x, const int64
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
+    ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,    size  ,  size        ) );
     ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, RANGE_ATK_DIST, team    ) );
     ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent ) );
 }
@@ -84,7 +88,8 @@ UnitsManager::createPlayerPointer(const uint32_t size, const int64_t pos_x, cons
     const auto new_ent = ent_man.createEntity_t();
 
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }     ) );
-    ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent, { size } , { size }, col ) );
+    ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col ) );
+    ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,    size  ,  size         ) );
     ent_man.addComponentToEntity( new_ent, InputComponent(    new_ent ) );
     ent_man.addComponentToEntity( new_ent, TeamComponent(     new_ent ) );
 
@@ -94,14 +99,16 @@ UnitsManager::createPlayerPointer(const uint32_t size, const int64_t pos_x, cons
 inline void 
 UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y, bool team) noexcept {
     const auto new_ent = ent_man.createEntity_t();
+    constexpr auto size { 10u };
 
     if(team)
         ally_bullets.push_back(new_ent);
     else    
         enem_bullets.push_back(new_ent);
 
-    auto& mov = ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }             ) );
-                ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent, { 10u }  , { 10u }, Color::White ) );
+    auto& mov = ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }              ) );
+                ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,   size   ,   size  , Color::White ) );
+                ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,   size   ,   size                 ) );
 
     nDir.normalize();
     mov.dir = (nDir * (ENT_MAX_SPEED/2));

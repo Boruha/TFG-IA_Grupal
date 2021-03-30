@@ -1,11 +1,12 @@
 #pragma once
-#include <game/utils/EventHandler.hpp>
 #include <game/utils/fvec2.hpp>
 
 namespace AIP {
 
+struct entID;
+
 template <typename Context_t>
-struct CollisionSystem : EventHandler {
+struct CollisionSystem {
     void update(Context_t& context) noexcept;
 
 private:

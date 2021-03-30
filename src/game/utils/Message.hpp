@@ -1,5 +1,5 @@
 #pragma once
-#include <game/cmp/AI_Component.hpp>
+#include <game/utils/AI_behaviours.hpp>
 #include <game/utils/fvec2.hpp>
 
 #include <ecs/utils/Alias.hpp>
@@ -40,12 +40,12 @@ struct DeathMessage {
     EntType     type { EntType::Bullet };
 };
 
-struct ComandMessage {
-    constexpr explicit ComandMessage(AI_behaviour status) 
-        : action(status) { }
-
-    AI_behaviour action { AI_behaviour::no_b };
-};
+//struct ComandMessage {
+//    constexpr explicit ComandMessage(AI_behaviour status) 
+//        : action(status) { }
+//
+//    AI_behaviour action { AI_behaviour::no_b };
+//};
 
 
 } // NS

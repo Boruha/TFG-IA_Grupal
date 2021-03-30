@@ -2,9 +2,8 @@
 
 #include <game/cmp/MovementComponent.hpp>
 #include <game/cmp/CombatComponent.hpp>
+#include <game/cmp/AI_Component.hpp>
 #include <game/cmp/TeamComponent.hpp>
-
-#include <ecs/ent/Entity_t.hpp>
 
 #include <algorithm>
 #include <iostream>
@@ -16,7 +15,7 @@ void
 AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
     auto& enemies_ids = context.template getEnemyIDs();
     auto& allies_ids  = context.template getAllyIDs();
-    
+
     //update IA units
     std::for_each(begin(enemies_ids), end(enemies_ids), [&](BECS::entID eid) {
         auto& ai  = context.template getCmpByEntityID<AI_Component>( eid );
@@ -46,22 +45,15 @@ AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime
         }
     });
 
-    auto comand = AI_behaviour::no_b;
-    
-    if( !comand_msg.empty() ) {
-        comand = comand_msg.front().action;
-        comand_msg.pop();
-    }
-    
     //update PJ units
     std::for_each(begin(allies_ids), end(allies_ids), [&](BECS::entID eid) {     
         auto& ai  = context.template getCmpByEntityID<AI_Component>( eid );
         auto& mov = context.template getCmpByEntityID<MovementComponent>( eid );
 
-        decisionMakingPJ(context, eid, enemies_ids, comand);
+        decisionMakingPJ(context, eid, enemies_ids);
 
         switch (ai.current_behavior) {
-            case AI_behaviour::follow_b : { 
+            case AI_behaviour::follow_b : {
                 follow(context, ai, mov, allies_ids);
             } break;
         
@@ -118,13 +110,17 @@ AI_System<Context_t>::attack(Context_t& context, AI_Component& ai, MovementCompo
 
     if(combat.current_attack_cd.number <= 0l) {
         combat.current_attack_cd = combat.attack_cd;
+        
         switch (combat.attack_range.getNoScaled()) {
-            case MEELE_ATK_DIST.getNoScaled():
-                    attack_msg.emplace(eid, ai.target_ent, combat.damage);
-                break;
-            case RANGE_ATK_DIST.getNoScaled():
-                    bullet_msg.emplace(eid, mov.orientation, mov.coords.x.getNoScaled(), mov.coords.y.getNoScaled(), combat.team, combat.damage);
-                break;
+            case MEELE_ATK_DIST.getNoScaled(): {
+                    auto& eventCmp    = context.template getSCmpByType<EventCmp_t>();
+                    eventCmp.attack_msg.emplace_back(eid, ai.target_ent, combat.damage);
+                } break;
+            
+            case RANGE_ATK_DIST.getNoScaled(): {
+                    auto& eventCmp    = context.template getSCmpByType<EventCmp_t>();
+                    eventCmp.bullet_msg.emplace(eid, mov.orientation, mov.coords.x.getNoScaled(), mov.coords.y.getNoScaled(), combat.team, combat.damage);
+                } break;
         }        
     }
 
@@ -174,7 +170,6 @@ AI_System<Context_t>::seek(MovementComponent& mov, fvec2_int& target_pos) noexce
 
     mov.accel_to_target = accelFromDir(target_dir, mov.dir);
 }
-
 
 template <typename Context_t>
 constexpr bool
@@ -285,13 +280,18 @@ AI_System<Context_t>::decisionMakingIA(Context_t& context, BECS::entID eid, std:
     }
 
     if( curr_behavior == AI_behaviour::chase_b || curr_behavior == AI_behaviour::attack_b ) {
-        auto& combat_cmp       = context.template getCmpByEntityID<CombatComponent>( eid );
-        auto& combat_cmp_enemy = context.template getCmpByEntityID<CombatComponent>( ai_cmp.target_ent );
 
+        if( ai_cmp.target_ent == 0u ) {                 //MUY MEJORABLE !!!=!=!!==!=!=!=!
+            curr_behavior     = AI_behaviour::patrol_b;
+            ai_cmp.target_pos = ai_cmp.target_vec.at(ai_cmp.target_index);
+            return;
+        }
+
+        auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( eid );
         auto  target_dir = ai_cmp.target_pos - mov_cmp.coords;
         auto  distance2  = target_dir.length2();
         
-        if( distance2 > VISION_DIST2 || combat_cmp_enemy.health <= 0 ) {
+        if( distance2 > VISION_DIST2 ) {
             curr_behavior     = AI_behaviour::patrol_b;
             ai_cmp.target_ent = 0u;
             ai_cmp.target_pos = ai_cmp.target_vec.at(ai_cmp.target_index);
@@ -310,53 +310,79 @@ AI_System<Context_t>::decisionMakingIA(Context_t& context, BECS::entID eid, std:
 
 template <typename Context_t>
 constexpr void
-AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids, AI_behaviour comand) noexcept {
-    auto& ai_cmp = context.template getCmpByEntityID<AI_Component>( eid );
+AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept {
+    auto& ai     = context.template getCmpByEntityID<AI_Component>( eid );
+    auto& curr_b = ai.current_behavior; 
 
-    auto& curr_behavior = ai_cmp.current_behavior;
-
-    if( curr_behavior == AI_behaviour::chase_b || curr_behavior == AI_behaviour::attack_b ) {
-        auto& mov_cmp          = context.template getCmpByEntityID<MovementComponent>( eid );
-        auto& combat_cmp       = context.template getCmpByEntityID<CombatComponent>( eid );
-        auto& combat_cmp_enemy = context.template getCmpByEntityID<CombatComponent>( ai_cmp.target_ent );
-
-        auto  target_dir = ai_cmp.target_pos - mov_cmp.coords;
-        auto  distance2  = target_dir.length2();
-        
-        if(distance2 < combat_cmp.attack_range2)
-            comand = AI_behaviour::attack_b;
-        else
-            comand = AI_behaviour::chase_b;
+    auto  eidPj = context.template getPlayerID();
+    auto& team  = context.template getCmpByEntityID<TeamComponent>( eidPj );
     
-        if( distance2 > VISION_DIST2 || combat_cmp_enemy.health <= 0 )
-            comand = AI_behaviour::follow_b;
+    switch (team.action) {
+        case AI_behaviour::follow_b : {
+                auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
+                setFollowing(ai, mov);
+                return;
+            } break;
+
+        case AI_behaviour::chase_b  : {
+                if(curr_b != AI_behaviour::chase_b) {
+                    ai.target_ent = 0u;
+                    curr_b        = AI_behaviour::chase_b;
+                }
+            } break;
+        
+        case AI_behaviour::attack_b : {
+            } break;
+
+        case AI_behaviour::patrol_b : {
+            } break;
+
+        case AI_behaviour::no_b     : {
+            } break;
     }
+    
+    if( curr_b == AI_behaviour::chase_b || curr_b == AI_behaviour::attack_b ) {
+        if( ai.target_ent == 0u ) { 
+            if( !findNearEnemy(context, eid, enemy_eids) ) {
+                auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
+                setFollowing(ai, mov);
+                return;
+            }
+        }
 
-    if(comand != AI_behaviour::no_b) {
+        auto& mov    = context.template getCmpByEntityID<MovementComponent>( eid );
+        auto& combat = context.template getCmpByEntityID<CombatComponent>( eid );
+
+        auto target_dir { ai.target_pos - mov.coords };
+        auto distance2  { target_dir.length2() };
         
-        switch (comand) {
-            case AI_behaviour::follow_b : {
-                    auto  pj_eid  = context.template getPlayerID();
-                    auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( pj_eid );
-
-                    curr_behavior     = AI_behaviour::follow_b;
-                    ai_cmp.target_ent = pj_eid;
-                    ai_cmp.target_pos = mov_cmp.coords;
-            } break;
-        
-            case AI_behaviour::chase_b : {
-                    if( findNearEnemy(context, eid, enemy_eids) )
-                        curr_behavior = AI_behaviour::chase_b;
-            } break;
-
-            case AI_behaviour::attack_b : {
-                    curr_behavior = AI_behaviour::attack_b;
-            } break;
-
-            default: 
-            break;
+        if(distance2 < combat.attack_range2)
+            curr_b = AI_behaviour::attack_b;
+        else
+            curr_b = AI_behaviour::chase_b;
+    
+        if( distance2 > VISION_DIST2 ) {
+            auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
+            setFollowing(ai, mov);
         }
     }
+
+    if( curr_b == AI_behaviour::no_b || curr_b == AI_behaviour::follow_b ) {
+        if( !findNearEnemy(context, eid, enemy_eids) ) {
+            auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
+            setFollowing(ai, mov);
+        }
+        else
+            curr_b = AI_behaviour::chase_b;
+    }
+
+}
+
+inline void
+setFollowing(AI_Component& ai, MovementComponent& mov) noexcept {
+    ai.current_behavior = AI_behaviour::follow_b;
+    ai.target_ent       = mov.getEntityID();
+    ai.target_pos       = mov.coords;
 }
 
 
@@ -364,32 +390,31 @@ AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std:
 template <typename Context_t> 
 constexpr bool 
 AI_System<Context_t>::findNearEnemy(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept {
-    auto  result    { false };
-    auto& ai_cmp    = context.template getCmpByEntityID<AI_Component>( eid );
-    auto& mov_cmp   = context.template getCmpByEntityID<MovementComponent>( eid );
-    auto& my_coords = mov_cmp.coords;
+    auto& ai  = context.template getCmpByEntityID<AI_Component>( eid );
+    auto& mov = context.template getCmpByEntityID<MovementComponent>( eid );
     
-    auto dist { VISION_DIST2 };
+    auto& my_coords = mov.coords;
+    auto  result    { false };
+    auto dist       { VISION_DIST2 };
 
     std::for_each(begin(enemy_eids), end(enemy_eids), [&](BECS::entID enemy_eid) {
-        auto& enemy_mov_cmp = context.template getCmpByEntityID<MovementComponent>( enemy_eid );
-        auto  new_coords    = enemy_mov_cmp.coords - my_coords;    
-        auto  new_dist      = new_coords.length2();
+        auto& enemy_mov  = context.template getCmpByEntityID<MovementComponent>( enemy_eid );
+        auto  new_coords = enemy_mov.coords - my_coords;    
+        auto  new_dist   = new_coords.length2();
 
         if(new_dist < dist ) {
-            dist = new_dist;
-            ai_cmp.target_pos = enemy_mov_cmp.coords;
-            ai_cmp.target_ent = enemy_eid;
-            result            = true;
+            dist   = new_dist;
+            result = true;
+            ai.target_pos = enemy_mov.coords;
+            ai.target_ent = enemy_eid;
         }
     });
 
     return result;
 }
 
-template <typename Context_t> 
-constexpr bool
-AI_System<Context_t>::updatePatrol(AI_Component& ai) noexcept {
+inline bool
+updatePatrol(AI_Component& ai) noexcept {
     auto& route  = ai.target_vec;
     auto& index  = ai.target_index;
 
@@ -399,9 +424,8 @@ AI_System<Context_t>::updatePatrol(AI_Component& ai) noexcept {
     return true;
 }
 
-template <typename Context_t> 
-constexpr bool
-AI_System<Context_t>::updateRoute(AI_Component& ai) noexcept {
+inline bool
+updateRoute(AI_Component& ai) noexcept {
     bool  result { false };
 
     auto& route     = ai.target_vec;
@@ -417,9 +441,9 @@ AI_System<Context_t>::updateRoute(AI_Component& ai) noexcept {
     return result;
 }
 
-template <typename Context_t>
-constexpr typename AI_System<Context_t>::fvec2_int 
-AI_System<Context_t>::accelFromDir(fvec2_int target_dir, fvec2_int my_dir) noexcept {
+
+inline fvec2<fint_t<int64_t>> 
+accelFromDir(fvec2<fint_t<int64_t>> target_dir, fvec2<fint_t<int64_t>> my_dir) noexcept {
     auto my_accel  { target_dir - my_dir };
          my_accel /= ENT_TIME_TO_TARGET;
 

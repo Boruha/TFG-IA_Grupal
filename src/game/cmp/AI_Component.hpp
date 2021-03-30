@@ -2,19 +2,11 @@
 #include <ecs/cmp/Component_t.hpp>
 
 #include <game/utils/fvec2.hpp>
+#include <game/utils/AI_behaviours.hpp>
 
 #include <vector>
 
 namespace AIP {
-
-enum class AI_behaviour : uint16_t {
-    no_b     = 0u,
-    patrol_b = 1u,
-    chase_b  = 2u,
-    //evade_b  = 3u,
-    attack_b = 4u,
-    follow_b = 5u
-};
 
 //hay que pasar el objetivo a un parametro.
 //hacerlo flexible para ambos equipos

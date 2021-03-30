@@ -7,21 +7,11 @@ típicos en los \ac{RTS}. A lo largo de los distintos niveles, el jugador deber�
 frente a distintos desafios como pueden ser: escoltar con sus unidades de un punto
 del mapa a otro a un personaje importante y/o eliminar a todas las entidades enemigas del escenario.
 
-La ficha técnica es la siguientes:
-
-\begin{itemize}
-	%\item \textbf{Título:} \placeholdertext{N/A.}
-	\item \textbf{Plataforma:} \ac{PC} (Windows y Linux).
-	\item \textbf{Género:} \acf{RTS}.
-	\item \textbf{Idioma:} Inglés.
-	%\item \textbf{Clasificación:} PEGI 7\footnote{Web de la asociación https://pegi.info}
-\end{itemize}
-
 \section{Mecánicas}
 Durante el juego podremos ejecutar una serie de ordenes sobre nuestras unidades para cambiar
 su distribución, ordenarles que se desplazen y/o que ataquen a enemigos.\\
 Para el desplazamiento por el mapa, el jugador contará con un marcador en el mapa el cual
-será capaz de desplazar para que sus unidades lo sigan mientras les sea posible.
+será capaz de mover para que sus unidades lo sigan mientras les sea posible.
 
 \begin{figure}[ht]
 \centering
@@ -32,23 +22,25 @@ será capaz de desplazar para que sus unidades lo sigan mientras les sea posible
 
 En cuanto a las posibles formaciones para nuestras unidades, encontramos las siguientes:
 
-\begin{itemize}
-\item \textbf{Por filas:} las unidades se dispondrán en función de su rango,
-siendo encabezado el pelotón por las unidades de ataque a \textit{melee}.
+\newpage
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.39\textwidth]{imagenes/gdd/Formacion-en-fila.png}
-\caption{MockUp formacion en fila.}
-\label{mockup_en_fila}
-\end{figure}
+\begin{itemize}
+%\item \textbf{Por filas:} las unidades se dispondrán en función de su rango,
+%siendo encabezado el pelotón por las unidades de ataque a \textit{melee}.
+
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=0.39\textwidth]{imagenes/gdd/Formacion-en-fila.png}
+%\caption{MockUp formacion en fila.}
+%\label{mockup_en_fila}
+%\end{figure}
 
 \item \textbf{Sin formación:} las unidades no tendrán nigún paramétro de ordenación.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.32\textwidth]{imagenes/gdd/Formacion-desordenada.png}
-\caption{MockUp formacion desordenada.}
+\caption{MockUp unidades desordenada.}
 \label{mockup_desordenada}
 \end{figure}
 
@@ -60,11 +52,10 @@ no haber unidad escoltada el centro estará vacío.
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.32\textwidth]{imagenes/gdd/Formacion-anillo.png}
-\caption{MockUp formacion en anillo.}
+\caption{MockUp unidades en anillo.}
 \label{mockup_anillo}
 \end{figure}
 
-\newpage
 Por último podemos ordenar a las unidades que mantengan una estrategia definida:
 
 \begin{itemize}
@@ -114,32 +105,25 @@ Arquero & 2    & 3    & Largo \\
 \end{center}
 \end{table}
 
-
 \section{Controles}
 A la hora de jugar tendremos una serie de teclas asignadas a las acciones que el
 jugador puede realizar cuando interactúe con el juego. Para enumerarlas dividiremos las
 acciones en dos grupos, dependiendo de si son para navegar por los menús o si
 representan acciones durante el \textit{gameplay}.
 
-Las teclas para navegar por los menús son las siguientes:
-
-\begin{itemize}
-	\item \textbf{Enter:} mediante esta tecla podremos avanzar por los menús una vez estemos sobre la opción deseada.
-	\item \textbf{Retroceso:} mediante esta otra podremos ir hacía atrás por los menús.
-	\item \textbf{Escape:} esta nos permitirá salir de la ejecución del programa.
-	\placeholdertext{igual esto es un poco ilegal.}
-\end{itemize}
+Para avanzar por los menús usaremos la tecla \textbf{Enter} una vez estemos sobre la opción deseada o
+para avanzar los mensajes explicativos del tutorial/informativos.
 
 Las asignadas para jugar son las siguientes:
-
 \begin{itemize}
-	\item \textbf{W/A/S/D:} mediante estas teclas podremos desplazar el puntero por el mapa.
+	\item \textbf{Flechas o W/A/S/D:} mediante estas teclas podremos desplazar el puntero por el mapa.
 	\item \textbf{Barra Espaciadora:} con esta otra podremos ordenar atacar a nuestras unidades,
 									  si no encuentran una unidades enemiga en su rango se mantendrá
-									  en seguimiento del puntero, si un aliado cercano entra en combate
-									  se unirá a la afrenta junto a él.
-	\item \textbf{B:} activa el modo huída y las unidades dejarán de combatir y seguirán el
-					  puntero aunque tengan enemigos en su campo de visión.									  
+									  en seguimiento del puntero.
+	\item \textbf{Ctrl:} activa el modo huída y las unidades dejarán de combatir y seguirán el
+					  puntero.	
+	\item \textbf{Z:} activa la formación en anillo.									  
+	\item \textbf{X:} desactiva toda formación.									  
 \end{itemize}
 
 \section{Pantallas}
@@ -252,6 +236,9 @@ jugador la posibilidad de conocer lo máximo posible el territorio cercano posib
 vez le libramos de tener que estar preocuparse de situar la cámara para cada momento. \\
 Al mantener una posición fija podemos situar todos los elementos en la escena de forma
 que no obstaculicen la visión o molesten al jugador.
+
+En las primeras versiones del proyecto el juego todos los elementos serán 2D y la vista será
+un plano picado, el final deseable será poder pasar a un entorno 3D.
 
 \section{Mínimo producto viable}
 Una vez planteadas todas las características deseadas para el videojuego, es acosenjable

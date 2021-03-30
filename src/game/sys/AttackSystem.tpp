@@ -1,24 +1,29 @@
 #include <game/sys/AttackSystem.hpp>
 #include <game/cmp/CombatComponent.hpp>
+#include <game/cmp/EventCmp_t.hpp>
 
 #include <ecs/ent/Entity_t.hpp>
+
+#include <algorithm>
 
 namespace AIP {
 
 template <typename Context_t>
 void 
 AttackSystem<Context_t>::update(Context_t& context) noexcept {
+    auto& eventCmp = context.template getSCmpByType<EventCmp_t>();
+    auto& atk_vec  = eventCmp.attack_msg;
+    
+    std::for_each(atk_vec.rbegin(), atk_vec.rend(),
+        [&](auto& msg) {
+            auto& combat_cmp   = context.template getCmpByEntityID<CombatComponent>( msg.eid_damaged );
+            combat_cmp.health -= msg.amount;
 
-    while( !attack_msg.empty() ) {
-        auto& first_msg    = attack_msg.front();
-        auto& combat_cmp   = context.template getCmpByEntityID<CombatComponent>( first_msg.eid_damaged );
-        combat_cmp.health -= first_msg.amount;
+            if(combat_cmp.health <= 0)
+                eventCmp.death_msg.emplace(msg.eid_damaged, EntType::Human);
 
-        if(combat_cmp.health <= 0)
-            death_msg.emplace(first_msg.eid_damaged, EntType::Human);
-
-        attack_msg.pop();
-    }
+            atk_vec.pop_back();
+    });
 }
 
 } // NS

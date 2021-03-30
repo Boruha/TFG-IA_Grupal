@@ -4,6 +4,7 @@
 #include <game/utils/GameConditions.hpp>
 
 #include <chrono>
+#include <iostream>
 
 int main() {
   using timer = std::chrono::steady_clock;
@@ -36,6 +37,6 @@ int main() {
       gameCondition = GameConditions::Loop;
     }
   }
-
+  
   return 0;
 }
