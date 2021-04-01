@@ -267,45 +267,39 @@ AI_System<Context_t>::cohesion(Context_t& context, BECS::entID eid_ent, std::vec
 template <typename Context_t>
 constexpr void
 AI_System<Context_t>::decisionMakingIA(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept {
-    auto& ai_cmp  = context.template getCmpByEntityID<AI_Component>( eid );
-    auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( eid );
+    auto& ai     = context.template getCmpByEntityID<AI_Component>( eid );
+    auto& curr_b = ai.current_behavior;
 
-    auto& curr_behavior = ai_cmp.current_behavior;
-
-    if( curr_behavior == AI_behaviour::patrol_b || curr_behavior == AI_behaviour::no_b ) {
-        if( findNearEnemy(context, eid, enemy_eids) ) {
-            curr_behavior = AI_behaviour::chase_b;
+    if( curr_b == AI_behaviour::no_b || curr_b == AI_behaviour::patrol_b ) {
+        if( !findNearEnemy(context, eid, enemy_eids) ) {
+            setPatroling(ai);
             return;
         }
-    }
-
-    if( curr_behavior == AI_behaviour::chase_b || curr_behavior == AI_behaviour::attack_b ) {
-
-        if( ai_cmp.target_ent == 0u ) {                 //MUY MEJORABLE !!!=!=!!==!=!=!=!
-            curr_behavior     = AI_behaviour::patrol_b;
-            ai_cmp.target_pos = ai_cmp.target_vec.at(ai_cmp.target_index);
-            return;
-        }
-
-        auto& combat_cmp = context.template getCmpByEntityID<CombatComponent>( eid );
-        auto  target_dir = ai_cmp.target_pos - mov_cmp.coords;
-        auto  distance2  = target_dir.length2();
-        
-        if( distance2 > VISION_DIST2 ) {
-            curr_behavior     = AI_behaviour::patrol_b;
-            ai_cmp.target_ent = 0u;
-            ai_cmp.target_pos = ai_cmp.target_vec.at(ai_cmp.target_index);
-            return;
-        }
-
-        if(distance2 < combat_cmp.attack_range2)
-            curr_behavior = AI_behaviour::attack_b;
         else
-            curr_behavior = AI_behaviour::chase_b;
+            curr_b = AI_behaviour::chase_b;
     }
 
-    if( curr_behavior == AI_behaviour::no_b )
-        curr_behavior = AI_behaviour::patrol_b;
+    if( curr_b == AI_behaviour::chase_b || curr_b == AI_behaviour::attack_b ) {
+        if( ai.target_ent == 0u && !findNearEnemy(context, eid, enemy_eids) ) {
+            setPatroling(ai);
+            return;
+        }
+
+        auto& mov    = context.template getCmpByEntityID<MovementComponent>( eid );
+        auto& combat = context.template getCmpByEntityID<CombatComponent>( eid );
+
+        auto target_dir { ai.target_pos - mov.coords };
+        auto distance2  { target_dir.length2() };
+        
+        if(distance2 < combat.attack_range2) 
+            curr_b = AI_behaviour::attack_b;
+        else
+            curr_b = AI_behaviour::chase_b;
+    
+        if( distance2 > VISION_DIST2 )
+            setPatroling(ai);
+    }
+
 }
 
 template <typename Context_t>
@@ -342,12 +336,10 @@ AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std:
     }
     
     if( curr_b == AI_behaviour::chase_b || curr_b == AI_behaviour::attack_b ) {
-        if( ai.target_ent == 0u ) { 
-            if( !findNearEnemy(context, eid, enemy_eids) ) {
-                auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
-                setFollowing(ai, mov);
-                return;
-            }
+        if( ai.target_ent == 0u && !findNearEnemy(context, eid, enemy_eids) ) {
+            auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
+            setFollowing(ai, mov);
+            return;
         }
 
         auto& mov    = context.template getCmpByEntityID<MovementComponent>( eid );
@@ -364,6 +356,7 @@ AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std:
         if( distance2 > VISION_DIST2 ) {
             auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
             setFollowing(ai, mov);
+            return;
         }
     }
 
@@ -383,6 +376,13 @@ setFollowing(AI_Component& ai, MovementComponent& mov) noexcept {
     ai.current_behavior = AI_behaviour::follow_b;
     ai.target_ent       = mov.getEntityID();
     ai.target_pos       = mov.coords;
+}
+
+inline void
+setPatroling(AI_Component& ai) noexcept {
+    ai.current_behavior = AI_behaviour::patrol_b;
+    ai.target_ent       = 0u;
+    ai.target_pos       = ai.target_vec.at(ai.target_index);
 }
 
 
@@ -440,7 +440,6 @@ updateRoute(AI_Component& ai) noexcept {
 
     return result;
 }
-
 
 inline fvec2<fint_t<int64_t>> 
 accelFromDir(fvec2<fint_t<int64_t>> target_dir, fvec2<fint_t<int64_t>> my_dir) noexcept {

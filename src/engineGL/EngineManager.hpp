@@ -19,9 +19,9 @@ struct EngineManager {
     EngineManager& operator=(const EngineManager& ) = delete;
     EngineManager& operator=(const EngineManager&&) = delete;
 
-    void drawRectFilled(uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color) noexcept;
-    void drawLine(      uint32_t p1_x , uint32_t p1_y , uint32_t p2_x  , uint32_t p2_y  , uint32_t color) noexcept;
-    void drawInMinimap( uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color) noexcept;
+    void drawRect(      uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color, bool filled) noexcept;
+    void drawLine(      uint32_t p1_x , uint32_t p1_y , uint32_t p2_x  , uint32_t p2_y  , uint32_t color)              noexcept;
+    void drawInMinimap( uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color)              noexcept;
 
     void debugInterface(bool& showDebug, float& DT, float& LT, bool& changed) const noexcept;
 

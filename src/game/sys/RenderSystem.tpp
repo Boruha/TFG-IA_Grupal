@@ -1,5 +1,6 @@
 #include <game/sys/RenderSystem.hpp>
 #include <game/cmp/MovementComponent.hpp>
+#include <game/cmp/Collider2DCmp.hpp>
 #include <game/cmp/InterfaceControl.hpp>
 #include <game/utils/ScreenData.hpp>
 
@@ -27,38 +28,41 @@ RenderSystem<Context_t>::update(Context_t& context) noexcept {
         engine->debugInterface(debug_mode, control.deltaTime, control.deltaSize, control.changed);
 
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
-        [&](const RenderComponent& render_cmp) {
-            auto& mov_cmp = context.template getCmpByEntityID<MovementComponent>( render_cmp.getEntityID() );
+        [&](const RenderComponent& render) {
+            auto& mov = context.template getCmpByEntityID<MovementComponent>( render.getEntityID() );
             
             //draw sprite
-            auto  screen_coords { continuous_to_screen(mov_cmp.coords) };
-            vec2  sprite        = render_cmp.sprite;
+            auto  screen_coords { continuous_to_screen(mov.coords) };
+            auto& sprite        = render.sprite;
 
-            engine->drawRectFilled(screen_coords.x, screen_coords.y, sprite.x, sprite.y, static_cast<uint32_t>(render_cmp.sprite_C) );
-            engine->drawInMinimap( screen_coords.x, screen_coords.y, sprite.x, sprite.y, static_cast<uint32_t>(render_cmp.sprite_C) );
+            engine->drawRect( screen_coords.x, screen_coords.y, sprite.x, sprite.y, static_cast<uint32_t>(render.sprite_C), true );
+            engine->drawInMinimap( screen_coords.x, screen_coords.y, sprite.x, sprite.y, static_cast<uint32_t>(render.sprite_C) );
 
-            auto head         { sprite/4 }; 
-            auto h_sp         { sprite/2 }; 
-            auto orientation  { mov_cmp.orientation };
+            auto head        { sprite/4 }; 
+            auto h_sp        { sprite/2 }; 
+            auto orientation { mov.orientation };
             
             orientation.normalize();
             
             orientation.x.number *= h_sp.x;
             orientation.y.number *= h_sp.y;
-            orientation          += mov_cmp.coords; 
+            orientation          += mov.coords; 
 
             screen_coords  = continuous_to_screen(orientation);
             screen_coords += h_sp - head/2;
         
-            engine->drawRectFilled(screen_coords.x, screen_coords.y, head.x, head.y, static_cast<uint32_t>(Color::White));
+            engine->drawRect(screen_coords.x, screen_coords.y, head.x, head.y, static_cast<uint32_t>(Color::White), true);
 
-            if(debug_mode)
-                draw_debug(mov_cmp, render_cmp);
+            if(debug_mode) {
+                auto& collider2D = context.template getCmpByEntityID<Collider2DCmp>( render.getEntityID() );
+                draw_debug(mov, render, collider2D);
+            }
     });
 
            engine->render();
     return engine->shouldClose();
 }
+
 
 //AUX
 template <typename Context_t>
@@ -73,46 +77,55 @@ RenderSystem<Context_t>::continuous_to_screen(const fvec2<fint_t<int64_t>>& cont
 template <typename Context_t>
 vec2<uint32_t> 
 RenderSystem<Context_t>::clip_2_draw(fvec2<fint_t<int64_t>> point) noexcept {
-    point.x         = std::clamp(point.x, (F_H_WINDOW_W_N), F_H_WINDOW_W);
-    point.y         = std::clamp(point.y, (F_H_WINDOW_H_N), F_H_WINDOW_H);
+    point.x = std::clamp(point.x, (F_H_WINDOW_W_N), F_H_WINDOW_W);
+    point.y = std::clamp(point.y, (F_H_WINDOW_H_N), F_H_WINDOW_H);
     
     return continuous_to_screen(point);
 }
 
+
 //DRAW LINES DEBUG
 template <typename Context_t>
 void
-RenderSystem<Context_t>::draw_debug(const MovementComponent& mov_cmp, const RenderComponent& render_cmp) noexcept {
-    //const auto& dir   = mov_cmp.dir;
-    const auto& accel = mov_cmp.acc_copy_to_draw;
-    const auto& separ = mov_cmp.sep_copy_to_draw;
-    const auto& cohes = mov_cmp.coh_copy_to_draw;
+RenderSystem<Context_t>::draw_debug(const MovementComponent& mov, const RenderComponent& render, const Collider2DCmp& coll2D) noexcept {
+    //const auto& dir   = mov.dir;
+    const auto& accel = mov.acc_copy_to_draw;
+    const auto& separ = mov.sep_copy_to_draw;
+    const auto& cohes = mov.coh_copy_to_draw;
     
     //ajustamos el inicio de los vectores de steer.
-          auto p_ini         = mov_cmp.coords;
-               p_ini.x      += ( static_cast<int64_t>(render_cmp.sprite.x) / 2 );
-               p_ini.y      += ( static_cast<int64_t>(render_cmp.sprite.y) / 2 );
+          auto p_ini         = mov.coords;
+               p_ini.x      += ( static_cast<int64_t>(render.sprite.x) / 2 );
+               p_ini.y      += ( static_cast<int64_t>(render.sprite.y) / 2 );
     const auto screen_p_ini  = clip_2_draw(p_ini);
+
 /*   
     if(dir.length2().number != 0) {
-        const auto screen_p_fin = clip_2_draw(p_ini + dir);
-        engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_fin.x, screen_p_fin.y, static_cast<uint32_t>(Color::White));
+        const auto screen_p_end = clip_2_draw(p_ini + dir);
+        engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_end.x, screen_p_end.y, static_cast<uint32_t>(Color::White));
     }
 */
     if(accel.length2().number != 0) {
-        const auto screen_p_fin = clip_2_draw(p_ini + accel);
-        engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_fin.x, screen_p_fin.y, static_cast<uint32_t>(Color::Green));
+        const auto screen_p_end = clip_2_draw(p_ini + accel);
+        engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_end.x, screen_p_end.y, static_cast<uint32_t>(Color::Green));
     }
 
     if(separ.length2().number != 0) {
-        const auto screen_p_fin = clip_2_draw(p_ini + separ);
-        engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_fin.x, screen_p_fin.y, static_cast<uint32_t>(Color::Blue));
+        const auto screen_p_end = clip_2_draw(p_ini + separ);
+        engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_end.x, screen_p_end.y, static_cast<uint32_t>(Color::Blue));
     }
 
     if(cohes.length2().number != 0) {
-        const auto screen_p_fin = clip_2_draw(p_ini + cohes);
-        engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_fin.x, screen_p_fin.y, static_cast<uint32_t>(Color::Red));
+        const auto screen_p_end = clip_2_draw(p_ini + cohes);
+        engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_end.x, screen_p_end.y, static_cast<uint32_t>(Color::Red));
     }
+
+// Colliders2DCmp_t
+    auto uSize         { static_cast<uint32_t>( coll2D.size.getNoScaled() ) };
+    auto screen_coords { continuous_to_screen(mov.coords) };
+
+    engine->drawRect(screen_coords.x, screen_coords.y, uSize, uSize, static_cast<uint32_t>(Color::Purple), false);
+
 }
 
 

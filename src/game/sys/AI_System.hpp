@@ -2,7 +2,7 @@
 #include <game/utils/fvec2.hpp>
 #include <game/utils/AI_Constants.hpp>
 
-#include <ecs/ent/Entity_t.hpp>
+#include <ecs/utils/Alias.hpp>
 
 #include <vector>
 
@@ -43,8 +43,9 @@ private:
 };
 
 void setFollowing(AI_Component& ai, MovementComponent& mov) noexcept;
-bool updatePatrol(AI_Component& ai)                         noexcept;
-bool updateRoute( AI_Component& ai)                         noexcept;
+void setPatroling(AI_Component& ai) noexcept;
+bool updatePatrol(AI_Component& ai) noexcept;
+bool updateRoute( AI_Component& ai) noexcept;
 
 fvec2<fint_t<int64_t>> accelFromDir(fvec2<fint_t<int64_t>> target_dir, fvec2<fint_t<int64_t>> my_dir) noexcept;
 

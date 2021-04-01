@@ -10,6 +10,7 @@
 namespace AIP {
 
 struct MovementComponent;
+struct Collider2DCmp;
 
 template <typename Context_t>
 struct RenderSystem {
@@ -21,7 +22,7 @@ private:
     vec2<uint32_t> continuous_to_screen(const fvec2<fint_t<int64_t>>& cont) noexcept;
     vec2<uint32_t> clip_2_draw(fvec2<fint_t<int64_t>> point)                noexcept;
 
-    void draw_debug(const MovementComponent& mov_cmp, const RenderComponent& render_cmp) noexcept;
+    void draw_debug(const MovementComponent& mov, const RenderComponent& render, const Collider2DCmp& coll2D ) noexcept;
 
     bool debug_mode { false };
     std::unique_ptr<eGL::EngineManager> engine { nullptr };

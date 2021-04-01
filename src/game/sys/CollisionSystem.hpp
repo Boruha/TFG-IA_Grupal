@@ -1,9 +1,10 @@
 #pragma once
 #include <game/utils/fvec2.hpp>
+#include <vector>
+
+#include <ecs/utils/Alias.hpp>
 
 namespace AIP {
-
-struct entID;
 
 template <typename Context_t>
 struct CollisionSystem {

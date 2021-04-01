@@ -5,8 +5,6 @@
 #include <game/cmp/EventCmp_t.hpp>
 #include <game/utils/ScreenData.hpp>
 
-#include <ecs/ent/Entity_t.hpp>
-
 #include <algorithm>
 #include <iostream>
 
@@ -15,17 +13,16 @@ namespace AIP {
 template <typename Context_t>
 void
 CollisionSystem<Context_t>::update(Context_t& context) noexcept {
-    auto& mov_cmp_vec = context.template getComponentVector<MovementComponent>();
+    auto& mov_vec = context.template getComponentVector<MovementComponent>();
 
     bulletsCollision(context, context.template getEnemyIDs(), context.template getAllyBullets() );
     bulletsCollision(context, context.template getAllyIDs() , context.template getEnemBullets() );
 
-    std::for_each(begin(mov_cmp_vec), end(mov_cmp_vec),
+    std::for_each(begin(mov_vec), end(mov_vec),
         [&](MovementComponent& mov) {
             auto& collider2D = context.template getCmpByEntityID<Collider2DCmp>( mov.getEntityID() );
             auto& coord      = mov.coords;
 
-            const auto p1 { coord + collider2D.p1 };
             const auto p2 { coord + collider2D.p2 };
             const auto sz { collider2D.size };
 
@@ -33,14 +30,14 @@ CollisionSystem<Context_t>::update(Context_t& context) noexcept {
             if( p2.x > F_H_WINDOW_W )
                     coord.x = F_H_WINDOW_W_N + sz;
             
-            if( p1.x < F_H_WINDOW_W_N )
+            if( coord.x < F_H_WINDOW_W_N )
                     coord.x = F_H_WINDOW_W - sz;
             
             //eje Y
             if( p2.y > F_H_WINDOW_H )
                     coord.y = F_H_WINDOW_H_N + sz;
             
-            if( p1.y < F_H_WINDOW_H_N )
+            if( coord.y < F_H_WINDOW_H_N )
                     coord.y = F_H_WINDOW_H - sz;
     });
 
@@ -58,7 +55,6 @@ CollisionSystem<Context_t>::bulletsCollision(Context_t& context, std::vector<BEC
         auto& entColl2D = context.template getCmpByEntityID<Collider2DCmp>(ent);
         auto& entCoords = entMov.coords;
 
-        const auto entP1 { entCoords + entColl2D.p1 };
         const auto entP2 { entCoords + entColl2D.p2 };
 
         for(auto& bullet : bullets) {
@@ -66,19 +62,18 @@ CollisionSystem<Context_t>::bulletsCollision(Context_t& context, std::vector<BEC
             auto& bulColl2D = context.template getCmpByEntityID<Collider2DCmp>(bullet);
             auto& bulCoords = bulMov.coords;
 
-            const auto bulP1 { bulCoords + bulColl2D.p1 };
             const auto bulP2 { bulCoords + bulColl2D.p2 };
             
             //eje x
-            if(entP1.x < bulP2.x && entP1.x > bulP1.x)
+            if(entCoords.x < bulP2.x && entCoords.x > bulCoords.x)
                 axis_x = true;
-            if(entP2.x < bulP2.x && entP2.x > bulP1.x)
+            if(entP2.x < bulP2.x && entP2.x > bulCoords.x)
                 axis_x = true;
 
             //eje y
-            if(entP1.y < bulP2.y && entP1.y > bulP1.y)
+            if(entCoords.y < bulP2.y && entCoords.y > bulCoords.y)
                 axis_y = true;
-            if(entP2.y < bulP2.y && entP2.y > bulP1.y)
+            if(entP2.y < bulP2.y && entP2.y > bulCoords.y)
                 axis_y = true;
 
             if(axis_x && axis_y) {

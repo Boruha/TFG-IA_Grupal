@@ -100,18 +100,22 @@ EngineManager::getWindowSize() const noexcept {
 }
 
 /* WIDGETS FUNTIONS AND SECUNDARY WINDOWS SETTERS
-    - DRAW FILL RECTAGLES
+    - DRAW (FILL) RECTAGLES
     - DRAW LINES
     - OPEN A DEBUG INTERFACE
     - OPEN A GAMEPLAY INTERFACE
 */
 void 
-EngineManager::drawRectFilled(uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color) noexcept {
+EngineManager::drawRect(uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color, bool filled) noexcept {
     const auto* viewport = ImGui::GetMainViewport();
     auto bg_draw         = ImGui::GetBackgroundDrawList();
     auto work_pos        = viewport->WorkPos;
-  
-    bg_draw->AddRectFilled(ImVec2(work_pos.x + pos_x, work_pos.y + pos_y), ImVec2(pos_x + size_x, pos_y + size_y), color);
+    auto p1              = ImVec2(work_pos.x + pos_x, work_pos.y + pos_y);
+    
+    if(filled)
+        bg_draw->AddRectFilled(p1, ImVec2(p1.x + size_x, p1.y + size_y), color);
+    else
+        bg_draw->AddRect(p1, ImVec2(p1.x + size_x, p1.y + size_y), color);
 }
 
 void 
