@@ -115,24 +115,25 @@ UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, con
 
 
 inline void 
-UnitsManager::deleteEntity(BECS::entID eid) noexcept { //Bastante fe00 por tu parte
-    auto it = std::find_if(enemies_vec.begin(), enemies_vec.end(), [&](BECS::entID id) {
-                  return id == eid;
-              });
+UnitsManager::deleteEntity(BECS::entID eid) noexcept {
+    auto& combat = getCmpByEntityID<CombatComponent>(eid);
 
-    if(it != enemies_vec.end() ) {
-        enemies_vec.erase(it);
-        ent_man.deleteEntity(eid);
-        return;
-    }
-    
-    it = std::find_if(allies_vec.begin(), allies_vec.end(), [&](BECS::entID id) {
-             return id == eid;
-         });
-              
-    if(it != allies_vec.end() ) {
-        allies_vec.erase(it);
-        ent_man.deleteEntity(eid);
+    if(combat.team) {
+        auto it = std::find_if(allies_vec.begin(), allies_vec.end(),
+                    [eid](BECS::entID id) { return id == eid; });
+                
+        if(it != allies_vec.end() ) {
+            allies_vec.erase(it);
+            ent_man.deleteEntity(eid);
+        }
+    } else {
+        auto it = std::find_if(enemies_vec.begin(), enemies_vec.end(), 
+                    [eid](BECS::entID id) { return id == eid; });
+
+        if(it != enemies_vec.end() ) {
+            enemies_vec.erase(it);
+            ent_man.deleteEntity(eid);
+        }
     }
 }
 
