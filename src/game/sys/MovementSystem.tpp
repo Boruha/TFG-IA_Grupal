@@ -26,8 +26,8 @@ MovementSystem<Context_t>::update(Context_t& context, const fint_t<int64_t> Delt
     
             mov_cmp.coords += dir * DeltaTime;
 
-            if(dir.length_fix() > EPSILON)
-                mov_cmp.orientation = dir;
+            //if(dir.length_fix() > EPSILON)
+            //    mov_cmp.orientation = dir;
 
             /* resets */
             mov_cmp.acc_copy_to_draw = std::exchange(mov_cmp.accel_to_target, 0l);

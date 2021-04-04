@@ -25,11 +25,6 @@ private:
     constexpr void attack(Context_t& context, AI_Component& ai, MovementComponent& mov) noexcept;
     constexpr void follow(Context_t& context, AI_Component& ai, MovementComponent& mov, std::vector<BECS::entID>& eids) noexcept;
                                               
-/* STEERING B. BASIC */
-    constexpr void seek(MovementComponent& mov, fvec2_int& target_pos) noexcept;
-    constexpr bool arrive(MovementComponent& mov, fvec2_int& target_pos, const fint_t<int64_t> arrive_dist = ENT_ARRIVE_DIST2, const fint_t<int64_t> slow_dist = ENT_SLOW_DIST2) noexcept;
-    constexpr void velocity_matching(MovementComponent& mov, fvec2_int& target_dir);
-
 /* FLOCKING B. COMPO */
     constexpr void separation(Context_t& context, std::vector<BECS::entID>& eids) noexcept;
     constexpr void cohesion(  Context_t& context, BECS::entID eid_ent, std::vector<BECS::entID>& eids, const fint_t<int64_t> coeficient = DECAY_COEFICIENT_COH) noexcept;
@@ -42,12 +37,19 @@ private:
     constexpr bool findNearEnemy(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept;
 };
 
+
 void setFollowing(AI_Component& ai, MovementComponent& mov) noexcept;
 void setPatroling(AI_Component& ai) noexcept;
 bool updatePatrol(AI_Component& ai) noexcept;
 bool updateRoute( AI_Component& ai) noexcept;
 
 fvec2<fint_t<int64_t>> accelFromDir(fvec2<fint_t<int64_t>> target_dir, fvec2<fint_t<int64_t>> my_dir) noexcept;
+
+/* STEERING B. BASIC */
+void seek(MovementComponent& mov, fvec2<fint_t<int64_t>>& target_pos) noexcept;
+bool arrive(MovementComponent& mov, fvec2<fint_t<int64_t>>& target_pos, const fint_t<int64_t> arrive_dist = ENT_ARRIVE_DIST2, const fint_t<int64_t> slow_dist = ENT_SLOW_DIST2) noexcept;
+void velocity_matching(MovementComponent& mov, fvec2<fint_t<int64_t>>& target_dir) noexcept;
+void face(MovementComponent& mov, fvec2<fint_t<int64_t>>& target_dir) noexcept;
 
 } //NS
 

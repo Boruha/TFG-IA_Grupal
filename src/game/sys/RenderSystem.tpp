@@ -42,7 +42,7 @@ RenderSystem<Context_t>::update(Context_t& context) noexcept {
             auto h_sp        { sprite/2 }; 
             auto orientation { mov.orientation };
             
-            orientation.normalize();
+            //orientation.normalize();
             
             orientation.x.number *= h_sp.x;
             orientation.y.number *= h_sp.y;

@@ -38,9 +38,10 @@ AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime
                 attack(context, ai, mov);
             } break;
 
-            default: 
-                mov.dir.x.number             = mov.dir.y.number             = 0;
-                mov.accel_to_target.x.number = mov.accel_to_target.y.number = 0;
+            case AI_behaviour::no_b:
+            break;
+
+            case AI_behaviour::follow_b:
             break;
         }
     });
@@ -66,10 +67,11 @@ AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime
                 attack(context, ai, mov);
             } break;
 
-            default: {
-                mov.dir.x.number             = mov.dir.y.number             = 0;
-                mov.accel_to_target.x.number = mov.accel_to_target.y.number = 0;
-            } break;
+            case AI_behaviour::no_b:
+            break;
+
+            case AI_behaviour::patrol_b:
+            break;
         }
     });
 
@@ -78,7 +80,16 @@ AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime
 }
 
 
-/* COMPLEX B. */
+/* COMPLEX B.
+    - Metodos que usan los comportamientos básicos para hacer
+      con comportamientos complejos que hagan funciones específicas.
+    
+        - Patrol: movimiento de patrulla, se basa en hacer arrive hasta cada punto de la ruta
+                  cuando llega a cada uno, cambia al siguiente.
+        - Chase : persecución a una entidad (tiene sentido su uso sin variar nada de la pos??).
+        - Attack: persigue a su objetivo hasta estar a rango de ataque y tira.
+        - follow: sigue al marcador del pj en función de la formación activa.
+*/
 template <typename Context_t>
 constexpr void
 AI_System<Context_t>::patrol(AI_Component& ai, MovementComponent& mov) noexcept {
@@ -94,10 +105,7 @@ AI_System<Context_t>::chase(Context_t& context, AI_Component& ai, MovementCompon
     auto& mov_target = context.template getCmpByEntityID<MovementComponent>( ai.target_ent );
     ai.target_pos    = mov_target.coords;
     
-    if( !arrive(mov, ai.target_pos) ) {
-        mov.dir.x.number             = mov.dir.y.number             = 0;
-        mov.accel_to_target.x.number = mov.accel_to_target.y.number = 0;
-    }
+    arrive(mov, ai.target_pos);
 }
 
 template <typename Context_t>
@@ -113,21 +121,21 @@ AI_System<Context_t>::attack(Context_t& context, AI_Component& ai, MovementCompo
         
         switch (combat.attack_range.getNoScaled()) {
             case MEELE_ATK_DIST.getNoScaled(): {
-                    auto& eventCmp    = context.template getSCmpByType<EventCmp_t>();
+                    auto& eventCmp = context.template getSCmpByType<EventCmp_t>();
                     eventCmp.attack_msg.emplace_back(eid, ai.target_ent, combat.damage);
                 } break;
             
             case RANGE_ATK_DIST.getNoScaled(): {
-                    auto& eventCmp    = context.template getSCmpByType<EventCmp_t>();
+                    auto& eventCmp = context.template getSCmpByType<EventCmp_t>();
                     eventCmp.bullet_msg.emplace(eid, mov.orientation, mov.coords.x.getNoScaled(), mov.coords.y.getNoScaled(), combat.team, combat.damage);
                 } break;
         }        
     }
 
-    if( !arrive(mov, ai.target_pos, combat.attack_range2,  combat.attack_range2 + 5) ) {
-        mov.dir.x.number             = mov.dir.y.number             = 0;
-        mov.accel_to_target.x.number = mov.accel_to_target.y.number = 0;
-    }
+    arrive(mov, ai.target_pos, combat.attack_range2,  combat.attack_range2 + 5);
+
+    auto target_dir { ai.target_pos - mov.coords };
+    face(mov, target_dir);
 }
 
 template <typename Context_t>
@@ -144,6 +152,8 @@ AI_System<Context_t>::follow(Context_t& context, AI_Component& ai, MovementCompo
     {
         case Formation::no_form : { 
             chase(context, ai, mov);
+            auto target_dir { ai.target_pos - mov.coords };
+            face(mov, target_dir);
         } break;
         
         case Formation::ring_form : {
@@ -151,55 +161,77 @@ AI_System<Context_t>::follow(Context_t& context, AI_Component& ai, MovementCompo
             from_centre.normalize();
             targetPos += from_centre * (RING_MAX_DIST - combat.attack_range);
 
-            if( !arrive(mov, targetPos, RING_ARRIVE, RING_ARRIVE) )
+            if( !arrive(mov, targetPos, RING_ARRIVE, RING_ARRIVE) ) {
                 velocity_matching(mov, mov_enemy.dir);
+                auto target_dir { mov.coords - mov_enemy.coords };
+                face(mov, target_dir);
+            }
 
         } break;
     }
 }
 
 
-/* BASIC BEHAVIOURS FUNCTIONS */
-template <typename Context_t> 
-constexpr void 
-AI_System<Context_t>::seek(MovementComponent& mov, fvec2_int& target_pos) noexcept {
+/* BASIC BEHAVIOURS FUNCTIONS
+    - seek     : se mueve hasta un punto.
+    - arrive   : se mueve hasta un punto, con un margen antes de llegar y reduciendo la vel un poco antes.
+    - vel match: ajusta la velocidad en función de la dirección de otra entidad.
+    - face     : marca la dirección objtivo.
+*/
+inline void
+seek(MovementComponent& mov, fvec2<fint_t<int64_t>>& target_pos) noexcept {
     auto target_dir { target_pos - mov.coords };
     
     target_dir.normalize();
     target_dir *= ENT_MAX_SPEED;
 
     mov.accel_to_target = accelFromDir(target_dir, mov.dir);
+    face(mov, target_dir);
 }
 
-template <typename Context_t>
-constexpr bool
-AI_System<Context_t>::arrive(MovementComponent& mov, fvec2_int& target_pos, const fint_t<int64_t> arrive_dist, const fint_t<int64_t> slow_dist) noexcept {
+inline bool 
+arrive(MovementComponent& mov, fvec2<fint_t<int64_t>>& target_pos, const fint_t<int64_t> arrive_dist, const fint_t<int64_t> slow_dist) noexcept {
     auto target_dir   { target_pos - mov.coords };
     auto distance2    { target_dir.length2()   };
-    auto target_speed = ENT_MAX_SPEED;
-
-    if(distance2 < arrive_dist)
-        return false;
-
-    if(distance2 < slow_dist) 
-        target_speed *= ( target_dir.length_fix() / ENT_SLOW_DIST );
+    auto target_speed { ENT_MAX_SPEED };
+    auto result       { true };
     
+    if(distance2 < slow_dist) {
+        if(distance2 < arrive_dist) {
+            result        = false;
+            target_speed  = 0l;
+        } else
+            target_speed *= ( target_dir.length_fix() / ENT_SLOW_DIST );
+    }
+
     target_dir.normalize();
     target_dir *= target_speed;
 
     mov.accel_to_target = accelFromDir(target_dir, mov.dir);
+    face(mov, mov.dir);
 
-    return true;
+    return result;
 }
 
-template <typename Context_t>
-constexpr void 
-AI_System<Context_t>::velocity_matching(MovementComponent& mov, fvec2_int& target_dir) {
+inline void 
+velocity_matching(MovementComponent& mov, fvec2<fint_t<int64_t>>& target_dir) noexcept {
     mov.accel_to_target = accelFromDir(target_dir, mov.dir);
 }
 
+inline void
+face(MovementComponent& mov, fvec2<fint_t<int64_t>>& target_dir) noexcept {
+    if(target_dir.length_fix() > EPSILON) {
+        mov.orientation = target_dir;
+        mov.orientation.normalize();
+    }
+}
 
-/* FLOCKING B. FUNCTIONS */
+
+/* FLOCKING B. FUNCTIONS
+    - separation: func usada para mantener la distancía entre las unidades del escuadró.
+    - cohesion  : func usada para acercar a las unidades que se quedan lejos el centro
+                  de masas del escuadrón.
+*/
 template <typename Context_t>
 constexpr void 
 AI_System<Context_t>::separation(Context_t& context, std::vector<BECS::entID>& eids) noexcept {
@@ -263,7 +295,10 @@ AI_System<Context_t>::cohesion(Context_t& context, BECS::entID eid_ent, std::vec
 }
 
 
-/* DECISION FUNCTIONS */
+/* DECISION FUNCTIONS
+    - decisionMakingIA: toma de decisión enemiga.
+    - decisionMakingPJ: toma de decisión propia.
+*/
 template <typename Context_t>
 constexpr void
 AI_System<Context_t>::decisionMakingIA(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept {
@@ -386,7 +421,11 @@ setPatroling(AI_Component& ai) noexcept {
 }
 
 
-/* AUX FUNCTIONS */
+/* AUX FUNCTIONS
+    - updatePatrol: pasa a la siguiente posición y si se pasa del size resetea.
+    - updateRoute : pasa a la siguiente posición y si se pasa del size termina el mov.
+    - accFromDir  : en función de la dirección, sacar la acceleración.
+*/
 template <typename Context_t> 
 constexpr bool 
 AI_System<Context_t>::findNearEnemy(Context_t& context, BECS::entID eid, std::vector<BECS::entID>& enemy_eids) noexcept {
@@ -395,18 +434,18 @@ AI_System<Context_t>::findNearEnemy(Context_t& context, BECS::entID eid, std::ve
     
     auto& my_coords = mov.coords;
     auto  result    { false };
-    auto dist       { VISION_DIST2 };
+    auto  dist      { VISION_DIST2 };
 
-    std::for_each(begin(enemy_eids), end(enemy_eids), [&](BECS::entID enemy_eid) {
-        auto& enemy_mov  = context.template getCmpByEntityID<MovementComponent>( enemy_eid );
-        auto  new_coords = enemy_mov.coords - my_coords;    
-        auto  new_dist   = new_coords.length2();
+    std::for_each(begin(enemy_eids), end(enemy_eids), [&](BECS::entID eidEnemy) {
+        auto& eneMov   = context.template getCmpByEntityID<MovementComponent>( eidEnemy );
+        auto  toEnemy  = eneMov.coords - my_coords;    
+        auto  new_dist = toEnemy.length2();
 
         if(new_dist < dist ) {
             dist   = new_dist;
             result = true;
-            ai.target_pos = enemy_mov.coords;
-            ai.target_ent = enemy_eid;
+            ai.target_pos = eneMov.coords;
+            ai.target_ent = eidEnemy;
         }
     });
 

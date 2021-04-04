@@ -7,6 +7,7 @@ namespace AIP {
 constexpr fint_t<int64_t> EPSILON       { 15l };
 constexpr fint_t<int64_t> RING_ARRIVE   { 400l };
 constexpr fint_t<int64_t> RING_MAX_DIST { 220l };
+
 //SENSOR
 constexpr fint_t<int64_t> VISION_DIST     { 180l };
 constexpr fint_t<int64_t> VISION_DIST2    { VISION_DIST * VISION_DIST };

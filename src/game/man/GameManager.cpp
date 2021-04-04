@@ -67,28 +67,6 @@ GameManager::checkFps() noexcept {
         changeDeltaTime(control);
         control.changed = false;
     }
-
-//    auto& msgs = ia_sys.fps_msg;
-//    
-//    while (!msgs.empty()) {
-//        auto& last_msg = msgs.front();
-//        
-//        switch (last_msg.Target) {
-//            case FPS_Opc::LoopTime : 
-//                    changeLoopTime(last_msg.Action);
-//                break;
-//            
-//            case FPS_Opc::DeltaTime : 
-//                    changeDeltaTime(last_msg.Action);
-//                break;
-//            
-//            case FPS_Opc::Both : 
-//                    changeLoopTime(last_msg.Action);
-//                    changeDeltaTime(last_msg.Action);
-//                break;
-//        }
-//        msgs.pop();
-//    }
 }
 
 fint_t<int64_t>&
@@ -117,8 +95,8 @@ GameManager::changeLoopTime(InterfaceControl& control) noexcept {
     std::clamp(FPS_LT, 15.f, 120.f);
 
     LoopTime = setLoopTime();
-    std::cout << "El LoopRate es:       " << FPS_LT << "\n";
-    std::cout << "Con un Tick size de : " << LoopTime.number << "\n\n";
+    //std::cout << "El LoopRate es:       " << FPS_LT << "\n";
+    //std::cout << "Con un Tick size de : " << LoopTime.number << "\n\n";
 }
 
 void
@@ -127,8 +105,8 @@ GameManager::changeDeltaTime(InterfaceControl& control) noexcept {
     std::clamp(FPS_DT, 15.f, 120.f);
 
     DeltaTime = setDeltaTime();
-    std::cout << "El DeltaRate es:      " << FPS_DT << "\n";
-    std::cout << "Con un Tick size de : " << DeltaTime.number << "\n\n";
+    //std::cout << "El DeltaRate es:      " << FPS_DT << "\n";
+    //std::cout << "Con un Tick size de : " << DeltaTime.number << "\n\n";
 }
 
 
