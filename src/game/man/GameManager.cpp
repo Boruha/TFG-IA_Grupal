@@ -33,7 +33,7 @@ GameManager::update() noexcept {
     //pj decision
     if( !input_sys.update(units_man) )
         return GameConditions::Cerrar;
-        
+
     //ia decision
     ia_sys.update(units_man, DeltaTime);
     //physics

@@ -1,4 +1,7 @@
 #include <game/sys/BulletLifeSystem.hpp>
+
+#include <game/cmp/BulletCmp.hpp>
+#include <game/cmp/MovementComponent.hpp>
 #include <game/cmp/EventCmp_t.hpp>
 
 #include <iostream>
@@ -9,12 +12,14 @@ namespace AIP {
 template <typename Context_t>
 void
 BulletLifeSystem<Context_t>::update(Context_t& context) noexcept {
+    constexpr fint_t<int64_t> dist { 300l };
+
     //checking life diff
     auto lifeCheck = [&](BECS::entID& bullet) {
         auto& mov  = context.template getCmpByEntityID<MovementComponent>(bullet);
-        
-        constexpr fint_t<int64_t> dist { 300l };
-        auto  diff { mov.coords - mov.spawnPos };
+        auto& bull = context.template getCmpByEntityID<BulletCmp>(bullet);        
+
+        auto  diff { mov.coords - bull.spawnPos };
 
         if( dist < diff.length() ) {
             auto& eventCmp = context.template getSCmpByType<EventCmp_t>();
@@ -39,7 +44,7 @@ BulletLifeSystem<Context_t>::spawnBullets(Context_t& context) noexcept {
     
     while ( !bullet_vec.empty() ) {
         auto& msg = bullet_vec.front();
-        context.createBullet(msg.nDir, msg.pos_x, msg.pos_y, msg.team);
+        context.createBullet(msg.nDir, msg.pos_x, msg.pos_y, msg.team, msg.shooter, msg.amount);
         bullet_vec.pop();
     }
 }

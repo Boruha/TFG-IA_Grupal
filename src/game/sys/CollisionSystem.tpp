@@ -1,8 +1,8 @@
 #include <game/sys/CollisionSystem.hpp>
 #include <game/cmp/MovementComponent.hpp>
-#include <game/cmp/RenderComponent.hpp>
 #include <game/cmp/Collider2DCmp.hpp>
 #include <game/cmp/EventCmp_t.hpp>
+#include <game/cmp/BulletCmp.hpp>
 #include <game/utils/ScreenData.hpp>
 
 #include <algorithm>
@@ -76,9 +76,11 @@ CollisionSystem<Context_t>::bulletsCollision(Context_t& context, std::vector<BEC
                 axis_y = true;
 
             if(axis_x && axis_y) {
-                auto& eventCmp = context.template getSCmpByType<EventCmp_t>();
+                auto& eventCmp   = context.template getSCmpByType<EventCmp_t>();
+                auto& bulletInfo = context.template getCmpByEntityID<BulletCmp>(bullet);
+
                 eventCmp.death_msg.emplace(bullet, EntType::Bullet);
-                eventCmp.attack_msg.emplace_back(bullet, ent, 4);
+                eventCmp.attack_msg.emplace_back(bulletInfo.shooter, ent, bulletInfo.damage);
             }
             
             axis_y = axis_x = false;

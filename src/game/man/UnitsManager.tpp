@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <iostream>
-#include <utility>
 
 namespace AIP {
 
@@ -97,7 +96,9 @@ UnitsManager::createPlayerPointer(const uint32_t size, const int64_t pos_x, cons
 }
 
 inline void 
-UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y, bool team) noexcept {
+UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y,
+                bool team, BECS::entID eid, int64_t amount) noexcept {
+    
     const auto new_ent = ent_man.createEntity_t();
     constexpr auto size { 10u };
 
@@ -106,9 +107,10 @@ UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, con
     else    
         enem_bullets.push_back(new_ent);
 
-    auto& mov = ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }              ) );
-                ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,   size   ,   size  , Color::White ) );
-                ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,   size   ,   size                 ) );
+    auto& mov = ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }               ) );
+                ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,   size   ,   size  , Color::White  ) );
+                ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,   size   ,   size                  ) );
+                ent_man.addComponentToEntity( new_ent, BulletCmp(         new_ent, { pos_x }, { pos_y }, eid , amount ) );
 
     mov.dir = (nDir * (ENT_MAX_SPEED/2));
 }
@@ -116,48 +118,27 @@ UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, con
 
 inline void 
 UnitsManager::deleteEntity(BECS::entID eid) noexcept {
-    auto& combat = getCmpByEntityID<CombatComponent>(eid);
-
-    if(combat.team) {
-        auto it = std::find_if(allies_vec.begin(), allies_vec.end(),
-                    [eid](BECS::entID id) { return id == eid; });
-                
-        if(it != allies_vec.end() ) {
-            allies_vec.erase(it);
-            ent_man.deleteEntity(eid);
-        }
-    } else {
-        auto it = std::find_if(enemies_vec.begin(), enemies_vec.end(), 
-                    [eid](BECS::entID id) { return id == eid; });
-
-        if(it != enemies_vec.end() ) {
-            enemies_vec.erase(it);
-            ent_man.deleteEntity(eid);
-        }
-    }
+    deleteByIDFrom(allies_vec, eid);
+    deleteByIDFrom(enemies_vec, eid);
 }
 
 inline void 
-UnitsManager::deleteBullet(BECS::entID eid) noexcept { //Bastante fe00 por tu parte
-    auto it = std::find_if(enem_bullets.begin(), enem_bullets.end(), [&](BECS::entID id) {
-                  return id == eid;
-              });
+UnitsManager::deleteBullet(BECS::entID eid) noexcept {
+    deleteByIDFrom(ally_bullets, eid);
+    deleteByIDFrom(enem_bullets, eid);
+}
 
-    if(it != enem_bullets.end() ) {
-        enem_bullets.erase(it);
-        ent_man.deleteEntity(eid);
-        return;
-    }
-    
-    it = std::find_if(ally_bullets.begin(), ally_bullets.end(), [&](BECS::entID id) {
-             return id == eid;
-         });
-              
-    if(it != ally_bullets.end() ) {
-        ally_bullets.erase(it);
+inline void 
+UnitsManager::deleteByIDFrom(std::vector<BECS::entID>& container, BECS::entID eid) noexcept {
+    auto it = std::find_if(container.begin(), container.end(), 
+                [&](BECS::entID id) { return id == eid; });
+
+    if(it != container.end() ) {
+        container.erase(it);
         ent_man.deleteEntity(eid);
     }
 }
+
 
 
 /* GETTERS */

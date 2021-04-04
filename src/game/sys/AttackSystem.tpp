@@ -15,8 +15,7 @@ AttackSystem<Context_t>::update(Context_t& context) noexcept {
     auto& eventCmp = context.template getSCmpByType<EventCmp_t>();
     auto& atk_vec  = eventCmp.attack_msg;
     
-    std::for_each(atk_vec.rbegin(), atk_vec.rend(),
-        [&](auto& msg) {
+    std::for_each(atk_vec.rbegin(), atk_vec.rend(), [&](auto& msg) {
             auto& combat_cmp   = context.template getCmpByEntityID<CombatComponent>( msg.eid_damaged );
             combat_cmp.health -= msg.amount;
 

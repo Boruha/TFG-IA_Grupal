@@ -1,9 +1,9 @@
 #pragma once
 #include <game/utils/fvec2.hpp>
-#include <vector>
 
 #include <ecs/utils/Alias.hpp>
 
+#include <vector>
 
 namespace AIP {
 

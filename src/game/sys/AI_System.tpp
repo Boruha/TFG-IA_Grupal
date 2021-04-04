@@ -4,6 +4,7 @@
 #include <game/cmp/CombatComponent.hpp>
 #include <game/cmp/AI_Component.hpp>
 #include <game/cmp/TeamComponent.hpp>
+#include <game/cmp/EventCmp_t.hpp>
 
 #include <algorithm>
 #include <iostream>

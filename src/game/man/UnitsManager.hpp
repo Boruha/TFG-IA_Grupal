@@ -20,11 +20,13 @@ struct UnitsManager {
       void clear()                       noexcept;
       void deleteEntity(BECS::entID eid) noexcept; //marcar equipo ahora que esta en una var.
       void deleteBullet(BECS::entID eid) noexcept;
+      
+      void deleteByIDFrom(std::vector<BECS::entID>& container, BECS::entID eid) noexcept;
 
       void createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team) noexcept;
       void createArcher( const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team) noexcept;
       void createPlayerPointer( const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col)     noexcept;
-      void createBullet( fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y, bool team)          noexcept;
+      void createBullet( fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y, bool team, BECS::entID eid, int64_t amount) noexcept;
     
       template <typename CMP_t>  constexpr std::vector<CMP_t>& getComponentVector()                    noexcept;
       template <typename CMP_t>  constexpr CMP_t&              getCmpByEntityID(const BECS::entID eid) noexcept;
