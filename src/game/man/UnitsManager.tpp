@@ -110,7 +110,6 @@ UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, con
                 ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,   size   ,   size  , Color::White ) );
                 ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,   size   ,   size                 ) );
 
-    //nDir.normalize();
     mov.dir = (nDir * (ENT_MAX_SPEED/2));
 }
 

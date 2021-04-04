@@ -5,6 +5,7 @@
 #include <ecs/ent/Entity_t.hpp>
 
 #include <algorithm>
+#include <iostream>
 
 namespace AIP {
 

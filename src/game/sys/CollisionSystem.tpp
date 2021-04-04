@@ -15,8 +15,8 @@ void
 CollisionSystem<Context_t>::update(Context_t& context) noexcept {
     auto& mov_vec = context.template getComponentVector<MovementComponent>();
 
-    bulletsCollision(context, context.template getEnemyIDs(), context.template getAllyBullets() );
-    bulletsCollision(context, context.template getAllyIDs() , context.template getEnemBullets() );
+    bulletsCollision(context, context.getEnemyIDs(), context.getAllyBullets() );
+    bulletsCollision(context, context.getAllyIDs() , context.getEnemBullets() );
 
     std::for_each(begin(mov_vec), end(mov_vec),
         [&](MovementComponent& mov) {
@@ -46,7 +46,6 @@ CollisionSystem<Context_t>::update(Context_t& context) noexcept {
 template <typename Context_t>
 void                        
 CollisionSystem<Context_t>::bulletsCollision(Context_t& context, std::vector<BECS::entID>& team, std::vector<BECS::entID>& bullets) noexcept {
-    constexpr fint_t<int64_t> dist { 18l };
     auto axis_x { false };
     auto axis_y { false };
 

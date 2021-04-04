@@ -11,11 +11,11 @@ namespace AIP {
 template <typename Context_t>
 GameConditions 
 DeathSystem<Context_t>::update(Context_t& context) noexcept {
-    auto& enemies_ids = context.template getEnemyIDs();
-    auto& allies_ids  = context.template getAllyIDs();
+    auto& enemies_ids = context.getEnemyIDs();
+    auto& allies_ids  = context.getAllyIDs();
     auto& eventCmp    = context.template getSCmpByType<EventCmp_t>();
     auto& death_vec   = eventCmp.death_msg;
-
+    
     while( !death_vec.empty() ) {
         auto& msg = death_vec.front();
         
@@ -37,15 +37,18 @@ DeathSystem<Context_t>::update(Context_t& context) noexcept {
         if( allies_ids.size() == 0)
             return GameConditions::Derrota;
     }
-    
+
     return GameConditions::Loop;
 }
 
 //We have to delete attks to deaths entities to avoid bad memory access in attk system.
 inline void
 dontHitMeImDead(EventCmp_t& eventCmp, const BECS::entID& eid) noexcept {
-    std::remove_if(eventCmp.attack_msg.begin(), eventCmp.attack_msg.end(),
-        [&](auto& msg) { return eid == msg.eid_damaged; });
+    auto& atk_msg = eventCmp.attack_msg;
+    atk_msg.erase(  std::remove_if(atk_msg.begin(), atk_msg.end(),
+                        [&](auto& msg) { return msg.eid_damaged == eid; }), 
+                    atk_msg.end()
+    );
 }
 
 inline void

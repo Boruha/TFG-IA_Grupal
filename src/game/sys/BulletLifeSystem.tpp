@@ -22,8 +22,8 @@ BulletLifeSystem<Context_t>::update(Context_t& context) noexcept {
         }
     };
 
-    auto& eneBullets  = context.template getEnemBullets();
-    auto& allyBullets = context.template getAllyBullets();
+    auto& eneBullets  = context.getEnemBullets();
+    auto& allyBullets = context.getAllyBullets();
 
     std::for_each( begin(eneBullets) , end(eneBullets) , lifeCheck );
     std::for_each( begin(allyBullets), end(allyBullets), lifeCheck );
@@ -39,7 +39,7 @@ BulletLifeSystem<Context_t>::spawnBullets(Context_t& context) noexcept {
     
     while ( !bullet_vec.empty() ) {
         auto& msg = bullet_vec.front();
-        context.template createBullet(msg.nDir, msg.pos_x, msg.pos_y, msg.team);
+        context.createBullet(msg.nDir, msg.pos_x, msg.pos_y, msg.team);
         bullet_vec.pop();
     }
 }

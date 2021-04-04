@@ -2,9 +2,6 @@
 
 namespace AIP {
 
-
-template <typename NumType> constexpr fvec2<NumType>::fvec2(const NumType X,  const NumType Y ) noexcept : x(X), y(Y) { }
-
 /* ASSIGMENT */
 template <typename NumType> 
 fvec2<NumType>& 

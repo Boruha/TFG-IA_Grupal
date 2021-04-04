@@ -47,10 +47,10 @@ C           := $(CCACHE) gcc
 FLAGS       := -pthread -Wall -fno-exceptions -O3
 CCFLAGS     := $(FLAGS) -std=c++17 
 CFLAGS      := $(FLAGS)
-
-#ifeq ($(opt), false)
-#	CCFLAGS   += -O3
-#endif
+SANI        := 
+ifeq ($(sani), true)
+	SANI += -fsanitize=address
+endif
 
 # STRUCTURE FOLDERS
 APPDIR      := 		                              #EXECUTABLE DIRECTORY (Folder root)
@@ -97,14 +97,14 @@ RM          := rm -f
 #                       make
 
 $(APPDIR)$(APP) : $(OBJSUBDIRS) $(ALLOBJ) $(OBJSUBLIB) $(ALLOBJLIB)
-	$(CC) -o $(APPDIR)$(APP) $(ALLOBJ) $(ALLOBJLIB) $(LIBS) $(GOLD_OPTION)
+	$(CC) -o $(APPDIR)$(APP) $(ALLOBJ) $(ALLOBJLIB) $(LIBS) $(GOLD_OPTION) $(SANI)
 
 #========================================================================
 #	COMPILER C++
 
 # COMPILES EVERY .CPP / .C IF IT HAS NOT CHANGED SINCE THE LAST MAKE
 #	source code
-$(foreach F,$(ALLCPP),$(eval $(call COMPILE_CPP,$(CC),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(INCLUDE),$(CCFLAGS))))
+$(foreach F,$(ALLCPP),$(eval $(call COMPILE_CPP,$(CC),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(INCLUDE),$(CCFLAGS) $(SANI))))
 $(foreach F,$(ALLC),$(eval $(call COMPILE_CPP,$(C),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(INCLUDE),$(CFLAGS))))
 #	libs
 $(foreach F,$(ALLCPPLIB),$(eval $(call COMPILE_CPP,$(CC),$(call C2OLIB,$(F)),$(F),$(call C2H,$(F)),$(INCLUDE),$(CCFLAGS))))

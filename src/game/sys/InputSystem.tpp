@@ -17,7 +17,7 @@ namespace AIP {
 template <typename Context_t>
 bool 
 InputSystem<Context_t>::update(Context_t& context) noexcept {
-    auto  pj_id = context.template getPlayerID();
+    auto  pj_id = context.getPlayerID();
     auto& mov   = context.template getCmpByEntityID<MovementComponent>( pj_id );
     auto& team  = context.template getCmpByEntityID<TeamComponent>( pj_id );
 

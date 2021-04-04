@@ -10,7 +10,7 @@ namespace AIP {
 template<typename NumType>
 struct fvec2 {
     fvec2() = default;
-    constexpr          fvec2(const NumType X,  const NumType Y ) noexcept;
+    constexpr          fvec2(const NumType X,  const NumType Y ) noexcept : x(X), y(Y) { };
     constexpr          fvec2(const fvec2<NumType>& cpy_vec)      noexcept = default; //cpy ctor
     constexpr          fvec2(fvec2<NumType>&& mov_vec)           noexcept = default; //move ctor
 

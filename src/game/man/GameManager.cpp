@@ -30,14 +30,12 @@ GameConditions
 GameManager::update() noexcept {
     //timers and dmg
     cd_sys.update(units_man, DeltaTime);
-
     //pj decision
     if( !input_sys.update(units_man) )
         return GameConditions::Cerrar;
-
+        
     //ia decision
     ia_sys.update(units_man, DeltaTime);
-
     //physics
     movement_sys.update(units_man, DeltaTime);
     collision_sys.update(units_man);
@@ -50,9 +48,7 @@ GameManager::update() noexcept {
  
     //deleted entities
     bulletLife_sys.update(units_man);
-
     result = death_sys.update(units_man);
-
     attack_sys.update(units_man);
  
     return result;

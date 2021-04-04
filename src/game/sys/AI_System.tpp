@@ -13,8 +13,8 @@ namespace AIP {
 template <typename Context_t>
 void
 AI_System<Context_t>::update(Context_t& context, const fint_t<int64_t> DeltaTime) noexcept {
-    auto& enemies_ids = context.template getEnemyIDs();
-    auto& allies_ids  = context.template getAllyIDs();
+    auto& enemies_ids = context.getEnemyIDs();
+    auto& allies_ids  = context.getAllyIDs();
 
     //update IA units
     std::for_each(begin(enemies_ids), end(enemies_ids), [&](BECS::entID eid) {
@@ -343,7 +343,7 @@ AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std:
     auto& ai     = context.template getCmpByEntityID<AI_Component>( eid );
     auto& curr_b = ai.current_behavior; 
 
-    auto  eidPj = context.template getPlayerID();
+    auto  eidPj = context.getPlayerID();
     auto& team  = context.template getCmpByEntityID<TeamComponent>( eidPj );
     
     switch (team.action) {
