@@ -20,13 +20,21 @@ bool
 RenderSystem<Context_t>::update(Context_t& context) noexcept {    
     const auto& render_cmp_vec = context.template getComponentVector<RenderComponent>();
           auto& control        = context.template getSCmpByType<InterfaceControl>();
+          auto& team           = context.template getCmpByEntityID<TeamComponent>( context.getPlayerID() );
+
 
     engine->start_frame();
     engine->minimap();
+    //selections
+    auto act { static_cast<uint32_t>(team.action) };
+    auto frm { static_cast<uint32_t>(team.current_form) };
+    engine->modeInterface( act, frm );
+    team.action       = static_cast<AI_behaviour>(act);
+    team.current_form = static_cast<Formation>(frm);
 
     if( control.showDebug )
         engine->debugInterface(debug_mode, control.deltaTime, control.deltaSize, control.changed);
-
+    
     std::for_each(cbegin(render_cmp_vec), cend(render_cmp_vec), 
         [&](const RenderComponent& render) {
             auto& mov = context.template getCmpByEntityID<MovementComponent>( render.getEntityID() );

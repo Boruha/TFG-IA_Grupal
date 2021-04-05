@@ -19,6 +19,7 @@ GameManager::init() noexcept {
     LoopTime    = setLoopTime();
     DeltaTime   = setDeltaTime();
     units_man.init();
+    render_sys.debug_mode = false; //un poco feo pero bueno.
 }
 
 void

@@ -9,7 +9,7 @@ namespace AIP {
 
 enum class Formation : uint16_t {
     no_form     = 0u,
-    ring_form   = 2u
+    ring_form   = 1u
 };
 
 struct TeamComponent : BECS::Component_t {

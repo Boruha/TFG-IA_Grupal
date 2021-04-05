@@ -146,11 +146,48 @@ EngineManager::debugInterface(bool& showDebug, float& DT, float& LT, bool& chang
     }
 }
 
+void
+EngineManager::modeInterface(unsigned int& opc, unsigned int& frm) const noexcept {
+     const auto* viewport = ImGui::GetMainViewport();
+           auto  viewSize = viewport->Size;
+    static auto  p_open   { true };
+    
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration 
+                                  | ImGuiWindowFlags_AlwaysAutoResize 
+                                  | ImGuiWindowFlags_NoMove 
+                                  | ImGuiWindowFlags_NoFocusOnAppearing 
+                                  | ImGuiWindowFlags_NoNav;
+
+    ImGui::SetNextWindowPos( ImVec2(1, viewSize.y - 1), ImGuiCond_Always, ImVec2(0.0,1.0) );
+    ImGui::SetNextWindowSize( ImVec2(210, 150));
+    {
+    ImGui::Begin("escuadron", &p_open, window_flags);
+        {
+        if( ImGui::Selectable("Libre" , opc == 0u, ImGuiSelectableFlags_None, ImVec2(60, 60)) )
+            opc = 0u;
+        ImGui::SameLine();        
+        if( ImGui::Selectable("Ataque", opc == 2u, ImGuiSelectableFlags_None, ImVec2(60, 60)) )
+            opc = 2u;
+        ImGui::SameLine();
+        if( ImGui::Selectable("Huida" , opc == 5u, ImGuiSelectableFlags_None, ImVec2(60, 60)) )
+            opc = 5u;
+        }
+        {
+        if( ImGui::Selectable("Desordenado" , frm == 0u, ImGuiSelectableFlags_None, ImVec2(90, 60)) )
+            frm = 0u;
+        ImGui::SameLine();        
+        if( ImGui::Selectable("Anillo", frm == 1u, ImGuiSelectableFlags_None, ImVec2(90, 60)) )
+            frm = 1u;
+        }
+    ImGui::End();
+    }
+}
+
 void 
 EngineManager::minimap() noexcept {
-    const auto* viewport = ImGui::GetMainViewport();
-          auto  viewSize = viewport->Size;
-          auto  p_open   { true };
+    const  auto* viewport = ImGui::GetMainViewport();
+           auto  viewSize = viewport->Size;
+    static auto  p_open   { true };
     
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration 
                                   | ImGuiWindowFlags_AlwaysAutoResize 

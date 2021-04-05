@@ -25,6 +25,8 @@ struct EngineManager {
 
     void debugInterface(bool& showDebug, float& DT, float& LT, bool& changed) const noexcept;
 
+    void modeInterface(unsigned int& opc, unsigned int& frm) const noexcept;
+
     void minimap()     noexcept;
     void render()      noexcept;
     void start_frame() noexcept;

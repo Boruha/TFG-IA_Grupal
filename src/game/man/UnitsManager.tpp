@@ -47,6 +47,7 @@ UnitsManager::clear() noexcept {
     ally_bullets.clear();
     enem_bullets.clear(); 
     player_id = 0u;
+    singletonCmps = { };
 }
 
 /* CREATES & DELETE */
