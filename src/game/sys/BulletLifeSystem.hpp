@@ -1,5 +1,4 @@
 #pragma once
-#include <game/utils/fvec2.hpp>
 
 namespace AIP {
 

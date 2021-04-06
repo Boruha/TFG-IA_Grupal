@@ -1,6 +1,7 @@
 #pragma once
 #include <ecs/man/EntityManager.tpp>
-#include <game/utils/fvec2.tpp>
+//#include <game/utils/fvec2.tpp>
+#include <game/utils/Patrol_t.hpp>
 
 #include <vector>
 #include <tuple>
@@ -23,8 +24,8 @@ struct UnitsManager {
       
       void deleteByIDFrom(std::vector<BECS::entID>& container, BECS::entID eid) noexcept;
 
-      void createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team) noexcept;
-      void createArcher( const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team) noexcept;
+      void createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team, Patrol_t& pat) noexcept;
+      void createArcher( const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team, Patrol_t& pat) noexcept;
       void createPlayerPointer( const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col)     noexcept;
       void createBullet( fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y, bool team, BECS::entID eid, int64_t amount) noexcept;
     
@@ -45,10 +46,12 @@ private:
       BECS::EntityManager ent_man   {    };
       BECS::entID         player_id { 0u };
 
-      std::vector<BECS::entID>     enemies_vec;
-      std::vector<BECS::entID>     allies_vec;
-      std::vector<BECS::entID>     ally_bullets;
-      std::vector<BECS::entID>     enem_bullets;
+      std::vector<BECS::entID> enemies_vec;
+      std::vector<BECS::entID> allies_vec;
+      std::vector<BECS::entID> ally_bullets;
+      std::vector<BECS::entID> enem_bullets;
+      std::vector<Patrol_t>    patrols;
+
       std::tuple<InterfaceControl, EventCmp_t> singletonCmps { };
 };
 

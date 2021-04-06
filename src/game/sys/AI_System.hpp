@@ -40,8 +40,6 @@ private:
 
 void setFollowing(AI_Component& ai, MovementComponent& mov) noexcept;
 void setPatroling(AI_Component& ai) noexcept;
-bool updatePatrol(AI_Component& ai) noexcept;
-bool updateRoute( AI_Component& ai) noexcept;
 
 fvec2<fint_t<int64_t>> accelFromDir(fvec2<fint_t<int64_t>> target_dir, fvec2<fint_t<int64_t>> my_dir) noexcept;
 

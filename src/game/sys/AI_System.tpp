@@ -95,8 +95,9 @@ template <typename Context_t>
 constexpr void
 AI_System<Context_t>::patrol(AI_Component& ai, MovementComponent& mov) noexcept {
     if( !arrive(mov, ai.target_pos) ) {
-        if( updatePatrol(ai) )
-            arrive(mov, ai.target_pos);
+        ++ai.patrolIt;
+        ai.target_pos = *ai.patrolIt;
+        arrive(mov, ai.target_pos);
     }
 }
 
@@ -418,14 +419,13 @@ inline void
 setPatroling(AI_Component& ai) noexcept {
     ai.current_behavior = AI_behaviour::patrol_b;
     ai.target_ent       = 0u;
-    ai.target_pos       = ai.target_vec.at(ai.target_index);
+    ai.target_pos       = *ai.patrolIt; //ai.target_vec.at(ai.target_index);
 }
 
 
 /* AUX FUNCTIONS
-    - updatePatrol: pasa a la siguiente posición y si se pasa del size resetea.
-    - updateRoute : pasa a la siguiente posición y si se pasa del size termina el mov.
-    - accFromDir  : en función de la dirección, sacar la acceleración.
+    - accFromDir    : en función de la dirección, sacar la acceleración.
+    - findNearEnemy : marca al enemigo más cercano si es que lo hay.
 */
 template <typename Context_t> 
 constexpr bool 
@@ -449,34 +449,6 @@ AI_System<Context_t>::findNearEnemy(Context_t& context, BECS::entID eid, std::ve
             ai.target_ent = eidEnemy;
         }
     });
-
-    return result;
-}
-
-inline bool
-updatePatrol(AI_Component& ai) noexcept {
-    auto& route  = ai.target_vec;
-    auto& index  = ai.target_index;
-
-    index         = (index+1) % route.size();
-    ai.target_pos = route.at(index);
-
-    return true;
-}
-
-inline bool
-updateRoute(AI_Component& ai) noexcept {
-    bool  result { false };
-
-    auto& route     = ai.target_vec;
-    auto& index     = ai.target_index;
-    auto  index_fwd = index + 1;
-
-    if( index_fwd < route.size() ) {
-        index         = index_fwd;
-        result        = true;
-        ai.target_pos = route.at(index);
-    }
 
     return result;
 }

@@ -11,32 +11,40 @@ UnitsManager::init() noexcept {
     enemies_vec.reserve(10);
     allies_vec.reserve(10);
     ally_bullets.reserve(15);
-    enem_bullets.reserve(15);
+    enem_bullets.reserve(30);
+
+    auto& pat  = patrols.emplace_back();
+    pat.points = { fvec2<fint_t<int64_t>> 
+        { { -300l }, { -300l } }
+      , { {  200l }, { -300l } }
+      , { {  200l }, {  200l } }
+      , { { -300l }, {  200l } } 
+    };
 
     createPlayerPointer(20, 400l, 400l, Color::Green);
 
-    createSoldier(20,  30l,  30l, Color::Red, false);
-    createArcher(20,  60l, -10l, Color::Red, false);
-    createSoldier(20, -10l,  20l, Color::Red, false);
-    createArcher(20, -60l,  10l, Color::Red, false);
-    createSoldier(20, -20l, -40l, Color::Red, false);
+    createSoldier(20,  30l,  30l, Color::Red, false, pat);
+    createArcher( 20,  60l, -10l, Color::Red, false, pat);
+    createSoldier(20, -10l,  20l, Color::Red, false, pat);
+    createArcher( 20, -60l,  10l, Color::Red, false, pat);
+    createSoldier(20, -20l, -40l, Color::Red, false, pat);
 
-    createSoldier(20,  100l,  100l, Color::Red, false);
-    createArcher(20,  60l, -100l, Color::Red, false);
-    createSoldier(20, -130l,  20l, Color::Red, false);
-    createArcher(20, -60l,  100l, Color::Red, false);
-    createSoldier(20, -200l, -200l, Color::Red, false);
+    createSoldier(20,  100l,  100l, Color::Red, false, pat);
+    createArcher( 20,   60l, -100l, Color::Red, false, pat);
+    createSoldier(20, -130l,   20l, Color::Red, false, pat);
+    createArcher( 20,  -60l,  100l, Color::Red, false, pat);
+    createSoldier(20, -200l, -200l, Color::Red, false, pat);
 
-    createSoldier(20, 380l, 390l, Color::Blue, true);
-    createSoldier(20, 360l, 400l, Color::Blue, true);
-    createArcher(20, 400l, 420l, Color::Blue, true);
-    createArcher(20, 380l, 420l, Color::Blue, true);
-    createArcher(20, 300l, 420l, Color::Blue, true);
-    createArcher(20, 380l, 400l, Color::Blue, true);
-    createArcher(20, 420l, 380l, Color::Blue, true);
-    createSoldier(20, 350l, 380l, Color::Blue, true);
-    createSoldier(20, 340l, 380l, Color::Blue, true);
-    createSoldier(20, 410l, 380l, Color::Blue, true);
+    createSoldier(20, 380l, 390l, Color::Blue, true, pat);
+    createSoldier(20, 360l, 400l, Color::Blue, true, pat);
+    createArcher( 20, 400l, 420l, Color::Blue, true, pat);
+    createArcher( 20, 380l, 420l, Color::Blue, true, pat);
+    createArcher( 20, 300l, 420l, Color::Blue, true, pat);
+    createArcher( 20, 380l, 400l, Color::Blue, true, pat);
+    createArcher( 20, 420l, 380l, Color::Blue, true, pat);
+    createSoldier(20, 350l, 380l, Color::Blue, true, pat);
+    createSoldier(20, 340l, 380l, Color::Blue, true, pat);
+    createSoldier(20, 410l, 380l, Color::Blue, true, pat);
 }
 
 inline void
@@ -52,7 +60,7 @@ UnitsManager::clear() noexcept {
 
 /* CREATES & DELETE */
 inline void
-UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team) noexcept {
+UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team, Patrol_t& pat) noexcept {
     const auto new_ent = ent_man.createEntity_t();
 
     if(team)
@@ -64,11 +72,11 @@ UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int6
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
     ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,    size  ,  size        ) );
     ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, MEELE_ATK_DIST, team    ) );
-    ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent ) );
+    ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent, pat.begin()             ) );
 }
 
 inline void
-UnitsManager::createArcher(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team) noexcept {
+UnitsManager::createArcher(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team, Patrol_t& pat) noexcept {
     const auto new_ent = ent_man.createEntity_t();
 
     if(team)
@@ -80,7 +88,7 @@ UnitsManager::createArcher(const uint32_t size, const int64_t pos_x, const int64
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
     ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,    size  ,  size        ) );
     ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, RANGE_ATK_DIST, team    ) );
-    ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent ) );
+    ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent, pat.begin()             ) );
 }
 
 inline void

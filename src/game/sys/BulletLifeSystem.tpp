@@ -3,6 +3,7 @@
 #include <game/cmp/BulletCmp.hpp>
 #include <game/cmp/MovementComponent.hpp>
 #include <game/cmp/EventCmp_t.hpp>
+#include <game/utils/fvec2.tpp>
 
 #include <iostream>
 #include <algorithm>
