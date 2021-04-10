@@ -1,6 +1,5 @@
 #pragma once
 #include <ecs/man/EntityManager.tpp>
-//#include <game/utils/fvec2.tpp>
 #include <game/utils/Patrol_t.hpp>
 
 #include <vector>
@@ -24,11 +23,12 @@ struct UnitsManager {
       
       void deleteByIDFrom(std::vector<BECS::entID>& container, BECS::entID eid) noexcept;
 
-      void createSoldier(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team, Patrol_t& pat) noexcept;
-      void createArcher( const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team, Patrol_t& pat) noexcept;
-      void createPlayerPointer( const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col)     noexcept;
+      void createSoldier(      const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team, Patrol_t& pat) noexcept;
+      void createArcher(       const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team, Patrol_t& pat) noexcept;
+      void createPlayerPointer(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col    ) noexcept;
+      void createCamera(       const uint32_t sz_x, const uint32_t sz_y, const int64_t pos_x, const int64_t pos_y) noexcept;
       void createBullet( fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y, bool team, BECS::entID eid, int64_t amount) noexcept;
-    
+
       template <typename CMP_t>  constexpr std::vector<CMP_t>& getComponentVector()                    noexcept;
       template <typename CMP_t>  constexpr CMP_t&              getCmpByEntityID(const BECS::entID eid) noexcept;
       template <typename SCMP_t> constexpr SCMP_t&             getSCmpByType()                         noexcept;
@@ -41,10 +41,12 @@ struct UnitsManager {
       BECS::Entity_t&    getEntityByID(BECS::entID eid)       noexcept;
       const BECS::entID  getPlayerID()                  const noexcept;  
             BECS::entID  getPlayerID()                        noexcept;
+            BECS::entID  getCameraID()                        noexcept;
 
 private:
       BECS::EntityManager ent_man   {    };
       BECS::entID         player_id { 0u };
+      BECS::entID         camera_id { 0u };
 
       std::vector<BECS::entID> enemies_vec;
       std::vector<BECS::entID> allies_vec;

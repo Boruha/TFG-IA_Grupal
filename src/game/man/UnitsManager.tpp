@@ -1,5 +1,6 @@
 #include <game/man/UnitsManager.hpp>
 #include <game/utils/AI_Constants.hpp>
+#include <game/utils/ScreenData.hpp>
 
 #include <algorithm>
 #include <iostream>
@@ -21,30 +22,32 @@ UnitsManager::init() noexcept {
       , { { -300l }, {  200l } } 
     };
 
-    createPlayerPointer(20, 400l, 400l, Color::Green);
+    constexpr const int64_t sz { 20l };
 
-    createSoldier(20,  30l,  30l, Color::Red, false, pat);
-    createArcher( 20,  60l, -10l, Color::Red, false, pat);
-    createSoldier(20, -10l,  20l, Color::Red, false, pat);
-    createArcher( 20, -60l,  10l, Color::Red, false, pat);
-    createSoldier(20, -20l, -40l, Color::Red, false, pat);
+    createPlayerPointer(sz, 400l, 400l, Color::Green);
+    createCamera(UWIN_W, UWIN_H, HALF_WIN_W * -1, HALF_WIN_H * -1);
+/*
+    createSoldier(sz,   30l,   30l, Color::Red, false, pat);
+    createArcher( sz,   60l,  -10l, Color::Red, false, pat);
+    createSoldier(sz,  -10l,   20l, Color::Red, false, pat);
+    createArcher( sz,  -60l,   10l, Color::Red, false, pat);
+    createSoldier(sz,  -20l,  -40l, Color::Red, false, pat);
+    createSoldier(sz,  100l,  100l, Color::Red, false, pat);
+    createArcher( sz,   60l, -100l, Color::Red, false, pat);
+    createSoldier(sz, -130l,   20l, Color::Red, false, pat);
+    createArcher( sz,  -60l,  100l, Color::Red, false, pat);
+    createSoldier(sz, -200l, -200l, Color::Red, false, pat);
 
-    createSoldier(20,  100l,  100l, Color::Red, false, pat);
-    createArcher( 20,   60l, -100l, Color::Red, false, pat);
-    createSoldier(20, -130l,   20l, Color::Red, false, pat);
-    createArcher( 20,  -60l,  100l, Color::Red, false, pat);
-    createSoldier(20, -200l, -200l, Color::Red, false, pat);
-
-    createSoldier(20, 380l, 390l, Color::Blue, true, pat);
-    createSoldier(20, 360l, 400l, Color::Blue, true, pat);
-    createArcher( 20, 400l, 420l, Color::Blue, true, pat);
-    createArcher( 20, 380l, 420l, Color::Blue, true, pat);
-    createArcher( 20, 300l, 420l, Color::Blue, true, pat);
-    createArcher( 20, 380l, 400l, Color::Blue, true, pat);
-    createArcher( 20, 420l, 380l, Color::Blue, true, pat);
-    createSoldier(20, 350l, 380l, Color::Blue, true, pat);
-    createSoldier(20, 340l, 380l, Color::Blue, true, pat);
-    createSoldier(20, 410l, 380l, Color::Blue, true, pat);
+    createSoldier(sz, 380l, 390l, Color::Blue, true, pat);
+    createSoldier(sz, 360l, 400l, Color::Blue, true, pat);
+    createArcher( sz, 400l, 420l, Color::Blue, true, pat);
+    createArcher( sz, 380l, 420l, Color::Blue, true, pat);
+    createArcher( sz, 300l, 420l, Color::Blue, true, pat);
+    createArcher( sz, 380l, 400l, Color::Blue, true, pat);
+    createArcher( sz, 420l, 380l, Color::Blue, true, pat);
+    createSoldier(sz, 350l, 380l, Color::Blue, true, pat);
+    createSoldier(sz, 340l, 380l, Color::Blue, true, pat);
+    createSoldier(sz, 410l, 380l, Color::Blue, true, pat);*/
 }
 
 inline void
@@ -98,11 +101,21 @@ UnitsManager::createPlayerPointer(const uint32_t size, const int64_t pos_x, cons
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }     ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col ) );
     ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,    size  ,  size         ) );
-    ent_man.addComponentToEntity( new_ent, InputComponent(    new_ent ) );
     ent_man.addComponentToEntity( new_ent, TeamComponent(     new_ent ) );
 
     player_id = new_ent;
 }
+
+inline void
+UnitsManager::createCamera(const uint32_t sz_x, const uint32_t sz_y, const int64_t pos_x, const int64_t pos_y) noexcept {
+    const auto new_ent = ent_man.createEntity_t();
+
+    ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y } ) );
+    ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,    sz_x  ,  sz_y     ) );
+    
+    camera_id = new_ent;
+}
+
 
 inline void 
 UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y,
@@ -182,6 +195,11 @@ UnitsManager::getPlayerID() const noexcept {
 inline BECS::entID  
 UnitsManager::getPlayerID() noexcept { 
     return player_id; 
+}
+
+inline BECS::entID  
+UnitsManager::getCameraID() noexcept { 
+    return camera_id; 
 }
 
 inline constexpr 

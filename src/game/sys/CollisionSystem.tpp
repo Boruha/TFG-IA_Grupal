@@ -10,37 +10,16 @@
 
 namespace AIP {
 
+
 template <typename Context_t>
 void
 CollisionSystem<Context_t>::update(Context_t& context) noexcept {
-    auto& mov_vec = context.template getComponentVector<MovementComponent>();
+    auto& movCmps = context.template getComponentVector<MovementComponent>();
 
     bulletsCollision(context, context.getEnemyIDs(), context.getAllyBullets() );
     bulletsCollision(context, context.getAllyIDs() , context.getEnemBullets() );
-
-    std::for_each(begin(mov_vec), end(mov_vec),
-        [&](MovementComponent& mov) {
-            auto& collider2D = context.template getCmpByEntityID<Collider2DCmp>( mov.getEntityID() );
-            auto& coord      = mov.coords;
-
-            const auto p2 { coord + collider2D.p2 };
-            const auto sz { collider2D.size };
-
-            //eje X
-            if( p2.x > F_H_WINDOW_W )
-                    coord.x = F_H_WINDOW_W_N + sz;
-            
-            if( coord.x < F_H_WINDOW_W_N )
-                    coord.x = F_H_WINDOW_W - sz;
-            
-            //eje Y
-            if( p2.y > F_H_WINDOW_H )
-                    coord.y = F_H_WINDOW_H_N + sz;
-            
-            if( coord.y < F_H_WINDOW_H_N )
-                    coord.y = F_H_WINDOW_H - sz;
-    });
-
+    
+    checkWorldLimits(context, movCmps);
 }
 
 template <typename Context_t>
@@ -87,5 +66,33 @@ CollisionSystem<Context_t>::bulletsCollision(Context_t& context, std::vector<BEC
         }
     }
 }
+
+
+template <typename Context_t> /* change to work w/world dimensions */
+void                        
+CollisionSystem<Context_t>::checkWorldLimits(Context_t& context, std::vector<MovementComponent>& movCmps) noexcept {
+    std::for_each(begin(movCmps), end(movCmps),
+        [&](MovementComponent& mov) {
+            const auto& collider2D = context.template getCmpByEntityID<Collider2DCmp>( mov.getEntityID() );
+                  auto& coord      = mov.coords;
+            const auto& p2         { collider2D.p2 };
+            const auto  locatedP2  { coord + p2 };
+
+            //eje X
+            if( locatedP2.x > FIXED_HALF_WINDOW_W )
+                    coord.x = FIXED_HALF_WINDOW_W - p2.x;
+            
+            if( coord.x < FIXED_HALF_WINDOW_W_N )
+                    coord.x = FIXED_HALF_WINDOW_W_N;
+            
+            //eje Y
+            if( locatedP2.y > FIXED_HALF_WINDOW_H )
+                    coord.y = FIXED_HALF_WINDOW_H - p2.y;
+
+            if( coord.y < FIXED_HALF_WINDOW_H_N )
+                    coord.y = FIXED_HALF_WINDOW_H_N;
+    });
+}
+
 
 } //NS

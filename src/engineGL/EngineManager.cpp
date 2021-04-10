@@ -17,10 +17,18 @@ EngineManager::EngineManager(int win_w, int win_h, const char* name) {
     constexpr const char* glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+
+    GLFWmonitor* monitor    = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
     
-    display_w = win_w;
-    display_h = win_h;
-    window    = glfwCreateWindow(win_w, win_h, name, NULL, NULL);
+    glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+    glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+    display_w = mode->width;
+    display_h = mode->height;
+    window    = glfwCreateWindow(display_w, display_h, name, monitor, NULL);
     
     if (window == nullptr) {
         std::cout << "Failed to create a window!\n";
@@ -195,8 +203,8 @@ EngineManager::minimap() noexcept {
                                   | ImGuiWindowFlags_NoFocusOnAppearing 
                                   | ImGuiWindowFlags_NoNav;
 
-    ImGui::SetNextWindowPos( ImVec2(viewSize.x - 1, viewSize.y - 1), ImGuiCond_Always, ImVec2(1.0,1.0) );
-    ImGui::SetNextWindowSize( ImVec2(viewSize.x/5, viewSize.y/5));
+    ImGui::SetNextWindowPos( ImVec2(viewSize.x, viewSize.y), ImGuiCond_Always, ImVec2(1.0,1.0) );
+    ImGui::SetNextWindowSize( ImVec2(viewSize.x/4, viewSize.y/4) );
     {
     ImGui::Begin("MiniMap boy", &p_open, window_flags);
     ImGui::End();
@@ -204,18 +212,28 @@ EngineManager::minimap() noexcept {
 }
 
 void 
-EngineManager::drawInMinimap(uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color) noexcept {
+EngineManager::drawInMinimap(uint32_t pos_x, uint32_t pos_y, uint32_t size_x, uint32_t size_y, uint32_t color, bool filled) noexcept {
     {
     ImGui::Begin("MiniMap boy");
         auto  winPos   = ImGui::GetWindowPos();
-        auto  fraction = 1.f/5.f;
         auto* drawList = ImGui::GetWindowDrawList();
-        auto  p1       = ImVec2( winPos.x + (pos_x*fraction), winPos.y + (pos_y*fraction) );
+        auto  p1       = ImVec2( winPos.x + (pos_x*fraction.x), winPos.y + (pos_y*fraction.y) );
 
-        drawList->AddRectFilled(p1, ImVec2(p1.x + (size_x*fraction), p1.y + (size_y*fraction)), color);
+        if(filled)
+            drawList->AddRectFilled(p1, ImVec2(p1.x + (size_x*fraction.x), p1.y + (size_y*fraction.y)), color);
+        else
+            drawList->AddRect(p1, ImVec2(p1.x + (size_x*fraction.x), p1.y + (size_y*fraction.y)), color);
     ImGui::End();
     }
 
+}
+
+void 
+EngineManager::setMiniMapFraction(int64_t world_x, int64_t world_y) noexcept {
+    float WorldWindowRatio_x { static_cast<float>(display_w) / static_cast<float>(world_x) };
+    float WorldWindowRatio_y { static_cast<float>(display_h) / static_cast<float>(world_y) };
+
+    fraction = ImVec2(WorldWindowRatio_x/4.f, WorldWindowRatio_y/4.f);
 }
 
 } //NS

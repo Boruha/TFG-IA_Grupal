@@ -49,7 +49,7 @@ GameManager::update() noexcept {
  
     //deleted entities
     bulletLife_sys.update(units_man);
-    result = death_sys.update(units_man);
+    //result = death_sys.update(units_man);
     attack_sys.update(units_man);
  
     return result;
