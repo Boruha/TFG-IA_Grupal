@@ -16,8 +16,8 @@ constexpr uint32_t UWIN_H { 1080u };
 constexpr int64_t WIN_W { static_cast<int64_t>(UWIN_W) };
 constexpr int64_t WIN_H { static_cast<int64_t>(UWIN_H) };
 
-//constexpr int64_t HALF_WIN_W { WIN_W/2 };
-//constexpr int64_t HALF_WIN_H { WIN_H/2 };
+constexpr int64_t HALF_WIN_W { WIN_W/2 };
+constexpr int64_t HALF_WIN_H { WIN_H/2 };
 //constexpr fint_t FIXED_HALF_WINDOW_W { HALF_WIN_W };
 //constexpr fint_t FIXED_HALF_WINDOW_H { HALF_WIN_H };
 //constexpr fint_t FIXED_HALF_WINDOW_W_N { HALF_WIN_W * -1 };

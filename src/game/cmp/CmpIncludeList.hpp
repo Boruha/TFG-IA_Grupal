@@ -9,3 +9,4 @@
 #include <game/cmp/Collider2DCmp.hpp>
 #include <game/cmp/EventCmp_t.hpp>
 #include <game/cmp/BulletCmp.hpp>
+#include <game/cmp/BlackBoardCmp.hpp>

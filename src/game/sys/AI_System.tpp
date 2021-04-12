@@ -5,6 +5,7 @@
 #include <game/cmp/AI_Component.hpp>
 #include <game/cmp/TeamComponent.hpp>
 #include <game/cmp/EventCmp_t.hpp>
+#include <game/cmp/BlackBoardCmp.hpp>
 
 #include <algorithm>
 #include <iostream>
@@ -146,26 +147,35 @@ AI_System<Context_t>::follow(Context_t& context, AI_Component& ai, MovementCompo
     auto& combat    = context.template getCmpByEntityID<CombatComponent>(   ai.getEntityID()  );
     auto& mov_enemy = context.template getCmpByEntityID<MovementComponent>( ai.target_ent );
     auto& team      = context.template getCmpByEntityID<TeamComponent>(     ai.target_ent );
-    auto& targetPos = ai.target_pos;
+
+    auto& bb = context.template getSCmpByType<BlackBoardCmp>();
+
+    auto& targetPos = bb.player_pos;
+    auto& targetDir = bb.player_dir;
     
-    targetPos = mov_enemy.coords;
+    if(bb.current_reaction_cd.number <= 0l) {
+        targetDir = mov_enemy.dir;
+        targetPos = mov_enemy.coords;
+        bb.current_reaction_cd = bb.reaction_cd;
+    }
+
 
     switch ( team.current_form )
     {
         case Formation::no_form : { 
-            chase(context, ai, mov);
-            auto target_dir { ai.target_pos - mov.coords };
+            //chase(context, ai, mov);
+            auto target_dir { targetPos - mov.coords };
+            seek(mov, targetPos);
             face(mov, target_dir);
         } break;
         
         case Formation::ring_form : {
             auto from_centre { mov.coords - targetPos };
             from_centre.normalize();
-            targetPos += from_centre * (RING_MAX_DIST - combat.attack_range);
-
-            if( !arrive(mov, targetPos, RING_ARRIVE, RING_ARRIVE) ) {
-                velocity_matching(mov, mov_enemy.dir);
-                auto target_dir { mov.coords - mov_enemy.coords };
+            auto toRing = targetPos + (from_centre * (RING_MAX_DIST - combat.attack_range));
+            if( !arrive(mov, toRing, RING_ARRIVE, SLOW_RING) ) {
+                velocity_matching(mov, targetDir);
+                auto target_dir { mov.coords - targetPos };
                 face(mov, target_dir);
             }
 
@@ -194,7 +204,7 @@ seek(MovementComponent& mov, fvec2<fint_t<int64_t>>& target_pos) noexcept {
 inline bool 
 arrive(MovementComponent& mov, fvec2<fint_t<int64_t>>& target_pos, const fint_t<int64_t> arrive_dist, const fint_t<int64_t> slow_dist) noexcept {
     auto target_dir   { target_pos - mov.coords };
-    auto distance2    { target_dir.length2()   };
+    auto distance2    { target_dir.length2() };
     auto target_speed { ENT_MAX_SPEED };
     auto result       { true };
     
@@ -349,8 +359,8 @@ AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std:
     auto& team  = context.template getCmpByEntityID<TeamComponent>( eidPj );
     
     switch (team.action) {
-        case AI_behaviour::follow_b : {
-                auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
+        case AI_behaviour::follow_b : { //deprecate
+                auto& mov     = context.template getCmpByEntityID<MovementComponent>( eidPj );
                 setFollowing(ai, mov);
                 return;
             } break;
@@ -373,7 +383,7 @@ AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std:
     }
     
     if( curr_b == AI_behaviour::chase_b || curr_b == AI_behaviour::attack_b ) {
-        if( ai.target_ent == 0u && !findNearEnemy(context, eid, enemy_eids) ) {
+        if( ai.target_ent == 0u && !findNearEnemy(context, eid, enemy_eids) ) { //deprecate
             auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
             setFollowing(ai, mov);
             return;
@@ -391,7 +401,7 @@ AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std:
             curr_b = AI_behaviour::chase_b;
     
         if( distance2 > VISION_DIST2 ) {
-            auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
+            auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj ); //deprecate
             setFollowing(ai, mov);
             return;
         }
@@ -399,7 +409,7 @@ AI_System<Context_t>::decisionMakingPJ(Context_t& context, BECS::entID eid, std:
 
     if( curr_b == AI_behaviour::no_b || curr_b == AI_behaviour::follow_b ) {
         if( !findNearEnemy(context, eid, enemy_eids) ) {
-            auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj );
+            auto& mov = context.template getCmpByEntityID<MovementComponent>( eidPj ); //deprecate
             setFollowing(ai, mov);
         }
         else

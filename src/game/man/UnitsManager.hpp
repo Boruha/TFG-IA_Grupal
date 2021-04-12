@@ -54,7 +54,7 @@ private:
       std::vector<BECS::entID> enem_bullets;
       std::vector<Patrol_t>    patrols;
 
-      std::tuple<InterfaceControl, EventCmp_t> singletonCmps { };
+      std::tuple<InterfaceControl, EventCmp_t, BlackBoardCmp> singletonCmps { };
 };
 
 } // namespace AIP

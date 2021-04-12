@@ -5,7 +5,8 @@ namespace AIP {
 
 //EXTRA
 constexpr fint_t<int64_t> EPSILON       { 15l };
-constexpr fint_t<int64_t> RING_ARRIVE   { 400l };
+constexpr fint_t<int64_t> RING_ARRIVE   { 50l };
+constexpr fint_t<int64_t> SLOW_RING     { RING_ARRIVE + 5l };
 constexpr fint_t<int64_t> RING_MAX_DIST { 220l };
 
 //SENSOR
@@ -19,7 +20,7 @@ constexpr fint_t<int64_t> RANGE_ATK_DIST2 { RANGE_ATK_DIST * RANGE_ATK_DIST };
 //ARRIVE B.
 constexpr fint_t<int64_t> ENT_ARRIVE_DIST    { 60l };
 constexpr fint_t<int64_t> ENT_ARRIVE_DIST2   { ENT_ARRIVE_DIST * ENT_ARRIVE_DIST };
-constexpr fint_t<int64_t> ENT_SLOW_DIST      { ENT_ARRIVE_DIST + 5l };
+constexpr fint_t<int64_t> ENT_SLOW_DIST      { ENT_ARRIVE_DIST + 30l };
 constexpr fint_t<int64_t> ENT_SLOW_DIST2     { ENT_SLOW_DIST * ENT_SLOW_DIST };
 constexpr fint_t<int64_t> ENT_TIME_TO_TARGET { 1.2f };
 

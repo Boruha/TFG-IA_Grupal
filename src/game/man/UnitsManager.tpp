@@ -18,17 +18,17 @@ UnitsManager::init() noexcept {
     pat.points = { fvec2<fint_t<int64_t>> 
         { { -300l }, { -300l } }
       , { {  200l }, { -300l } }
-      , { {  200l }, {  200l } }
+      , { {  400l }, {  400l } } //, { {  200l }, {  200l } }
       , { { -300l }, {  200l } } 
     };
 
     constexpr const int64_t sz { 20l };
 
     createPlayerPointer(sz, 400l, 400l, Color::Green);
-    createCamera(UWIN_W, UWIN_H, HALF_WORLD_W * -1, HALF_WORLD_H * -1);
+    createCamera(UWIN_W, UWIN_H, 400l+(HALF_WIN_W * -1), 400l+(HALF_WIN_H * -1));
 
     createSoldier(sz,   30l,   30l, Color::Red, false, pat);
-/*    createArcher( sz,   60l,  -10l, Color::Red, false, pat);
+    createArcher( sz,   60l,  -10l, Color::Red, false, pat);
     createSoldier(sz,  -10l,   20l, Color::Red, false, pat);
     createArcher( sz,  -60l,   10l, Color::Red, false, pat);
     createSoldier(sz,  -20l,  -40l, Color::Red, false, pat);
@@ -36,18 +36,18 @@ UnitsManager::init() noexcept {
     createArcher( sz,   60l, -100l, Color::Red, false, pat);
     createSoldier(sz, -130l,   20l, Color::Red, false, pat);
     createArcher( sz,  -60l,  100l, Color::Red, false, pat);
-    createSoldier(sz, -200l, -200l, Color::Red, false, pat);*/
+    createSoldier(sz, -200l, -200l, Color::Red, false, pat);
 
-//    createSoldier(sz, 380l, 390l, Color::Blue, true, pat);
-//    createSoldier(sz, 360l, 400l, Color::Blue, true, pat);
-//    createArcher( sz, 400l, 420l, Color::Blue, true, pat);
+    createSoldier(sz, 380l, 390l, Color::Blue, true, pat);
+    createSoldier(sz, 360l, 400l, Color::Blue, true, pat);
+    createArcher( sz, 400l, 420l, Color::Blue, true, pat);
     createArcher( sz, 380l, 420l, Color::Blue, true, pat);
-//    createArcher( sz, 300l, 420l, Color::Blue, true, pat);
-//    createArcher( sz, 380l, 400l, Color::Blue, true, pat);
-//    createArcher( sz, 420l, 380l, Color::Blue, true, pat);
-//    createSoldier(sz, 350l, 380l, Color::Blue, true, pat);
-//    createSoldier(sz, 340l, 380l, Color::Blue, true, pat);
-//    createSoldier(sz, 410l, 380l, Color::Blue, true, pat);
+    createArcher( sz, 300l, 420l, Color::Blue, true, pat);
+    createArcher( sz, 380l, 400l, Color::Blue, true, pat);
+    createArcher( sz, 420l, 380l, Color::Blue, true, pat);
+    createSoldier(sz, 350l, 380l, Color::Blue, true, pat);
+    createSoldier(sz, 340l, 380l, Color::Blue, true, pat);
+    createSoldier(sz, 410l, 380l, Color::Blue, true, pat);
 }
 
 inline void

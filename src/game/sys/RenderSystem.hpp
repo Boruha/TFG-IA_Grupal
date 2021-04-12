@@ -25,7 +25,7 @@ private:
     
     void drawFacing(const MovementComponent& mov, const RenderComponent& render, vec2<uint32_t>& camScreenCoords) noexcept;
     void drawInterface(Context_t& context) noexcept;
-    void draw_debug(MovementComponent& mov, const RenderComponent& render, const Collider2DCmp& coll2D) noexcept;
+    void draw_debug(MovementComponent& mov, const RenderComponent& render, const Collider2DCmp& coll2D, vec2<uint32_t>& camScreenCoords) noexcept;
 
     std::unique_ptr<eGL::EngineManager> engine { nullptr };
 };
