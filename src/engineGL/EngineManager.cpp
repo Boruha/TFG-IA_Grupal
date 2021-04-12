@@ -142,11 +142,11 @@ EngineManager::debugInterface(bool& showDebug, float& DT, float& LT, bool& chang
     {
     ImGui::Begin("Debug controller");
         ImGui::Checkbox("Show Debug Vectors", &showDebug);
-        if( ImGui::SliderFloat("DeltaTime", &DT, 15.f, 120.f, "%.2f", 1.f) )
+        if( ImGui::SliderFloat("DeltaTime", &DT, 1.f, 120.f, "%.2f", 1.f) )
             changed = true;
-        if( ImGui::SliderFloat("LoopTime", &LT, 15.f, 120.f, "%.2f", 1.f) )
+        if( ImGui::SliderFloat("LoopTime", &LT, 1.f, 120.f, "%.2f", 1.f) )
             changed = true;
-        if( ImGui::SliderFloat("Both", &LT, 15.f, 120.f, "%.2f", 1.f) ) {
+        if( ImGui::SliderFloat("Both", &LT, 1.f, 120.f, "%.2f", 1.f) ) {
             DT = LT;
             changed = true;
         }

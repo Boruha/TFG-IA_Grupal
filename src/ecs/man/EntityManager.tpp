@@ -26,7 +26,7 @@ EntityManager::createEntity_t() noexcept {
 
 template <typename CMP_t>
 CMP_t& 
-EntityManager::addComponentToEntity(const entID eid, const CMP_t& new_cmp) noexcept {
+EntityManager::addComponentToEntity(const entID eid, const CMP_t&& new_cmp) noexcept {
     auto& ref_cmp = cmp_storage.createComponent(new_cmp);
     auto& ref_ent = getEntityByID(eid);
 

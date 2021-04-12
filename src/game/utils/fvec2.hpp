@@ -50,6 +50,7 @@ struct fvec2 {
     constexpr NumType length_fix() const noexcept;
     constexpr NumType length2()    const noexcept;
     constexpr void    normalize()        noexcept;
+    constexpr void    setZero()          noexcept;
 };
 
 

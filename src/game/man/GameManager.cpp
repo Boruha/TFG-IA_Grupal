@@ -49,7 +49,7 @@ GameManager::update() noexcept {
  
     //deleted entities
     bulletLife_sys.update(units_man);
-    //result = death_sys.update(units_man);
+    result = death_sys.update(units_man);
     attack_sys.update(units_man);
  
     return result;
@@ -89,21 +89,17 @@ GameManager::setDeltaTime() noexcept {
 void
 GameManager::changeLoopTime(InterfaceControl& control) noexcept {        
     FPS_LT = control.deltaSize;
-    std::clamp(FPS_LT, 15.f, 120.f);
+    std::clamp(FPS_LT, 1.f, 120.f);
 
     LoopTime = setLoopTime();
-    //std::cout << "El LoopRate es:       " << FPS_LT << "\n";
-    //std::cout << "Con un Tick size de : " << LoopTime.number << "\n\n";
 }
 
 void
 GameManager::changeDeltaTime(InterfaceControl& control) noexcept {    
     FPS_DT = control.deltaTime;
-    std::clamp(FPS_DT, 15.f, 120.f);
+    std::clamp(FPS_DT, 1.f, 120.f);
 
     DeltaTime = setDeltaTime();
-    //std::cout << "El DeltaRate es:      " << FPS_DT << "\n";
-    //std::cout << "Con un Tick size de : " << DeltaTime.number << "\n\n";
 }
 
 

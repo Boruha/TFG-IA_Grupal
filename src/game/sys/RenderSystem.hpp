@@ -23,9 +23,9 @@ private:
     vec2<uint32_t> continuousToScreen(const fvec2<fint_t<int64_t>>& cont) noexcept;
     vec2<uint32_t> clipToDraw(fvec2<fint_t<int64_t>> point)               noexcept;
     
-    void drawFacing(const MovementComponent& mov, const RenderComponent& render) noexcept;
+    void drawFacing(const MovementComponent& mov, const RenderComponent& render, vec2<uint32_t>& camScreenCoords) noexcept;
     void drawInterface(Context_t& context) noexcept;
-    void draw_debug(const MovementComponent& mov, const RenderComponent& render, const Collider2DCmp& coll2D ) noexcept;
+    void draw_debug(MovementComponent& mov, const RenderComponent& render, const Collider2DCmp& coll2D) noexcept;
 
     std::unique_ptr<eGL::EngineManager> engine { nullptr };
 };

@@ -67,8 +67,7 @@ CollisionSystem<Context_t>::bulletsCollision(Context_t& context, std::vector<BEC
     }
 }
 
-
-template <typename Context_t> /* change to work w/world dimensions */
+template <typename Context_t>
 void                        
 CollisionSystem<Context_t>::checkWorldLimits(Context_t& context, std::vector<MovementComponent>& movCmps) noexcept {
     std::for_each(begin(movCmps), end(movCmps),
@@ -79,18 +78,18 @@ CollisionSystem<Context_t>::checkWorldLimits(Context_t& context, std::vector<Mov
             const auto  locatedP2  { coord + p2 };
 
             //eje X
-            if( locatedP2.x > FIXED_HALF_WINDOW_W )
-                    coord.x = FIXED_HALF_WINDOW_W - p2.x;
+            if( locatedP2.x > FIXED_HALF_WORLD_W )
+                    coord.x = FIXED_HALF_WORLD_W - p2.x;
             
-            if( coord.x < FIXED_HALF_WINDOW_W_N )
-                    coord.x = FIXED_HALF_WINDOW_W_N;
+            if( coord.x < FIXED_HALF_WORLD_W_N )
+                    coord.x = FIXED_HALF_WORLD_W_N;
             
             //eje Y
-            if( locatedP2.y > FIXED_HALF_WINDOW_H )
-                    coord.y = FIXED_HALF_WINDOW_H - p2.y;
+            if( locatedP2.y > FIXED_HALF_WORLD_H )
+                    coord.y = FIXED_HALF_WORLD_H - p2.y;
 
-            if( coord.y < FIXED_HALF_WINDOW_H_N )
-                    coord.y = FIXED_HALF_WINDOW_H_N;
+            if( coord.y < FIXED_HALF_WORLD_H_N )
+                    coord.y = FIXED_HALF_WORLD_H_N;
     });
 }
 

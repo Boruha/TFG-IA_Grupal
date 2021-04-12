@@ -21,7 +21,7 @@ constexpr fint_t<int64_t> ENT_ARRIVE_DIST    { 60l };
 constexpr fint_t<int64_t> ENT_ARRIVE_DIST2   { ENT_ARRIVE_DIST * ENT_ARRIVE_DIST };
 constexpr fint_t<int64_t> ENT_SLOW_DIST      { ENT_ARRIVE_DIST + 5l };
 constexpr fint_t<int64_t> ENT_SLOW_DIST2     { ENT_SLOW_DIST * ENT_SLOW_DIST };
-constexpr fint_t<int64_t> ENT_TIME_TO_TARGET { 0.2f };
+constexpr fint_t<int64_t> ENT_TIME_TO_TARGET { 1.2f };
 
 //SEPARATION B.
 constexpr fint_t<int64_t> ENT_SEPARATION_DIST  { 200l };

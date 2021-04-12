@@ -209,9 +209,14 @@ fvec2<NumType>::normalize() noexcept {
         x /= module; y /= module;
     }
     else {
-        x.number = 0; y.number = 0;
+        x.number = 0l; y.number = 0l;
     }
 }
 
+template <typename NumType> constexpr 
+void 
+fvec2<NumType>::setZero() noexcept {
+    x.number = 0l; y.number = 0l;
+}
 
 }

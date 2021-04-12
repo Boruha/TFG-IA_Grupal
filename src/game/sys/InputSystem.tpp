@@ -11,7 +11,6 @@
 
 #include <engineGL/EngineManager.hpp>
 
-
 namespace AIP {
 
 template <typename Context_t>
@@ -25,6 +24,9 @@ InputSystem<Context_t>::update(Context_t& context) noexcept {
     auto& accel = mov.accel_to_target;
 
     fvec2<fint_t<int64_t>> target_dir { };
+
+    if( ImGui::IsKeyDown(GLFW_KEY_ESCAPE) )
+        return false;
 
     if( ImGui::IsKeyDown(GLFW_KEY_UP) )
         target_dir.y -= ENT_MAX_SPEED;
