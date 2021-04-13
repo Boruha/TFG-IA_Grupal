@@ -147,9 +147,11 @@ RenderSystem<Context_t>::draw_debug(MovementComponent& mov, const RenderComponen
 
     vec2<uint32_t> screen_p_end { };
 
-/*   
+/* 
     if(dir.length2().number != 0) {
-        const auto screen_p_end = continuousToScreen(p_ini + dir);
+        const auto locaterdDir { p_ini + dir }; 
+        screen_p_end  = continuousToScreen(locaterdDir);
+        screen_p_end -= camScreenCoords;
         engine->drawLine(screen_p_ini.x, screen_p_ini.y, screen_p_end.x, screen_p_end.y, static_cast<uint32_t>(Color::White));
     }
 */

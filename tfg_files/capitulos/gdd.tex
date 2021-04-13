@@ -59,9 +59,8 @@ no haber unidad escoltada el centro estará vacío.
 Por último podemos ordenar a las unidades que mantengan una estrategia definida:
 
 \begin{itemize}
-\item \textbf{Mantener la zona:} en este modo las unidades intentarán evitar dejar su posición
-actual, pudiendo desplazarse ligeramente para atacar unidades enemigas. En caso de salir de combate
-regresará a su posición.
+\item \textbf{Huida:} en este modo las unidades seguirán el marcador sin pararse a pelear con unidades
+cercanas enemigas.
 
 \item \textbf{Agresivo:} en el momento en el que la tropa divisa un enemigo saldrá diracto a atacarle,
 aunque se aleje esta le seguirá mientras siga en su rango de detección.
@@ -95,9 +94,9 @@ Los tipos son los siguientes:
         & Daño & Vida & Rango \\ 
 \hline
 \hline
-Soldado & 1    & 5    & Melee \\ 
+Soldado & 10    & 10    & Melee \\ 
 \hline
-Arquero & 2    & 3    & Largo \\ 
+Arquero & 4     & 4     & Largo \\ 
 \hline
 \end{tabular}\\
 \caption{Unidades y estadísticas}
@@ -123,8 +122,11 @@ Las asignadas para jugar son las siguientes:
 	\item \textbf{Ctrl:} activa el modo huída y las unidades dejarán de combatir y seguirán el
 					  puntero.	
 	\item \textbf{Z:} activa la formación en anillo.									  
-	\item \textbf{X:} desactiva toda formación.									  
+	\item \textbf{X:} desactiva toda formación.
 \end{itemize}
+
+Tanto la \textbf{formación} como el \textbf{comportamiento} de las unidades se podrá cambiar desde un
+pequeño \textbf{\textit{HUD}},que se encuentra en la esquina inferior izquierda.
 
 \section{Pantallas}
 Al ejecutar el programa la primera pantalla que aparecerá será la de 
@@ -269,3 +271,76 @@ más completas. Ambos ejercitos se compondrán de soldados y arqueros.
 
 En lo referente al apartado visual, sería deseable tener sprites para unidades y escenario pero
 de ser necesario podemos mantener el sistema de \textit{render} inicial.
+
+
+\section{Actualización: 13/04/21}
+\begin{itemize}
+	\item Corregido el movimiento lento de las entidades en algunos momentos cuando estaban en el radio
+	de frenada, era debido a un cálculo erróneo en las diviones con el tipo de dato en coma fija.
+	
+	\item Creació de una componente para las colisiones y integración en los sistemas pertinentes.
+	
+	\item Solucionado el problema de las balas que no colisionaban bien.
+	
+	\item Adicción de los \textit{Colliders} al modo de depuración visual.
+	
+	\item Cambios ligeros en el sistema de eventos de las balas y creación y destrucción de entidades.
+	
+	\item Creación de un \textit{HUD} para seleccionar comportamientos y formaciones de las unidades
+	aliadas.
+	
+	\item Rediseño completo en la toma de decisión de las unidades aliadas y enemigas.
+
+	\item Creación de un componente de BlackBoard para el seguimiento al pj v0.1.
+	
+	\item Sistema de cámaras y coordenadas de mundo: ahora las dimensiones del nivel son independientes
+	del tamaño de la ventana, se usan los limites del nivel para no dejar pasar a las unidades, se hace
+	\textit{clipping} sobre las unidades que no están en la cámara, el minimapa ahora muestra la porción
+	de nivel que se muestra.
+	
+	\item Se ha mejorado el sistema de entidades objetivo y los mensajes de muerte y ataque para cambiar
+	de objetivo cuando el actual muera, además al morir una unidad se eliminan los demás mensajes asociados
+	a ella.
+
+	\item El componente de \ac{IA} ya no contiene la ruta directamente, ahora contiene un iterador a su
+	ruta y se ha creado el tipo de dato ruta con operadores sobrecargados para navegar por ella. También
+	tenemos ``caminos'' diseñados pero sin incluir, los cuales son caminos no cíclicos.
+
+	\item Se ha ampliado un poco el GDD con apartados sobre tareas pendientes y objetivos.
+
+	\item En el diario de desarrollo se han sustituido códigos de ejemplo por mockups.  
+\end{itemize}
+
+\section{Cuestiones tecnológicas que faltan}
+Con el fin de evaluar que aspectos del proyecto quedan por finalizar, vamos a elaborar dos listas con
+elementos técnicos y de diseño que sería deseable poder introducir en el proyecto. La primera serán
+elementos que estimamos posibles de alcanzar en el tiempo restante de desarrollo, y la segunda
+cuestiones que es altamente probable que no se puedan acometer.
+
+\textbf{Objetivos principales:}
+\begin{itemize}
+	\item Realizar balanceo de las unidades.
+
+	\item Plantear como dar \textit{feedback} al jugador del estado de las unidades en el nivel.
+
+	\item Diseñar sistema de triggers para poder lanzar eventos para el jugador.
+
+	\item Diseñar nivel tutorial donde se explica como jugar e interactuar con las unidades
+	tanto aliadas como enemigas y las reglas.
+
+	\item Crear un menú de inicio previo a la ejecución del juego.
+
+	\item Redacción completa de la memoria.
+
+	\item Montar el proyecto para compilar tanto en Windows como en Linux.
+\end{itemize}
+
+\textbf{Objetivos deseables:}
+\begin{itemize}
+	\item Ampliar el uso de OpenGL e intergrar sistema de carga de imagenes para poder añadir
+	elementos visuales a las entidades, escenario y menús.
+
+	\item Obtener/diseñar recursos gráficos apropiados para el proyecto.
+
+	\item Integrar un sistema de sonido para poder reproducir al menos una melodia.
+\end{itemize}

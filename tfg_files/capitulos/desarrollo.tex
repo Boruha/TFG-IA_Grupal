@@ -113,27 +113,34 @@ Es importante elegir una escala adecuada para trabajar de forma eficiente, para 
 un número portencia de 2 el cual nos permitirá usar desplazamientos en múltiplicaciones y divisiones,
 hacíendo los calculos mucho más rápidos que si tuvieramos que usar las operaciones comunes.
 
-\begin{lstlisting}[style=CodigoC++, caption={Entero coma fija},label=fint_t]
-template <typename NumType>
-struct fint_t {
-fint_t() = default;
+%\begin{lstlisting}[style=CodigoC++, caption={Entero coma fija},label=fint_t]
+%template <typename NumType>
+%struct fint_t {
+%fint_t() = default;
 
-constexpr fint_t(NumType num)                noexcept; //ctor
-constexpr explicit fint_t(float   num)       noexcept; //ctor
-constexpr fint_t(const fint_t<NumType>& num) noexcept = default; 
-constexpr fint_t(fint_t<NumType>&& num)      noexcept = default;
+%constexpr fint_t(NumType num)                noexcept; //ctor
+%constexpr explicit fint_t(float   num)       noexcept; //ctor
+%constexpr fint_t(const fint_t<NumType>& num) noexcept = default; 
+%constexpr fint_t(fint_t<NumType>&& num)      noexcept = default;
 
-/* OPERATIONS */
-//***
+%/* OPERATIONS */
+%//***
 
-/* GETTERS */
-constexpr NumType getNoScaled() const noexcept;
+%/* GETTERS */
+%constexpr NumType getNoScaled() const noexcept;
 
-/* DATA */    
-			NumType number { 0 };
-constexpr static inline NumType SCALE  { 65536 };
-};
-\end{lstlisting}
+%/* DATA */    
+%			NumType number { 0 };
+%constexpr static inline NumType SCALE  { 65536 };
+%};
+%\end{lstlisting}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{imagenes/diario_desarrollo/Entero_fijo.png}
+\caption{Ejemplos entero con coma fija.}
+\label{fig:fixed}
+\end{figure} 
 
 Por otro lado, se comenzó a trabajar en la \ac{IA} del juego creando los primeros comportamientos
 y herramientas para alternar entre ellos. Aquí caeremos en los primeros errores de concepto a la
@@ -170,37 +177,44 @@ marcados.\\
 Además, contamos con dos modeficadores adicionales como son el tiempo deseado para alcanzar el
 objetivo y un límite de distancia con el objetivo para evitar solapes y/o oscilar sobre el.
 
-\begin{lstlisting}[style=CodigoC++, caption={Arrive behavior}, label=ia_arrive] 
-template <typename Context_t>
-constexpr bool
-AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid) noexcept {
-	/* Recogida de datos */
-	//Las varaibles en mayúscula son constantes definidas fuera
-	//los datos terminados en `2' usan el valor al cuadrado
+%\begin{lstlisting}[style=CodigoC++, caption={Arrive behavior}, label=ia_arrive] 
+%template <typename Context_t>
+%constexpr bool
+%AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid) noexcept {
+%	/* Recogida de datos */
+%	//Las varaibles en mayúscula son constantes definidas fuera
+%	//los datos terminados en `2' usan el valor al cuadrado
 
-	if(distance2 < ENT_ARRIVE_DIST2)
-		return false;
+%	if(distance2 < ENT_ARRIVE_DIST2)
+%		return false;
 
-	if(distance2 > ENT_SLOW_DIST2)
-		target_speed = ENT_MAX_SPEED;
-	else
-		target_speed = ENT_MAX_SPEED * 
-		( target_dir.length_fix() / ENT_SLOW_DIST );
-	
-	target_dir.normalize();
-	target_dir *= target_speed;
+%	if(distance2 > ENT_SLOW_DIST2)
+%		target_speed = ENT_MAX_SPEED;
+%	else
+%		target_speed = ENT_MAX_SPEED * 
+%		( target_dir.length_fix() / ENT_SLOW_DIST );
+%	
+%	target_dir.normalize();
+%	target_dir *= target_speed;
+%
+%	my_accel  = (target_dir - my_direct);
+%	my_accel /= ENT_TIME_TO_TARGET;
+%
+%	if(my_accel.length2() > ENT_MAX_ACCEL2) {
+%%		my_accel.normalize();
+%		my_accel *= ENT_MAX_ACCEL;
+%	}
 
-	my_accel  = (target_dir - my_direct);
-	my_accel /= ENT_TIME_TO_TARGET;
+%	return true;
+%}
+%\end{lstlisting}
 
-	if(my_accel.length2() > ENT_MAX_ACCEL2) {
-		my_accel.normalize();
-		my_accel *= ENT_MAX_ACCEL;
-	}
-
-	return true;
-}
-\end{lstlisting}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.75\textwidth]{imagenes/diario_desarrollo/arrive_b.png}
+\caption{Diagrama Arrive Behaviour.}
+\label{fig:arrive_b}
+\end{figure} 
 
 \subsection*{Iteración 2}
 Durante la tercera iteración nos centramos en la mejora de algunos \textit{`Steering behaviors'}
@@ -344,8 +358,6 @@ veces que mandamos al sistema ir a buscar nuestros datos~\ref{fig:memoria_obj}.
 \caption{Esquema acceso a vector de objetos.}
 \label{fig:memoria_obj}
 \end{figure}
-
-%\placeholdertext{Comparativa tiempos/rendimiento a ser posible}
 
 A continuación, se modificó la estructura de las entidades para componerse unicamente de su
 \textit{Entity ID} y una serie de \textit{Component ID}s para posibles comprobaciones de que
@@ -492,14 +504,19 @@ destrucción de las proyectiles una vez alcanzan su distancia máxima y/o impact
 La creación y destrucción de entidades se realiza al final del bucle del juego, al igual que con las
 demás entidades. 
 
-Un proyectil consiste en una entidad formada solamente por una componente física para su desplazamiento
-y calculo de colisiones, y una visual para poder dibujarla. Una vez se lance un proyectil, este seguirá la
+Un proyectil consiste en una entidad formada por una componente física para su desplazamiento, una para el
+calculo de colisiones, y una visual para poder dibujarla. Una vez se lance un proyectil, este seguirá la
 dirección que tenía la unidad al momento de disparar, por lo que solo hará daño si la unidad enemiga no 
 cambia de posición lo suficiente para esquivar el área de impacto. A la hora de programar las colisiones,
 solamente contaremos las unidades del bando contrario para optimizar el número de comprobaciones, para ello
 tendrémos un vector de proyectiles por cada bando.
 
-\placeholdertext{incluir imagenes disparo}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.45\textwidth]{imagenes/diario_desarrollo/balas.png}\\
+\caption{Demostración sistema de disparos.}
+\label{fig:balas}
+\end{figure}
 
 Otra de las mecánicas que han sido mejoradas, es la formación en anillo de nuestras unidades. Los resultados
 y la forma generada eran poco satisfactorios por lo que se cambió de trabajar con la intensidad de la cohesión
@@ -556,4 +573,47 @@ Distancia & Lineal  & Cuadrado \\
 \caption{Fuerzas de separación en función de la distancia}
 \end{longtable}
 
-%	\cmidrule[1pt]{1-3}
+\newpage
+
+\section{Fase 3: Últimos pasos}
+\begin{longtable}[c]{|p{7cm}|c|c|}
+\hline
+Iteraciones                                                & \% Completado & Termindo en \\ 
+\hline
+\endhead
+\textbf{7.1.} Continuar trabajando el GDD.                 & \% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{7.2.} Ajustes de valores de daño y vida.           & \% &   \\ 
+	\cmidrule[.003pt]{1-3}
+\textbf{7.3.} Incluir los ciclos de análisis de los 
+				comportamientos resultantes y 
+				propuestas de mejora                       & \% &   \\ 
+	\cmidrule[.003pt]{1-3}
+\textbf{7.4.} Revisar bugs y comportamientos erróneos.     & \% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{7.5.} Incluir sistema de cámara y coordenadas 
+				de mundo                                   & \% &   \\
+	\cmidrule[.003pt]{1-3}
+\textbf{7.6.} Implementar jugabilidad básica: debe poder
+				jugarse una partida simple al juego, con
+				las reglas propuestas                      & \% &   \\
+
+\hline
+\caption{Resumen fase 3}
+\end{longtable}
+
+\subsection*{Iteración 7: Terminando las cuestiones tecnológicas}
+A lo largo de esta iteración los objetivos propuestos eran los de terminar de implementar y/o corregir
+las mecánicas y sistemas del proyecto, a la vez que se continua en la redacción de la memoria y el GDD.
+De esta forma poder dejar las ultimas iteraciones en diseñar los niveles, balancear el juego y terminar
+de redactar la memoria.
+
+\placeholdertext{Introducir info de las colisiones}
+
+\placeholdertext{Introducir info del sistema de cámara y dimensiones del nivel vs pantalla}
+
+\placeholdertext{Introducir info actualización del HUD: minimapa2.0 + elección de comportamientos}
+
+\placeholdertext{Hablar del mini cmp de blackboard}
+  
+\placeholdertext{correciones en el calculo de las divisiones tipo de dato en coma fija y efectos}  
