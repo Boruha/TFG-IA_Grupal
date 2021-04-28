@@ -73,10 +73,9 @@ visuales del juego también hayan sido diseñados teniendo esto en cuenta.
 
 Como podemos ver en el artículo de \citeauthor*{Pritchard2000} sobre el desarrollo de \textit{\ac{AoE} 2},
 la \ac{IA} del juego esta desarrollada completamente con un lenguaje de \textit{scripting} desarrollado
-por ellos~\ref{img:aoe_scripting_1}, de esta forma el código consiste en una serie de constantes y variables definidas desde un
+por ellos, de esta forma el código consiste en una serie de constantes y variables definidas desde un
 inicio y mediante condicionales realizar las acciones  y cambios pertinentes. Gracias a un usuario
-de \textit{`GitHub'} podemos ver en las imagenes~\ref{img:aoe_scripting_2} el código usado en el juego
-y confirmar como está elaborado.
+de \textit{`GitHub'} podemos ver en las imagenes el código usado en el juego y confirmar como está elaborado.
 
 \begin{figure}[ht]
 \centering
@@ -84,7 +83,6 @@ y confirmar como está elaborado.
 	\hspace{20mm}
 	\includegraphics[height=0.15\textheight]{imagenes/marco_teo/referentes/aoe_scripting_1.png}
 	\caption{Descripción Estructura.}
-	\label{img:aoe_script_1}
 \end{minipage}
 \begin{minipage}[c]{0.45\linewidth}
 	\hspace{9mm}
@@ -93,7 +91,6 @@ y confirmar como está elaborado.
 	\label{img:aoe_script_2}
 \end{minipage}\\[3mm]
 \textbf{Fuente:} guía de scripting para \ac{IA} de \ac{AoE} 2 de \citeauthor*{redmechanic2017}.
-\label{img:aoe_scripting_1}	
 \end{figure}
 
 \begin{figure}[ht]
@@ -111,7 +108,6 @@ y confirmar como está elaborado.
 	\label{img:aoe_script_4}
 \end{minipage}\\[3mm]
 \textbf{Fuente:} repositorio de \textit{'GitHub'} del usuario \citeauthor*{Andygmb2014}. 
-\label{img:aoe_scripting_2}	
 \end{figure}
 
 Además de estos \textit{scripts} el juego utiliza un sistema de \textit{pathfinding} en dos niveles,
@@ -166,11 +162,11 @@ A diferencia de en \textit{'\ac{AoE}'}, en \textit{'\ac{TaB}'} encontramos la ap
 serie de colonias que tendremos que desarrollar a lo largo de los niveles, y en el otro lado, 
 encontramos las infinitas hordas de zombis que tratarán de exterminar a la raza humana.
 
-Cada una de las facciones tiene sus propias unidades~\ref{img:tab_2}, el jugador contará con 7 unidades distintas
+Cada una de las facciones tiene sus propias unidades, el jugador contará con 7 unidades distintas
 entre las que podemos encontrar desde unas rápidas y sigilosas exploradoras hasta unidades equipadas
 con lanzallamas o montados en robots de combate. \footnote{Lista unidades imperiales: \url{https://they-are-billions.fandom.com/wiki/Category:Units}.}
 \\Las hordas enemigas estarán compuestas en su mayoria por unidades débiles que de forma eventual
-serán acompañadas por gigantes~\ref{img:tab_3} y/o otras unidades especiales.
+serán acompañadas por gigantes y/o otras unidades especiales.
 \footnote{Lista unidades zombi: \url{https://they-are-billions.fandom.com/wiki/Category:Infected}.}
 
 \begin{figure}[ht]
@@ -198,7 +194,7 @@ atrapados en refriegas con otros jugadores, con este tipo de mecánicas estas si
 se solventan en mayor o menor medida y permiten al jugador tomarse el tiempo que
 necesite para pensar las acciones que quiere realizar.
 
-Otra adición interesante es la posibilidad de hacer una captura de todo el mapeado explorado~\ref{img:tab_4}
+Otra adición interesante es la posibilidad de hacer una captura de todo el mapeado explorado
 en el nivel pudiendo así mostrar el avance de nuesta ciudad y alrededores, además de la 
 inmensidad de las oleadas de zombis que nos irán atacando.
 
@@ -296,7 +292,7 @@ unidades se encuentran en todo momento actuando de la misma forma.
 
 
 \section{Técnicas de inteligencia articificial}
-Como ha sido mencionado en la introducción~\ref{intro}, uno de los objetivos más importantes 
+Como ha sido mencionado en la introducción, uno de los objetivos más importantes 
 del proyecto recaen en el desarrollo de una \ac{IA} haciendo uso de las técnicas de 
 \textit{'Flocking'} y \textit{`Steering behaviors'}.
 
@@ -332,9 +328,19 @@ se nos introduce el concepto de \textit{``Boid''} como entidad generica que simu
 comportamiento bajo este algoritmo. Además, se nos introducen los tres comportamientos
 básicos en los que se basa la técnica para generar el movimiento emergente, que son:
 
-La \textbf{separación}~\ref{img:separation-b} que cada \textit{Boid} mantendrá entre
+La \textbf{separación} que cada \textit{Boid} mantendrá entre
 las demás entidades en su vencidad, con esto evitaremos solapamientos y respetar el
 espacio y movimiento de las demás entidades.
+
+
+Por otro lado podemos encontrar el \textbf{alineamiento} de la
+dirección del movimento propio con las de las entidades más cercanas, de esta forma conseguimos un
+movimiento armónico entre los \textit{boids} y produciremos una sensación de
+coordinación entre ellos.
+
+Por último encontramos la \textbf{cohesión} la cual se encargará de
+mantener a las entidades cercanas juntas para crear esa sensación de grupo que buscamos
+con el algoritmo.
 
 \begin{figure}[ht]
 \centering
@@ -343,21 +349,12 @@ espacio y movimiento de las demás entidades.
 \label{img:separation-b}
 \end{figure}
 
-Por otro lado podemos encontrar el \textbf{alineamiento}~\ref{img:alignment-b} de la
-dirección del movimento propio con las de las entidades más cercanas, de esta forma conseguimos un
-movimiento armónico entre los \textit{boids} y produciremos una sensación de
-coordinación entre ellos.
-
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.35\textwidth]{imagenes/marco_teo/alignment.png}
 \caption{Alignment behavior}
 \label{img:alignment-b}
 \end{figure}
-
-Por último encontramos la \textbf{cohesión}~\ref{img:cohesion-b} la cual se encargará de
-mantener a las entidades cercanas juntas para crear esa sensación de grupo que buscamos
-con el algoritmo.
 
 \begin{figure}[ht]
 \centering

@@ -32,27 +32,27 @@ Iteraciones                                               & \% Completado    & T
 
 \cmidrule[1pt]{1-3}
 
-\textbf{1.1.} Creación tipo con coma fija.                  & 100\%         &              \\
+\textbf{1.1.} Creación tipo con coma fija.                  & 100\%         &         \\
 	\cmidrule[.006pt]{1-3}
-\textbf{1.2.} Busqueda de referentes                        & 40\%          & It.3         \\
+\textbf{1.2.} Busqueda de referentes.                       & 40\%          & It.3    \\
 	\cmidrule[.006pt]{1-3}
 \textbf{1.3.} Corregir funcionamiento de los
 				\textit{Steering behavior} y
-				prototipar todos los posibles               & 100\%         &              \\
+				prototipar todos los posibles.              & 100\%         &          \\
 	\cmidrule[.006pt]{1-3}
-\textbf{1.4.} Sistema de debug visual: vectores.            & 100\%         &              \\ 
+\textbf{1.4.} Sistema de debug visual: vectores.            & 100\%         &          \\ 
 	\cmidrule[.006pt]{1-3}
-\textbf{1.5.} Herramientras control de ejecución.           & 50\%          & $\infty$     \\ 
+\textbf{1.5.} Herramientras control de ejecución.           & 50\%          & It.7     \\ 
 
 \cmidrule[1pt]{1-3}
 
-\textbf{2.1.} Trabajar más la memoria.                      & 65\%          & $\infty$     \\
+\textbf{2.1.} Trabajar más la memoria.                      & 65\%          & $\infty$ \\
 	\cmidrule[.006pt]{1-3}
-\textbf{2.2.} Terminar de definir idea (GDD).               & 100\%         &              \\
+\textbf{2.2.} Terminar de definir idea (GDD).               & 100\%         &          \\
 	\cmidrule[.006pt]{1-3}
-\textbf{2.3.} Implementar el mínimo producto.               & 20\%          & It.4         \\
+\textbf{2.3.} Implementar el mínimo producto.               & 20\%          & It.4     \\
 	\cmidrule[.006pt]{1-3}
-\textbf{2.4.} Experimentación y análisis de resultados.     & 0\%           & $\infty$     \\
+\textbf{2.4.} Experimentación y análisis de resultados.     & 0\%           & It.8     \\
 \hline
 \caption{Resumen fase 0}
 \end{longtable}
@@ -61,7 +61,7 @@ Esta primera fase engloba las tres primeras iteraciones donde comenzamos a termi
 la idea para el proyecto, ya que, todavía era un poco difusa la imagen del producto final que se
 quería desarrollar.
 
-\subsection*{Iteración 0}
+\subsection*{Iteración 0: Bucle del juego y primeros sistemas}
 Para ir entrando en una dinámica productiva iniciamos el desarrollo de funcionalidades básicas 
 como pueden ser el bucle principal del juego, en el cual usamos de la librería \textit{\textless
 chrono\textgreater} de C++ para medir y limitar el tiempo entre ejecuciones del bucle acompañado del uso 
@@ -83,13 +83,13 @@ incluye demasidas funcionalidades u opciones pero nos permitirá trabajar rápid
 sencilla. Los sprites en un inicio serán simples cuadrados de colores por lo que no requeriremos 
 mucho.
 
-Por último, se añadireron las componentes de movimiento y \ac{IA} que, junto a sus correspondientes
+Por último, se añadireron las componentes de movimiento e \ac{IA} que, junto a sus correspondientes
 sistemas, nos permitirán poder crear un comportamiento de patrulla básico entre puntos fijos.
 Además, se terminó la preparación de las herramientas de \LaTeX y `Jabref' para redactar la 
 memoria acompañado de la lectura de las directrices, normas y memorias de compañeros del año 
 pasado.
 
-\subsection*{Iteración 1}
+\subsection*{Iteración 1: Entero con coma fija e inicio de la IA}
 A lo largo de la iteración siguiente, seguimos añadiendo funcionalidades al prototipo como puede 
 ser el componente y sistema de \textit{Input}, el cual nos permitirá interactuar con el juego
 mediante el mapeado del teclado haciendo uso de la librería \textit{\textless X11\textgreater}
@@ -112,28 +112,6 @@ para convertirlo a coma fija, devolverlo sin escalar y/o operaciones con otros n
 Es importante elegir una escala adecuada para trabajar de forma eficiente, para ello escogeremos
 un número portencia de 2 el cual nos permitirá usar desplazamientos en múltiplicaciones y divisiones,
 hacíendo los calculos mucho más rápidos que si tuvieramos que usar las operaciones comunes.
-
-%\begin{lstlisting}[style=CodigoC++, caption={Entero coma fija},label=fint_t]
-%template <typename NumType>
-%struct fint_t {
-%fint_t() = default;
-
-%constexpr fint_t(NumType num)                noexcept; //ctor
-%constexpr explicit fint_t(float   num)       noexcept; //ctor
-%constexpr fint_t(const fint_t<NumType>& num) noexcept = default; 
-%constexpr fint_t(fint_t<NumType>&& num)      noexcept = default;
-
-%/* OPERATIONS */
-%//***
-
-%/* GETTERS */
-%constexpr NumType getNoScaled() const noexcept;
-
-%/* DATA */    
-%			NumType number { 0 };
-%constexpr static inline NumType SCALE  { 65536 };
-%};
-%\end{lstlisting}
 
 \begin{figure}[htb]
 \centering
@@ -177,38 +155,6 @@ marcados.\\
 Además, contamos con dos modeficadores adicionales como son el tiempo deseado para alcanzar el
 objetivo y un límite de distancia con el objetivo para evitar solapes y/o oscilar sobre el.
 
-%\begin{lstlisting}[style=CodigoC++, caption={Arrive behavior}, label=ia_arrive] 
-%template <typename Context_t>
-%constexpr bool
-%AI_System<Context_t>::arrive(Context_t& context, BECS::entID eid) noexcept {
-%	/* Recogida de datos */
-%	//Las varaibles en mayúscula son constantes definidas fuera
-%	//los datos terminados en `2' usan el valor al cuadrado
-
-%	if(distance2 < ENT_ARRIVE_DIST2)
-%		return false;
-
-%	if(distance2 > ENT_SLOW_DIST2)
-%		target_speed = ENT_MAX_SPEED;
-%	else
-%		target_speed = ENT_MAX_SPEED * 
-%		( target_dir.length_fix() / ENT_SLOW_DIST );
-%	
-%	target_dir.normalize();
-%	target_dir *= target_speed;
-%
-%	my_accel  = (target_dir - my_direct);
-%	my_accel /= ENT_TIME_TO_TARGET;
-%
-%	if(my_accel.length2() > ENT_MAX_ACCEL2) {
-%%		my_accel.normalize();
-%		my_accel *= ENT_MAX_ACCEL;
-%	}
-
-%	return true;
-%}
-%\end{lstlisting}
-
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.75\textwidth]{imagenes/diario_desarrollo/arrive_b.png}
@@ -216,11 +162,33 @@ objetivo y un límite de distancia con el objetivo para evitar solapes y/o oscil
 \label{fig:arrive_b}
 \end{figure} 
 
-\subsection*{Iteración 2}
+\subsection*{Iteración 2: Herramientas de depuración visual y tiempo de ejecución}
 Durante la tercera iteración nos centramos en la mejora de algunos \textit{`Steering behaviors'}
 para terminar de hacerlos más fáciles de usar y combinar, con el fin de tener un código más 
 limpio y legible, también se mejoró el uso de la coma fija añadiendo más operaciones y ajustando
 el funcionamiento.
+
+En cuanto al \textit{'Flocking'}, se comenzó a trabajar en el calculo de las distintas fuerzas que
+actuarán sobre las unidades, siendo estas: la atracción al centro de masas del grupo y la separación
+de las unidades cercanas. En ambos casos, se recorre el array de entidades aliadas seleccionando las
+que se encuentren dentro del radio de influencia, el módulo del vector dependerá de la distancia entre
+ambas entidades siendo las más cercanas la que tengan más presencia en la separación y las más lejanas 
+en la cohesión, una vez se terminan de acumular todas las direcciones se comprueba que la fuerza 
+resultante no es superior al límite.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.95\textwidth]{imagenes/diario_desarrollo/flocking.png}
+\caption{Esquema fuerzas del flocking}
+\label{fig:fuerzas_flocking}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.35\textwidth]{imagenes/diario_desarrollo/linea_ideal.png}
+\caption{Esquema algoritmo de Bresenham.}
+\label{fig:bresenham}
+\end{figure} 
 
 Por otro lado, se añadieron herramientas para debug del movimientos de las entidades y las
 diferentes componentes de este, para el dibujado de los vectores se eligió el algoritmo de
@@ -229,13 +197,6 @@ y sin consumir muchos recursos. Además, el algoritmo esta diseñado para trabaj
 cosa que hacemos a lo largo de todo el prototipo. En el esquema~\ref{fig:bresenham} la 
 cuadricula blanca representa los pixeles de la plantalla, en color azul la recta ideal que
 se busca dibujar y en amarillo la recta resultante del algoritmo.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.35\textwidth]{imagenes/diario_desarrollo/linea_ideal.png}
-\caption{Esquema algoritmo de Bresenham.}
-\label{fig:bresenham}
-\end{figure} 
 
 Otra de las herramientas destinadas a poder análizar el funcionamiento del programa es
 el control del tiempo de ejecución y el tamaño del \textit{`DeltaTime'}. Al poder disminuir
@@ -293,11 +254,11 @@ Iteraciones                                               & \% Completado & Term
 				una iteración.                             & 100\% &   \\
 	\cmidrule[.003pt]{1-3}
 \textbf{4.3.} Agrupar iteración en fases y describir el
-				desarrollo hasta la fecha.                 & 30\%  &  It.x \\
+				desarrollo hasta la fecha.                 & 30\%  &  It.5 \\
 	\cmidrule[.003pt]{1-3}
 \textbf{4.4.} Implementar mínimo producto.                 & 85\%  &  It.6 \\
 	\cmidrule[.003pt]{1-3}
-\textbf{4.5.} Análisis de resultados del MVP.              & 10\%  &  It.x \\
+\textbf{4.5.} Análisis de resultados del MVP.              & 10\%  &  It.7 \\
 	
 	\cmidrule[1pt]{1-3}
 	
@@ -305,10 +266,10 @@ Iteraciones                                               & \% Completado & Term
 	\cmidrule[.003pt]{1-3}
 \textbf{5.2.} Adición de formación en anillo.              & 80\%  &  It.6 \\ 
 	\cmidrule[.003pt]{1-3}
-\textbf{5.3.} Balanceo de las unidades.                    & 0\%   &  It.x \\ 
+\textbf{5.3.} Balanceo de las unidades.                    & 0\%   &  It.8 \\ 
 	\cmidrule[.003pt]{1-3}		
 \textbf{5.4.} Profundizar los objetivos en el GDD y 
-				explicar método de balanceo.               & 0\%   &  It.x \\ 
+				explicar método de balanceo.               & 0\%   &  It.8 \\ 
 	\cmidrule[.003pt]{1-3}		
 \textbf{5.5.} Incluir tabla resumen al inicio de fase
 				e incluir información extra como el set-up.& 100\%  &  \\
@@ -324,15 +285,15 @@ Iteraciones                                               & \% Completado & Term
 \textbf{6.3.} Remplazar  TinyPTC por Dear ImGUI y
 				hacer una interfaz básica.                 & 100\% &   \\
 	\cmidrule[.003pt]{1-3}
-\textbf{6.4.} Ajustar y continuar con la memoria.          & \% &   \\
+\textbf{6.4.} Ajustar y continuar con la memoria.          & 80\%  & $\infty$ \\
 	\cmidrule[.003pt]{1-3}
 \textbf{6.5.} Profundizar en el GDD y listar cuestiones
-				tecnológicas que hacen falta.              & \% &   \\
+				tecnológicas que hacen falta.              & 100\% &   \\
 \hline
 \caption{Resumen fase 1}
 \end{longtable}
 
-\subsection*{Iteración 3}
+\subsection*{Iteración 3: Motor ECS y gestión de memoria}
 La fase comenzó con una iteración corta debido a las vacaciones de Navidad y final de año, en la
 que el foco estuvo despositado en refactorizar y dejar en mejor estado el código desarrollado
 hasta el momento, donde se separó el nucleo principal del motor \ac{ECS} del conjunto de sistemas y
@@ -370,7 +331,7 @@ Por último se siguieron modificando los tipos propios, tanto el \textit{fint\_t
 los \textit{vec2} y \textit{fvec2} para trabajar como plantillas, pudiendo así librarnos de
 la necesidad de crear un tipo completo para cada tipo básico con el que queramos usarlos.
 
-\subsection*{Iteración 4}
+\subsection*{Iteración 4: Combate, victoria y derrota}
 Durante el mes de enero se implementaron diversas funcionalidades, en primer lugar abordamos
 el sistema de combate del juego, para ello se creó una componente para almacenar elementos como
 la vida de la unidad, su daño, el rango y el tiempo entre ataques, además, los sistemas de 
@@ -426,7 +387,7 @@ ratón ni las selecciona de forma individual, sino que controla un marcador verd
 seguido por sus tropas y mediante ordenenes activará los distintos comportamientos de sus 
 unidades. 
 
-\subsection*{Iteración 5}
+\subsection*{Iteración 5: Mecánicas fallidas}
 A lo largo de la siguiente iteración se trabajó sobretodo en las mecánicas de juego, con el fin
 de acercarse un poco más a la obtención de un prototipo que cumpla con los requisitos del \acs{MVP},
 en concreto se comenzó el desarollo de un segundo tipo de unidad basada en ataques a distancia y 
@@ -458,7 +419,7 @@ las tareas principales de cada iteración, el portentaje estimado de completado 
 terminada, la iteración donde se ha finalizado.
 
 
-\subsection*{Iteración 6}
+\subsection*{Iteración 6: Interfaz y Dear ImGUI}
 En la cuarta y última iteración de esta fase, el objetivo es el de terminar todas las mecánicas del prototipo
 y sustituir \textit{\textless TinyPTC\textgreater} por \textit{\textless Dear ImGUI\textgreater} para poder
 centrarnos más adelante en el diseño del nivel/es del prototipo de cara a la entrega final. Además de, poder
@@ -581,23 +542,33 @@ Distancia & Lineal  & Cuadrado \\
 Iteraciones                                                & \% Completado & Termindo en \\ 
 \hline
 \endhead
-\textbf{7.1.} Continuar trabajando el GDD.                 & \% &   \\
+\textbf{7.1.} Continuar trabajando el GDD.                 & 10\% & It.X  \\
 	\cmidrule[.003pt]{1-3}
-\textbf{7.2.} Ajustes de valores de daño y vida.           & \% &   \\ 
+\textbf{7.2.} Ajustes de valores de daño y vida.           &  0\% & It.X  \\ 
 	\cmidrule[.003pt]{1-3}
 \textbf{7.3.} Incluir los ciclos de análisis de los 
 				comportamientos resultantes y 
-				propuestas de mejora                       & \% &   \\ 
+				propuestas de mejora                       & 40\% & It.X  \\ 
 	\cmidrule[.003pt]{1-3}
-\textbf{7.4.} Revisar bugs y comportamientos erróneos.     & \% &   \\
+\textbf{7.4.} Revisar bugs y comportamientos erróneos.     & 100\% & \\
 	\cmidrule[.003pt]{1-3}
 \textbf{7.5.} Incluir sistema de cámara y coordenadas 
-				de mundo                                   & \% &   \\
+				de mundo.                                  & 100\% & \\
 	\cmidrule[.003pt]{1-3}
 \textbf{7.6.} Implementar jugabilidad básica: debe poder
 				jugarse una partida simple al juego, con
-				las reglas propuestas                      & \% &   \\
+				las reglas propuestas.                     & \% & It.X  \\
 
+		\cmidrule[1pt]{1-3}
+
+\textbf{8.1.} Balanceo de unidades y ajustar sus valores.  & \% &  \\
+	\cmidrule[.003pt]{1-3}
+\textbf{8.2.} Redactar de forma detallada el balanceo.     & \% &  \\
+	\cmidrule[.003pt]{1-3}
+\textbf{8.3.} Prueba de compilación cruzada para Windows.  & \% &  \\
+	\cmidrule[.003pt]{1-3}
+\textbf{8.4.} Describir todas las herramientas implementadas
+				y procesos de analasis.                    & \% &  \\
 \hline
 \caption{Resumen fase 3}
 \end{longtable}
@@ -608,12 +579,90 @@ las mecánicas y sistemas del proyecto, a la vez que se continua en la redacció
 De esta forma poder dejar las ultimas iteraciones en diseñar los niveles, balancear el juego y terminar
 de redactar la memoria.
 
-\placeholdertext{Introducir info de las colisiones}
+Uno de los puntos principales cae sobre la resolución de un error en las colisiones de las balas,
+este problema consistía en una serie de balas que atravesaban a las unidades con baja frecuencía
+y sin motivo aparente. Con el fin de subsanar este problema se ha creado una componente de colisiones
+la cual ha sustituido el uso del tamaño del sprite en los calculos de colisiones con el límite de la 
+ventana y demás entidades. \\
+Al integrar esta componente en el sistema de debug visual pudimos observar como el problema era que las
+colisiones estan siendo calculadas teniendo en cuenta el centro de la entidad, cuando el origen de ésta
+es la esquina superior izquierda, esto suponía un desplazamiento de todas las colisiones y por lo tanto
+errores en las detección, con cambiar ese factor se solucionaron todos los problemas.
 
-\placeholdertext{Introducir info del sistema de cámara y dimensiones del nivel vs pantalla}
+A lo largo de la ejecución del programa, podíamos ver como algunas unidades se quedaban quietas sin poder
+retomar su movimiento hasta que otra unidad la desplazaba y hacía reaccionar, después de analizar la situación
+pudimos determinar que el problema ocurría cuando la unidad perdía su velocidad y aceleración dentro del
+rango de ``velocidad reducida'' del \textit{`Arrive behaviour'}, lo que estaba sucediendo, es que no se
+estaban calculando correctamente las divisiones con enteros de coma fija cuyo resultado era un valor
+entre 0 y 1.
 
-\placeholdertext{Introducir info actualización del HUD: minimapa2.0 + elección de comportamientos}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.45\textwidth]{imagenes/diario_desarrollo/division_entera.png}\\
+\caption{Comparación resultados división.}
+\label{fig:div_int}
+\end{figure}
 
-\placeholdertext{Hablar del mini cmp de blackboard}
-  
-\placeholdertext{correciones en el calculo de las divisiones tipo de dato en coma fija y efectos}  
+En una primera versión del operador, el cálculo que se realizaba era: dividir primero los valores a operar
+y después multiplicar el resultado por la `Escala', este orden de los factores nos llevaba a que si, en la
+primera operación el divisor era mayor que el dividendo, el valor del resto era 0, ya que trabajamos
+con enteros y trunca los valores decimales.
+
+Para solucionar el problema, lo que se hizo fue extraer una versión reducida del tipo de dato que sólo contaba
+con las operaciones de división e introducirla en `Godbolt'\footnote{\url{https://godbolt.org}}, para poder
+realizar una serie de pruebas y ajustes rápidamente sin tener que estar pendiente del resto del proyecto. \\
+Una vez teníamos ya las funciones listas, lo único que quedaba era experimentar con el orden de los
+factores a la hora de realizar la operación y ver si el resultado variaba. Tras un ligero ajuste conseguimos
+que la operación conservara el valor deseado, esto se logró multiplicando el primer valor de la operación
+por la `Escala' antes de dividir por el segundo dígito, de esta forma evitamos los resultados entre 0 y 65536
+y que se trunque el valor en mitad de la operación.
+
+Una vez solventados los errores, nos pusimos a crear lo necesario para poder diseñar niveles más amplios,
+para ello incluímos un sistema de cámaras, el cual mostrará la porción del nivel donde se encuentre
+nuestro puntero y unidades, el seguimiento se hace utilizando el \textit{`Arrive behaviour'} de forma que
+el movimiento de la cámara comienza cuando nos separamos una cierta distancia del centro de la escena.
+
+Ahora las dimensiones de la pantalla pasan a ser las de la cámara y el nivel tendrá unas dimensiones
+propias, las cuales usaremos para limitar el movimiento de las unidades, por lo que las unidades se pueden
+mover libremente fuera de nuestro campo de visión siempre y cuando estén en los límites del nivel. \\
+Además de los cálculos para las colisiones, otro requisito fue adaptar el minimapa para que mostrara
+que parte del nivel esta siendo visualizado y que nos permita úbicar a todas las unidades y objetivos
+fuera de cámara. Un detalle importante es que al crear el nivel, le indicamos al motor la relación
+entre las dimensiones de pantalla y nivel, por lo que los objetos mostrados en el minimapa se ajustarán
+en función de este parámetro, cuanto más grande el nivel, más pequeños serán los elementos.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\textwidth]{imagenes/diario_desarrollo/minimap2.png}\\
+\caption{Cambios en el minimapa}
+\label{fig:minimap2}
+\end{figure}
+
+En lo referente al \textit{HUD}, se ha añadido también un selector de comportamiento y formación
+para nuestras unidades, de esta forma podremos controlar dichos parametros con simples \textit{clicks}
+y ahorrarnos el tener que disponer de una tecla para cada opción. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.45\textwidth]{imagenes/diario_desarrollo/eleccion_b.png}\\
+\caption{Selector de comportamiento y formación}
+\label{fig:hud_selec}
+\end{figure}
+
+En lo referente a la mecánicas y comportamientos de las entidades han habido dos cambios relevantes durante
+la iteración, en primer lugar encontramos la adición de un componente \textit{singleton} de \textit{Blackboard}
+el cual nos permitirá almacenar información compartida para todas las unidades bajo nuestro control, además de
+controlar la frecuencia en la que la esta información se actualiza, esto nos permitirá crear una sensación
+de retraso en la reacción a nuestras acciones por parte de las unidades a la vez que nos permite eliminar
+la necesidad de guardar la misma información en cada componente de \ac{IA} por unidad que tengamos.
+
+En segundo lugar encontramos otro cambio en las componentes de \ac{IA}, esta vez con efectos sobre las unidades
+controladas por la máquina, en este caso se trata de la creación de una estructura auxiliar que representa 
+y contiene las rutas que las unidades seguirán mientras no estén peleando contra nosotros.
+
+En un inicio estas rutas se encontraban directamente en la componente, actualmente en la componente podemos
+encontrar un ``iterador de ruta'' el cual nos podrá facilitar la siguiente posición y gestionar como avanzamos
+por la patrulla, de forma que si llegamos al final de forma automática nos devolverá la primera posición
+que recorrimos. De esta forma evitamos errores en la gestión de las patrullas y dublicar la información de estas.
+ 
+
