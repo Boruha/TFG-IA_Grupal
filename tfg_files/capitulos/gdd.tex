@@ -113,6 +113,7 @@ Las asignadas para jugar son las siguientes:
 					  puntero.	
 	\item \textbf{Z:} activa la formación en anillo.									  
 	\item \textbf{X:} desactiva toda formación.
+	\item \textbf{Ratón:} interactuar con el \textit{HUD}.
 \end{itemize}
 
 Tanto la \textbf{formación} como el \textbf{comportamiento} de las unidades se podrá cambiar desde un
@@ -213,13 +214,6 @@ pueden ser praderas, bosque o desiertos como los que podemos encontrar en \ac{Ao
 \label{img:mapa_aoe1}
 \end{figure}
 
-%\begin{figure}[ht]
-%\centering
-%\includegraphics[width=0.6\textwidth]{imagenes/gdd/mapa_aoe_2.jpg}
-%\caption{Ejemplo escenario desértico.}
-%\label{img:mapa_aoe2}
-%\end{figure}
-
 Además de imitar el estilo artístico el juego se desarrollará empleando una cámara
 aerea fija manteniendo una perspectiva isométrica que nos permitirá visualizar desde
 un punto elevado una gran porción del escenario, esto lo haremos con el fin de dar al
@@ -230,6 +224,15 @@ que no obstaculicen la visión o molesten al jugador.
 
 En las primeras versiones del proyecto el juego todos los elementos serán 2D y la vista será
 un plano picado, el final deseable será poder pasar a un entorno 3D.
+
+\section{Sistema de cámaras}
+Si quisieramos mostrar todo el nivel por pantalla, tendríamos el problema de que los elementos
+quedarían dibujados con un tamaño demasiado pequeño si el nivel supera las dimensiones de la pantalla,
+por ello, si queremos poder diseñar niveles con las dimensiones que queramos deberemos mostrar únicamente
+las fracción del nivel que ocupamos en cada momento.
+
+Por lo que, tendremos una cámara la cual seguirá al puntero del jugador por el nivel y tendremos el
+minimapa para poder ubicarnos en el nivel.
 
 \section{Mínimo producto viable}
 Una vez planteadas todas las características deseadas para el videojuego, es acosenjable
@@ -298,6 +301,19 @@ de ser necesario podemos mantener el sistema de \textit{render} inicial.
 	\item Se ha ampliado un poco el GDD con apartados sobre tareas pendientes y objetivos.
 
 	\item En el diario de desarrollo se han sustituido códigos de ejemplo por mockups.  
+\end{itemize}
+
+\section{Actualización: 06/05/21}
+\begin{itemize}
+	\item Redacción problema en las divisiones de los enteros con coma fija.
+
+	\item Redacción problema con las colisiones y solución.
+
+	\item Redacción \textit{HUD} v0.4.
+	
+	\item Redacción sistema de cámaras en el GDD y diario de desarrollo.
+
+	\item Redacción cambios en las entidades: rutas y comportamientos.
 \end{itemize}
 
 \section{Cuestiones tecnológicas que faltan}

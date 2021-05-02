@@ -117,28 +117,32 @@ AI_System<Context_t>::attack(Context_t& context, AI_Component& ai, MovementCompo
     auto  eid        = ai.getEntityID();
     auto& mov_target = context.template getCmpByEntityID<MovementComponent>( ai.target_ent );
     auto& combat     = context.template getCmpByEntityID<CombatComponent>( eid );
+    
     ai.target_pos    = mov_target.coords;
+    auto target_dir  { ai.target_pos - mov.coords };
 
+    face(mov, target_dir);
+    
     if(combat.current_attack_cd.number <= 0l) {
         combat.current_attack_cd = combat.attack_cd;
         
-        switch (combat.attack_range.getNoScaled()) {
-            case MEELE_ATK_DIST.getNoScaled(): {
+        switch (combat.type) {
+            case Combat_t::Soldier : {
                     auto& eventCmp = context.template getSCmpByType<EventCmp_t>();
                     eventCmp.attack_msg.emplace_back(eid, ai.target_ent, combat.damage);
                 } break;
             
-            case RANGE_ATK_DIST.getNoScaled(): {
-                    auto& eventCmp = context.template getSCmpByType<EventCmp_t>();
-                    eventCmp.bullet_msg.emplace(eid, mov.orientation, mov.coords.x.getNoScaled(), mov.coords.y.getNoScaled(), combat.team, combat.damage);
+            case Combat_t::Archer : {
+                    if(target_dir.length2() < combat.attack_range2) {
+                        auto& eventCmp = context.template getSCmpByType<EventCmp_t>();
+                        eventCmp.bullet_msg.emplace(eid, mov.orientation, mov.coords.x.getNoScaled(), mov.coords.y.getNoScaled(), combat.team, combat.damage);
+                    }
                 } break;
+            case Combat_t::None : break; //NADA
         }        
     }
 
     arrive(mov, ai.target_pos, combat.attack_range2,  combat.attack_range2 + 5);
-
-    auto target_dir { ai.target_pos - mov.coords };
-    face(mov, target_dir);
 }
 
 template <typename Context_t>

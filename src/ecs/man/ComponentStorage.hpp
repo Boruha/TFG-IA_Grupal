@@ -25,10 +25,8 @@ struct ComponentStorage {
     template<typename T>               constexpr       T&              createComponent(const T& new_cmp) noexcept;
 
     template<typename T> [[nodiscard]] constexpr       std::vector<T>& getCmpCollection()                noexcept;
-    //template<typename T> [[nodiscard]] constexpr const std::vector<T>& getCmpCollection() const          noexcept;
 
     template<typename T> [[nodiscard]] constexpr       T&              getCmpByEntityID(const entID eid) noexcept;
-    //template<typename T> [[nodiscard]] constexpr const T&              getCmpByEntityID(const entID eid) const noexcept;
 
     bool deleteCmpByTypeIDAndEntityID(cmpTypeID cid, entID eid) noexcept;
 

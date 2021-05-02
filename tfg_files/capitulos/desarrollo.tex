@@ -622,9 +622,17 @@ para ello incluímos un sistema de cámaras, el cual mostrará la porción del n
 nuestro puntero y unidades, el seguimiento se hace utilizando el \textit{`Arrive behaviour'} de forma que
 el movimiento de la cámara comienza cuando nos separamos una cierta distancia del centro de la escena.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\textwidth]{imagenes/diario_desarrollo/camara.png}\\
+\caption{Arrive behaviour en la cámara}
+\label{fig:arrive_cam}
+\end{figure}
+
 Ahora las dimensiones de la pantalla pasan a ser las de la cámara y el nivel tendrá unas dimensiones
 propias, las cuales usaremos para limitar el movimiento de las unidades, por lo que las unidades se pueden
-mover libremente fuera de nuestro campo de visión siempre y cuando estén en los límites del nivel. \\
+mover libremente fuera de nuestro campo de visión siempre y cuando estén en los límites del nivel,
+mientras estén fuera de cámara solo se dibujaran en el minimapa para evitar hacer llamadas inútiles. \\
 Además de los cálculos para las colisiones, otro requisito fue adaptar el minimapa para que mostrara
 que parte del nivel esta siendo visualizado y que nos permita úbicar a todas las unidades y objetivos
 fuera de cámara. Un detalle importante es que al crear el nivel, le indicamos al motor la relación

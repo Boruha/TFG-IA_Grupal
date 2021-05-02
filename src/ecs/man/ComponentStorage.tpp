@@ -34,12 +34,6 @@ ComponentStorage::getCmpCollection() noexcept {
     return (*result).get();
 }
 
-/*template<typename T> constexpr //CHANGE THIS
-const std::vector<T>&
-ComponentStorage::getCmpCollection() const noexcept {
-    return const_cast< const std::vector<T>& >( const_cast<ComponentStorage*>(this)->getCmpCollection<T>() );
-}*/
-
 template<typename T> constexpr
 T& 
 ComponentStorage::getCmpByEntityID(const entID eid) noexcept {

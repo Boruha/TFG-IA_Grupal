@@ -11,14 +11,14 @@ inline void
 UnitsManager::init() noexcept {
     enemies_vec.reserve(10);
     allies_vec.reserve(10);
-    ally_bullets.reserve(15);
-    enem_bullets.reserve(30);
+    ally_bullets.reserve(20);
+    enem_bullets.reserve(20);
 
     auto& pat  = patrols.emplace_back();
     pat.points = { fvec2<fint_t<int64_t>> 
         { { -300l }, { -300l } }
       , { {  200l }, { -300l } }
-      , { {  400l }, {  400l } } //, { {  200l }, {  200l } }
+    /*  , { {  400l }, {  400l } } */, { {  200l }, {  200l } }
       , { { -300l }, {  200l } } 
     };
 
@@ -28,26 +28,26 @@ UnitsManager::init() noexcept {
     createCamera(UWIN_W, UWIN_H, 400l+(HALF_WIN_W * -1), 400l+(HALF_WIN_H * -1));
 
     createSoldier(sz,   30l,   30l, Color::Red, false, pat);
-    createArcher( sz,   60l,  -10l, Color::Red, false, pat);
+    createSoldier(sz,   60l,  -10l, Color::Red, false, pat);
     createSoldier(sz,  -10l,   20l, Color::Red, false, pat);
-    createArcher( sz,  -60l,   10l, Color::Red, false, pat);
-    createSoldier(sz,  -20l,  -40l, Color::Red, false, pat);
-    createSoldier(sz,  100l,  100l, Color::Red, false, pat);
+    createSoldier(sz,  -60l,   10l, Color::Red, false, pat);
+    createSoldier( sz,  -20l,  -40l, Color::Red, false, pat);
+    createArcher( sz,  100l,  100l, Color::Red, false, pat);
     createArcher( sz,   60l, -100l, Color::Red, false, pat);
-    createSoldier(sz, -130l,   20l, Color::Red, false, pat);
+    createArcher( sz, -130l,   20l, Color::Red, false, pat);
     createArcher( sz,  -60l,  100l, Color::Red, false, pat);
-    createSoldier(sz, -200l, -200l, Color::Red, false, pat);
+    createArcher( sz, -200l, -200l, Color::Red, false, pat);
 
     createSoldier(sz, 380l, 390l, Color::Blue, true, pat);
     createSoldier(sz, 360l, 400l, Color::Blue, true, pat);
-    createArcher( sz, 400l, 420l, Color::Blue, true, pat);
-    createArcher( sz, 380l, 420l, Color::Blue, true, pat);
+    createSoldier(sz, 400l, 420l, Color::Blue, true, pat);
+    createSoldier(sz, 380l, 420l, Color::Blue, true, pat);
     createArcher( sz, 300l, 420l, Color::Blue, true, pat);
     createArcher( sz, 380l, 400l, Color::Blue, true, pat);
     createArcher( sz, 420l, 380l, Color::Blue, true, pat);
-    createSoldier(sz, 350l, 380l, Color::Blue, true, pat);
-    createSoldier(sz, 340l, 380l, Color::Blue, true, pat);
-    createSoldier(sz, 410l, 380l, Color::Blue, true, pat);
+    createArcher( sz, 350l, 380l, Color::Blue, true, pat);
+    createArcher( sz, 340l, 380l, Color::Blue, true, pat);
+    createArcher( sz, 410l, 380l, Color::Blue, true, pat);
 }
 
 inline void
@@ -74,7 +74,7 @@ UnitsManager::createSoldier(const uint32_t size, const int64_t pos_x, const int6
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
     ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,    size  ,  size        ) );
-    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, MEELE_ATK_DIST, team    ) );
+    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, Combat_t::Soldier, team ) );
     ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent, pat.begin()             ) );
 }
 
@@ -90,7 +90,7 @@ UnitsManager::createArcher(const uint32_t size, const int64_t pos_x, const int64
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }    ) );
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,    size  ,  size   , col) );
     ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,    size  ,  size        ) );
-    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, RANGE_ATK_DIST, team    ) );
+    ent_man.addComponentToEntity( new_ent, CombatComponent(   new_ent, Combat_t::Archer, team  ) );
     ent_man.addComponentToEntity( new_ent, AI_Component(      new_ent, pat.begin()             ) );
 }
 
@@ -115,7 +115,6 @@ UnitsManager::createCamera(const uint32_t sz_x, const uint32_t sz_y, const int64
     
     camera_id = new_ent;
 }
-
 
 inline void 
 UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y,
@@ -160,8 +159,6 @@ UnitsManager::deleteByIDFrom(std::vector<BECS::entID>& container, BECS::entID ei
         ent_man.deleteEntity(eid);
     }
 }
-
-
 
 /* GETTERS */
 template <typename SCMP_t> constexpr
