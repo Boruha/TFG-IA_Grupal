@@ -31,7 +31,7 @@ UnitsManager::init() noexcept {
     createSoldier(sz,   60l,  -10l, Color::Red, false, pat);
     createSoldier(sz,  -10l,   20l, Color::Red, false, pat);
     createSoldier(sz,  -60l,   10l, Color::Red, false, pat);
-    createSoldier( sz,  -20l,  -40l, Color::Red, false, pat);
+    createArcher( sz,  -20l,  -40l, Color::Red, false, pat);
     createArcher( sz,  100l,  100l, Color::Red, false, pat);
     createArcher( sz,   60l, -100l, Color::Red, false, pat);
     createArcher( sz, -130l,   20l, Color::Red, false, pat);
@@ -42,7 +42,7 @@ UnitsManager::init() noexcept {
     createSoldier(sz, 360l, 400l, Color::Blue, true, pat);
     createSoldier(sz, 400l, 420l, Color::Blue, true, pat);
     createSoldier(sz, 380l, 420l, Color::Blue, true, pat);
-    createArcher( sz, 300l, 420l, Color::Blue, true, pat);
+    createSoldier( sz, 300l, 420l, Color::Blue, true, pat);
     createArcher( sz, 380l, 400l, Color::Blue, true, pat);
     createArcher( sz, 420l, 380l, Color::Blue, true, pat);
     createArcher( sz, 350l, 380l, Color::Blue, true, pat);
