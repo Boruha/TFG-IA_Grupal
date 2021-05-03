@@ -674,3 +674,86 @@ por la patrulla, de forma que si llegamos al final de forma automática nos devo
 que recorrimos. De esta forma evitamos errores en la gestión de las patrullas y dublicar la información de estas.
  
 
+\subsection*{Iteración 8: Diseño de niveles}
+Durante esta penúltima iteración buscamos conseguir un prototipo que ofrezca una experiencia
+de juego capaz de mostrar todas las herramientas diseñadas y entretener al jugador. Para ello se han 
+planteado objetivos relacionados con el diseño de los niveles y el balanceo de las unidades, tratando
+de conseguir el que el jugador sepa en todo momento su objetivo en el juego y que sea atractivo para el.
+
+En primer lugar hemos trabajado el balanceo de los valores de vida y daño de los distintos tipos de
+unidades, partiendo de una situación con todas las unidades con los mismos valores
+debemos tratar de darles ventajas y desventajas a cada una de ellas, con el fin de obligar al
+jugador a pensar bien como colocarlas y utilizarlas. Durante el proceso se ha desarrollado un excel
+para observar los valores y modificarlos de forma rápida, esto nos ayuda a poder hacer un análisis
+profundo de los efectos de cada valor en el resultado de las unidades.
+
+\begin{longtable}[c]{|c|c|c|c|c|c|}
+\hline
+\multicolumn{1}{|m{1.8cm}|}{Tiempo de refresco} & \multicolumn{1}{m{1.2cm}|}{Ataque}             &
+\multicolumn{1}{m{1.7cm}|}{Daño por segundo}   & \multicolumn{1}{m{1.4cm}|}{Vida enemiga}        &
+\multicolumn{1}{m{1.2cm}|}{Tiempo para matar}  & \multicolumn{1}{m{1.45cm}|}{Impactos para matar}\\
+\hline
+\hline
+\endhead
+\multicolumn{1}{|S|}{2} & \multicolumn{1}{S|}{4} & \multicolumn{1}{S|}{2} & 
+\multicolumn{1}{S|}{12} & \multicolumn{1}{S|}{6} & \multicolumn{1}{S|}{3} \\
+\hline
+\multicolumn{1}{|S|}{2} & \multicolumn{1}{S|}{4} & \multicolumn{1}{S|}{2}   & 
+\multicolumn{1}{S|}{14} & \multicolumn{1}{S|}{7} & \multicolumn{1}{S|}{3.5} \\ 
+\hline
+\multicolumn{1}{|S|}{2} & \multicolumn{1}{S|}{5}   & \multicolumn{1}{S|}{2.5} & 
+\multicolumn{1}{S|}{12} & \multicolumn{1}{S|}{4.8} & \multicolumn{1}{S|}{2.4} \\ 
+\hline
+\multicolumn{1}{|S|}{2} & \multicolumn{1}{S|}{5}   & \multicolumn{1}{S|}{2.5} & 
+\multicolumn{1}{S|}{14} & \multicolumn{1}{S|}{5.6} & \multicolumn{1}{S|}{2.8} \\
+\hline
+\multicolumn{1}{|S|}{3} & \multicolumn{1}{S|}{5}   & \multicolumn{1}{S|}{1.667} & 
+\multicolumn{1}{S|}{12} & \multicolumn{1}{S|}{7.2} & \multicolumn{1}{S|}{2.4}   \\
+\hline
+\multicolumn{1}{|S|}{3} & \multicolumn{1}{S|}{5}   & \multicolumn{1}{S|}{1.667} & 
+\multicolumn{1}{S|}{14} & \multicolumn{1}{S|}{8.4} & \multicolumn{1}{S|}{2.8}   \\
+\hline
+\caption{Valores arquero vs soldado}
+\end{longtable}
+
+La idea es lograr que el jugador sienta que los Soldados son unidades más resistentes pero con menor
+daño, para ello les dotaremos de mayor vida pero menor daño que a los arqueros, por otro lado, realizar
+un movimiento con las manos es una acción que requiere mucha menos preparación y dedicación que cargar 
+un arco, por ello se contempla darles una mayor frecuencia a sus ataques.
+
+\begin{longtable}[c]{|c|c|c|c|c|c|}
+\hline
+\multicolumn{1}{|m{1.8cm}|}{Tiempo de refresco} & \multicolumn{1}{m{1.2cm}|}{Ataque}             &
+\multicolumn{1}{m{1.7cm}|}{Daño por segundo}   & \multicolumn{1}{m{1.4cm}|}{Vida enemiga}        &
+\multicolumn{1}{m{1.2cm}|}{Tiempo para matar}  & \multicolumn{1}{m{1.45cm}|}{Impactos para matar}\\
+\hline
+\hline
+\endhead
+\multicolumn{1}{|S|}{2} & \multicolumn{1}{S|}{4} & \multicolumn{1}{S|}{2} & 
+\multicolumn{1}{S|}{6}  & \multicolumn{1}{S|}{3} & \multicolumn{1}{S|}{1.5} \\
+\hline
+\multicolumn{1}{|S|}{2} & \multicolumn{1}{S|}{4} & \multicolumn{1}{S|}{2}   & 
+\multicolumn{1}{S|}{8}  & \multicolumn{1}{S|}{4} & \multicolumn{1}{S|}{2} \\ 
+\hline
+\multicolumn{1}{|S|}{2} & \multicolumn{1}{S|}{5}   & \multicolumn{1}{S|}{2.5} & 
+\multicolumn{1}{S|}{6}  & \multicolumn{1}{S|}{2.4} & \multicolumn{1}{S|}{1.2} \\ 
+\hline
+\multicolumn{1}{|S|}{2} & \multicolumn{1}{S|}{5}   & \multicolumn{1}{S|}{2.5} & 
+\multicolumn{1}{S|}{8}  & \multicolumn{1}{S|}{3.2} & \multicolumn{1}{S|}{1.6} \\
+\hline
+\multicolumn{1}{|S|}{3} & \multicolumn{1}{S|}{5}   & \multicolumn{1}{S|}{1.667} & 
+\multicolumn{1}{S|}{6}  & \multicolumn{1}{S|}{3.6} & \multicolumn{1}{S|}{1.2}   \\
+\hline
+\multicolumn{1}{|S|}{3} & \multicolumn{1}{S|}{5}   & \multicolumn{1}{S|}{1.667} & 
+\multicolumn{1}{S|}{8}  & \multicolumn{1}{S|}{4.8} & \multicolumn{1}{S|}{1.6}   \\
+\hline
+\caption{Valores soldado vs arquero}
+\end{longtable}
+
+Los arqueros por su lado, están pensados como unidades de mediano alcance que atacan con proyectiles.
+Son débiles y si tratan de avanzar solos podrían ser masacrados por grupos de soldados, para evitarlo 
+el jugador deberá intentar proteger a sus arqueros utilizando a sus guerreros como muro defensivo. 
+A pesar de que realizan más daño a sus rivales, los proyectiles no realizan un daño inmediato, sino que
+actuan al impactar, cosa que podría no suceder. Esto nos ayuda a equilibrar la balanza debido a la ventaja
+de rango que poseen los arqueros.
+
