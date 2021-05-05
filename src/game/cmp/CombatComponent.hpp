@@ -17,16 +17,16 @@ struct CombatComponent : BECS::Component_t {
         : Component_t(entityID), type(type_), team(team_) {
             switch (type) {
                 case Combat_t::Archer :
-                        health        = 7;
-                        damage        = 3;
-                        attack_cd     = 2l;
+                        health        = 14;
+                        damage        = 7;
+                        attack_cd     = 3l;
                         attack_range  = RANGE_ATK_DIST;
                         attack_range2 = RANGE_ATK_DIST2;
                     break;
 
                 case Combat_t::Soldier :
-                        health        = 12;
-                        damage        = 3;
+                        health        = 24;
+                        damage        = 4;
                         attack_cd     = 2l;
                         attack_range  = MEELE_ATK_DIST;
                         attack_range2 = MEELE_ATK_DIST2;
