@@ -134,6 +134,27 @@ EngineManager::drawLine(uint32_t p1_x, uint32_t p1_y, uint32_t p2_x, uint32_t p2
 
     bg_draw->AddLine(ImVec2(work_pos.x + p1_x, work_pos.y + p1_y), ImVec2(work_pos.x + p2_x, work_pos.y + p2_y), color);  
 }
+/*
+void 
+EngineManager::drawMsg(uint32_t p1_x, uint32_t p1_y, std::string text) noexcept {
+    const  auto* viewport = ImGui::GetMainViewport();
+           auto  viewSize = viewport->Size;
+    static auto  p_open   { true };
+    
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration 
+                                  | ImGuiWindowFlags_AlwaysAutoResize 
+                                  | ImGuiWindowFlags_NoMove 
+                                  | ImGuiWindowFlags_NoFocusOnAppearing 
+                                  | ImGuiWindowFlags_NoNav;
+
+    ImGui::SetNextWindowPos( ImVec2(p1_x, p1_y), ImGuiCond_Always );
+    ImGui::SetNextWindowSize( ImVec2(viewSize.x/8, viewSize.y/8) );
+    {
+    ImGui::Begin(text.c_str(), &p_open, window_flags);
+        ImGui::Text(text.c_str());
+    ImGui::End();
+    }   
+}*/
 
 void 
 EngineManager::debugInterface(bool& showDebug, float& DT, float& LT, bool& changed) const noexcept {

@@ -23,6 +23,9 @@ struct GameManager {
     fint_t<int64_t>& getLoopTime()  noexcept;
     fint_t<int64_t>& getDeltaTime() noexcept;
 
+    void loadLevel0();
+    void loadLevel1();
+
 private:
     UnitsManager units_man;
 
@@ -36,7 +39,8 @@ private:
     DeathSystem<UnitsManager>      death_sys;
     BulletLifeSystem<UnitsManager> bulletLife_sys;
 
-    GameConditions result { GameConditions::Loop };
+    GameConditions result      { GameConditions::Loop };
+    int32_t        level_index { 0 };
 
     fint_t<int64_t> setLoopTime()     noexcept;
     fint_t<int64_t> setDeltaTime()    noexcept;

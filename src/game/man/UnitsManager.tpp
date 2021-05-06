@@ -9,6 +9,23 @@ namespace AIP {
 
 inline void
 UnitsManager::init() noexcept {
+    loadLevel0();
+}
+
+inline void
+UnitsManager::clear() noexcept {
+    ent_man.clear();
+    enemies_vec.clear();
+    allies_vec.clear();
+    ally_bullets.clear();
+    enem_bullets.clear(); 
+    player_id = 0u;
+    singletonCmps = { };
+}
+
+
+inline void
+UnitsManager::loadLevel0() { 
     enemies_vec.reserve(15);
     allies_vec.reserve(10);
     ally_bullets.reserve(20);
@@ -67,24 +84,77 @@ UnitsManager::init() noexcept {
     createSoldier(sz, 380l, 390l, Color::Blue, true, pat1);
     createSoldier(sz, 360l, 400l, Color::Blue, true, pat1);
     createSoldier(sz, 400l, 420l, Color::Blue, true, pat1);
-    createSoldier(sz, 380l, 420l, Color::Blue, true, pat1);
-    createSoldier(sz, 300l, 420l, Color::Blue, true, pat1);
     createArcher( sz, 380l, 400l, Color::Blue, true, pat1);
     createArcher( sz, 420l, 380l, Color::Blue, true, pat1);
+    createSoldier(sz, 380l, 420l, Color::Blue, true, pat1);
+    createSoldier(sz, 300l, 420l, Color::Blue, true, pat1);
     createArcher( sz, 350l, 380l, Color::Blue, true, pat1);
     createArcher( sz, 340l, 380l, Color::Blue, true, pat1);
     createArcher( sz, 410l, 380l, Color::Blue, true, pat1);
+
+//void createMessage(const int64_t pos_x, const int64_t pos_y, const char* text) noexcept;
 }
 
 inline void
-UnitsManager::clear() noexcept {
-    ent_man.clear();
-    enemies_vec.clear();
-    allies_vec.clear();
-    ally_bullets.clear();
-    enem_bullets.clear(); 
-    player_id = 0u;
-    singletonCmps = { };
+UnitsManager::loadLevel1() {
+    enemies_vec.reserve(17);
+    allies_vec.reserve(10);
+    ally_bullets.reserve(20);
+    enem_bullets.reserve(20);
+    patrols.reserve(2);
+    
+    auto& pat1  = patrols.emplace_back();
+    pat1.points = { fvec2<fint_t<int64_t>> 
+        { { -1820l }, { -650l } }
+      , { {  -950l }, {  150l } }
+      , { {  -150l }, { -650l } }
+      , { {  -950l }, { -850l } } 
+    };
+
+    auto& pat2  = patrols.emplace_back();
+    pat2.points = { fvec2<fint_t<int64_t>> 
+        { {  100l }, {  250l } }
+      , { {  600l }, {   50l } }
+      , { { 1400l }, { -700l } }
+      , { {    0l }, { -400l } } 
+    };
+
+    constexpr const int64_t sz { 20l };
+
+    createPlayerPointer(sz, -1800l, 820l, Color::Green);
+    createCamera(UWIN_W, UWIN_H, -1800+(HALF_WIN_W * -1), 720l+(HALF_WIN_H * -1));
+
+/*SQUAD 1*/
+    createSoldier(sz, -1800l , -650l, Color::Red, false, pat1);
+    createSoldier(sz, -1840l , -660l, Color::Red, false, pat1);
+    createSoldier(sz, -1810l , -670l, Color::Red, false, pat1);
+    createSoldier(sz, -1810l , -630l, Color::Red, false, pat1);
+    createArcher( sz, -1830l , -675l, Color::Red, false, pat1);
+    createArcher( sz, -1770l , -625l, Color::Red, false, pat1);
+    createArcher( sz, -1820l , -650l, Color::Red, false, pat1);
+/*SQUAD 2*/
+    createSoldier(sz, 100l, 100l, Color::Red, false, pat2);
+    createSoldier(sz, 120l, 100l, Color::Red, false, pat2);
+    createSoldier(sz,  80l, 100l, Color::Red, false, pat2);
+    createSoldier(sz, 110l, 120l, Color::Red, false, pat2);
+    createSoldier(sz, 100l,  80l, Color::Red, false, pat2);
+    createArcher( sz, 100l, 130l, Color::Red, false, pat2);
+    createArcher( sz,  90l,  90l, Color::Red, false, pat2);
+    createArcher( sz, 130l, 130l, Color::Red, false, pat2);
+    createArcher( sz, 100l, 140l, Color::Red, false, pat2);
+    createArcher( sz, 120l,  70l, Color::Red, false, pat2);
+
+/*TEAM*/
+    createSoldier(sz, -1830l, 820l, Color::Blue, true, pat1);
+    createSoldier(sz, -1820l, 810l, Color::Blue, true, pat1);
+    createSoldier(sz, -1820l, 830l, Color::Blue, true, pat1);
+    createSoldier(sz, -1810l, 800l, Color::Blue, true, pat1);
+    createSoldier(sz, -1830l, 800l, Color::Blue, true, pat1);
+    createArcher( sz, -1820l, 790l, Color::Blue, true, pat1);
+    createArcher( sz, -1800l, 850l, Color::Blue, true, pat1);
+    createArcher( sz, -1800l, 780l, Color::Blue, true, pat1);
+    createArcher( sz, -1780l, 820l, Color::Blue, true, pat1);
+    createArcher( sz, -1790l, 770l, Color::Blue, true, pat1);
 }
 
 /* CREATES & DELETE */

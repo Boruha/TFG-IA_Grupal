@@ -23,6 +23,18 @@ GameManager::init() noexcept {
 }
 
 void
+GameManager::loadLevel0() {
+    level_index = 0;
+    units_man.loadLevel0();
+}
+
+void
+GameManager::loadLevel1() {
+    level_index = 1;
+    units_man.loadLevel1();
+}
+
+void
 GameManager::clear() noexcept {
     units_man.clear();
 }
