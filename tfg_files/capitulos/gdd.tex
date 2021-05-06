@@ -79,14 +79,14 @@ Los tipos son los siguientes:
 
 \begin{table}[ht]
 \begin{center}
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-        & Daño & Vida & Rango \\ 
+        & Daño & Vida  & Rango  & Tiempo de ataque \\ 
 \hline
 \hline
-Soldado & 3    & 12    & Melee \\ 
+Soldado & 7    & 24    & Melee & 2 seg.\\ 
 \hline
-Arquero & 3    & 7     & Largo \\ 
+Arquero & 4    & 14    & Largo & 3 seg.\\ 
 \hline
 \end{tabular}
 \caption{Unidades y estadísticas}
@@ -200,6 +200,32 @@ Dicho esquema podemos encontrarlo en la figura siguiente:
 \includegraphics[width=0.45\textwidth]{imagenes/gdd/pantallas/flow_ejecucion.png}
 \caption{MockUp flujo de ejecución.}
 \label{esq:flow_juego}
+\end{figure}
+
+\section{Niveles}
+El juego contiene actualmente 2 niveles (idealmente serán más), el primero se trata de un nivel introductorio
+en el que encontraremos grupos pequeños de unidades que será fáciles de abatir para que el jugador experimente
+como es el combate en el juego, además, a lo largo del nivel queremos poner marcadores para dar indicaciones
+al jugador de como jugar o \textit{tips} para superar los niveles de forma satisfactoria.
+El nivel se supera matando a los enemigos.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\textwidth]{imagenes/gdd/nivel0.png}
+\caption{MockUp nivel 0.}
+\label{esq:lvl0}
+\end{figure}
+
+En el segundo nivel se muestra otro de los objetivos posibles en el juego, el cual se trata de alcanzar
+una zona de huida/meta más allá de las tropas enemigas, en este nivel encontraremos
+grupos más grandes de enemigos que nos pueden vencer y hacernos repetir el nivel, por ello podremos optar
+por intentar derrotarlos o buscar una que nos evite el conflicto lo máximo posible. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\textwidth]{imagenes/gdd/nivel1.png}
+\caption{MockUp nivel 1.}
+\label{esq:lvl1}
 \end{figure}
 
 \section{Escenarios}
