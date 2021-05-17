@@ -25,7 +25,7 @@ struct EntityManager {
 private:
       std::unordered_map<entID, Entity_t> ent_map      {     };
       ComponentStorage                    cmp_storage  {     };
-      const std::size_t                   MAX_ENTITIES { 10u };
+      const std::size_t                   MAX_ENTITIES { 50u };
 };
 
 } // namespace AIP

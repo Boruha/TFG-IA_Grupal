@@ -10,3 +10,4 @@
 #include <game/cmp/EventCmp_t.hpp>
 #include <game/cmp/BulletCmp.hpp>
 #include <game/cmp/BlackBoardCmp.hpp>
+#include <game/cmp/TriggerCmp_t.hpp>

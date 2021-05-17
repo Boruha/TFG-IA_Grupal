@@ -9,7 +9,7 @@ namespace AIP {
 
 inline void
 UnitsManager::init() noexcept {
-    loadLevel0();
+    loadLevel1();
 }
 
 inline void
@@ -155,6 +155,9 @@ UnitsManager::loadLevel1() {
     createArcher( sz, -1800l, 780l, Color::Blue, true, pat1);
     createArcher( sz, -1780l, 820l, Color::Blue, true, pat1);
     createArcher( sz, -1790l, 770l, Color::Blue, true, pat1);
+
+/*OTHERS*/
+    createTiggerBox(30u, 40u, 500l, -800l, GameConditions::Victoria);
 }
 
 /* CREATES & DELETE */
@@ -230,6 +233,16 @@ UnitsManager::createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, con
                 ent_man.addComponentToEntity( new_ent, BulletCmp(         new_ent, { pos_x }, { pos_y }, eid , amount ) );
 
     mov.dir = (nDir * (ENT_MAX_SPEED/2));
+}
+
+inline void 
+UnitsManager::createTiggerBox(const uint32_t sz_x, const uint32_t sz_y, const int64_t pos_x, const int64_t pos_y, GameConditions event) noexcept {
+    const auto new_ent = ent_man.createEntity_t();
+
+    ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,   sz_x   ,   sz_y  ) );
+    ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y }              ) );
+    ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,   sz_x   ,   sz_y  , Color::White ) );
+    ent_man.addComponentToEntity( new_ent, TriggerCmp_t(      new_ent,   event  ) );
 }
 
 

@@ -2,6 +2,7 @@
 #include <game/cmp/MovementComponent.hpp>
 #include <game/cmp/Collider2DCmp.hpp>
 #include <game/cmp/EventCmp_t.hpp>
+#include <game/cmp/TriggerCmp_t.hpp>
 #include <game/cmp/BulletCmp.hpp>
 #include <game/cmp/RenderComponent.hpp>
 #include <game/utils/ScreenData.hpp>
@@ -13,14 +14,21 @@ namespace AIP {
 
 
 template <typename Context_t>
-void
+GameConditions
 CollisionSystem<Context_t>::update(Context_t& context) noexcept {
+    auto result   { GameConditions::Loop };
     auto& movCmps = context.template getComponentVector<MovementComponent>();
 
     bulletsCollision(context, context.getEnemyIDs(), context.getAllyBullets() );
     bulletsCollision(context, context.getAllyIDs() , context.getEnemBullets() );
     
     checkWorldLimits(context, movCmps);
+
+    result = checkTriggerBoxes(context);
+
+    std::cout << "CollisionSys: " << static_cast<int>(result) << "\n";
+
+    return result;
 }
 
 template <typename Context_t>
@@ -96,6 +104,51 @@ CollisionSystem<Context_t>::checkWorldLimits(Context_t& context, std::vector<Mov
                     coord.y = FIXED_HALF_WORLD_H_N;
     });
 }
+
+template <typename Context_t>
+GameConditions 
+CollisionSystem<Context_t>::checkTriggerBoxes(Context_t& context) noexcept {
+    auto  result      { GameConditions::Loop };
+    auto  axis_x      { false };
+    auto  axis_y      { false };
+
+    auto  player   = context.getPlayerID();
+    auto& pjMov    = context.template getCmpByEntityID<MovementComponent>(player);
+    auto& pjColl2D = context.template getCmpByEntityID<Collider2DCmp>(player);
+    auto& pjCoords = pjMov.coords;
+    auto  pjP2     { pjCoords + pjColl2D.p2 };
+
+    auto& triggerCmps = context.template getComponentVector<TriggerCmp_t>();
+
+    for(auto& trigger : triggerCmps) {
+        auto& entMov    = context.template getCmpByEntityID<MovementComponent>(trigger.getEntityID());
+        auto& entColl2D = context.template getCmpByEntityID<Collider2DCmp>(trigger.getEntityID());
+        auto& entCoords = entMov.coords;
+        auto  entP2     { entCoords + entColl2D.p2 };
+
+        
+        //eje x
+        if(pjCoords.x < entP2.x && entCoords.x < pjCoords.x)
+            axis_x = true;
+        if(pjP2.x < entP2.x && entCoords.x < pjP2.x)
+            axis_x = true;
+
+        //eje y
+        if(pjCoords.y < entP2.y && entCoords.y < pjCoords.y)
+            axis_y = true;
+        if(pjP2.y < entP2.y && entCoords.y < pjP2.y)
+            axis_y = true;
+
+        if(axis_x && axis_y) {
+            result = trigger.event;
+            break;
+        }
+        
+        axis_y = axis_x = false;
+    }
+
+    return result;
+} 
 
 
 } //NS

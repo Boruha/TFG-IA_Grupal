@@ -27,13 +27,15 @@ int main() {
 
     if(gameCondition == GameConditions::Victoria) {
       gameManager.clear();
-      gameManager.loadLevel1();
-      gameCondition = GameConditions::Loop;
+      gameManager.loadNextLevel();
+      gameManager.result = GameConditions::Loop; 
+      gameCondition      = GameConditions::Loop;
     }
 
     if(gameCondition == GameConditions::Derrota) {
       gameManager.clear();
       gameManager.loadLevel0();
+      gameManager.result = GameConditions::Loop; 
       gameCondition = GameConditions::Loop;
     }
   }

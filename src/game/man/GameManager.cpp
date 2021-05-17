@@ -9,7 +9,7 @@
 namespace AIP {
 
 GameManager::GameManager() {
-    units_man.init();
+    loadLevel0();
 }
 
 void
@@ -23,13 +23,27 @@ GameManager::init() noexcept {
 }
 
 void
-GameManager::loadLevel0() {
+GameManager::loadNextLevel() noexcept {
+    level_index = (level_index + 1) % 2;
+    
+    switch (level_index) {
+        case 0: loadLevel0();
+            break;
+
+        case 1: loadLevel1();
+            break;
+    }  
+}
+
+
+void
+GameManager::loadLevel0() noexcept {
     level_index = 0;
     units_man.loadLevel0();
 }
 
 void
-GameManager::loadLevel1() {
+GameManager::loadLevel1() noexcept {
     level_index = 1;
     units_man.loadLevel1();
 }
@@ -41,6 +55,10 @@ GameManager::clear() noexcept {
 
 GameConditions
 GameManager::update() noexcept {
+    auto loopResult { GameConditions::Loop };
+
+    std::cout << "INIT LOOP\n";
+
     //timers and dmg
     cd_sys.update(units_man, DeltaTime);
     //pj decision
@@ -51,7 +69,10 @@ GameManager::update() noexcept {
     ia_sys.update(units_man, DeltaTime);
     //physics
     movement_sys.update(units_man, DeltaTime);
-    collision_sys.update(units_man);
+    loopResult     = collision_sys.update(units_man);
+
+    if(loopResult != GameConditions::Loop)
+        result     = loopResult;
 
     //draw
     if( render_sys.update(units_man) )
@@ -61,8 +82,14 @@ GameManager::update() noexcept {
  
     //deleted entities
     bulletLife_sys.update(units_man);
-    result = death_sys.update(units_man);
+    loopResult = death_sys.update(units_man);
+
+    if(loopResult != GameConditions::Loop)
+        result     = loopResult;
+
     attack_sys.update(units_man);
+
+    std::cout << "Result: " << static_cast<int>(result) << "\n";
  
     return result;
 }

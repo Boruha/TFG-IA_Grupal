@@ -18,7 +18,7 @@ struct CmpVector : CmpCollection {
     bool     deleteCmpByEntityID(entID eid) noexcept override;
     auto     findCmpByEntityID(entID eid)   noexcept;
 
-    const std::size_t    MAX_CMP_SIZE = 30u;
+    const std::size_t    MAX_CMP_SIZE = 35u;
           std::vector<T> cmps;
 };
 
