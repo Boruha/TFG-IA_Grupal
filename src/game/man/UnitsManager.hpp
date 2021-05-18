@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <tuple>
+#include <string>
 
 
 namespace AIP {
@@ -32,8 +33,7 @@ struct UnitsManager {
       void createCamera(       const uint32_t sz_x, const uint32_t sz_y, const int64_t pos_x, const int64_t pos_y) noexcept;
       void createBullet( fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y, bool team, BECS::entID eid, int64_t amount) noexcept;
       void createTiggerBox(    const uint32_t sz_x, const uint32_t sz_y, const int64_t pos_x, const int64_t pos_y, GameConditions event)    noexcept;
-
-      //void createMessage(const int64_t pos_x, const int64_t pos_y, std::string mensaje) noexcept;
+      void createMessage(const int64_t pos_x, const int64_t pos_y, std::string mensaje) noexcept;
 
 
       template <typename CMP_t>  constexpr std::vector<CMP_t>& getComponentVector()                    noexcept;

@@ -57,8 +57,6 @@ GameConditions
 GameManager::update() noexcept {
     auto loopResult { GameConditions::Loop };
 
-    std::cout << "INIT LOOP\n";
-
     //timers and dmg
     cd_sys.update(units_man, DeltaTime);
     //pj decision
@@ -69,8 +67,8 @@ GameManager::update() noexcept {
     ia_sys.update(units_man, DeltaTime);
     //physics
     movement_sys.update(units_man, DeltaTime);
-    loopResult     = collision_sys.update(units_man);
 
+    loopResult     = collision_sys.update(units_man);
     if(loopResult != GameConditions::Loop)
         result     = loopResult;
 
@@ -82,14 +80,12 @@ GameManager::update() noexcept {
  
     //deleted entities
     bulletLife_sys.update(units_man);
-    loopResult = death_sys.update(units_man);
 
+    loopResult     = death_sys.update(units_man);
     if(loopResult != GameConditions::Loop)
         result     = loopResult;
 
     attack_sys.update(units_man);
-
-    std::cout << "Result: " << static_cast<int>(result) << "\n";
  
     return result;
 }

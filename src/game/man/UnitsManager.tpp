@@ -92,7 +92,8 @@ UnitsManager::loadLevel0() {
     createArcher( sz, 340l, 380l, Color::Blue, true, pat1);
     createArcher( sz, 410l, 380l, Color::Blue, true, pat1);
 
-//void createMessage(const int64_t pos_x, const int64_t pos_y, const char* text) noexcept;
+/* OTHERS */
+    createMessage(600l, 600l,"Esto es una prueba u know\n Controles:\n\tW -> UP\n\tA -> DOWN");
 }
 
 inline void
@@ -244,6 +245,16 @@ UnitsManager::createTiggerBox(const uint32_t sz_x, const uint32_t sz_y, const in
     ent_man.addComponentToEntity( new_ent, RenderComponent(   new_ent,   sz_x   ,   sz_y  , Color::White ) );
     ent_man.addComponentToEntity( new_ent, TriggerCmp_t(      new_ent,   event  ) );
 }
+
+inline void
+UnitsManager::createMessage(const int64_t pos_x, const int64_t pos_y, std::string mensaje) noexcept {
+    const auto new_ent = ent_man.createEntity_t();
+
+    ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,   20u    ,   20u     ) );
+    ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y } ) );
+    ent_man.addComponentToEntity( new_ent, TextCmp_t(         new_ent, mensaje  ) );
+}
+
 
 
 inline void 

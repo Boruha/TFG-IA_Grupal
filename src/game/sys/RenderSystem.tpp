@@ -2,6 +2,7 @@
 #include <game/cmp/MovementComponent.hpp>
 #include <game/cmp/Collider2DCmp.hpp>
 #include <game/cmp/InterfaceControl.hpp>
+#include <game/cmp/TextCmp_t.hpp>
 #include <game/utils/ScreenData.hpp>
 
 #include <ecs/ent/Entity_t.hpp>
@@ -21,6 +22,7 @@ template <typename Context_t>
 bool
 RenderSystem<Context_t>::update(Context_t& context) noexcept {    
     const auto& renderCmps = context.template getComponentVector<RenderComponent>();
+    const auto& textCmps   = context.template getComponentVector<TextCmp_t>();
     
     /* camera info */
     const auto& cameraID  = context.getCameraID();
@@ -63,9 +65,20 @@ RenderSystem<Context_t>::update(Context_t& context) noexcept {
                 draw_debug(mov, render, collider2D, camScreenCoords);
     });
 
+    std::for_each(cbegin(textCmps), cend(textCmps), 
+        [&](const TextCmp_t& text) {
+            auto& mov = context.template getCmpByEntityID<MovementComponent>( text.getEntityID() );
+
+            auto screen_coords { continuousToScreen(mov.coords) }; //WORLD COORDS 
+            auto cam_coords    { screen_coords - camScreenCoords }; //CAM   COORDS
+
+            engine->drawMsg(cam_coords.x, cam_coords.y, text.text.c_str());
+    });
+
            engine->drawInMinimap( camScreenCoords.x, camScreenCoords.y, 
                                   static_cast<uint32_t>(camP2.x.getNoScaled()), static_cast<uint32_t>(camP2.y.getNoScaled()), 
                                   static_cast<uint32_t>(Color::Yellw), false );
+
            engine->render();
     return engine->shouldClose();
 }

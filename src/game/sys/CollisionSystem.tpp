@@ -26,8 +26,6 @@ CollisionSystem<Context_t>::update(Context_t& context) noexcept {
 
     result = checkTriggerBoxes(context);
 
-    std::cout << "CollisionSys: " << static_cast<int>(result) << "\n";
-
     return result;
 }
 
@@ -125,7 +123,6 @@ CollisionSystem<Context_t>::checkTriggerBoxes(Context_t& context) noexcept {
         auto& entColl2D = context.template getCmpByEntityID<Collider2DCmp>(trigger.getEntityID());
         auto& entCoords = entMov.coords;
         auto  entP2     { entCoords + entColl2D.p2 };
-
         
         //eje x
         if(pjCoords.x < entP2.x && entCoords.x < pjCoords.x)
