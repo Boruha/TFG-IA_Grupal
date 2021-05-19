@@ -83,8 +83,8 @@ ALLOBJLIB   := $(foreach L,$(ALLCLIB) $(ALLCPPLIB),$(call C2OLIB,$(L)))
 
 # HEADERS AND LIBRARIES
 INCLUDE 	:= -I.$(APPDIR)/$(SRC) -I.$(APPDIR)/$(LIB) -I.$(APPDIR)/$(LIB)/gl3w -DIMGUI_IMPL_OPENGL_LOADER_GL3W
-LIBS 		:= -L.$(APPDIR)/$(LIB) -lGL -lglfw -ldl
-GOLD_OPTION	:= #-fuse-ld=gold
+LIBS 		:= -L.$(APPDIR)/$(LIB) -lGLX -lglfw -ldl
+GOLD_OPTION	:= #-fuse-ld=gold-lGL 
 
 # CLEAN
 RM          := rm -f
