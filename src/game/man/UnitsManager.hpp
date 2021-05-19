@@ -29,11 +29,12 @@ struct UnitsManager {
 
       void createSoldier(      const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team, Patrol_t& pat) noexcept;
       void createArcher(       const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col, bool team, Patrol_t& pat) noexcept;
+      void createTiggerBox(    const uint32_t sz_x, const uint32_t sz_y, const int64_t pos_x, const int64_t pos_y, GameConditions event) noexcept;
+      void createMessage(      const uint32_t sz_x, const uint32_t sz_y, const int64_t pos_x, const int64_t pos_y, std::string mensaje)  noexcept;
       void createPlayerPointer(const uint32_t size, const int64_t pos_x, const int64_t pos_y, const Color col    ) noexcept;
       void createCamera(       const uint32_t sz_x, const uint32_t sz_y, const int64_t pos_x, const int64_t pos_y) noexcept;
-      void createBullet( fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y, bool team, BECS::entID eid, int64_t amount) noexcept;
-      void createTiggerBox(    const uint32_t sz_x, const uint32_t sz_y, const int64_t pos_x, const int64_t pos_y, GameConditions event)    noexcept;
-      void createMessage(const int64_t pos_x, const int64_t pos_y, std::string mensaje) noexcept;
+      
+      void createBullet(fvec2<fint_t<int64_t>> nDir, const int64_t pos_x, const int64_t pos_y, bool team, BECS::entID eid, int64_t amount) noexcept;
 
 
       template <typename CMP_t>  constexpr std::vector<CMP_t>& getComponentVector()                    noexcept;

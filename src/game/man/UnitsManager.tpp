@@ -67,12 +67,14 @@ UnitsManager::loadLevel0() {
     createSoldier(sz, -920l, -430l, Color::Red, false, pat1);
     createArcher( sz, -950l, -430l, Color::Red, false, pat1);
     createArcher( sz, -930l, -450l, Color::Red, false, pat1);
+    
 /*SQUAD 2*/
     createSoldier(sz, -720l, 460l, Color::Red, false, pat2);
     createSoldier(sz, -780l, 450l, Color::Red, false, pat2);
     createSoldier(sz, -760l, 430l, Color::Red, false, pat2);
     createSoldier(sz, -740l, 410l, Color::Red, false, pat2);
     createArcher( sz, -730l, 450l, Color::Red, false, pat2);
+
 /*SQUAD 3*/
     createSoldier(sz, 925l, -410l, Color::Red, false, pat3);
     createSoldier(sz, 880l, -420l, Color::Red, false, pat3);
@@ -93,7 +95,28 @@ UnitsManager::loadLevel0() {
     createArcher( sz, 410l, 380l, Color::Blue, true, pat1);
 
 /* OTHERS */
-    createMessage(600l, 600l,"Esto es una prueba u know\n Controles:\n\tW -> UP\n\tA -> DOWN");
+    createMessage(180u, 170u, 600l, 600l,
+    "Bienvenido a mi TFG, el punto verde es tu representación en este mundo,"
+    "para que puedas navegar por el mundo usa esto."
+    "\n\nControles:"
+        "\n\tArrowUp    -> Up"
+        "\n\tArrowDown  -> Down"
+        "\n\tArrowLeft  -> Left"
+        "\n\tArrowRight -> Right");
+    
+    createMessage(180u, 140u, 600l, 780l,
+    "Esquina inferior derecha esta el minimapa, "
+    "muestran los distintos elementos del juego."
+    "\nRojo     -> Aliados"
+    "\nAzul     -> Enemigos"
+    "\nAmarillo -> Cámara"
+    "\nCian     -> Ayudas");
+
+    createMessage(210u, 170u, 0l, 780l,
+    "Esquina inferior izquiera se encuentra el HUD para manejar las unidades."
+    "\n\n- Arriba: Posibles comportamientos"
+    "\n\n- Abajo : Formaciones disponibles, en anillo las unidades a melee "
+    "protegen más fácil a los arqueros.");
 }
 
 inline void
@@ -133,6 +156,7 @@ UnitsManager::loadLevel1() {
     createArcher( sz, -1830l , -675l, Color::Red, false, pat1);
     createArcher( sz, -1770l , -625l, Color::Red, false, pat1);
     createArcher( sz, -1820l , -650l, Color::Red, false, pat1);
+
 /*SQUAD 2*/
     createSoldier(sz, 100l, 100l, Color::Red, false, pat2);
     createSoldier(sz, 120l, 100l, Color::Red, false, pat2);
@@ -150,15 +174,18 @@ UnitsManager::loadLevel1() {
     createSoldier(sz, -1820l, 810l, Color::Blue, true, pat1);
     createSoldier(sz, -1820l, 830l, Color::Blue, true, pat1);
     createSoldier(sz, -1810l, 800l, Color::Blue, true, pat1);
-    createSoldier(sz, -1830l, 800l, Color::Blue, true, pat1);
+    //createSoldier(sz, -1830l, 800l, Color::Blue, true, pat1);
     createArcher( sz, -1820l, 790l, Color::Blue, true, pat1);
     createArcher( sz, -1800l, 850l, Color::Blue, true, pat1);
     createArcher( sz, -1800l, 780l, Color::Blue, true, pat1);
     createArcher( sz, -1780l, 820l, Color::Blue, true, pat1);
-    createArcher( sz, -1790l, 770l, Color::Blue, true, pat1);
+    //createArcher( sz, -1790l, 770l, Color::Blue, true, pat1);
 
 /*OTHERS*/
     createTiggerBox(30u, 40u, 500l, -800l, GameConditions::Victoria);
+    createMessage(210u, 170u, -1400l, 780l,
+    "El marcador blanco del minimapa indica el objetivo a alcanzar para pasar de nivel.\n\n"
+    "La actividad enemiga es alta en esta zona, igual te conviene evitarlos lo máximo posible");
 }
 
 /* CREATES & DELETE */
@@ -247,10 +274,10 @@ UnitsManager::createTiggerBox(const uint32_t sz_x, const uint32_t sz_y, const in
 }
 
 inline void
-UnitsManager::createMessage(const int64_t pos_x, const int64_t pos_y, std::string mensaje) noexcept {
+UnitsManager::createMessage(const uint32_t sz_x, const uint32_t sz_y, const int64_t pos_x, const int64_t pos_y, std::string mensaje) noexcept {
     const auto new_ent = ent_man.createEntity_t();
 
-    ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,   20u    ,   20u     ) );
+    ent_man.addComponentToEntity( new_ent, Collider2DCmp(     new_ent,   sz_x   ,   sz_y    ) );
     ent_man.addComponentToEntity( new_ent, MovementComponent( new_ent, { pos_x }, { pos_y } ) );
     ent_man.addComponentToEntity( new_ent, TextCmp_t(         new_ent, mensaje  ) );
 }

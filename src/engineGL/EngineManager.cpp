@@ -136,10 +136,8 @@ EngineManager::drawLine(uint32_t p1_x, uint32_t p1_y, uint32_t p2_x, uint32_t p2
 }
 
 void 
-EngineManager::drawMsg(uint32_t p1_x, uint32_t p1_y, const char* text) noexcept {
-    const  auto* viewport = ImGui::GetMainViewport();
-           auto  viewSize = viewport->Size;
-    static auto  p_open   { true };
+EngineManager::drawMsg(uint32_t p1_x, uint32_t p1_y, uint32_t size_x, uint32_t size_y, const char* text) noexcept {
+    static auto  p_open { true };
     
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration 
                                   | ImGuiWindowFlags_AlwaysAutoResize 
@@ -148,7 +146,7 @@ EngineManager::drawMsg(uint32_t p1_x, uint32_t p1_y, const char* text) noexcept 
                                   | ImGuiWindowFlags_NoNav;
 
     ImGui::SetNextWindowPos( ImVec2(p1_x, p1_y), ImGuiCond_Always );
-    ImGui::SetNextWindowSize( ImVec2(viewSize.x/8, viewSize.y/8) );
+    ImGui::SetNextWindowSize( ImVec2(size_x, size_y) );
     {
     ImGui::Begin(text, &p_open, window_flags);
         ImGui::TextWrapped(text);

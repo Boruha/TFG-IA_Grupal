@@ -9,7 +9,7 @@
 namespace AIP {
 
 GameManager::GameManager() {
-    loadLevel0();
+    loadLevel1();
 }
 
 void

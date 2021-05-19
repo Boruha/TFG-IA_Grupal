@@ -67,12 +67,26 @@ RenderSystem<Context_t>::update(Context_t& context) noexcept {
 
     std::for_each(cbegin(textCmps), cend(textCmps), 
         [&](const TextCmp_t& text) {
-            auto& mov = context.template getCmpByEntityID<MovementComponent>( text.getEntityID() );
+                  auto& mov        = context.template getCmpByEntityID<MovementComponent>( text.getEntityID() );
+            const auto& collider2D = context.template getCmpByEntityID<Collider2DCmp>( text.getEntityID() );
 
-            auto screen_coords { continuousToScreen(mov.coords) }; //WORLD COORDS 
+            const auto& coords     { mov.coords };
+            const auto& p2         { collider2D.p2 };
+            const auto  locatedP2  { coords + p2 };
+
+            auto uP2_x { static_cast<uint32_t>(p2.x.getNoScaled()) };
+            auto uP2_y { static_cast<uint32_t>(p2.y.getNoScaled()) };
+
+            auto screen_coords { continuousToScreen(coords) }; //WORLD COORDS 
             auto cam_coords    { screen_coords - camScreenCoords }; //CAM   COORDS
 
-            engine->drawMsg(cam_coords.x, cam_coords.y, text.text.c_str());
+            engine->drawInMinimap( screen_coords.x, screen_coords.y, uP2_x, uP2_y, static_cast<uint32_t>(Color::Blue2), false );
+
+            //clip
+            if( locatedP2.x < camCoords.x || coords.x > camLocatedP2.x ||
+                locatedP2.y < camCoords.y || coords.y > camLocatedP2.y ) return;
+
+            engine->drawMsg(cam_coords.x, cam_coords.y, uP2_x, uP2_y, text.text.c_str());
     });
 
            engine->drawInMinimap( camScreenCoords.x, camScreenCoords.y, 
