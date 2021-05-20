@@ -765,12 +765,40 @@ del nivel, los enemigos serán más y el combate directo nos pondrá en aprietos
 debería ser encontrar una ruta que nos asegure el menor nivel de conflicto posible.
 
 \subsection*{Iteración 9: Retoques y preparación entrega}
+Durante esta última iteración, debido al tiempo y a el estado del proyecto, lo único que queda por hacer
+es desarrollar dos pequeñas herramientas para el proyecto, la compilación en \textit{Windows} y preparar
+todos los documentos para la entrega.
 
-\placeholdertext{tiggers}
-\placeholdertext{mensajes estaticos mapa}
-\placeholdertext{complilación windows}
+En este último período se ha creado un pequeño sistema de \textit{TiggerBoxes} que nos permiten
+lanzar eventos del juego una vez colisionamos con ellas con nuestro marcador, esto nos habilita
+poder tener niveles en los que podremos avanzar simplemente alcanzando la localización objetivo.
+Estos objetos se componen únicamente de una componente de colisiones, una de movimiento 
+una de dibujado y un nuevo componente de eventos que contiene la acción a ejecutar cuando colisionemos
+, los textos salen representados en blanco en el minimapa.
 
-\placeholdertext{terminar de escribir memoria}
-\placeholdertext{poster + docs entrega}
+Además, ahora contamos con la posibilidad de ubicar textos estáticos por el nivel para dar información
+al jugador cuando lo veámos necesario, esto nos permitirá darle píldoras de información como los controles
+iniciales o el objetivo del nivel en el que se encuentra, además de, introducir elementos nuevos que se
+introduzcan en los niveles posteriores.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.50\textwidth]{imagenes/diario_desarrollo/textos.png}\\
+\caption{Mensajes estáticos nivel}
+\label{fig:texts}
+\end{figure}
 
+En cuanto a la compilación y ejecución en \textit{Windows}, con un par de cambios en las opciones de
+compilación y añadiendo las \textit{``.dll''} necesarias el proyecto funciona correctamente y fluido
+en el sistema. Para la compilación de \textit{Dear ImGUI} lo único que ha sido necesario añadir ha sido
+la opción de compilación \textit{``-DIMGUI\_DISABLE\_WIN32\_FUNCTIONS''} para evitar que carge funciones
+de \textit{DirectX11}. El compilador usado ha sido \textit{MinGW64} a través del entorno \textit{MSYS2}
+corriendo directamente en \textit{Windows}.
+\footnote{Página de MSYS2: y guía para usar MinGW \url{https://www.msys2.org}} 
+
+Para finalizar, lo último que queda es terminar de preparar la entrega y todos los documentos relacionados
+como son: finalizar la memoria con la redacción de las conclusiones, realizar el resumen del trabajo, 
+diseñar un poster para la presentación, adjuntar el documento de autoría e incluir una licencia para el
+proyecto. \\ 
+Una vez este todo se creará un entregable con todos los contenidos dispuestos de la mejor forma posible
+para el tribunal y se entregará de acuerdo con la fecha establecida.

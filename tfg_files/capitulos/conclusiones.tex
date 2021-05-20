@@ -1,29 +1,68 @@
 \chapter{Conclusiones}
-Er final primo.
+Para hablar de las conclusiones obtenidas del desarrollo del proyecto, quiero traer de vuelta los
+objetivos que se propusieron en su momento. 
+
+Uno de los objetivos más generales era ``Comprender mejor el funcionamiento del \ac{PC}'', gracias a
+tareas como el desarollo del tipo numérico en coma fija hemos ampliado nuestros conocimientos sobre como
+traduce y codifíca el código el compilador. \\ Además, tras realizar de nuevo el proceso de preparar el
+proyecto para no depender del sistema para su ejecución, hemos afianzado nuestros conocimientos sobre las
+opciones de compilación y enlace de librerías.
+
+A lo largo de estos meses la gestión de la memoria usada durante la ejecución del programa ha jugado una
+carta importante. Las operaciones de reserva, liberación y acceso de memoria suponen recursos y tiempo
+para sistema, hacer un uso eficiente y escoger el momento adecuado para ellas es altamente importante.
+Para lograr hacer un uso más efectivo, hemos tenido que trabajar otro de los objetivos del proyecto,
+``Profundizar en la arquitectura \ac{ECS}'' el cuál nos ha permitido desarrollar un pequeño motor que
+gestione de forma correcta la información de nuestras entidades.
+
+Uno de los puntos claves era estudiar y aprender nuevas técnicas de \ac{IA}, en concreto el
+\textit{Flocking} y el uso de los \textit{Steering Behaviors}, además de poder crear una demo que nos
+permite mostrar el conocimiento adquirido. \\
+Gracias a la lectura a conciencia sobre el tema y la dedicación de un largo periodo de tiempo para
+desarollar algoritmos y funciones que trabaja estas técnicas, hemos conseguido entender su
+funcionamiento a la perfección y obtener resultados que satisfacen este altamente objetivo.
+
+Al desarrollar todo únicamente en \textit{C++17}, hemos conseguido apliar el conocimiento sobre el lenguaje
+y entender mejor el funcionamiento de algunas funcionalidades y herramientas incluidas en la \textit{STL} y
+a desarrollar las nuestras propias, como puede ser el ya mencionado tipo de dato en coma fija, siguiendo una
+serie de normas y reglas estandarizadas.
+
 
 \section{Lecciones aprendidas}
-hablar de los hitos/cosas importantes en general
+Después de estos meses trabajando en el \ac{TFG}, hay una serie de mensajes y/o ideas que han ganado peso y
+que es puede ser interesante tener en cuenta.
+
+A la hora de desarrollar un proyecto, herramientas y códigos hay miles, pero lo que siempre vas a tener es
+una máquina que lo interprete y ejecute. Conocer la máquina y como gestiona tu trabajo te permitirá ser más óptimo y encontrar fallos más rápido de haberlos, por ello es importante invertir tiempo en entender como
+funciona a bajo nivel. 
+
+Un pilar fundamental de la ingeniería son las matemáticas, es importante no descuidarlas y entender como
+hacer un uso correcto de ellas aplicado a la informática. Una vez más, entendiendo como las gestiona y
+representa internamente.
+
+Es importante planificar el desarrollo con periódos de tiempo realistas, las prisas y la mala planificación
+llevan a soluciones temporales y malos funcionamientos.
+
+Cuanto más general y flexible sea el código, mejor. Diseñar las herramientas de forma que sean reutilizable
+te facilitará el trabajo futuro y te hará plantear de mejor forma su funcionamiento.
+
+Internet cuenta con mucha información y gente dispuesta a ayudar, pero no hay que olvidarse de los libros
+como fuente de un conocimiento más completo y profundo.
+
 
 \section{Trabajos futuros}
 Con el fin de evaluar que aspectos del proyecto quedan por finalizar, vamos a elaborar dos
-listas con elementos técnicos y de diseño que sería deseable poder introducir en el proyecto.
-La primera serán elementos que estimamos posibles de alcanzar en el tiempo restante de
-desarrollo, y la segunda cuestiones que es altamente probable que no se puedan acometer.
+listas con elementos técnicos y de diseño que serían deseables para en el proyecto.
+La primera serán elementos que estimamos de alta prioridad y necesarios, que por motivos de tiempo
+y desarrollo no se han posido integrar a tiempo, la segunda serań cuestiones que es altamente probable 
+que no se puedan realizar, que tienen una baja prioridad por el momento o que estan fuera de los
+objetivos generales del trabajo y por eso se han quedado fuera del desarrollo realizado hasta la fecha.
 
 \textbf{Objetivos principales:}
 \begin{itemize}
-	\item Plantear como dar \textit{feedback} al jugador del estado de las unidades en el nivel.
+	\item Dar \textit{feedback} al jugador del estado de las unidades en el nivel.
 
-	\item Diseñar sistema de triggers para poder lanzar eventos para el jugador.
-
-	\item Diseñar nivel tutorial donde se explica como jugar e interactuar con las unidades
-	tanto aliadas como enemigas y las reglas.
-
-	\item Crear un menú de inicio previo a la ejecución del juego.
-
-	\item Redacción completa de la memoria.
-
-	\item Montar el proyecto para compilar tanto en Windows como en Linux.
+	\item Crear un sistema de menús para la ejecución del juego.
 \end{itemize}
 
 \textbf{Objetivos deseables:}
