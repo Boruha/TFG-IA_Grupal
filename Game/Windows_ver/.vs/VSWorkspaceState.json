@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\game",
+    "\\src\\game\\cmp"
+  ],
+  "SelectedNode": "\\src\\game\\cmp\\MovementComponent.hpp",
+  "PreviewInSolutionExplorer": false
+}
