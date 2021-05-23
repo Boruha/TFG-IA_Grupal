@@ -1,6 +1,6 @@
 \chapter{Desarrollo y fases del producto}
 A lo largo de esta sección comentaremos todo el proceso de desarrollo del prototipo y de la 
-memoria, las diferentes iteraciones del producto serán agrupadas en diversas fases con el fin
+memoria. Las diferentes iteraciones del producto serán agrupadas en diversas fases con el fin
 de facilitar la lectura y el entendimiento de los objetivos planteados en cada momento. Además,
 se contarán de forma más extensa los puntos relevantes y objetivos en este proyecto.
 
@@ -46,7 +46,7 @@ Iteraciones                                               & \% Completado    & T
 
 \cmidrule[1pt]{1-3}
 
-\textbf{2.1.} Trabajar más la memoria.                      & 65\%          & $\infty$ \\
+\textbf{2.1.} Trabajar más la memoria.                      & 65\%          & It.9 \\
 	\cmidrule[.006pt]{1-3}
 \textbf{2.2.} Terminar de definir idea (GDD).               & 100\%         &          \\
 	\cmidrule[.006pt]{1-3}
@@ -97,7 +97,7 @@ y \textit{\textless TinyPTC\textgreater}.
 
 Una de las herramientas implementadas en el proyecto es el tipo de dato entero con coma fija,
 en C++ podemos encontrar el tipo fundamental \textit{float} creado para trabajar con números 
-reales, pero si miramos como funcionan exactamente es posible encontar que no es lo que deseamos
+reales, pero si miramos cómo funcionan exactamente es posible encontar que no es lo que deseamos
 exactamente. Los \textit{floats} usan ``precisión simple'' lo cual implica que conforme el número 
 sea más grande, la cantidad de bytes destinados a la representación de la parte decimal va 
 disminuyendo ofreciendo así menor precisión. Además, trabajar con ellos es más costoso a nivel
@@ -105,11 +105,11 @@ computacional\footnote{Esto pasa sobretodo en máquinas que no tengan CPUs con u
 a cálculos en coma flotante} y conllevan un código más pesado debido a la codificación usada 
 al ser compilados.
 
-El tipo con coma fija tiene dos partes, en primer lúgar el valor que se quiere reprentar normal
+El tipo con coma fija tiene dos partes, en primer lúgar el valor que se quiere representar normal
 y corriente, y por otro la escala, número que indicará la cantidad de valores disponibles
 para la representación decimal. La escala la usaremos para multiplicar o dividir nuestro número
 para convertirlo a coma fija, devolverlo sin escalar y/o operaciones con otros números enteros.\\
-Es importante elegir una escala adecuada para trabajar de forma eficiente, para ello escogeremos
+Es importante elegir una escala adecuada para trabajar de forma eficiente. Para ello escogeremos
 un número portencia de 2 el cual nos permitirá usar desplazamientos en múltiplicaciones y divisiones,
 hacíendo los calculos mucho más rápidos que si tuvieramos que usar las operaciones comunes.
 
@@ -147,7 +147,7 @@ dirección y velocidad.
 Uno de los comportamientos más sencillos es el \textit{`Arrive'}, el cual nos
 llevará a la posición objetivo de forma directa y conforme estemos llegando a esta, la 
 acceleración disminuirá parando una vez hayamos llegado al destino. En esta función podremos
-apreciar como calculamos la velocidad objetivo en función de la distancia hasta llegar a
+apreciar cómo calculamos la velocidad objetivo en función de la distancia hasta llegar a
 la posición objetivo, una vez se calcula se compara con el desplazamiento actual de la entidad
 y es la resta de ambas la que nos dará la acceleración necesaria para alcanzar la velocidad
 objetivo, siempre controlando que la acceleración y la velocidad no exceden los límites 
@@ -200,8 +200,8 @@ se busca dibujar y en amarillo la recta resultante del algoritmo.
 
 Otra de las herramientas destinadas a poder análizar el funcionamiento del programa es
 el control del tiempo de ejecución y el tamaño del \textit{`DeltaTime'}. Al poder disminuir
-el número de fotogramas por segundo, podemos visualizar más detenidamente que sucede en
-pantalla y ver que todo va según la previsión, por otra parte se puede aumentar la velocidad
+el número de fotogramas por segundo, podemos visualizar más detenidamente qué sucede en
+pantalla y ver que todo va según la previsión. Por otra parte, se puede aumentar la velocidad
 para llegar antes a un punto de la ejecución en concreto. Además, jugar con el tamaño del
 \textit{`DeltaTime'} nos permite experimentar con los valores de velocidad y/o otros factores
 interpolados para ajustarlos de forma visual. 
@@ -285,7 +285,7 @@ Iteraciones                                               & \% Completado & Term
 \textbf{6.3.} Remplazar  TinyPTC por Dear ImGUI y
 				hacer una interfaz básica.                 & 100\% &   \\
 	\cmidrule[.003pt]{1-3}
-\textbf{6.4.} Ajustar y continuar con la memoria.          & 80\%  & $\infty$ \\
+\textbf{6.4.} Ajustar y continuar con la memoria.          & 80\%  & It.8 \\
 	\cmidrule[.003pt]{1-3}
 \textbf{6.5.} Profundizar en el GDD y listar cuestiones
 				tecnológicas que hacen falta.              & 100\% &   \\
@@ -295,12 +295,12 @@ Iteraciones                                               & \% Completado & Term
 
 \subsection*{Iteración 3: Motor ECS y gestión de memoria}
 La fase comenzó con una iteración corta debido a las vacaciones de Navidad y final de año, en la
-que el foco estuvo despositado en refactorizar y dejar en mejor estado el código desarrollado
+que el foco estuvo en refactorizar y dejar en mejor estado el código desarrollado
 hasta el momento, donde se separó el nucleo principal del motor \ac{ECS} del conjunto de sistemas y
 herramientas en dos \textit{namespaces} diferentes. 
 
 Por el lado del motor \ac{ECS}, en un primer lugar el almacén de componentes estaba diseñado
-para contener punteros a componentes, esto implicaba que los datos de los componentes se
+para contener punteros a componentes. Esto implicaba que los datos de los componentes se
 guardaban en la memoria libre de forma ``anárquica''~\ref{fig:memoria_ptr}, 
 en su lugar, lo deseado es almacenar todas las componentes de forma contigua para poder utilizar
 la caché cuando sea posible, para poder aprovechar que es más rápida y minimizar la cantidad de
@@ -320,7 +320,7 @@ veces que mandamos al sistema ir a buscar nuestros datos~\ref{fig:memoria_obj}.
 \label{fig:memoria_obj}
 \end{figure}
 
-A continuación, se modificó la estructura de las entidades para componerse unicamente de su
+A continuación, se modificó la estructura de las entidades para componerse únicamente de su
 \textit{Entity ID} y una serie de \textit{Component ID}s para posibles comprobaciones de que
 componentes contiene la entidad, dejando así de tener un puntero a las componentes del almacén.
 Esto implica una serie de cambios en la fachada y uso del \textit{Entity manager} a la hora
@@ -333,8 +333,8 @@ la necesidad de crear un tipo completo para cada tipo básico con el que queramo
 
 \subsection*{Iteración 4: Combate, victoria y derrota}
 Durante el mes de enero se implementaron diversas funcionalidades, en primer lugar abordamos
-el sistema de combate del juego, para ello se creó una componente para almacenar elementos como
-la vida de la unidad, su daño, el rango y el tiempo entre ataques, además, los sistemas de 
+el sistema de combate del juego. Para ello se creó una componente para almacenar elementos como
+la vida de la unidad, su daño, el rango y el tiempo entre ataques. Además, los sistemas de 
 ataque para ir restando vida a las unidades conforme reciban daño, el de \textit{cooldown} para
 actualizar los temporizadores para volver a atacar, y por último el sistema de muertes donde se
 manda a pedir que se borren las entidades que hayan muerto y se realizan las comprobaciones 
@@ -389,8 +389,8 @@ unidades.
 
 \subsection*{Iteración 5: Mecánicas fallidas}
 A lo largo de la siguiente iteración se trabajó sobretodo en las mecánicas de juego, con el fin
-de acercarse un poco más a la obtención de un prototipo que cumpla con los requisitos del \acs{MVP},
-en concreto se comenzó el desarollo de un segundo tipo de unidad basada en ataques a distancia y 
+de acercarse un poco más a la obtención de un prototipo que cumpla con los requisitos del \acs{MVP}.
+En concreto se comenzó el desarollo de un segundo tipo de unidad basada en ataques a distancia y 
 la posibilidad de controlar la formación que siguen nuestras unidades, pudiendo alternar entre un
 movimiento sin orden o una formación en anillo.
 
@@ -402,7 +402,7 @@ Por otro lado encontramos la formación en anillo, la cual cuenta con una primer
 modificar el rango de cohesión al centro del grupo en función de la distacia de ataque. Probando esta forma 
 de configurar la posición de las unidades nos hemos dado cuenta de que no muestras buenos resultados en
 conjuntos grandes de unidades, ya que, numerosas unidades quedan atrapadas en posiciones incorrectas y la
-distribución resultante no es muy optima.
+distribución resultante no es muy óptima.
 
 \begin{figure}[htb]
 \centering
@@ -460,13 +460,13 @@ mapeado sea más grande que la pantalla, para que nos permita visualizar y ubica
 \end{figure}
 
 En cuanto a las mecánicas del juego, hemos añadido un sistema de lanzamiento de proyectiles para las unidades
-que ataquen a distacia, esto incluye: la creación de las balas siguiendo la orientación del personaje, la
+que ataquen a distacia. Esto incluye: la creación de las balas siguiendo la orientación del personaje, la
 destrucción de las proyectiles una vez alcanzan su distancia máxima y/o impactan contra un objetivo.
 La creación y destrucción de entidades se realiza al final del bucle del juego, al igual que con las
 demás entidades. 
 
 Un proyectil consiste en una entidad formada por una componente física para su desplazamiento, una para el
-calculo de colisiones, y una visual para poder dibujarla. Una vez se lance un proyectil, este seguirá la
+cálculo de colisiones, y una visual para poder dibujarla. Una vez se lance un proyectil, este seguirá la
 dirección que tenía la unidad al momento de disparar, por lo que solo hará daño si la unidad enemiga no 
 cambia de posición lo suficiente para esquivar el área de impacto. A la hora de programar las colisiones,
 solamente contaremos las unidades del bando contrario para optimizar el número de comprobaciones, para ello
@@ -479,7 +479,7 @@ tendrémos un vector de proyectiles por cada bando.
 \label{fig:balas}
 \end{figure}
 
-Otra de las mecánicas que han sido mejoradas, es la formación en anillo de nuestras unidades. Los resultados
+Otra de las mecánicas que han sido mejoradas es la formación en anillo de nuestras unidades. Los resultados
 y la forma generada eran poco satisfactorios por lo que se cambió de trabajar con la intensidad de la cohesión
 a calcular una posición deseada para cada unidad en relación a su distancia de ataque. Para ello, mediante el
 trazado de rayos creamos una recta entre el marcador del jugador y cada una de las distintas unidades, sobre esa
@@ -542,13 +542,13 @@ Distancia & Lineal  & Cuadrado \\
 Iteraciones                                                & \% Completado & Termindo en \\ 
 \hline
 \endhead
-\textbf{7.1.} Continuar trabajando el GDD.                 & 10\% & It.X  \\
+\textbf{7.1.} Continuar trabajando el GDD.                 & 10\% & It.9  \\
 	\cmidrule[.003pt]{1-3}
-\textbf{7.2.} Ajustes de valores de daño y vida.           &  0\% & It.X  \\ 
+\textbf{7.2.} Ajustes de valores de daño y vida.           &  0\% & It.8  \\ 
 	\cmidrule[.003pt]{1-3}
 \textbf{7.3.} Incluir los ciclos de análisis de los 
 				comportamientos resultantes y 
-				propuestas de mejora                       & 40\% & It.X  \\ 
+				propuestas de mejora                       & 40\% & It.8  \\ 
 	\cmidrule[.003pt]{1-3}
 \textbf{7.4.} Revisar bugs y comportamientos erróneos.     & 100\% & \\
 	\cmidrule[.003pt]{1-3}
@@ -557,18 +557,26 @@ Iteraciones                                                & \% Completado & Ter
 	\cmidrule[.003pt]{1-3}
 \textbf{7.6.} Implementar jugabilidad básica: debe poder
 				jugarse una partida simple al juego, con
-				las reglas propuestas.                     & \% & It.X  \\
+				las reglas propuestas.                     & 70\% & It.8  \\
 
 		\cmidrule[1pt]{1-3}
 
-\textbf{8.1.} Balanceo de unidades y ajustar sus valores.  & \% &  \\
+\textbf{8.1.} Balanceo de unidades y ajustar sus valores.  & 100\% &  \\
 	\cmidrule[.003pt]{1-3}
-\textbf{8.2.} Redactar de forma detallada el balanceo.     & \% &  \\
+\textbf{8.2.} Redactar de forma detallada el balanceo.     & 100\% &  \\
 	\cmidrule[.003pt]{1-3}
-\textbf{8.3.} Prueba de compilación cruzada para Windows.  & \% &  \\
+\textbf{8.3.} Prueba de compilación cruzada para Windows.  & 0\% & It.9 \\
 	\cmidrule[.003pt]{1-3}
 \textbf{8.4.} Describir todas las herramientas implementadas
-				y procesos de analasis.                    & \% &  \\
+				y procesos de analasis.                    & 100\% &  \\
+		
+		\cmidrule[1pt]{1-3}
+
+\textbf{9.1.} Compilación cruzada para Windows.  & 100\% &  \\
+	\cmidrule[.003pt]{1-3}
+\textbf{9.2.} Finalizar la memoria               & 100\% &  \\
+	\cmidrule[.003pt]{1-3}
+\textbf{9.3.} Preparar la entrega                & 100\% &  \\
 \hline
 \caption{Resumen fase 3}
 \end{longtable}
@@ -579,20 +587,20 @@ las mecánicas y sistemas del proyecto, a la vez que se continua en la redacció
 De esta forma poder dejar las ultimas iteraciones en diseñar los niveles, balancear el juego y terminar
 de redactar la memoria.
 
-Uno de los puntos principales cae sobre la resolución de un error en las colisiones de las balas,
-este problema consistía en una serie de balas que atravesaban a las unidades con baja frecuencía
+Uno de los puntos principales cae sobre la resolución de un error en las colisiones de las balas.
+Este problema consistía en una serie de balas que atravesaban a las unidades con baja frecuencía
 y sin motivo aparente. Con el fin de subsanar este problema se ha creado una componente de colisiones
-la cual ha sustituido el uso del tamaño del sprite en los calculos de colisiones con el límite de la 
+que ha sustituido el uso del tamaño del sprite en los calculos de colisiones con el límite de la 
 ventana y demás entidades. \\
 Al integrar esta componente en el sistema de debug visual pudimos observar como el problema era que las
 colisiones estan siendo calculadas teniendo en cuenta el centro de la entidad, cuando el origen de ésta
 es la esquina superior izquierda, esto suponía un desplazamiento de todas las colisiones y por lo tanto
 errores en las detección, con cambiar ese factor se solucionaron todos los problemas.
 
-A lo largo de la ejecución del programa, podíamos ver como algunas unidades se quedaban quietas sin poder
-retomar su movimiento hasta que otra unidad la desplazaba y hacía reaccionar, después de analizar la situación
+A lo largo de la ejecución del programa, podíamos ver cómo algunas unidades se quedaban quietas sin poder
+retomar su movimiento hasta que otra unidad la desplazaba y hacía reaccionar. Después de analizar la situación
 pudimos determinar que el problema ocurría cuando la unidad perdía su velocidad y aceleración dentro del
-rango de ``velocidad reducida'' del \textit{`Arrive behaviour'}, lo que estaba sucediendo, es que no se
+rango de ``velocidad reducida'' del \textit{`Arrive behaviour'}. Lo que estaba sucediendo es que no se
 estaban calculando correctamente las divisiones con enteros de coma fija cuyo resultado era un valor
 entre 0 y 1.
 
@@ -604,7 +612,7 @@ entre 0 y 1.
 \end{figure}
 
 En una primera versión del operador, el cálculo que se realizaba era: dividir primero los valores a operar
-y después multiplicar el resultado por la `Escala', este orden de los factores nos llevaba a que si, en la
+y después multiplicar el resultado por la `Escala'. Este orden de los factores nos llevaba a que si, en la
 primera operación el divisor era mayor que el dividendo, el valor del resto era 0, ya que trabajamos
 con enteros y trunca los valores decimales.
 
@@ -617,9 +625,9 @@ que la operación conservara el valor deseado, esto se logró multiplicando el p
 por la `Escala' antes de dividir por el segundo dígito, de esta forma evitamos los resultados entre 0 y 65536
 y que se trunque el valor en mitad de la operación.
 
-Una vez solventados los errores, nos pusimos a crear lo necesario para poder diseñar niveles más amplios,
-para ello incluímos un sistema de cámaras, el cual mostrará la porción del nivel donde se encuentre
-nuestro puntero y unidades, el seguimiento se hace utilizando el \textit{`Arrive behaviour'} de forma que
+Una vez solventados los errores, nos pusimos a crear lo necesario para poder diseñar niveles más amplios.
+Para ello, incluímos un sistema de cámaras, que mostrará la porción del nivel donde se encuentre
+nuestro puntero y unidades. El seguimiento se hace utilizando el \textit{`Arrive behaviour'} de forma que
 el movimiento de la cámara comienza cuando nos separamos una cierta distancia del centro de la escena.
 
 \begin{figure}[ht]
@@ -631,13 +639,13 @@ el movimiento de la cámara comienza cuando nos separamos una cierta distancia d
 
 Ahora las dimensiones de la pantalla pasan a ser las de la cámara y el nivel tendrá unas dimensiones
 propias, las cuales usaremos para limitar el movimiento de las unidades, por lo que las unidades se pueden
-mover libremente fuera de nuestro campo de visión siempre y cuando estén en los límites del nivel,
-mientras estén fuera de cámara solo se dibujaran en el minimapa para evitar hacer llamadas inútiles. \\
+mover libremente fuera de nuestro campo de visión siempre y cuando estén en los límites del nivel.
+Mientras estén fuera de cámara solo se dibujarán en el minimapa para evitar hacer llamadas inútiles. \\
 Además de los cálculos para las colisiones, otro requisito fue adaptar el minimapa para que mostrara
-que parte del nivel esta siendo visualizado y que nos permita úbicar a todas las unidades y objetivos
+qué parte del nivel está siendo visualizado y que nos permita úbicar a todas las unidades y objetivos
 fuera de cámara. Un detalle importante es que al crear el nivel, le indicamos al motor la relación
 entre las dimensiones de pantalla y nivel, por lo que los objetos mostrados en el minimapa se ajustarán
-en función de este parámetro, cuanto más grande el nivel, más pequeños serán los elementos.
+en función de este parámetro: cuánto más grande el nivel, más pequeños serán los elementos.
 
 \begin{figure}[ht]
 \centering
@@ -657,33 +665,34 @@ y ahorrarnos el tener que disponer de una tecla para cada opción.
 \label{fig:hud_selec}
 \end{figure}
 
-En lo referente a la mecánicas y comportamientos de las entidades han habido dos cambios relevantes durante
-la iteración, en primer lugar encontramos la adición de un componente \textit{singleton} de \textit{Blackboard}
-el cual nos permitirá almacenar información compartida para todas las unidades bajo nuestro control, además de
-controlar la frecuencia en la que la esta información se actualiza, esto nos permitirá crear una sensación
+En lo referente a la mecánicas y comportamientos de las entidades ha habido dos cambios relevantes durante
+la iteración: en primer lugar, encontramos la adición de un componente \textit{singleton} de \textit{Blackboard}
+que nos permitirá almacenar información compartida para todas las unidades bajo nuestro control, además de
+controlar la frecuencia en la que la esta información se actualiza, lo que nos permitirá crear una sensación
 de retraso en la reacción a nuestras acciones por parte de las unidades a la vez que nos permite eliminar
 la necesidad de guardar la misma información en cada componente de \ac{IA} por unidad que tengamos.
 
 En segundo lugar encontramos otro cambio en las componentes de \ac{IA}, esta vez con efectos sobre las unidades
-controladas por la máquina, en este caso se trata de la creación de una estructura auxiliar que representa 
+controladas por la máquina. En este caso se trata de la creación de una estructura auxiliar que representa 
 y contiene las rutas que las unidades seguirán mientras no estén peleando contra nosotros.
 
-En un inicio estas rutas se encontraban directamente en la componente, actualmente en la componente podemos
+En un primer momento estas rutas se encontraban directamente en la componente. Actualmente en la componente 
+podemos
 encontrar un ``iterador de ruta'' el cual nos podrá facilitar la siguiente posición y gestionar como avanzamos
-por la patrulla, de forma que si llegamos al final de forma automática nos devolverá la primera posición
-que recorrimos. De esta forma evitamos errores en la gestión de las patrullas y dublicar la información de estas.
+por la patrulla, de manera que si llegamos al final de forma automática nos devolverá la primera posición
+que recorrimos. De este modo evitamos errores en la gestión de las patrullas y dublicar la información de estas.
  
 
 \subsection*{Iteración 8: Diseño de niveles}
 Durante esta penúltima iteración buscamos conseguir un prototipo que ofrezca una experiencia
 de juego capaz de mostrar todas las herramientas diseñadas y entretener al jugador. Para ello se han 
-planteado objetivos relacionados con el diseño de los niveles y el balanceo de las unidades, tratando
+planteado objetivos relacionados con el diseño de los niveles y el ajuste de las unidades, tratando
 de conseguir el que el jugador sepa en todo momento su objetivo en el juego y que sea atractivo para el.
 
-En primer lugar hemos trabajado el balanceo de los valores de vida y daño de los distintos tipos de
-unidades, partiendo de una situación con todas las unidades con los mismos valores
+En primer lugar, hemos trabajado el equilibrio de los valores de vida y daño de los distintos tipos de
+unidades. Partiendo de una situación con todas las unidades con los mismos valores
 debemos tratar de darles ventajas y desventajas a cada una de ellas, con el fin de obligar al
-jugador a pensar bien como colocarlas y utilizarlas. Durante el proceso se ha desarrollado un excel
+jugador a pensar bien cómo colocarlas y utilizarlas. Durante el proceso se ha desarrollado un excel
 para observar los valores y modificarlos de forma rápida, esto nos ayuda a poder hacer un análisis
 profundo de los efectos de cada valor en el resultado de las unidades.
 
@@ -717,7 +726,7 @@ profundo de los efectos de cada valor en el resultado de las unidades.
 \end{longtable}
 
 La idea es lograr que el jugador sienta que los Soldados son unidades más resistentes pero con menor
-daño, para ello les dotaremos de mayor vida pero menor daño que a los arqueros, por otro lado, realizar
+daño. Para ello les dotaremos de mayor vida pero menor daño que a los arqueros. Por otro lado, realizar
 un movimiento con las manos es una acción que requiere mucha menos preparación y dedicación que cargar 
 un arco, por ello se contempla darles una mayor frecuencia a sus ataques.
 
@@ -750,16 +759,16 @@ un arco, por ello se contempla darles una mayor frecuencia a sus ataques.
 \caption{Valores soldado vs arquero}
 \end{longtable}
 
-Los arqueros por su lado, están pensados como unidades de mediano alcance que atacan con proyectiles.
-Son débiles y si tratan de avanzar solos podrían ser masacrados por grupos de soldados, para evitarlo 
-el jugador deberá intentar proteger a sus arqueros utilizando a sus guerreros como muro defensivo. 
+Los arqueros, por su parte, están pensados como unidades de mediano alcance que atacan con proyectiles.
+Son débiles y si tratan de avanzar solos podrían ser masacrados por grupos de soldados. Para evitarlo,
+el jugador debería intentar proteger a sus arqueros utilizando a sus guerreros como muro defensivo. 
 A pesar de que realizan más daño a sus rivales, los proyectiles no realizan un daño inmediato, sino que
 actuan al impactar, cosa que podría no suceder. Esto nos ayuda a equilibrar la balanza debido a la ventaja
 de rango que poseen los arqueros.
 
-El segundo lugar encontramos el diseño de los niveles, a la hora de establecer la cantidad de enemigos
+En segundo lugar encontramos el diseño de los niveles, a la hora de establecer la cantidad de enemigos
 y su disposición tenemos que tener en cuenta el objetivo del nivel, si el nivel consiste en limpiar
-todos los enemigos existentes tendremos que evaluar la cantidad y como se agrupan para que puedan
+todos los enemigos existentes tendremos que evaluar la cantidad y cómo se agrupan para que puedan
 ser limpiados si gestionas medianamente bien las unidades. Si el objetivo es llegar a un punto en concreto
 del nivel, los enemigos serán más y el combate directo nos pondrá en aprietos, por lo que el objetivo
 debería ser encontrar una ruta que nos asegure el menor nivel de conflicto posible.

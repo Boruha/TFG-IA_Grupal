@@ -4,14 +4,14 @@
 \section{Descripción general}
 El juego que se pretende desarrollar se basa en el apartado de navegación por el mapa y combate
 típicos en los \ac{RTS}. A lo largo de los distintos niveles, el jugador deberá hacer
-frente a distintos desafios como pueden ser: escoltar con sus unidades de un punto
+frente a distintos desafíos como pueden ser: escoltar con sus unidades de un punto
 del mapa a otro a un personaje importante y/o eliminar a todas las entidades enemigas del escenario.
 
 \section{Mecánicas}
 Durante el juego podremos ejecutar una serie de ordenes sobre nuestras unidades para cambiar
 su distribución, ordenarles que se desplazen y/o que ataquen a enemigos.\\
-Para el desplazamiento por el mapa, el jugador contará con un marcador en el mapa el cual
-será capaz de mover para que sus unidades lo sigan mientras les sea posible.
+Para el desplazamiento por el mapa, el jugador contará con un marcador en el mapa que podrá
+mover para que sus unidades lo sigan mientras les sea posible.
 
 \begin{figure}[ht]
 \centering
@@ -52,13 +52,13 @@ Por último podemos ordenar a las unidades que mantengan una estrategia definida
 \item \textbf{Huida:} en este modo las unidades seguirán el marcador sin pararse a pelear con unidades
 cercanas enemigas.
 
-\item \textbf{Agresivo:} en el momento en el que la tropa divisa un enemigo saldrá diracto a atacarle,
+\item \textbf{Agresivo:} en el momento en el que la tropa divisa un enemigo saldrá directo a atacarle,
 aunque se aleje esta le seguirá mientras siga en su rango de detección.
 \end{itemize} 
 
 Aunque el jugador marque una estrategia y forma de plantear el combate, las unidades podrán
 decidir si seguir al jugador o revelarse. Si los soldados cercanos están siendo masacrados
-existe la posibilidad de que tengan miedo y huyan, si las unidades enemigas nos superan en número
+existe la posibilidad de que tengan miedo y huyan. Si las unidades enemigas nos superan en número
 la unidad puede decidir si permanecer en defensa en lugar de atacar de forma activa.
 
 \section{Unidades}
@@ -69,10 +69,10 @@ nivel.
 Los tipos son los siguientes:
 \begin{itemize}
 	\item \textbf{Soldado:} es la unidad más básica que podemos encontrar en el campo de
-							guerra, esta armado con una espada y posee estadisticas
+							guerra, esta armado con una espada y posee estadísticas
 							bajas.
 	\item \textbf{Arquero:} va equipado con arco y flechas para atacar a distancia a
-							sus rivales, tiene menos resistencia que los soldados por
+							sus rivales. Tiene menos resistencia que los soldados por
 							lo que tendremos que protegerlos para asegurar su
 							supervivencia.
 \end{itemize}
@@ -121,8 +121,8 @@ pequeño \textbf{\textit{HUD}},que se encuentra en la esquina inferior izquierda
 \section{Pantallas}
 Al ejecutar el programa la primera pantalla que aparecerá será la de 
 inicio. Se compone del título del juego, la fecha de lanzamiento,
-el nombre del desarrollador y un mensaje que nos indica que tenemos que pulsar al tecla
-\textit{entre} para continuar, esta pantalla se mantendrá hasta que el jugador presione
+el nombre del desarrollador y un mensaje que nos indica que tenemos que pulsar la tecla
+\textit{enter} para continuar, esta pantalla se mantendrá hasta que el jugador presione
 dicha tecla.\\
 Una vez pulsado el botón indicado se procederá a cargar el juego mientras se muestra
 una barra que indica el progreso de cargado.
@@ -143,7 +143,7 @@ una barra que indica el progreso de cargado.
 \end{minipage}	
 \end{figure}
 
-A continuación de la carga pasaremos directamente al escenario, donde se desarrollará el
+A continuación de la carga nos encontraremos con el escenario, donde se desarrollará el
 \textit{gameplay} y nos mantendremos en esta pantalla hasta que termine el juego, ya sea
 por victoria o derrota del jugador.
 
@@ -167,7 +167,7 @@ El final de la partida nos trae dos posibles escenarios, la victoria y la derrot
 Para cada uno saldrá su respectivo mensaje y pasado un momento se nos mandará automáticamente a 
 la pantalla de inicio.
 
-Como última pantalla con la que el jugador podrá interactuar es la del menú de
+Una última pantalla con la que el jugador podrá interactuar es la del menú de
 pausa, en el cual se le dará la opción de salir o de volver a la
 partida, mientras esta pantalla este activa la acción en el juego se paralizará hasta
 que el jugador decida. 
@@ -204,9 +204,9 @@ Dicho esquema podemos encontrarlo en la figura siguiente:
 
 \section{Niveles}
 El juego contiene actualmente 2 niveles, el primero se trata de un nivel introductorio
-en el que encontraremos grupos pequeños de unidades que será fáciles de abatir para que el jugador experimente
-como es el combate en el juego, además, a lo largo del nivel queremos poner marcadores para dar indicaciones
-al jugador de como jugar o \textit{tips} para superar los niveles de forma satisfactoria.
+en el que encontraremos grupos pequeños de unidades fáciles de abatir para que el jugador conozca
+cómo es el combate en el juego. Además, a lo largo del nivel pondrémos marcadores para que indiquen
+al jugador cómo jugar o \textit{tips} para superar los niveles de forma satisfactoria.
 El nivel se supera matando a los enemigos.
 
 \begin{figure}[ht]
@@ -216,8 +216,8 @@ El nivel se supera matando a los enemigos.
 \label{esq:lvl0}
 \end{figure}
 
-En el segundo nivel se muestra otro de los objetivos posibles en el juego, el cual se trata de alcanzar
-una zona de huida/meta más allá de las tropas enemigas, en este nivel encontraremos
+En el segundo nivel se muestra otro de los objetivos posibles en el juego: alcanzar
+una zona de huída/meta más allá de las tropas enemigas. En este nivel encontraremos
 grupos más grandes de enemigos que nos pueden vencer y hacernos repetir el nivel, por ello podremos optar
 por intentar derrotarlos o buscar una ruta que nos evite el conflicto lo máximo posible. 
 
@@ -230,7 +230,7 @@ por intentar derrotarlos o buscar una ruta que nos evite el conflicto lo máximo
 
 \section{Escenarios}
 A lo largo de los niveles la intención es que nos encontremos con distintos biomas como
-pueden ser praderas, bosque o desiertos como los que podemos encontrar en \ac{AoE} II.
+pueden ser praderas, bosque o desiertos similares a los que podemos encontrar en \ac{AoE} II.
 
 \begin{figure}[ht]
 \centering
@@ -241,9 +241,9 @@ pueden ser praderas, bosque o desiertos como los que podemos encontrar en \ac{Ao
 
 Además de imitar el estilo artístico el juego se desarrollará empleando una cámara
 aerea fija manteniendo una perspectiva isométrica que nos permitirá visualizar desde
-un punto elevado una gran porción del escenario, esto lo haremos con el fin de dar al
-jugador la posibilidad de conocer lo máximo posible el territorio cercano posible y a la
-vez le libramos de tener que estar preocuparse de situar la cámara para cada momento. \\
+un punto elevado una gran porción del escenario. Esto lo haremos con el fin de dar al
+jugador la posibilidad de conocer lo máximo posible el territorio cercano y a la
+vez le libramos de preocuparse por situar la cámara para cada momento. \\
 Al mantener una posición fija podemos situar todos los elementos en la escena de forma
 que no obstaculicen la visión o molesten al jugador.
 
@@ -251,18 +251,18 @@ En las primeras versiones del proyecto el juego todos los elementos serán 2D y 
 un plano picado, el final deseable será poder pasar a un entorno 3D.
 
 \section{Sistema de cámaras}
-Si quisieramos mostrar todo el nivel por pantalla, tendríamos el problema de que los elementos
-quedarían dibujados con un tamaño demasiado pequeño si el nivel supera las dimensiones de la pantalla,
-por ello, si queremos poder diseñar niveles con las dimensiones que queramos deberemos mostrar únicamente
+Si quisiéramos mostrar todo el nivel por pantalla, tendríamos el problema de que los elementos
+quedarían dibujados con un tamaño demasiado pequeño si el nivel supera las dimensiones de la pantalla.
+Por ello, si queremos poder diseñar niveles con las dimensiones que queramos deberemos mostrar únicamente
 las fracción del nivel que ocupamos en cada momento.
 
-Por lo que, tendremos una cámara la cual seguirá al puntero del jugador por el nivel y tendremos el
+En este caso, tendríamos una cámara que seguirá al puntero del jugador por el nivel y tendremos el
 minimapa para poder ubicarnos en el nivel.
 
 \section{Mínimo producto viable}
 Una vez planteadas todas las características deseadas para el videojuego, es acosenjable
-decidir que partes del producto son vitales para mostrar la experiencia
-de juego deseable, el hecho de marcar estos objetivos nos ayudará a poder desarrollar una
+decidir qué partes del producto son vitales para mostrar la experiencia
+de juego deseable. El hecho de marcar estos objetivos nos ayudará a poder desarrollar una
 versión reducida del proyecto que nos permita dar la sensación de tener un producto acabado.\\
 Es importante realizar este proceso ya que por motivos internos o externos al equipo de desarrollo,
 siempre existen contratiempos que nos impidan conseguir todos los objetivos propuestos en el
@@ -279,12 +279,12 @@ estará patrullando por una zona designada, dejando así a elección del jugador
 momento exacto en el que comenzará la disputa.
 
 En lo referente a las mecánicas y jugabilidad, es importante que el jugador sea capaz de poder
-mover a sus unidades por el escenario y ordenarles atacar, por otro lado sería deseable poder
+mover a sus unidades por el escenario y ordenarles atacar. También sería deseable poder
 ajustar algunos parámetros del comportamiento de su ejercito para poder pasar el nivel de más
 de una forma.\\
-Otro lado la \ac{IA} debe ser capaz de detectar el acercamiento del jugador y responder a la
+Por otro lado, la \ac{IA} debe ser capaz de detectar el acercamiento del jugador y responder a la
 ofensiva, dejando la capacidad de tomar la iniciativa y variar su estrategia para versiones
-más completas. Ambos ejercitos se compondrán de soldados y arqueros.
+más completas. Ambos ejércitos se compondrán de soldados y arqueros.
 
 En lo referente al apartado visual, sería deseable tener sprites para unidades y escenario pero
 de ser necesario podemos mantener el sistema de \textit{render} inicial.
@@ -293,9 +293,9 @@ de ser necesario podemos mantener el sistema de \textit{render} inicial.
 \section{Actualización: 13/04/21}
 \begin{itemize}
 	\item Corregido el movimiento lento de las entidades en algunos momentos cuando estaban en el radio
-	de frenada, era debido a un cálculo erróneo en las diviones con el tipo de dato en coma fija.
+	de frenada debido a un cálculo erróneo en las diviones con el tipo de dato en coma fija.
 	
-	\item Creació de una componente para las colisiones y integración en los sistemas pertinentes.
+	\item Creación de una componente para las colisiones e integración en los sistemas pertinentes.
 	
 	\item Solucionado el problema de las balas que no colisionaban bien.
 	
